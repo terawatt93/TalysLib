@@ -298,6 +298,7 @@ class Nucleus:public NucleusData
 	vector<Level*> GetLevelsWithCorrespondingTransitions(float Energy, float tolerancy=1,float intensity=0);
 	Level* FindLevelFromTalys(float Energy,SpinParity JP);
 	Level* FindBestLevelByEJP(float Energy,SpinParity JP,float tolerancy=1);
+	Level* FindLevelByEnergy(float Energy,float tolerancy=1);
 	Level* FindLevelByNumber(int number);
 	GammaTransition* GetBestTransition(float Energy,float tolerancy=1);
 	void PrintLevelsWithCorrespondingTransitions(float Energy, float tolerancy=1,float intensity=0);
@@ -321,6 +322,8 @@ class Nucleus:public NucleusData
 	void AssignPointers();
 	void ErasePointers();
 	void AssignDeformationsToLevels();
+	void SetLevelDeformation(int LevelNumber,char LevT, int BandN=-1, int BandL=-1, int NPhon=-1, int MagN=-1, vector<float> *Def=0);
+	void SetLevelDeformation(double LevelEnergy,char LevT, int BandN=-1, int BandL=-1, int NPhon=-1, int MagN=-1, vector<float> *Def=0);
 	string PrintLevels();
 	string PrintReactions();
 	string ReactionToTalysNotation(char DataSelection=kExcitationCS);
