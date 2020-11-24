@@ -1449,6 +1449,18 @@ Level* Nucleus::FindLevelFromTalys(float Energy,SpinParity JP)
 	return 0;
 }
 
+Level* Nucleus::FindLevelByEnergy(float Energy,float tolerancy)
+{
+	for(unsigned int i=0;i<Levels.size();i++)
+	{
+		if(abs(Levels[i].GetEnergy()-Energy)<1)
+		{
+			return &Levels[i];
+		}
+	}
+	return 0;
+}
+
 Level* Nucleus::FindLevelByNumber(int number)
 {
 	for(unsigned int i=0;i<Levels.size();i++)
@@ -2278,10 +2290,10 @@ void Nucleus::SetTGraphNameAndTitle(string ValName)
 	{
 		ValName="E";
 	}
-	if(ValName=="Beta")
+	/*if(ValName.find("Beta")!=string::npos())
 	{
 		ValName="B";
-	}
+	}*/
 	TotTalysV.SetName(TString::Format("Tot_%s",ValName.c_str()));
 	TotTalysV.SetTitle(TString::Format("#sigma(tot);%s;#sigma,mb",ValName.c_str()));
 	ElasticTotTalysV.SetName(TString::Format("TotEl_%s",ValName.c_str()));
@@ -2364,6 +2376,23 @@ void Nucleus::AddPoint(double x_value,Nucleus* Nucl)
 		}
 	}
 }
+void Nucleus::SetLevelDeformation(int LevelNumber,char LevT, int BandN, int BandL, int NPhon, int MagN, vector<float> *Def)
+{
+	Level *l=FindLevelByNumber(LevelNumber);
+	if(l)
+	{
+		l->SetDeformation(LevT,BandN,BandL,NPhon,MagN,Def);
+	}
+}
+void Nucleus::SetLevelDeformation(double LevelEnergy,char LevT, int BandN, int BandL, int NPhon, int MagN, vector<float> *Def)
+{
+	Level *l=FindLevelByEnergy(LevelEnergy);
+	if(l)
+	{
+		l->SetDeformation(LevT,BandN,BandL,NPhon,MagN,Def);
+	}
+}
+	
 void TalysCalculation::ReadParametersFromFile(string filename)
 {
 	ifstream ifs(filename.c_str());
@@ -2399,6 +2428,11 @@ void TalysCalculation::ReadParametersFromFile(string filename)
 				stringstream s(line);
 				s>>line>>Proj;
 			}
+			if(line.find("ProjectileEnergy:")!=string::npos)
+			{
+				stringstream s(line);
+				s>>line>>ProjectileEnergy;
+			}
 			if(line.find("Option:")!=string::npos)
 			{
 				TalysOptions.push_back(line.substr(7,line.size()-7));
@@ -2419,6 +2453,14 @@ void TalysCalculation::ExecuteCalculation()
 			{
 				Nucl.SetProjectileEnergy(VarValues[i]);
 				Results.push_back(Nucl);
+			}else if(Variable.find("Beta")!=string::npos)
+			{
+				TString ts(Variable);
+				ts.ReplaceAll("_"," ");
+				stringstream s(ts.Data());
+				string tmp; int LevNumber, BetaIndex;
+				s>>tmp>>LevNumber>>BetaIndex;
+				
 			}
 			//позже тут будут и другие параметры
 		}
