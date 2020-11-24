@@ -293,7 +293,7 @@ namespace ROOT {
       ::Level *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::Level >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("Level", ::Level::Class_Version(), "Levels.hh", 202,
+         instance("Level", ::Level::Class_Version(), "Levels.hh", 203,
                   typeid(::Level), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::Level::Dictionary, isa_proxy, 16,
                   sizeof(::Level) );
@@ -327,7 +327,7 @@ namespace ROOT {
       ::NucleusData *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::NucleusData >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("NucleusData", ::NucleusData::Class_Version(), "Levels.hh", 247,
+         instance("NucleusData", ::NucleusData::Class_Version(), "Levels.hh", 248,
                   typeid(::NucleusData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::NucleusData::Dictionary, isa_proxy, 16,
                   sizeof(::NucleusData) );
@@ -361,7 +361,7 @@ namespace ROOT {
       ::Nucleus *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::Nucleus >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("Nucleus", ::Nucleus::Class_Version(), "Levels.hh", 266,
+         instance("Nucleus", ::Nucleus::Class_Version(), "Levels.hh", 267,
                   typeid(::Nucleus), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::Nucleus::Dictionary, isa_proxy, 16,
                   sizeof(::Nucleus) );
@@ -395,7 +395,7 @@ namespace ROOT {
       ::TalysCalculation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::TalysCalculation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("TalysCalculation", ::TalysCalculation::Class_Version(), "Levels.hh", 334,
+         instance("TalysCalculation", ::TalysCalculation::Class_Version(), "Levels.hh", 335,
                   typeid(::TalysCalculation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::TalysCalculation::Dictionary, isa_proxy, 16,
                   sizeof(::TalysCalculation) );
@@ -429,7 +429,7 @@ namespace ROOT {
       ::SampleInformation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::SampleInformation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("SampleInformation", ::SampleInformation::Class_Version(), "Levels.hh", 361,
+         instance("SampleInformation", ::SampleInformation::Class_Version(), "Levels.hh", 362,
                   typeid(::SampleInformation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::SampleInformation::Dictionary, isa_proxy, 16,
                   sizeof(::SampleInformation) );

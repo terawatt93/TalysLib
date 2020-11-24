@@ -634,6 +634,10 @@ void Deformation::SetZA(int _Z,int _A)
 {
 	Z=_Z; A=_A;
 }
+void Deformation::SetTypeOfCollectivity( char _Type)
+{
+	TypeOfCollectivity=_Type;
+}
 void Deformation::ReadDeformation()
 {
 	string Filename=GetPathToTalysData()+"/structure/deformation/"+GetNucleusName(Z)+".def";
@@ -650,7 +654,6 @@ void Deformation::ReadDeformation()
 		if(_Z==Z&&_A==A)
 		{
 			PointToPastChangedDeformation=ContentOfFile.size();
-			cout<<PointToPastChangedDeformation<<"\n";
 			NLevels=Nlevels;
 			for(unsigned int i=0;i<Nlevels;i++)
 			{
@@ -684,6 +687,7 @@ void Deformation::WriteDeformation()
 	{
 		ofs<<ContentOfFile[i]<<"\n";
 	}
+	NLevels=LevelDeformations.size();
 	//ofs<<TString::Format("%4d%4d%4d   %c   %c",Z,A,NLevels,TypeOfCollectivity,TypeOfDeformation)<<"\n";
 	ofs<<GenerateMainDefString(Z,A,NLevels,TypeOfCollectivity,TypeOfDeformation)<<"\n";
 	for(unsigned int i=0;i<LevelDeformations.size();i++)
@@ -1081,10 +1085,19 @@ void Level::SetTGraphNameAndTitle(string ValName)
 
 void Level::SetDeformation(char LevT, int BandN, int BandL, int NPhon, int MagN, vector<float> *Def)
 {
-	LevelDeformation *def=0;
 	if(deformation)
 	{
-		def=deformation;
+		deformation->NumberOfBand=BandN;
+		deformation->TypeOfLevel=LevT;
+		deformation->NumberOfLevel=Number;
+		deformation->LOfBand=BandL;
+		deformation->NumberOfPhonons=NPhon;
+		deformation->MagneticNumber=MagN;
+		if(Def)
+		{
+			deformation->Beta=*Def;
+		}
+		deformation->fLevel=this;
 	}
 	else
 	{
@@ -1093,21 +1106,23 @@ void Level::SetDeformation(char LevT, int BandN, int BandL, int NPhon, int MagN,
 			cout<<"Error: deformation cannot be assigned to standalone level! (fNucleus does not set). Returned\n";
 			return ;
 		}
-		fNucleus->Def.LevelDeformations.emplace_back();
-		def=&(fNucleus->Def.LevelDeformations[fNucleus->Def.LevelDeformations.size()]);
+		LevelDeformation d;
+		d.NumberOfBand=BandN;
+		d.TypeOfLevel=LevT;
+		d.NumberOfLevel=Number;
+		d.LOfBand=BandL;
+		d.NumberOfPhonons=NPhon;
+		d.MagneticNumber=MagN;
+		d.fLevel=this;
+		if(Def)
+		{
+			d.Beta=*Def;
+		}
+		fNucleus->Def.LevelDeformations.push_back(d);
+		deformation=&(fNucleus->Def.LevelDeformations[fNucleus->Def.LevelDeformations.size()]);
+		//fNucleus->Def.AssignPointers();
+		fNucleus->Def.Sort();
 	}
-	def->NumberOfBand=BandN;
-	def->NumberOfLevel=Number;
-	def->LOfBand=BandL;
-	def->NumberOfPhonons=NPhon;
-	def->MagneticNumber=MagN;
-	if(Def)
-	{
-		def->Beta=*Def;
-	}
-	def->fLevel=this;
-	fNucleus->Def.AssignPointers();
-	fNucleus->Def.Sort();
 }
 
 void Level::AddPoint(double x_value,Level *level)
@@ -1325,6 +1340,7 @@ Nucleus::Nucleus(string Name,string Reaction)
 	fMotherNucleus=0;
 	Abundance=GetAbundance(Name);
 	ReadLevelsFromTalysDatabase();
+	AssignPointers();
 	Def.SetZA(Z,A);
 	Def.ReadDeformation();
 	AssignDeformationsToLevels();

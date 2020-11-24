@@ -186,11 +186,12 @@ class Deformation:public TObject
 	public:
 	Deformation():TObject() { }
 	int A,Z,NLevels;
-	char TypeOfCollectivity,TypeOfDeformation;
+	char TypeOfCollectivity='S',TypeOfDeformation='B';
 	vector<LevelDeformation> LevelDeformations;
 	vector<string> ContentOfFile;
 	unsigned int PointToPastChangedDeformation=0;
 	void SetZA(int _Z,int _A);
+	void SetTypeOfCollectivity( char _Type='S');
 	void ReadDeformation();
 	void WriteDeformation();
 	void RestoreDeformation();
