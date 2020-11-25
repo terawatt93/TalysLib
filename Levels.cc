@@ -1352,6 +1352,12 @@ void Nucleus::SetProjectileEnergy(double E)
 void Nucleus::ExecuteCalculationInTalys(string Projectile)
 {
 	string PathToCalculationDir=GetPathToTalysData()+"/CalculationResults/";
+	if(FastFlag)
+	{
+		PathToCalculationDir="/dev/shm/CalculationResults/";
+		system("mkdir /dev/shm/CalculationResults");
+		FastCalculated=true;
+	}
 	mkdir((PathToCalculationDir+Name).c_str(),S_IRWXU);
 	string filename=PathToCalculationDir+Name+"/input";
 	ofstream ofs(filename.c_str());
@@ -1477,6 +1483,10 @@ void Nucleus::ReadTalysCalculationResult()
 {
 	
 	string filename=GetPathToTalysData();
+	if(FastFlag)
+	{
+		filename="/dev/shm";
+	}
 	if(fMotherNucleus)
 	{
 		filename+="/CalculationResults/"+fMotherNucleus->Name+"/output";
@@ -2392,7 +2402,13 @@ void Nucleus::SetLevelDeformation(double LevelEnergy,char LevT, int BandN, int B
 		l->SetDeformation(LevT,BandN,BandL,NPhon,MagN,Def);
 	}
 }
-	
+Nucleus::~Nucleus()
+{
+	if((FastFlag)&&(FastCalculated))
+	{
+		system("rm -rf /dev/shm/CalculationResults/");
+	}
+}	
 void TalysCalculation::ReadParametersFromFile(string filename)
 {
 	ifstream ifs(filename.c_str());
