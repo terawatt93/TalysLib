@@ -1,3 +1,3 @@
 #/bin/bash 
- cd /home/terawatt/talys/talys/CalculationResults/56Fe
+ cd /dev/shm/CalculationResults/52Cr
  talys <input >output

@@ -278,7 +278,7 @@ class Nucleus:public NucleusData
 	TGraph BNECS_gamma, BNECS_neutron, BNECS_proton, BNECS_deuteron, BNECS_triton, BNECS_3He, BNECS_alpha, TEISGraphTot, TEISGraphCont, TEISGraphDiscr;
 	void ReadElastic();
 	TGraph* GetElasticAngularDistribution(string type="Total",string option="");//если график упругого уже построен, выдается сохраненный, если нет, или option=="new", строится заново
-	bool TalysGroundStateExsists=false;
+	bool TalysGroundStateExsists=false, FastFlag=true, FastCalculated=false;
 	void MergeLevels(float tolerancy);
 	void SortingLevels();
 	Nucleus* FindProductsByReaction(string reaction);
@@ -332,6 +332,7 @@ class Nucleus:public NucleusData
 	void GenerateGammaSpectrum(TH1F *Spectrum, TF1* ResolutionFunction, int NEntries=100000);
 	void SetTGraphNameAndTitle(string ValName);
 	void AddPoint(double x_value, Nucleus* Nucl);
+	~Nucleus();
 	ClassDef(Nucleus, 1);
 };
 
