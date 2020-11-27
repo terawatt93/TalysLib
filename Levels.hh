@@ -6,6 +6,7 @@
 #include <TFile.h>
 #include <TGraph.h>
 #include <TMultiGraph.h>
+#include <TCanvas.h>
 #pragma once
 using namespace std;
 
@@ -332,6 +333,7 @@ class Nucleus:public NucleusData
 	void GenerateGammaSpectrum(TH1F *Spectrum, TF1* ResolutionFunction, int NEntries=100000);
 	void SetTGraphNameAndTitle(string ValName);
 	void AddPoint(double x_value, Nucleus* Nucl);
+	void AngDisGraphsDeform(string type);
 	~Nucleus();
 	ClassDef(Nucleus, 1);
 };
