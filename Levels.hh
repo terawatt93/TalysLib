@@ -168,13 +168,13 @@ class LevelData:public TObject
 	ClassDef(LevelData, 1);
 };
 
-class LevelDeformation:public TObject
+class LevelDeformation:public TObject//класс - данные деформации одного уровня
 {
 	public:
 	char TypeOfLevel,TypeOfDeformation;
 	LevelDeformation(char Type='B'):TObject() {TypeOfDeformation='B';}
 	int NumberOfBand, NumberOfLevel, LOfBand=-1, NumberOfPhonons=-1, MagneticNumber=-1;
-	vector<float> Beta;
+	vector<float> Beta;//вектор - набор бета для каждого уровня
 	void GetFromString(string input);
 	void TurnToBeta(int A);
 	TString GenerateStringForDefFile();
@@ -182,13 +182,13 @@ class LevelDeformation:public TObject
 	Deformation *fDeformation=0;
 	ClassDef(LevelDeformation, 1);
 };
-class Deformation:public TObject
+class Deformation:public TObject//класс - данные о деформации ядра
 {
 	public:
 	Deformation():TObject() { }
 	int A,Z,NLevels;
 	char TypeOfCollectivity='S',TypeOfDeformation='B';
-	vector<LevelDeformation> LevelDeformations;
+	vector<LevelDeformation> LevelDeformations;//вектор - набор деформаций каждого уровня
 	vector<string> ContentOfFile;
 	unsigned int PointToPastChangedDeformation=0;
 	void SetZA(int _Z,int _A);
@@ -334,7 +334,7 @@ class Nucleus:public NucleusData
 	void SetTGraphNameAndTitle(string ValName);
 	void AddPoint(double x_value, Nucleus* Nucl);
 	void AngDisGraphsDeform(string type);
-	~Nucleus();
+	~Nucleus();//деструктор класса Nucleus (удаляет также файлы, созданные TALYS при прошлых вычислениях)
 	ClassDef(Nucleus, 1);
 };
 

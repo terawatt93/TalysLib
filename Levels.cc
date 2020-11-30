@@ -2426,7 +2426,7 @@ Nucleus::~Nucleus()
 {
 	if((FastFlag)&&(FastCalculated))
 	{
-		system("rm -rf /dev/shm/CalculationResults/");
+		system("rm -rf /dev/shm/CalculationResults/");//деструктор класса Nucleus, удаляет все файлы и папки в /dev/shm/CalculationResults/ 
 	}
 }	
 void TalysCalculation::ReadParametersFromFile(string filename)
@@ -2480,31 +2480,34 @@ void TalysCalculation::ReadParametersFromFile(string filename)
 //Илья
 void Nucleus::AngDisGraphsDeform(string type)//будем спрашивать какую компоненту и распределение нужно рисовать/сохранять
 {  //функция должна инициализировать вычисления для каждого из требуемых beta и рисовать результаты вычисления упругого и первого неупругого рассеяния нейтронов (+сохранять в тектсовых файлах)
+   ///на время отладки примем некоторые значения с самого начала
+   //входные данные:
    int LevelNumber=1;//номер уровня, для которого задаётся деформация
    char Level_type='D';//тип коллективности "D", "R", "V"
    float beta, beta_min=0.1, beta_max=0.4, iter=0.1;//переменные для вариации \beta_2
+   //данные для построения:
    vector <float> lvl_beta;//создадим вектор со всеми бета для уровня (он будет только с первой, бета_2 пока реализовано лишь для неё)
    TGraph* gr1 = new TGraph();//указатель на буферный график для упругого рассеяния
    TGraph* gr2 = new TGraph();//указатель на буферный график для неупругого рассеяния
-   ///TGraph gr1, gr2;
-   ///std::vector<TGraph*> gr_el, gr_inel;//вектора для хранения кривых упругого/неупругого рассеяния, каждая для своей деформации
    std::vector<TGraph> gr_el, gr_inel;//вектора с наборами графиков для упругого/неупругого рассяения
+   TString TitleEl=TString::Format("%s #frac{d#sigma_{el}}{d#Omega} for variable #beta;Angle, deg;#frac{d#sigma}{d#Omega},mb",(type).c_str());
+   TString TitleInel=TString::Format("%s #frac{d#sigma_{inel}}{d#Omega} to 1st state for variable #beta;Angle, deg;#frac{d#sigma}{d#Omega},mb",(type).c_str());
+   TString GrTitle;
    auto mg_el = new TMultiGraph();//указатель на TMultiGraph для отображения кривых упругого рассеяния для разных деформаций
-   //TString TotTitle=TString::Format(" #frac{d#sigma_{el}}{d#Omega} for %s;Angle, deg;#frac{d#sigma}{d#Omega},mb",(Name).c_str());
-   //TotTitle+=
-   //mg_el->SetTitle(TotTitle);
+   mg_el->SetTitle(TitleEl);//зададим подпись графика упругого рассеяния (сверху на холсте отрисовки)
    auto mg_inel = new TMultiGraph();//указатель на TMultiGraph для отображения кривых неупругого рассеяния для разных деформаций
-   mg_inel->SetTitle("inel. variable beta");
-   ///TMultiGraph mg_el, mg_inel;
+   mg_inel->SetTitle(TitleInel);//зададим подпись графика неупругого рассеяния (сверху на холсте отрисовки)
    
    std::vector<double> v_x, v_y;//буферные векторы для сохранения координат точек
    int i=0, n_exp;//счётчик размер буферных векторов
    
+   ///Раскомментировать после отладки:
    //спросим в каких пределах менять деформацию, для какого уровня по порядку и тип возбуждения уровня (тип коллективности уже должен быть задан)
    //(реализация изменения типа коллективности и других деформаций уровня затруднительна, нужно знать, какие уровни будут обсчитываться и задавать для каждого деформацию полностью)
    /*cout<<"Input level number, level type of collectivity, beta_min, beta_max, iter:\n";
    cout<<"(beta_2 for level LevelNumber will change from beta_min to beta_max with iter):\n";
    cin>>LevelNumber>>Level_type>>beta_min>>beta_max>>iter;*/
+   //проверка ввода:
    cout<<"I got your input:\n";
    cout<<"For level number "<<LevelNumber<<" with "<<Level_type<<" type of collectivity\n ";
    cout<<"beta will change from "<<beta_min<<" to "<<beta_max<<" in "<<iter<<"\n";
@@ -2512,35 +2515,29 @@ void Nucleus::AngDisGraphsDeform(string type)//будем спрашивать �
    lvl_beta.push_back(beta);//добавим первый (и единственный) элемент вектора набора бета для уровня
    
    //будем запускать вычисления для каждого \beta_2:
-   
-   /*if (Levels[LevelNumber].deformation->Beta.size() == 0 )//если деформации не было, то вектор пустой, 
-   {Levels[LevelNumber].deformation->Beta.push_back(beta);}//исправляем это*/
    while((beta<=beta_max)&&(i<20))//пока не дойдём до максимальной деформации или кол-во итераций не станет неприличным
-   {   cout<<"///////////// for i = "<<i<<" //////////////\n";
+   {   //cout<<"///////////// for i = "<<i<<" //////////////\n";
 	   //зададим полученную деформацию для указанного уровня
        Levels[LevelNumber].SetDeformation(Level_type, -1, -1, -1, -1, &lvl_beta);
        //проверим, правильная ли деформация сохранилась в deformation
-       cout<<"Saved beta_2="<<Levels[LevelNumber].deformation->Beta[0]<<"\n";
+       //cout<<"Saved beta_2="<<Levels[LevelNumber].deformation->Beta[0]<<"\n";
 	   //запишем нашу деформацию в файл .def
 	   Def.WriteDeformation();
 	   //запустим вычисление в ТАЛИС с этими параметрами
 	   GenerateProducts();
 	   //сохраним график результата расчёта упругого рассеяния
 	   gr1 = GetElasticAngularDistribution(type, "new");
-	   
-	   gr_el.push_back(*gr1);//получаем график упругого углового распределения нейтронов
+	   gr_el.push_back(*gr1);//получаем график упругого углового распределения нейтронов и сохраняем его в вектор
 	   gr_el[i].SetLineColor(kGreen+i);
-	   //mg_el->Add(&gr_el[i]);//добавим в TMultiGraph ссылку на объект
-	   ///mg_el->Add(gr1);
-	   ///gr_el.push_back(N.GetElasticAngularDistribution(type, "new"));
+	   GrTitle=TString::Format("#beta#_2 = %s",(to_string(beta)).c_str());
+	   gr_el[i].SetTitle(GrTitle);
+
 	   //сохраним в файле результат расчёта неупругого рассеяния (на первый уровень)
 	   
 	   gr2 = Products[0].Levels[1].GetAngularDistribution(type, "new");
-	   gr_inel.push_back(*gr2);
+	   gr_inel.push_back(*gr2);//получаем график неупругого углового распределения нейтронов и сохраняем его в вектор
 	   gr_inel[i].SetLineColor(kRed+i);
-	   //mg_inel->Add(&gr_inel[i]);//добавим в MultiGraph
-	   ///mg_inel->Add(gr2);
-	   ///gr_inel.push_back(N.Products[0].Levels[1].GetAngularDistribution(type, "new"));
+	   gr_inel[i].SetTitle(GrTitle);
 	   
 	   ///string FileName = N.NucleusData.Name+to_string(A)+"_lvl"+to_string(LevelNumber)+"_"+to_string(beta);//каждый файл должен иметь уникальное иимя
        ///string FilenameEl=getenv("TALYSDIR")+"/CalculationResults/def_graphs_el/"+to_string(t.Get())+"/"+FileName+".txt";
@@ -2586,54 +2583,33 @@ void Nucleus::AngDisGraphsDeform(string type)//будем спрашивать �
 	    beta = beta + iter;//зададим следующую деформацию
 	    lvl_beta[0]=beta;//обновим вектор с набором бета
 	    i++;//увеличим счётчик итераций на единицу
-	    /*cout<<"Calculated for:\n";
-	    cout<<"i = "<<i-1<<"\beta_2 = "<<beta-iter<<endl;*/
-	    ///cout<<"Vector sizes:\n";
-	    ///cout<<"gr_el.: "<<gr_el.size()<<" gr_inel.: "<<gr_inel.size()<<endl;
-	    ///cout<<"This time new vector members are:\n";
-	    ///cout<<"gr_el.: "<<gr_el[i]<<"gr_inel.: "<<gr_inel[i]<<endl;
     }
-    cout<<"////////WHILE ENDED!////////////\n";
-    cout<<"Check vector sizes:\n";
-    cout<<"gr_el.: "<<gr_el.size()<<" gr_inel.: "<<gr_inel.size()<<endl;
     
     TCanvas *c2 = new TCanvas("c2","Scattering differential cross sections",2100, 1600);//определим холст для отрисовки графиков
     //c2->Print("hoho.pdf(","pdf");//открываем файл hoho.pdf, а не печатем холст c2
-    
-    /*for (unsigned int k=0;k<i;k++)
+    //добавим в TMultiGraph графики, сохранённые в векторах
+    for(unsigned int i=0;i<gr_el.size();i++)
     {
-		c2->cd(i);
-		cout<<"GONE TO THE "<<k<<" PAD!\n";
-		gr_el[k].Draw();
-    }*/
-    
-    
-    
-    //mg_el->Draw("ac");
-    //cout<<"TRYING TO DRAW MG_EL!\n";
-    //c2->cd(2);
-    //mg_inel->Draw("ac");
-    for(unsigned int j=0;j<gr_el.size();j++)
-    {
-		mg_el->Add(&gr_el[j]);
+		mg_el->Add(&gr_el[i]);
 	}
-    for(unsigned int l=0;l<gr_inel.size();l++)
+    for(unsigned int i=0;i<gr_inel.size();i++)
     {
-		mg_inel->Add(&gr_inel[l]);
+		mg_inel->Add(&gr_inel[i]);
 	}
-	c2->Divide(2,1,0.0001,0.0001);//create 2 Pads on the canvas
+	
+	c2->Divide(2,1,0.001,0.001);//create 2 Pads on the canvas
+	
 	c2->cd(1);
-	mg_el->Draw("ac");
-	gPad->BuildLegend();
-	gPad->SetLogy();
-	//c2->Print("hoho.pdf","pdf");
+	mg_el->Draw("ac");//строим упругое рассеяние
+	gPad->BuildLegend();//добавляем легенду на текущую область построения
+	gPad->SetLogy();//делаем масштаб графика логарифмическим
 	
 	c2->cd(2);
-	mg_inel->Draw("ac");//строим
+	mg_inel->Draw("ac");//строим неупругое рассеяние
 	gPad->BuildLegend();//добавляем легенду на текущую область построения
-	c2->Print("hoho.pdf","pdf");//печатаем холст c2 в файл hoho.pdf
-   Def.RestoreDeformation();//вернём деформацию по-умолчанию, ну или попытаемся, скорее всего нужно сохранять деформацию отдельно, а то сейчас .def остаётся с изменённой деформацией
 	
+	c2->Print("Elastic&Inelastic_deformed.pdf","pdf");//печатаем холст c2 в файл hoho.pdf
+    Def.RestoreDeformation();//вернём деформацию в файле .def на деформацию по-умолчанию
 }
 
 void TalysCalculation::ExecuteCalculation()
