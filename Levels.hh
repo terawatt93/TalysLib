@@ -357,6 +357,9 @@ class TalysCalculation:public TObject
 	void GenerateGraphs();
 	TGraph GetLevelExcitationCrossSection(double LevelEnergy,string NucleusName="");
 	TGraph GetGammaTransitionCrossSction(double GammaEnergy,string NucleusName="");
+	TMultiGraph* GetAngularDistributionsForLevel(string ProductOrReaction,unsigned int LevelNumber,string type="Total",string option="");//выдает TMultiGraph с угловыми распределениями, соответствующими значениям VarValues
+	
+	
 	ClassDef(TalysCalculation, 1);
 };
 
