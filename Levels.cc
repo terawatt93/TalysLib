@@ -996,6 +996,9 @@ TGraph* Level::GetAngularDistribution(string type,string option)//если гр�
 		AdistCompoundTalys.SetName(CompName.c_str());
 		AdistDirectTalys.SetName(DirName.c_str());
 		
+		AdistCompoundTalys.SetLineColor(2);
+		AdistDirectTalys.SetLineColor(4);
+		
 		AdistTotalTalys.SetTitle(TotTitle);
 		AdistCompoundTalys.SetTitle(CompTitle);
 		AdistDirectTalys.SetTitle(DirTitle);
@@ -1034,10 +1037,10 @@ TMultiGraph* Level::GetTMultiGraphForAngularDistributions(string graphics)
 		AllAngularDistributions->Add(&AdistTotalTalys);
 		AllAngularDistributions->Add(&AdistCompoundTalys);
 		AllAngularDistributions->Add(&AdistDirectTalys);
-		if(elastic)
+		/*if(elastic)
 		{
 			AllAngularDistributions->Add(elastic);
-		}
+		}*/
 	}
 	else
 	{
