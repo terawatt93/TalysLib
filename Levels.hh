@@ -7,6 +7,7 @@
 #include <TGraph.h>
 #include <TMultiGraph.h>
 #include <TCanvas.h>
+#include <TLegend.h>
 #pragma once
 using namespace std;
 
@@ -47,21 +48,41 @@ using namespace std;
 class Level;
 class Nucleus;
 class Deformation;
-class OpticalModelParameters:public TObject
+class OMPStorage
 {
 	public:
 	double Vv, Wv, Rv, Av, Wd, Rd, Ad, Vso, Wso, Rso, Aso, Rc, v1, v2, v3, v4, w1, w2, d1, d2, d3, vso1, vso2, wso1, wso2, A, N, Z, ProjectileEnergy, Ef, Vc;
+	bool ReadFlag=false;
+	int Type=1;
+	string Projectile;
+	Nucleus *Nuclide;
+	void EvalKoning();
+	void EvalPotential();
+	void Read(string &Buffer);
+	TString GetTString();
+	void SetNucleus(Nucleus *_Nuclide);
+	void SetProjectile(string _Projectile);
+	void SetProjectileEnergy(double Energy);
+};
+class OpticalModelParameters:public TObject
+{
+	public:
+	OpticalModelParameters();
+	OMPStorage Potential, PotentialDisp, PotentialKoning;
+	int nOMP;
 	bool NormalisationMode=true;
 	bool Read=false;
 	bool JLM_flag=false;
 	bool goriely=false;
 	bool hilaire=false;
 	bool Koning=false;
+	bool Dispersive=false;
+	void ReadPotentials(string Line);
 	string Projectile;
+	vector<string> ContentOfFile;
+	unsigned int PointToPasteChangedOMP=0;
 	Nucleus *Nuclide;
-	void SetNucleus(Nucleus *_Nuclide);
-	void SetProjectile(string _Projectile);
-	void SetProjectileEnergy(double Energy);
+	int A,Z,N;
 	void SetVv(double value);
 	void SetWv(double value);
 	void SetRv(double value);
@@ -86,9 +107,9 @@ class OpticalModelParameters:public TObject
 	void Setvso2(double value);
 	void Setwso1(double value);
 	void Setwso2(double value);
-	bool ReadOMP();
-	void SaveOMP();//способ записи OMP приведен в omppar.f
-	void RestoreOMP();
+	bool ReadOMP(string _Projectile="n");
+	void SaveOMP(string filename,int UseKoning=0);//UseKoning=0-не использовать потенциал Кенинга; 1-использовать Кенинга, если нет локальной ОМ; 2-использовать только Кенинга
+	//void RestoreOMP();
 	ClassDef(OpticalModelParameters, 1);
 };
 
@@ -151,6 +172,7 @@ class GammaTransition:public GammaTransitionData
 	void SetInformationExtractedFromTalys(float TalysE_f, float TalysE_i, SpinParity JP_f, SpinParity JP_i);
 	void ErasePointers();
 	double GetEnergy();
+	TGraph *GetCSGraph();
 	ClassDef(GammaTransition, 1);
 };
 
@@ -240,6 +262,7 @@ class Level:public LevelData
 	void ErasePointers();
 	TGraph* GetAngularDistribution(string type="Total",string option="");//если график уже построен, выдается сохраненный, если нет, или option=="new", строится заново
 	TMultiGraph* GetTMultiGraphForAngularDistributions(string graphics="all");
+	TGraph *GetCSGraph(string type="Total");
 	LevelData ToLevelData();
 	void SetTGraphNameAndTitle(string ValName);
 	void AddPoint(double x_value,Level *level);
@@ -273,6 +296,8 @@ class Nucleus:public NucleusData
 	vector<Level*> LevelsFromTalys;
 	vector<Level*> LevelsFromENSDF;
 	vector<string> TalysOptions;
+	OpticalModelParameters OMPN;
+	OpticalModelParameters OMPP;
 	Deformation Def;
 	TGraph ElacticTotTalys, ElasticDirectTalys,ElasticCompoundTalys;//угловые распределения
 	TGraph InelasticTotTalysV, InelasticDirectTalysV,InelasticCompoundTalysV, ElasticTotTalysV, ElasticDirectTalysV,ElasticCompoundTalysV, TotTalysV;//сечения
@@ -280,9 +305,12 @@ class Nucleus:public NucleusData
 	void ReadElastic();
 	TGraph* GetElasticAngularDistribution(string type="Total",string option="");//если график упругого уже построен, выдается сохраненный, если нет, или option=="new", строится заново
 	bool TalysGroundStateExsists=false, FastFlag=true, FastCalculated=false;
+	int WriteOMPOrUseKoningP=-1;
+	int WriteOMPOrUseKoningN=-1;
 	void MergeLevels(float tolerancy);
 	void SortingLevels();
 	Nucleus* FindProductsByReaction(string reaction);
+	Nucleus* FindProductByName(string _Name);
 	Nucleus* fMotherNucleus;
 	Nucleus()
 	{
@@ -348,16 +376,19 @@ class TalysCalculation:public TObject
 	string Variable="Energy";
 	TGraph Elastic, Inelastic;
 	vector<double> VarValues;
+	bool GeneratedGraphs=false;
 	double ProjectileEnergy;
 	void ReadParametersFromFile(string filename);
 	void ExecuteCalculation();
+	void ExecuteCalculation(void (*VarChangeFunction)(Nucleus *Nuclide,double value));
 	void SetTarget(string _Target);
 	void SetProjectile(string _Proj);
-	void SetEnergies(double min,double max,double step);
+	void SetVarValues(double min,double max,double step);
 	void GenerateGraphs();
-	TGraph GetLevelExcitationCrossSection(double LevelEnergy,string NucleusName="");
-	TGraph GetGammaTransitionCrossSction(double GammaEnergy,string NucleusName="");
-	TMultiGraph* GetAngularDistributionsForLevel(string ProductOrReaction,unsigned int LevelNumber,string type="Total",string option="");//выдает TMultiGraph с угловыми распределениями, соответствующими значениям VarValues
+	TGraph *GetLevelExcitationCrossSection(double LevelEnergy,string NucleusName="",string Option="Total");
+	TGraph *GetGammaTransitionCrossSction(double GammaEnergy,string NucleusName="");
+	TMultiGraph* GetAngularDistributionsForLevel(double LevelEnergy,string NucleusName="",string type="Total",string option="",TLegend *leg=0);//выдает TMultiGraph с угловыми распределениями, соответствующими значениям VarValues
+	TMultiGraph* GetElasticAngularDistributions(string type="Total",string option="",TLegend *leg=0);//выдает TMultiGraph с угловыми распределениями, соответствующими значениям VarValues
 	
 	
 	ClassDef(TalysCalculation, 1);
