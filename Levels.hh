@@ -330,7 +330,6 @@ class Nucleus:public NucleusData
 	Level* FindLevelByEnergy(float Energy,float tolerancy=1);
 	Level* FindLevelByNumber(int number);
 	GammaTransition* GetBestTransition(float Energy,float tolerancy=1);
-	void PrintLevelsWithCorrespondingTransitions(float Energy, float tolerancy=1,float intensity=0);
 	vector<GammaTransition*> GetGammaTransition(float Energy, float tolerancy=1,float intensity=0);
 	vector<GammaTransition*> GetGammaTransitions(string option="Talys",int BetterThan=100,float tolerancy=1,float intensity=0);
 	/*опции:
@@ -343,8 +342,8 @@ class Nucleus:public NucleusData
 	 * аргумент BetterThan-вывести линии с уровней, mark которых меньше этого значения
 	 */
 	vector<Nucleus> Products;
-	void GenerateProducts(string Projectile="n");
-	void ExecuteCalculationInTalys(string Projectile="n");
+	void GenerateProducts(string _Projectile="n");
+	void ExecuteCalculationInTalys(string _Projectile="n");
 	void ReadTalysCalculationResult();
 	void AssignSimilarLevels(float Tolerancy=1.5);
 	void DrawLevelScheme(double MinTalysCS=0);
