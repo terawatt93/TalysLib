@@ -1459,16 +1459,6 @@ vector<Level*> Nucleus::GetLevelsWithCorrespondingTransitions(float Energy, floa
 	}
 	return FoundLevels;
 }
-/*void Nucleus::PrintLevelsWithCorrespondingTransitions(float Energy, float tolerancy,float intensity)
-{
-	vector<Level*> FoundLevels=GetLevelsWithCorrespondingTransitions(Energy,tolerancy,intensity);
-	for(unsigned int i=0;i<FoundLevels.size();i++)
-	{
-		cout<<"\n"<<Name<<" "<<Reaction<<" ";
-		FoundLevels[i]->Print();
-		cout<<"\n";
-	}
-}*/
 vector<GammaTransition*> Nucleus::GetGammaTransition(float Energy, float tolerancy,float intensity)
 {
 	vector<GammaTransition*> result;
@@ -1539,8 +1529,9 @@ void Nucleus::SetProjectileEnergy(double E)
 {
 	ProjectileEnergy=E;
 }
-void Nucleus::ExecuteCalculationInTalys(string Projectile)
+void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 {
+	Projectile=_Projectile;
 	string PathToCalculationDir=GetPathToTalysData()+"/CalculationResults/";
 	if(FastFlag)
 	{
@@ -2149,9 +2140,10 @@ void Nucleus::MergeLevels(float tolerancy)
 	}
 }
 
-void Nucleus::GenerateProducts(string Projectile)
+void Nucleus::GenerateProducts(string _Projectile)
 {
 	Products.resize(0);
+	Projectile=_Projectile;
 	ExecuteCalculationInTalys(Projectile);
 	int ProjZ,ProjA;
 	
