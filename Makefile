@@ -21,3 +21,4 @@ $(PROGRAM): $(SRCS)
 	@echo "done"
 
 clean:; @rm -rf core *~ LevelsDict* $(PROGRAM)
+install:; @echo 'export LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:'`pwd`>>~/.bashrc; echo 'export CPATH=$$CPATH:'`pwd`>>~/.bashrc
