@@ -825,25 +825,15 @@ void Deformation::ReadDeformation()
 	}
 	AssignPointers();
 }
-void Deformation::WriteDeformation()
+void Deformation::WriteDeformation(string filename)
 {
-	string Filename=GetPathToTalysData()+"/structure/deformation/"+GetNucleusName(Z)+".def";
-	ifstream ifs(Filename.c_str());
-	if(ifs.good())
-	{
-		TDatime t;
-		string NewFileName=GetPathToTalysData()+"/CalculationResults/"+to_string(t.Get())+"_"+GetNucleusName(Z)+".def";
-		system(("mv "+Filename+" "+NewFileName).c_str());
-		ifs.close();
-	}
-	ofstream ofs(Filename.c_str());
+	ofstream ofs(filename.c_str());
 	bool IsDeformationWritten=false;
 	for(unsigned int i=0;i<PointToPastChangedDeformation;i++)
 	{
 		ofs<<ContentOfFile[i]<<"\n";
 	}
 	NLevels=LevelDeformations.size();
-	//ofs<<TString::Format("%4d%4d%4d   %c   %c",Z,A,NLevels,TypeOfCollectivity,TypeOfDeformation)<<"\n";
 	ofs<<GenerateMainDefString(Z,A,NLevels,TypeOfCollectivity,TypeOfDeformation)<<"\n";
 	for(unsigned int i=0;i<LevelDeformations.size();i++)
 	{
@@ -856,49 +846,6 @@ void Deformation::WriteDeformation()
 	}
 	
 	ofs.close();
-}
-void Deformation::RestoreDeformation()
-{
-	string Path=GetPathToTalysData()+"/CalculationResults/";
-	vector<string> p;
-	p.push_back(Path);
-	string mask="*"+GetNucleusName(Z)+".def";
-	vector<string> Files=FindFile(p,mask);
-	string OldestFile;
-	TDatime dt;
-	unsigned int TimeFile=dt.Get();
-	
-	for(unsigned int i=0;i<Files.size();i++)
-	{
-		unsigned int LastSlashIndex=0;
-		for(unsigned int j=0;j<Files[i].size();j++)
-		{
-			if(Files[i][j]=='_')
-			{
-				Files[i][j]=' ';
-			}
-			if(Files[i][j]=='/')
-			{
-				Files[i][j]=' ';
-				LastSlashIndex=j;
-			}
-		}
-		Files[i]=Files[i].substr(LastSlashIndex,Files[i].size()-LastSlashIndex);
-		
-		stringstream s(Files[i]);
-		unsigned int t;
-		s>>t;
-		if(t<TimeFile)
-		{
-			TimeFile=t;
-		}
-	}
-	if(TimeFile>0)
-	{
-		string OldestFileName=Path+to_string(TimeFile)+"_"+mask.substr(1,mask.size()-1);
-		string TalysFileName=GetPathToTalysData()+"/structure/deformation/"+GetNucleusName(Z)+".def";
-		system(("mv "+OldestFileName+" "+TalysFileName).c_str());
-	}
 }
 void Deformation::Sort()
 {
@@ -1243,7 +1190,7 @@ void Level::SetTGraphNameAndTitle(string ValName)
 
 void Level::SetDeformation(char LevT, int BandN, int BandL, int NPhon, int MagN, vector<float> *Def)
 {
-	if(deformation)
+	if(deformation!=0)
 	{
 		deformation->NumberOfBand=BandN;
 		deformation->TypeOfLevel=LevT;
@@ -1335,6 +1282,7 @@ Nucleus::Nucleus(NucleusData ND)
 	OMPP.Nuclide=this;
 	OMPN.ReadOMP("n");
 	OMPP.ReadOMP("p");
+	AssignPointers();
 	for(unsigned int i=0;i<ND.LevelsData.size();i++)
 	{
 		Levels.emplace_back(ND.LevelsData[i]);
@@ -1343,6 +1291,10 @@ Nucleus::Nucleus(NucleusData ND)
 	{
 		Products.emplace_back(ND.ProductsData[i]);
 	}	
+	Def.SetZA(Z,A);
+	Def.ReadDeformation();
+	AssignDeformationsToLevels();
+	AssignPointers();
 }
 void Nucleus::ReadENSDFFile(string filename,string Nuclide)
 {
@@ -1524,6 +1476,7 @@ Nucleus::Nucleus(string Name,string Reaction)
 	OMPP.Nuclide=this;
 	OMPN.ReadOMP("n");
 	OMPP.ReadOMP("p");
+	AssignPointers();
 }
 void Nucleus::SetProjectileEnergy(double E)
 {
@@ -1569,6 +1522,11 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 			ofs<<"optmodfileN "<<Z<<" "<<GetNucleusName(Z)<<"N.omp\n";
 			OMPN.SaveOMP(PathToCalculationDir+Name+"/"+GetNucleusName(Z)+"N.omp",WriteOMPOrUseKoningN);
 		}
+	}
+	if(WriteDeformation)
+	{
+		ofs<<"deformfile "<<Z<<" "<<GetNucleusName(Z)<<".def\n";
+		Def.WriteDeformation(PathToCalculationDir+Name+"/"+GetNucleusName(Z)+".def");
 	}
 	ofs.close();
 	system("./run_talys.sh");

@@ -396,7 +396,7 @@ namespace ROOT {
       ::TalysCalculation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::TalysCalculation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("TalysCalculation", ::TalysCalculation::Class_Version(), "Levels.hh", 367,
+         instance("TalysCalculation", ::TalysCalculation::Class_Version(), "Levels.hh", 368,
                   typeid(::TalysCalculation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::TalysCalculation::Dictionary, isa_proxy, 16,
                   sizeof(::TalysCalculation) );
@@ -430,7 +430,7 @@ namespace ROOT {
       ::SampleInformation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::SampleInformation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("SampleInformation", ::SampleInformation::Class_Version(), "Levels.hh", 400,
+         instance("SampleInformation", ::SampleInformation::Class_Version(), "Levels.hh", 401,
                   typeid(::SampleInformation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::SampleInformation::Dictionary, isa_proxy, 16,
                   sizeof(::SampleInformation) );
@@ -2056,6 +2056,7 @@ void Nucleus::Streamer(TBuffer &R__b)
       R__b >> FastCalculated;
       R__b >> WriteOMPOrUseKoningP;
       R__b >> WriteOMPOrUseKoningN;
+      R__b >> WriteDeformation;
       R__b >> fMotherNucleus;
       {
          vector<Nucleus> &R__stl =  Products;
@@ -2147,6 +2148,7 @@ void Nucleus::Streamer(TBuffer &R__b)
       R__b << FastCalculated;
       R__b << WriteOMPOrUseKoningP;
       R__b << WriteOMPOrUseKoningN;
+      R__b << WriteDeformation;
       R__b << fMotherNucleus;
       {
          vector<Nucleus> &R__stl =  Products;

@@ -216,8 +216,8 @@ class Deformation:public TObject
 	void SetZA(int _Z,int _A);
 	void SetTypeOfCollectivity( char _Type='S');
 	void ReadDeformation();
-	void WriteDeformation();
-	void RestoreDeformation();
+	void WriteDeformation(string filename);
+	//void RestoreDeformation();
 	void Sort();
 	void AssignPointers();
 	ClassDef(Deformation, 1);
@@ -307,6 +307,7 @@ class Nucleus:public NucleusData
 	bool TalysGroundStateExsists=false, FastFlag=true, FastCalculated=false;
 	int WriteOMPOrUseKoningP=-1;
 	int WriteOMPOrUseKoningN=-1;
+	bool WriteDeformation=false;
 	void MergeLevels(float tolerancy);
 	void SortingLevels();
 	Nucleus* FindProductsByReaction(string reaction);
