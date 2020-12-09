@@ -1,0 +1,72 @@
+\babel@toc {russian}{}
+\contentsline {section}{\numberline {1}Введение}{1}{section.1}
+\contentsline {section}{\numberline {2}Структура библиотеки}{1}{section.2}
+\contentsline {subsection}{\numberline {2.1}Класс Nucleus}{1}{subsection.2.1}
+\contentsline {subsubsection}{\numberline {2.1.1}Name,Reaction,Projectile}{1}{subsubsection.2.1.1}
+\contentsline {subsubsection}{\numberline {2.1.2}vector<Level> Levels}{2}{subsubsection.2.1.2}
+\contentsline {subsubsection}{\numberline {2.1.3}OpticalModelParameters OMPN, OMPP}{2}{subsubsection.2.1.3}
+\contentsline {subsubsection}{\numberline {2.1.4}Deformation}{2}{subsubsection.2.1.4}
+\contentsline {subsubsection}{\numberline {2.1.5}TGraph ElacticTotTalys, ElasticDirectTalys, ElasticCompoundTalys}{2}{subsubsection.2.1.5}
+\contentsline {subsubsection}{\numberline {2.1.6}InelasticTotTalysV, InelasticDirectTalysV, InelasticCompoundTalysV, ElasticTotTalysV, ElasticDirectTalysV, ElasticCompoundTalysV, TotTalysV}{2}{subsubsection.2.1.6}
+\contentsline {subsubsection}{\numberline {2.1.7}BNECS_gamma, BNECS_neutron, BNECS_proton, BNECS_deuteron, BNECS_triton, BNECS_3He, BNECS_alpha}{3}{subsubsection.2.1.7}
+\contentsline {subsubsection}{\numberline {2.1.8}TEISGraphTot, TEISGraphCont, TEISGraphDiscr}{3}{subsubsection.2.1.8}
+\contentsline {subsubsection}{\numberline {2.1.9}void ReadElastic()}{3}{subsubsection.2.1.9}
+\contentsline {subsubsection}{\numberline {2.1.10}TGraph* GetElasticAngularDistribution(string type="Total",string option=" ")}{4}{subsubsection.2.1.10}
+\contentsline {subsubsection}{\numberline {2.1.11}int WriteOMPOrUseKoningP, WriteOMPOrUseKoningN}{4}{subsubsection.2.1.11}
+\contentsline {subsubsection}{\numberline {2.1.12}void MergeLevels(float tolerancy)}{4}{subsubsection.2.1.12}
+\contentsline {subsubsection}{\numberline {2.1.13}SortingLevels()}{5}{subsubsection.2.1.13}
+\contentsline {subsubsection}{\numberline {2.1.14}FindProductsByReaction(string reaction)}{5}{subsubsection.2.1.14}
+\contentsline {subsubsection}{\numberline {2.1.15}FindProductByName(string _Name)}{5}{subsubsection.2.1.15}
+\contentsline {subsubsection}{\numberline {2.1.16}Nucleus* fMotherNucleus}{5}{subsubsection.2.1.16}
+\contentsline {subsubsection}{\numberline {2.1.17}Nucleus()}{5}{subsubsection.2.1.17}
+\contentsline {subsubsection}{\numberline {2.1.18}Nucleus(string Name,string Reaction="")}{5}{subsubsection.2.1.18}
+\contentsline {subsubsection}{\numberline {2.1.19}Nucleus(NucleusData ND)}{6}{subsubsection.2.1.19}
+\contentsline {subsubsection}{\numberline {2.1.20}ReadENSDFFile(string filename="",string Nuclide="")}{6}{subsubsection.2.1.20}
+\contentsline {subsubsection}{\numberline {2.1.21}ReadLevelsFromTalysDatabase(string type="final")}{6}{subsubsection.2.1.21}
+\contentsline {subsubsection}{\numberline {2.1.22}SetProjectileEnergy(double E)}{6}{subsubsection.2.1.22}
+\contentsline {subsubsection}{\numberline {2.1.23}vector<Level*> GetLevelsWithCorrespondingTransitions(float Energy, float tolerancy=1, float intensity=0)}{6}{subsubsection.2.1.23}
+\contentsline {subsubsection}{\numberline {2.1.24}Level* FindLevelFromTalys(float Energy, SpinParity JP)}{7}{subsubsection.2.1.24}
+\contentsline {subsubsection}{\numberline {2.1.25}Level* FindBestLevelByEJP(float Energy, SpinParity JP, float tolerancy=1)}{7}{subsubsection.2.1.25}
+\contentsline {subsubsection}{\numberline {2.1.26}FindLevelByEnergy(float Energy, float tolerancy=1)}{7}{subsubsection.2.1.26}
+\contentsline {subsubsection}{\numberline {2.1.27}Level* FindLevelByNumber(int number)}{7}{subsubsection.2.1.27}
+\contentsline {subsubsection}{\numberline {2.1.28}GammaTransition* GetBestTransition(float Energy, float tolerancy=1)}{8}{subsubsection.2.1.28}
+\contentsline {subsubsection}{\numberline {2.1.29}vector<GammaTransition*> GetGammaTransition(float Energy, float tolerancy=1, float intensity=0)}{8}{subsubsection.2.1.29}
+\contentsline {subsubsection}{\numberline {2.1.30}vector<GammaTransition*> GetGammaTransitions(string option="Talys",int BetterThan=100, float tolerancy=1, float intensity=0)}{8}{subsubsection.2.1.30}
+\contentsline {subsubsection}{\numberline {2.1.31}vector<Nucleus> Products}{8}{subsubsection.2.1.31}
+\contentsline {subsubsection}{\numberline {2.1.32}void GenerateProducts(string Projectile="n")}{8}{subsubsection.2.1.32}
+\contentsline {subsubsection}{\numberline {2.1.33}void ExecuteCalculationInTalys(string _Projectile="n")}{9}{subsubsection.2.1.33}
+\contentsline {subsubsection}{\numberline {2.1.34}void ReadTalysCalculationResult()}{9}{subsubsection.2.1.34}
+\contentsline {subsubsection}{\numberline {2.1.35}void AssignSimilarLevels(float Tolerancy=1.5)}{9}{subsubsection.2.1.35}
+\contentsline {subsubsection}{\numberline {2.1.36}void DrawLevelScheme(double MinTalysCS=0)}{9}{subsubsection.2.1.36}
+\contentsline {subsubsection}{\numberline {2.1.37}void AssignPointers()}{9}{subsubsection.2.1.37}
+\contentsline {subsubsection}{\numberline {2.1.38}void ErasePointers()}{10}{subsubsection.2.1.38}
+\contentsline {subsubsection}{\numberline {2.1.39}void AssignDeformationsToLevels()}{10}{subsubsection.2.1.39}
+\contentsline {subsubsection}{\numberline {2.1.40}void SetLevelDeformation(int LevelNumber,char LevT, int BandN=-1, int BandL=-1, int NPhon=-1, int MagN=-1, vector<float> *Def=0)}{10}{subsubsection.2.1.40}
+\contentsline {subsubsection}{\numberline {2.1.41}void SetLevelDeformation(double LevelEnergy,char LevT, int BandN=-1, int BandL=-1, int NPhon=-1, int MagN=-1, vector<float> *Def=0)}{10}{subsubsection.2.1.41}
+\contentsline {subsubsection}{\numberline {2.1.42}string PrintLevels()}{11}{subsubsection.2.1.42}
+\contentsline {subsubsection}{\numberline {2.1.43}string PrintReactions()}{11}{subsubsection.2.1.43}
+\contentsline {subsubsection}{\numberline {2.1.44}string ReactionToTalysNotation(char DataSelection=kExcitationCS)}{11}{subsubsection.2.1.44}
+\contentsline {subsubsection}{\numberline {2.1.45}float GetMass()}{11}{subsubsection.2.1.45}
+\contentsline {subsubsection}{\numberline {2.1.46}NucleusData ToNucleusData()}{11}{subsubsection.2.1.46}
+\contentsline {subsubsection}{\numberline {2.1.47}void GenerateGammaSpectrum(TH1F *Spectrum, TF1* ResolutionFunction, int NEntries=100000)}{12}{subsubsection.2.1.47}
+\contentsline {subsubsection}{\numberline {2.1.48}void SetTGraphNameAndTitle(string ValName)}{12}{subsubsection.2.1.48}
+\contentsline {subsubsection}{\numberline {2.1.49}void AddPoint(double x_value, Nucleus* Nucl)}{12}{subsubsection.2.1.49}
+\contentsline {subsection}{\numberline {2.2}Класс TalysCalculation}{12}{subsection.2.2}
+\contentsline {subsubsection}{\numberline {2.2.1}Results, FinalResult}{13}{subsubsection.2.2.1}
+\contentsline {subsubsection}{\numberline {2.2.2}Target, Proj}{13}{subsubsection.2.2.2}
+\contentsline {subsubsection}{\numberline {2.2.3}TalysOptions}{13}{subsubsection.2.2.3}
+\contentsline {subsubsection}{\numberline {2.2.4}Variable}{13}{subsubsection.2.2.4}
+\contentsline {subsubsection}{\numberline {2.2.5}Elastic, Inelastic, GeneratedGraphs}{13}{subsubsection.2.2.5}
+\contentsline {subsubsection}{\numberline {2.2.6}VarValues}{13}{subsubsection.2.2.6}
+\contentsline {subsubsection}{\numberline {2.2.7}GeneratedGraphs}{13}{subsubsection.2.2.7}
+\contentsline {subsubsection}{\numberline {2.2.8}ProjectileEnergy}{13}{subsubsection.2.2.8}
+\contentsline {subsubsection}{\numberline {2.2.9}void ReadParametersFromFile(string filename)}{13}{subsubsection.2.2.9}
+\contentsline {subsubsection}{\numberline {2.2.10}void ExecuteCalculation(), void ExecuteCalculation(void (*VarChangeFunction)(Nucleus *Nuclide, double value))}{13}{subsubsection.2.2.10}
+\contentsline {subsubsection}{\numberline {2.2.11}void SetTarget(string _Target), void SetProjectile(string _Proj), void SetVarValues(double min, double max, double step)}{13}{subsubsection.2.2.11}
+\contentsline {subsubsection}{\numberline {2.2.12}void ExecuteCalculation(), ExecuteCalculation(void (*VarChangeFunction)(Nucleus *Nuclide,double value))}{13}{subsubsection.2.2.12}
+\contentsline {subsubsection}{\numberline {2.2.13}void GenerateGraphs()}{14}{subsubsection.2.2.13}
+\contentsline {subsubsection}{\numberline {2.2.14}TGraph* GetLevelExcitationCrossSection(double LevelEnergy, string NucleusName, string Option)}{14}{subsubsection.2.2.14}
+\contentsline {subsubsection}{\numberline {2.2.15}TGraph* GetGammaTransitionCrossSction(double GammaEnergy, string NucleusName)}{14}{subsubsection.2.2.15}
+\contentsline {subsubsection}{\numberline {2.2.16}TMultiGraph* GetAngularDistributionsForLevel(double LevelEnergy,string NucleusName, string type, string option, TLegend *leg)}{14}{subsubsection.2.2.16}
+\contentsline {subsubsection}{\numberline {2.2.17}TMultiGraph* GetElasticAngularDistributions(string type, string option, TLegend *leg)}{14}{subsubsection.2.2.17}
+\contentsline {subsection}{\numberline {2.3}Класс OpticalModelParameters}{14}{subsection.2.3}
