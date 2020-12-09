@@ -1,6 +1,6 @@
 #/bin/bash 
 make clean
-#make install
 make
+make install
 root
 
