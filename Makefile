@@ -2,17 +2,17 @@ CXX = `root-config --cxx`
 CXXFLAGS = `root-config --cflags` -fPIC -g
 ROOTLIBS = `root-config --glibs`
 SHARED = -shared
-SRCS = LevelsDict.cxx Levels.cc
-HDRS = LevelsLinkDef.h Levels.hh
+SRCS = TalysLibDict.cxx TalysLib.cc
+HDRS = TalysLinkDef.h TalysLib.hh
 
-PROGRAM = Levels.so
+PROGRAM = TalysLib.so
 
 all: $(PROGRAM)
 
-LevelsDict.cxx: $(HDRS) LevelsLinkDef.h
+TalysLibDict.cxx: $(HDRS) TalysLinkDef.h
 	@echo "Generating dictionary ..."
 	#@rootcint -f $@ -c -p $^
-	@rootcling -f LevelsDict.cxx -rml Levels.so -rmf LevelsDict.rootmap Levels.hh LevelsLinkDef.h
+	@rootcling -f TalysLibDict.cxx -rml TalysLib.so -rmf TalysLib.rootmap TalysLib.hh TalysLinkDef.h
 
 $(PROGRAM): $(SRCS)
 	@echo "Building $(PROGRAM) ..."

@@ -1,6 +1,6 @@
 // Do NOT change. Changes will be lost next time file is generated
 
-#define R__DICTIONARY_FILENAME LevelsDict
+#define R__DICTIONARY_FILENAME TalysLibDict
 #define R__NO_DEPRECATION
 
 /*******************************************************************/
@@ -38,7 +38,7 @@
 namespace std {} using namespace std;
 
 // Header files passed as explicit arguments
-#include "Levels.hh"
+#include "TalysLib.hh"
 
 // Header files passed via #pragma extra_include
 
@@ -56,7 +56,7 @@ namespace ROOT {
       ::OpticalModelParameters *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::OpticalModelParameters >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("OpticalModelParameters", ::OpticalModelParameters::Class_Version(), "Levels.hh", 67,
+         instance("OpticalModelParameters", ::OpticalModelParameters::Class_Version(), "TalysLib.hh", 67,
                   typeid(::OpticalModelParameters), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::OpticalModelParameters::Dictionary, isa_proxy, 16,
                   sizeof(::OpticalModelParameters) );
@@ -90,7 +90,7 @@ namespace ROOT {
       ::SpinParity *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::SpinParity >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("SpinParity", ::SpinParity::Class_Version(), "Levels.hh", 116,
+         instance("SpinParity", ::SpinParity::Class_Version(), "TalysLib.hh", 116,
                   typeid(::SpinParity), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::SpinParity::Dictionary, isa_proxy, 16,
                   sizeof(::SpinParity) );
@@ -124,7 +124,7 @@ namespace ROOT {
       ::GammaTransitionData *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::GammaTransitionData >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("GammaTransitionData", ::GammaTransitionData::Class_Version(), "Levels.hh", 134,
+         instance("GammaTransitionData", ::GammaTransitionData::Class_Version(), "TalysLib.hh", 134,
                   typeid(::GammaTransitionData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::GammaTransitionData::Dictionary, isa_proxy, 16,
                   sizeof(::GammaTransitionData) );
@@ -158,7 +158,7 @@ namespace ROOT {
       ::GammaTransition *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::GammaTransition >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("GammaTransition", ::GammaTransition::Class_Version(), "Levels.hh", 145,
+         instance("GammaTransition", ::GammaTransition::Class_Version(), "TalysLib.hh", 145,
                   typeid(::GammaTransition), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::GammaTransition::Dictionary, isa_proxy, 16,
                   sizeof(::GammaTransition) );
@@ -192,7 +192,7 @@ namespace ROOT {
       ::LevelData *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::LevelData >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("LevelData", ::LevelData::Class_Version(), "Levels.hh", 179,
+         instance("LevelData", ::LevelData::Class_Version(), "TalysLib.hh", 179,
                   typeid(::LevelData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::LevelData::Dictionary, isa_proxy, 16,
                   sizeof(::LevelData) );
@@ -226,7 +226,7 @@ namespace ROOT {
       ::LevelDeformation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::LevelDeformation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("LevelDeformation", ::LevelDeformation::Class_Version(), "Levels.hh", 193,
+         instance("LevelDeformation", ::LevelDeformation::Class_Version(), "TalysLib.hh", 193,
                   typeid(::LevelDeformation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::LevelDeformation::Dictionary, isa_proxy, 16,
                   sizeof(::LevelDeformation) );
@@ -260,7 +260,7 @@ namespace ROOT {
       ::Deformation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::Deformation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("Deformation", ::Deformation::Class_Version(), "Levels.hh", 207,
+         instance("Deformation", ::Deformation::Class_Version(), "TalysLib.hh", 207,
                   typeid(::Deformation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::Deformation::Dictionary, isa_proxy, 16,
                   sizeof(::Deformation) );
@@ -294,7 +294,7 @@ namespace ROOT {
       ::Level *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::Level >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("Level", ::Level::Class_Version(), "Levels.hh", 226,
+         instance("Level", ::Level::Class_Version(), "TalysLib.hh", 226,
                   typeid(::Level), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::Level::Dictionary, isa_proxy, 16,
                   sizeof(::Level) );
@@ -328,7 +328,7 @@ namespace ROOT {
       ::NucleusData *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::NucleusData >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("NucleusData", ::NucleusData::Class_Version(), "Levels.hh", 272,
+         instance("NucleusData", ::NucleusData::Class_Version(), "TalysLib.hh", 272,
                   typeid(::NucleusData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::NucleusData::Dictionary, isa_proxy, 16,
                   sizeof(::NucleusData) );
@@ -362,7 +362,7 @@ namespace ROOT {
       ::Nucleus *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::Nucleus >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("Nucleus", ::Nucleus::Class_Version(), "Levels.hh", 291,
+         instance("Nucleus", ::Nucleus::Class_Version(), "TalysLib.hh", 291,
                   typeid(::Nucleus), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::Nucleus::Dictionary, isa_proxy, 16,
                   sizeof(::Nucleus) );
@@ -396,7 +396,7 @@ namespace ROOT {
       ::TalysCalculation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::TalysCalculation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("TalysCalculation", ::TalysCalculation::Class_Version(), "Levels.hh", 368,
+         instance("TalysCalculation", ::TalysCalculation::Class_Version(), "TalysLib.hh", 368,
                   typeid(::TalysCalculation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::TalysCalculation::Dictionary, isa_proxy, 16,
                   sizeof(::TalysCalculation) );
@@ -430,7 +430,7 @@ namespace ROOT {
       ::SampleInformation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::SampleInformation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("SampleInformation", ::SampleInformation::Class_Version(), "Levels.hh", 401,
+         instance("SampleInformation", ::SampleInformation::Class_Version(), "TalysLib.hh", 401,
                   typeid(::SampleInformation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::SampleInformation::Dictionary, isa_proxy, 16,
                   sizeof(::SampleInformation) );
@@ -3386,9 +3386,9 @@ namespace ROOT {
 } // end of namespace ROOT for class vector<GammaTransition>
 
 namespace {
-  void TriggerDictionaryInitialization_LevelsDict_Impl() {
+  void TriggerDictionaryInitialization_TalysLibDict_Impl() {
     static const char* headers[] = {
-"Levels.hh",
+"TalysLib.hh",
 0
     };
     static const char* includePaths[] = {
@@ -3397,31 +3397,31 @@ namespace {
 0
     };
     static const char* fwdDeclCode = R"DICTFWDDCLS(
-#line 1 "LevelsDict dictionary forward declarations' payload"
+#line 1 "TalysLibDict dictionary forward declarations' payload"
 #pragma clang diagnostic ignored "-Wkeyword-compat"
 #pragma clang diagnostic ignored "-Wignored-attributes"
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 extern int __Cling_Autoloading_Map;
-class __attribute__((annotate("$clingAutoload$Levels.hh")))  OpticalModelParameters;
-class __attribute__((annotate("$clingAutoload$Levels.hh")))  SpinParity;
-class __attribute__((annotate("$clingAutoload$Levels.hh")))  GammaTransitionData;
-class __attribute__((annotate("$clingAutoload$Levels.hh")))  GammaTransition;
-class __attribute__((annotate("$clingAutoload$Levels.hh")))  LevelData;
-class __attribute__((annotate("$clingAutoload$Levels.hh")))  LevelDeformation;
-class __attribute__((annotate("$clingAutoload$Levels.hh")))  Deformation;
-class __attribute__((annotate("$clingAutoload$Levels.hh")))  Level;
-class __attribute__((annotate("$clingAutoload$Levels.hh")))  NucleusData;
-class __attribute__((annotate("$clingAutoload$Levels.hh")))  Nucleus;
-class __attribute__((annotate("$clingAutoload$Levels.hh")))  TalysCalculation;
-class __attribute__((annotate("$clingAutoload$Levels.hh")))  SampleInformation;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  OpticalModelParameters;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  SpinParity;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  GammaTransitionData;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  GammaTransition;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  LevelData;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  LevelDeformation;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  Deformation;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  Level;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  NucleusData;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  Nucleus;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  TalysCalculation;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  SampleInformation;
 )DICTFWDDCLS";
     static const char* payloadCode = R"DICTPAYLOAD(
-#line 1 "LevelsDict dictionary payload"
+#line 1 "TalysLibDict dictionary payload"
 
 
 #define _BACKWARD_BACKWARD_WARNING_H
 // Inline headers
-#include "Levels.hh"
+#include "TalysLib.hh"
 
 #undef  _BACKWARD_BACKWARD_WARNING_H
 )DICTPAYLOAD";
@@ -3442,18 +3442,18 @@ nullptr
 };
     static bool isInitialized = false;
     if (!isInitialized) {
-      TROOT::RegisterModule("LevelsDict",
+      TROOT::RegisterModule("TalysLibDict",
         headers, includePaths, payloadCode, fwdDeclCode,
-        TriggerDictionaryInitialization_LevelsDict_Impl, {}, classesHeaders, /*hasCxxModule*/false);
+        TriggerDictionaryInitialization_TalysLibDict_Impl, {}, classesHeaders, /*hasCxxModule*/false);
       isInitialized = true;
     }
   }
   static struct DictInit {
     DictInit() {
-      TriggerDictionaryInitialization_LevelsDict_Impl();
+      TriggerDictionaryInitialization_TalysLibDict_Impl();
     }
   } __TheDictionaryInitializer;
 }
-void TriggerDictionaryInitialization_LevelsDict() {
-  TriggerDictionaryInitialization_LevelsDict_Impl();
+void TriggerDictionaryInitialization_TalysLibDict() {
+  TriggerDictionaryInitialization_TalysLibDict_Impl();
 }

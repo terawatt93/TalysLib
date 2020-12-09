@@ -1,3 +1,4 @@
+#pragma once
 const double MeV=1;
 const double keV=0.001;
 const double eV=10e-6;

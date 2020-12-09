@@ -1,4 +1,4 @@
-[ Levels.so ]
+[ TalysLib.so ]
 # List of selected classes
 class Deformation
 class GammaTransition
@@ -12,4 +12,4 @@ class OpticalModelParameters
 class SampleInformation
 class SpinParity
 class TalysCalculation
-header Levels.hh
+header TalysLib.hh
