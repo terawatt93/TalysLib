@@ -412,7 +412,6 @@ void Nucleus::ReadTalysCalculationResult()
 	{
 		filename+="/CalculationResults/"+Name+"/output";
 	}
-	
 	ifstream ifs(filename.c_str());
 	string line;
 	bool read_flag=false;
@@ -868,6 +867,7 @@ void Nucleus::GenerateProducts(string _Projectile)
 	for(unsigned int i=0;i<Products.size();i++)
 	{
 		Products[i].fMotherNucleus=this;
+		Products[i].FastFlag=FastFlag;
 		//Products[i].ReadENSDFFile();
 	}
 	for(unsigned int i=0;i<Products.size();i++)
