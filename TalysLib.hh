@@ -11,6 +11,7 @@
 #pragma once
 using namespace std;
 
+#define OLD_VERSION 1
 
 #define kAngularDistribution 1
 #define kExcitationCS 2
@@ -217,6 +218,7 @@ class Deformation:public TObject
 	void SetTypeOfCollectivity( char _Type='S');
 	void ReadDeformation();
 	void WriteDeformation(string filename);
+	void SetDeformation(Level *l,char LevT, int BandN=-1, int BandL=-1, int NPhon=-1, int MagN=-1, vector<float> *Def=0);
 	//void RestoreDeformation();
 	void Sort();
 	void AssignPointers();
@@ -351,8 +353,8 @@ class Nucleus:public NucleusData
 	void AssignPointers();
 	void ErasePointers();
 	void AssignDeformationsToLevels();
-	void SetLevelDeformation(int LevelNumber,char LevT, int BandN=-1, int BandL=-1, int NPhon=-1, int MagN=-1, vector<float> *Def=0);
-	void SetLevelDeformation(double LevelEnergy,char LevT, int BandN=-1, int BandL=-1, int NPhon=-1, int MagN=-1, vector<float> *Def=0);
+	void SetLevelDeformation(int LevelNumber,char LevT, int BandN=-1, int BandL=-1, int NPhon=-1, int MagN=-1, vector<float> *DefVec=0);
+	void SetLevelDeformation(double LevelEnergy,char LevT, int BandN=-1, int BandL=-1, int NPhon=-1, int MagN=-1, vector<float> *DefVec=0);
 	string PrintLevels();
 	string PrintReactions();
 	string ReactionToTalysNotation(char DataSelection=kExcitationCS);

@@ -187,6 +187,47 @@ void Deformation::Sort()
 		}
 	}
 }
+void Deformation::SetDeformation(Level *l,char LevT, int BandN, int BandL, int NPhon, int MagN, vector<float> *Def)//для совместимости с root6.14
+{
+	LevelDeformation *ld=0;
+	if(l==0)
+	{
+		cout<<"Deformation::SetDeformation(...) error: level not defined. return \n";
+		return;
+	}
+	int LevN=l->Number;
+	for(unsigned int i=0;i<LevelDeformations.size();i++)
+	{
+		if(LevelDeformations[i].NumberOfLevel==LevN)
+		{
+			ld=&LevelDeformations[i];
+			break;
+		}
+	}
+	if(ld==0)
+	{
+		LevelDeformations.resize(LevelDeformations.size()+1);
+		ld=&LevelDeformations[LevelDeformations.size()-1];
+	}
+	ld->NumberOfBand=BandN;
+	ld->TypeOfLevel=LevT;
+	ld->NumberOfLevel=LevN;
+	ld->LOfBand=BandL;
+	ld->NumberOfPhonons=NPhon;
+	ld->MagneticNumber=MagN;
+	
+	if(Def!=0)
+	{
+		ld->Beta.resize(0);
+		for(unsigned int i=0;i<Def->size(); i++)
+		{
+			ld->Beta.push_back(Def->at(i));
+		}
+	}
+	ld->fLevel=l;
+	l->deformation=ld;
+	Sort();
+}
 void Deformation::AssignPointers()
 {
 	for(unsigned int i=0;i<LevelDeformations.size();i++)

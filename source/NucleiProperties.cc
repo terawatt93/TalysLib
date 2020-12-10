@@ -1331,21 +1331,29 @@ void Nucleus::AddPoint(double x_value,Nucleus* Nucl)
 		}
 	}
 }
-void Nucleus::SetLevelDeformation(int LevelNumber,char LevT, int BandN, int BandL, int NPhon, int MagN, vector<float> *Def)
+void Nucleus::SetLevelDeformation(int LevelNumber,char LevT, int BandN, int BandL, int NPhon, int MagN, vector<float> *DefVec)
 {
 	Level *l=FindLevelByNumber(LevelNumber);
+	#if OLD_VERSION!=1
 	if(l)
 	{
-		l->SetDeformation(LevT,BandN,BandL,NPhon,MagN,Def);
+		l->SetDeformation(LevT,BandN,BandL,NPhon,MagN,DefVec);
 	}
+	#else
+	Def.SetDeformation(l,LevT,BandN,BandL,NPhon,MagN,DefVec);
+	#endif
 }
-void Nucleus::SetLevelDeformation(double LevelEnergy,char LevT, int BandN, int BandL, int NPhon, int MagN, vector<float> *Def)
+void Nucleus::SetLevelDeformation(double LevelEnergy,char LevT, int BandN, int BandL, int NPhon, int MagN, vector<float> *DefVec)
 {
 	Level *l=FindLevelByEnergy(LevelEnergy);
+	#if OLD_VERSION!=1
 	if(l)
 	{
-		l->SetDeformation(LevT,BandN,BandL,NPhon,MagN,Def);
+		l->SetDeformation(LevT,BandN,BandL,NPhon,MagN,DefVec);
 	}
+	#else
+	Def.SetDeformation(l,LevT,BandN,BandL,NPhon,MagN,DefVec);
+	#endif
 }
 Nucleus::~Nucleus()
 {

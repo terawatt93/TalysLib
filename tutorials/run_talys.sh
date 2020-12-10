@@ -1,3 +1,3 @@
 #/bin/bash 
- cd /home/terawatt/talys/CalculationResults/12C
+ cd /dev/shm/CalculationResults/12C
  talys <input >output

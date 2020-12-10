@@ -1,7 +1,6 @@
 // Do NOT change. Changes will be lost next time file is generated
 
 #define R__DICTIONARY_FILENAME TalysLibDict
-#define R__NO_DEPRECATION
 
 /*******************************************************************/
 #include <stddef.h>
@@ -34,7 +33,7 @@
 
 #include "TDataMember.h"
 
-// The generated code does not explicitly qualifies STL entities
+// Since CINT ignores the std namespace, we need to do so in this file.
 namespace std {} using namespace std;
 
 // Header files passed as explicit arguments
@@ -56,7 +55,7 @@ namespace ROOT {
       ::OpticalModelParameters *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::OpticalModelParameters >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("OpticalModelParameters", ::OpticalModelParameters::Class_Version(), "TalysLib.hh", 67,
+         instance("OpticalModelParameters", ::OpticalModelParameters::Class_Version(), "TalysLib.hh", 68,
                   typeid(::OpticalModelParameters), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::OpticalModelParameters::Dictionary, isa_proxy, 16,
                   sizeof(::OpticalModelParameters) );
@@ -90,7 +89,7 @@ namespace ROOT {
       ::SpinParity *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::SpinParity >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("SpinParity", ::SpinParity::Class_Version(), "TalysLib.hh", 116,
+         instance("SpinParity", ::SpinParity::Class_Version(), "TalysLib.hh", 117,
                   typeid(::SpinParity), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::SpinParity::Dictionary, isa_proxy, 16,
                   sizeof(::SpinParity) );
@@ -124,7 +123,7 @@ namespace ROOT {
       ::GammaTransitionData *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::GammaTransitionData >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("GammaTransitionData", ::GammaTransitionData::Class_Version(), "TalysLib.hh", 134,
+         instance("GammaTransitionData", ::GammaTransitionData::Class_Version(), "TalysLib.hh", 135,
                   typeid(::GammaTransitionData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::GammaTransitionData::Dictionary, isa_proxy, 16,
                   sizeof(::GammaTransitionData) );
@@ -158,7 +157,7 @@ namespace ROOT {
       ::GammaTransition *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::GammaTransition >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("GammaTransition", ::GammaTransition::Class_Version(), "TalysLib.hh", 145,
+         instance("GammaTransition", ::GammaTransition::Class_Version(), "TalysLib.hh", 146,
                   typeid(::GammaTransition), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::GammaTransition::Dictionary, isa_proxy, 16,
                   sizeof(::GammaTransition) );
@@ -192,7 +191,7 @@ namespace ROOT {
       ::LevelData *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::LevelData >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("LevelData", ::LevelData::Class_Version(), "TalysLib.hh", 179,
+         instance("LevelData", ::LevelData::Class_Version(), "TalysLib.hh", 180,
                   typeid(::LevelData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::LevelData::Dictionary, isa_proxy, 16,
                   sizeof(::LevelData) );
@@ -226,7 +225,7 @@ namespace ROOT {
       ::LevelDeformation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::LevelDeformation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("LevelDeformation", ::LevelDeformation::Class_Version(), "TalysLib.hh", 193,
+         instance("LevelDeformation", ::LevelDeformation::Class_Version(), "TalysLib.hh", 194,
                   typeid(::LevelDeformation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::LevelDeformation::Dictionary, isa_proxy, 16,
                   sizeof(::LevelDeformation) );
@@ -260,7 +259,7 @@ namespace ROOT {
       ::Deformation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::Deformation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("Deformation", ::Deformation::Class_Version(), "TalysLib.hh", 207,
+         instance("Deformation", ::Deformation::Class_Version(), "TalysLib.hh", 208,
                   typeid(::Deformation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::Deformation::Dictionary, isa_proxy, 16,
                   sizeof(::Deformation) );
@@ -294,7 +293,7 @@ namespace ROOT {
       ::Level *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::Level >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("Level", ::Level::Class_Version(), "TalysLib.hh", 226,
+         instance("Level", ::Level::Class_Version(), "TalysLib.hh", 228,
                   typeid(::Level), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::Level::Dictionary, isa_proxy, 16,
                   sizeof(::Level) );
@@ -328,7 +327,7 @@ namespace ROOT {
       ::NucleusData *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::NucleusData >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("NucleusData", ::NucleusData::Class_Version(), "TalysLib.hh", 272,
+         instance("NucleusData", ::NucleusData::Class_Version(), "TalysLib.hh", 274,
                   typeid(::NucleusData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::NucleusData::Dictionary, isa_proxy, 16,
                   sizeof(::NucleusData) );
@@ -362,7 +361,7 @@ namespace ROOT {
       ::Nucleus *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::Nucleus >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("Nucleus", ::Nucleus::Class_Version(), "TalysLib.hh", 291,
+         instance("Nucleus", ::Nucleus::Class_Version(), "TalysLib.hh", 293,
                   typeid(::Nucleus), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::Nucleus::Dictionary, isa_proxy, 16,
                   sizeof(::Nucleus) );
@@ -396,7 +395,7 @@ namespace ROOT {
       ::TalysCalculation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::TalysCalculation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("TalysCalculation", ::TalysCalculation::Class_Version(), "TalysLib.hh", 368,
+         instance("TalysCalculation", ::TalysCalculation::Class_Version(), "TalysLib.hh", 370,
                   typeid(::TalysCalculation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::TalysCalculation::Dictionary, isa_proxy, 16,
                   sizeof(::TalysCalculation) );
@@ -430,7 +429,7 @@ namespace ROOT {
       ::SampleInformation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::SampleInformation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("SampleInformation", ::SampleInformation::Class_Version(), "TalysLib.hh", 401,
+         instance("SampleInformation", ::SampleInformation::Class_Version(), "TalysLib.hh", 403,
                   typeid(::SampleInformation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::SampleInformation::Dictionary, isa_proxy, 16,
                   sizeof(::SampleInformation) );
@@ -2518,7 +2517,7 @@ namespace ROOT {
       vector<unsigned int> *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<unsigned int>));
       static ::ROOT::TGenericClassInfo 
-         instance("vector<unsigned int>", -2, "vector", 216,
+         instance("vector<unsigned int>", -2, "vector", 214,
                   typeid(vector<unsigned int>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlEunsignedsPintgR_Dictionary, isa_proxy, 0,
                   sizeof(vector<unsigned int>) );
@@ -2581,7 +2580,7 @@ namespace ROOT {
       vector<string> *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<string>));
       static ::ROOT::TGenericClassInfo 
-         instance("vector<string>", -2, "vector", 216,
+         instance("vector<string>", -2, "vector", 214,
                   typeid(vector<string>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlEstringgR_Dictionary, isa_proxy, 0,
                   sizeof(vector<string>) );
@@ -2644,7 +2643,7 @@ namespace ROOT {
       vector<int> *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<int>));
       static ::ROOT::TGenericClassInfo 
-         instance("vector<int>", -2, "vector", 216,
+         instance("vector<int>", -2, "vector", 214,
                   typeid(vector<int>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlEintgR_Dictionary, isa_proxy, 0,
                   sizeof(vector<int>) );
@@ -2707,7 +2706,7 @@ namespace ROOT {
       vector<float> *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<float>));
       static ::ROOT::TGenericClassInfo 
-         instance("vector<float>", -2, "vector", 216,
+         instance("vector<float>", -2, "vector", 214,
                   typeid(vector<float>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlEfloatgR_Dictionary, isa_proxy, 0,
                   sizeof(vector<float>) );
@@ -2770,7 +2769,7 @@ namespace ROOT {
       vector<double> *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<double>));
       static ::ROOT::TGenericClassInfo 
-         instance("vector<double>", -2, "vector", 216,
+         instance("vector<double>", -2, "vector", 214,
                   typeid(vector<double>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlEdoublegR_Dictionary, isa_proxy, 0,
                   sizeof(vector<double>) );
@@ -2833,7 +2832,7 @@ namespace ROOT {
       vector<SpinParity> *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<SpinParity>));
       static ::ROOT::TGenericClassInfo 
-         instance("vector<SpinParity>", -2, "vector", 216,
+         instance("vector<SpinParity>", -2, "vector", 214,
                   typeid(vector<SpinParity>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlESpinParitygR_Dictionary, isa_proxy, 0,
                   sizeof(vector<SpinParity>) );
@@ -2896,7 +2895,7 @@ namespace ROOT {
       vector<NucleusData> *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<NucleusData>));
       static ::ROOT::TGenericClassInfo 
-         instance("vector<NucleusData>", -2, "vector", 216,
+         instance("vector<NucleusData>", -2, "vector", 214,
                   typeid(vector<NucleusData>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlENucleusDatagR_Dictionary, isa_proxy, 0,
                   sizeof(vector<NucleusData>) );
@@ -2959,7 +2958,7 @@ namespace ROOT {
       vector<Nucleus> *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<Nucleus>));
       static ::ROOT::TGenericClassInfo 
-         instance("vector<Nucleus>", -2, "vector", 216,
+         instance("vector<Nucleus>", -2, "vector", 214,
                   typeid(vector<Nucleus>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlENucleusgR_Dictionary, isa_proxy, 0,
                   sizeof(vector<Nucleus>) );
@@ -3022,7 +3021,7 @@ namespace ROOT {
       vector<LevelDeformation> *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<LevelDeformation>));
       static ::ROOT::TGenericClassInfo 
-         instance("vector<LevelDeformation>", -2, "vector", 216,
+         instance("vector<LevelDeformation>", -2, "vector", 214,
                   typeid(vector<LevelDeformation>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlELevelDeformationgR_Dictionary, isa_proxy, 0,
                   sizeof(vector<LevelDeformation>) );
@@ -3085,7 +3084,7 @@ namespace ROOT {
       vector<LevelData> *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<LevelData>));
       static ::ROOT::TGenericClassInfo 
-         instance("vector<LevelData>", -2, "vector", 216,
+         instance("vector<LevelData>", -2, "vector", 214,
                   typeid(vector<LevelData>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlELevelDatagR_Dictionary, isa_proxy, 0,
                   sizeof(vector<LevelData>) );
@@ -3148,7 +3147,7 @@ namespace ROOT {
       vector<Level> *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<Level>));
       static ::ROOT::TGenericClassInfo 
-         instance("vector<Level>", -2, "vector", 216,
+         instance("vector<Level>", -2, "vector", 214,
                   typeid(vector<Level>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlELevelgR_Dictionary, isa_proxy, 0,
                   sizeof(vector<Level>) );
@@ -3211,7 +3210,7 @@ namespace ROOT {
       vector<Level*> *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<Level*>));
       static ::ROOT::TGenericClassInfo 
-         instance("vector<Level*>", -2, "vector", 216,
+         instance("vector<Level*>", -2, "vector", 214,
                   typeid(vector<Level*>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlELevelmUgR_Dictionary, isa_proxy, 0,
                   sizeof(vector<Level*>) );
@@ -3274,7 +3273,7 @@ namespace ROOT {
       vector<GammaTransitionData> *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<GammaTransitionData>));
       static ::ROOT::TGenericClassInfo 
-         instance("vector<GammaTransitionData>", -2, "vector", 216,
+         instance("vector<GammaTransitionData>", -2, "vector", 214,
                   typeid(vector<GammaTransitionData>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlEGammaTransitionDatagR_Dictionary, isa_proxy, 0,
                   sizeof(vector<GammaTransitionData>) );
@@ -3337,7 +3336,7 @@ namespace ROOT {
       vector<GammaTransition> *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<GammaTransition>));
       static ::ROOT::TGenericClassInfo 
-         instance("vector<GammaTransition>", -2, "vector", 216,
+         instance("vector<GammaTransition>", -2, "vector", 214,
                   typeid(vector<GammaTransition>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &vectorlEGammaTransitiongR_Dictionary, isa_proxy, 0,
                   sizeof(vector<GammaTransition>) );
@@ -3392,8 +3391,8 @@ namespace {
 0
     };
     static const char* includePaths[] = {
-"/home/terawatt/Programs/root/install/include/",
-"/home/terawatt/Documents/TalysLib/",
+"/home/terawatt/Programs/root/root-install/include",
+"/home/terawatt/server/RAID1/Ing-27-Alpatov/macro/dec_reader/Levels_new_version/Lib/",
 0
     };
     static const char* fwdDeclCode = R"DICTFWDDCLS(
@@ -3418,14 +3417,16 @@ class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  SampleInformation
     static const char* payloadCode = R"DICTPAYLOAD(
 #line 1 "TalysLibDict dictionary payload"
 
+#ifndef G__VECTOR_HAS_CLASS_ITERATOR
+  #define G__VECTOR_HAS_CLASS_ITERATOR 1
+#endif
 
 #define _BACKWARD_BACKWARD_WARNING_H
-// Inline headers
 #include "TalysLib.hh"
 
 #undef  _BACKWARD_BACKWARD_WARNING_H
 )DICTPAYLOAD";
-    static const char* classesHeaders[] = {
+    static const char* classesHeaders[]={
 "Deformation", payloadCode, "@",
 "GammaTransition", payloadCode, "@",
 "GammaTransitionData", payloadCode, "@",
@@ -3438,13 +3439,13 @@ class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  SampleInformation
 "SampleInformation", payloadCode, "@",
 "SpinParity", payloadCode, "@",
 "TalysCalculation", payloadCode, "@",
-nullptr
-};
+nullptr};
+
     static bool isInitialized = false;
     if (!isInitialized) {
       TROOT::RegisterModule("TalysLibDict",
         headers, includePaths, payloadCode, fwdDeclCode,
-        TriggerDictionaryInitialization_TalysLibDict_Impl, {}, classesHeaders, /*hasCxxModule*/false);
+        TriggerDictionaryInitialization_TalysLibDict_Impl, {}, classesHeaders, /*has no C++ module*/false);
       isInitialized = true;
     }
   }
