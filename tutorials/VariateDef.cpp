@@ -11,7 +11,7 @@ void ChangeDef(Nucleus *Nuclide,double value)
 	Deformations.push_back(value);
 	Nuclide->SetLevelDeformation(4439.82,Level_type, -1, -1, -1, -1,&Deformations);
 	Nuclide->WriteDeformation=true;
-	Nuclide->FastFlag=false;
+	//Nuclide->FastFlag=false;
 }
 
 void VariateDef()
