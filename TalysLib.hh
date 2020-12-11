@@ -68,6 +68,8 @@ class OMPStorage
 };
 class OpticalModelParameters:public TObject
 {
+	private:
+	OMPStorage *DefaultOMP=0;
 	public:
 	OpticalModelParameters();
 	OMPStorage Potential, PotentialDisp, PotentialKoning;
@@ -85,6 +87,7 @@ class OpticalModelParameters:public TObject
 	unsigned int PointToPasteChangedOMP=0;
 	Nucleus *Nuclide;
 	int A,Z,N;
+	void SetDefaultOMPOption(int option);
 	void SetVv(double value);
 	void SetWv(double value);
 	void SetRv(double value);
