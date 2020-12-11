@@ -55,6 +55,13 @@ TString OMPStorage::GetTString()
 	result+=TString::Format("%8.3f%8.3f%6.1f%10.4f%6.1f%7.1f\n",Rso,Aso,vso1,vso2,wso1,wso2);
 	return result;
 }
+TString OMPStorage::GetInHumanReadable()
+{
+	TString result="    V_v    r_v    a_v    Wv    rw    aw    Vd    rvd    avd    Wd    rwd    awd    Vso    rvso    avso    Wso    rwso    awso\n";
+	result+=TString::Format("%4.3f %4.3f %4.3f %4.3f %4.3f %4.3f %4.3f %4.3f %4.3f %4.3f %4.3f %4.3f %4.3f %4.3f %4.3f %4.3f %4.3f %4.3f",Vv, Rv, Av, Wv, Rv, Av, 0.0, Rd, Ad, Wd, Rd, Ad, Vso, Rso, Aso, Wso, Rso, Aso);
+	return result;
+	
+}
 /*void OpticalModelParameters::SetWv(double value)
 void OpticalModelParameters::SetRv(double value)
 void OpticalModelParameters::SetAv(double value)
@@ -86,6 +93,7 @@ void OMPStorage::EvalKoning()
 		cout<<"Cannot evaluate Koning parametrisation! Pointer to Nucleus is invalid!\n";
 	}
 	N=Nuclide->A-Nuclide->Z; Z=Nuclide->Z; A=Nuclide->A;
+	double E=ProjectileEnergy;
 	if(Projectile=="n")
 	{
 		v1=59.30-21.0*(N-Z)/A-0.024*A;
@@ -102,11 +110,11 @@ void OMPStorage::EvalKoning()
 		wso1=-3.1;
 		wso2=160.;
 		Ef=-11.2814 + 0.02646*A;
-		Rv=1.3039 - 0.4054*pow(A,-1/3);
+		Rv=1.3039 - 0.4054*pow(A,-1.0/3);
 		Av=0.6778 - 1.487e-4*A;
-		Rd=1.3424 - 0.01585*pow(A,1/3);
+		Rd=1.3424 - 0.01585*pow(A,1.0/3);
 		Ad=0.5446 - 1.656e-4*A;
-		Rso=1.1854 - 0.647*pow(A,-1/3);
+		Rso=1.1854 - 0.647*pow(A,-1.0/3);
 		Aso=0.59;
 		Vc=0;
 	}
@@ -126,14 +134,20 @@ void OMPStorage::EvalKoning()
 		wso1=-3.1;
 		wso2=160.;
 		Ef=-8.4075 + 0.01378*A;
-		Rc=1.198 + 0.697*pow(A,-2/3) + 12.994*pow(A,-5/3);
-		Rv=1.3039 - 0.4054*pow(A,-1/3);
+		Rc=1.198 + 0.697*pow(A,-2.0/3) + 12.994*pow(A,-5.0/3);
+		Rv=1.3039 - 0.4054*pow(A,-1.0/3);
 		Av=0.6778 - 1.487e-4*A;
-		Rd=1.3424 - 0.01585*pow(A,1/3);
+		Rd=1.3424 - 0.01585*pow(A,1.0/3);
 		Ad=0.5187 + 5.205e-4*A;
-		Rso=1.1854 - 0.647*pow(A,-1/3);
+		Rso=1.1854 - 0.647*pow(A,-1.0/3);
 		Vc=1.73*Z*pow(A,-1.0/3)/Rc;
 	}
+	EvalPotential();
+	/*Vv=v1*(1-v2*(E-Ef)+v3*pow((E-Ef),2)+v4*pow((E-Ef),3));
+	Wv=w1*(pow((E-Ef),2)/(pow((E-Ef),2)+pow(w2,2)));
+	Wd=d1*pow((E-Ef),2)*exp(-d2*(E-Ef))/(pow((E-Ef),2)+pow(d3,2));
+	Vso=vso1*exp(-vso2*(E-Ef));
+	Wso=wso1*(pow((E-Ef),2)/(pow((E-Ef),2)+pow(wso2,2)));*/
 }
 
 void OMPStorage::EvalPotential()

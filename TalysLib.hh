@@ -61,6 +61,7 @@ class OMPStorage
 	void EvalPotential();
 	void Read(string &Buffer);
 	TString GetTString();
+	TString GetInHumanReadable();
 	void SetNucleus(Nucleus *_Nuclide);
 	void SetProjectile(string _Projectile);
 	void SetProjectileEnergy(double Energy);
