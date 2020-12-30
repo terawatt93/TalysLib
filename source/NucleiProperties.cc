@@ -571,7 +571,7 @@ void Nucleus::ReadTalysCalculationResult()
 					}
 				}
 			}
-			if((line.find(ReactionToTalysNotation(kTotalInelasticCS))!=string::npos)&&(line.size()>22))
+			if((line.find(ReactionToTalysNotation(kTotalInelasticCS))!=string::npos)&&(line.size()>50))//line.size()>50 нужен, чтобы не возникало путаницы с (n,gn), который обозначается абсолютно также
 			{
 				line=line.substr(22,line.size()-22);
 				stringstream s(line);
@@ -696,7 +696,7 @@ void Nucleus::ReadElastic()
 		{
 			string tmp;
 			stringstream s(line);
-			s>>tmp>>tmp>>tmp>>CompoundElastic;
+			s>>tmp>>tmp>>CompoundElastic;
 		}
 		if(line.find("Total elastic")!=string::npos)
 		{
@@ -1339,6 +1339,10 @@ void Nucleus::SetLevelDeformation(int LevelNumber,char LevT, int BandN, int Band
 	{
 		l->SetDeformation(LevT,BandN,BandL,NPhon,MagN,DefVec);
 	}
+	else
+	{
+		cout<<"Warning in Nucleus::SetLevelDeformation(...): level with number "<<LevelNumber<<" not found!\n";
+	}
 	#else
 	Def.SetDeformation(l,LevT,BandN,BandL,NPhon,MagN,DefVec);
 	#endif
@@ -1350,6 +1354,10 @@ void Nucleus::SetLevelDeformation(double LevelEnergy,char LevT, int BandN, int B
 	if(l)
 	{
 		l->SetDeformation(LevT,BandN,BandL,NPhon,MagN,DefVec);
+	}
+	else
+	{
+		cout<<"Warning in Nucleus::SetLevelDeformation(...): level with energy "<<LevelEnergy<<" not found!\n";
 	}
 	#else
 	Def.SetDeformation(l,LevT,BandN,BandL,NPhon,MagN,DefVec);
