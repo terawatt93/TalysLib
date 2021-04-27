@@ -97,7 +97,19 @@ TString LevelDeformation::GenerateStringForDefFile()
 {
 	return GenerateLevelDefString(NumberOfLevel,TypeOfLevel,NumberOfBand,LOfBand,NumberOfPhonons,MagneticNumber,&Beta);
 }
+LevelDeformationData LevelDeformation::ToLevelDeformationData()
+{
+	LevelDeformationData result = *((LevelDeformationData*)this);
+	result.Beta=Beta;
+	return result;
+}
 //Методы класса Deformation
+LevelDeformation::LevelDeformation(LevelDeformationData d)
+{
+	TypeOfLevel=d.TypeOfLevel; TypeOfDeformation=d.TypeOfDeformation;
+	NumberOfBand=d.NumberOfBand; NumberOfLevel=d.NumberOfLevel; LOfBand=d.LOfBand; NumberOfPhonons=d.NumberOfPhonons; MagneticNumber=d.MagneticNumber;
+	Beta=d.Beta;
+}
 void Deformation::SetZA(int _Z,int _A)
 {
 	Z=_Z; A=_A;
@@ -234,4 +246,24 @@ void Deformation::AssignPointers()
 	{
 		LevelDeformations[i].fDeformation=this;
 	}
+}
+DeformationData Deformation::ToDeformationData()
+{
+	DeformationData result=*((DeformationData*)this);
+	for(unsigned int i=0;i<LevelDeformations.size();i++)
+	{
+		result.LevelDeformationsData.push_back(LevelDeformations[i].ToLevelDeformationData());
+	}
+	return result;
+}
+Deformation::Deformation(DeformationData d)
+{
+	A=d.A; Z=d.Z; NLevels=d.NLevels;
+	TypeOfCollectivity=d.TypeOfCollectivity; TypeOfDeformation=d.TypeOfDeformation;
+	ContentOfFile=d.ContentOfFile;
+	for(unsigned int i=0;i<d.LevelDeformationsData.size();i++)
+	{
+		LevelDeformations.emplace_back(d.LevelDeformationsData[i]);
+	}
+	AssignPointers();
 }

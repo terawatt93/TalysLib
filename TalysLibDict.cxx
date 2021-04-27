@@ -1,6 +1,7 @@
 // Do NOT change. Changes will be lost next time file is generated
 
 #define R__DICTIONARY_FILENAME TalysLibDict
+#define R__NO_DEPRECATION
 
 /*******************************************************************/
 #include <stddef.h>
@@ -33,13 +34,183 @@
 
 #include "TDataMember.h"
 
-// Since CINT ignores the std namespace, we need to do so in this file.
+// The generated code does not explicitly qualifies STL entities
 namespace std {} using namespace std;
 
 // Header files passed as explicit arguments
 #include "TalysLib.hh"
 
 // Header files passed via #pragma extra_include
+
+namespace ROOT {
+   static void *new_AdditionalInformationContainer(void *p = 0);
+   static void *newArray_AdditionalInformationContainer(Long_t size, void *p);
+   static void delete_AdditionalInformationContainer(void *p);
+   static void deleteArray_AdditionalInformationContainer(void *p);
+   static void destruct_AdditionalInformationContainer(void *p);
+   static void streamer_AdditionalInformationContainer(TBuffer &buf, void *obj);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const ::AdditionalInformationContainer*)
+   {
+      ::AdditionalInformationContainer *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::AdditionalInformationContainer >(0);
+      static ::ROOT::TGenericClassInfo 
+         instance("AdditionalInformationContainer", ::AdditionalInformationContainer::Class_Version(), "TalysLib.hh", 74,
+                  typeid(::AdditionalInformationContainer), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &::AdditionalInformationContainer::Dictionary, isa_proxy, 16,
+                  sizeof(::AdditionalInformationContainer) );
+      instance.SetNew(&new_AdditionalInformationContainer);
+      instance.SetNewArray(&newArray_AdditionalInformationContainer);
+      instance.SetDelete(&delete_AdditionalInformationContainer);
+      instance.SetDeleteArray(&deleteArray_AdditionalInformationContainer);
+      instance.SetDestructor(&destruct_AdditionalInformationContainer);
+      instance.SetStreamerFunc(&streamer_AdditionalInformationContainer);
+      return &instance;
+   }
+   TGenericClassInfo *GenerateInitInstance(const ::AdditionalInformationContainer*)
+   {
+      return GenerateInitInstanceLocal((::AdditionalInformationContainer*)0);
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const ::AdditionalInformationContainer*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+} // end of namespace ROOT
+
+namespace ROOT {
+   static void *new_TXlsxwriter(void *p = 0);
+   static void *newArray_TXlsxwriter(Long_t size, void *p);
+   static void delete_TXlsxwriter(void *p);
+   static void deleteArray_TXlsxwriter(void *p);
+   static void destruct_TXlsxwriter(void *p);
+   static void streamer_TXlsxwriter(TBuffer &buf, void *obj);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const ::TXlsxwriter*)
+   {
+      ::TXlsxwriter *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::TXlsxwriter >(0);
+      static ::ROOT::TGenericClassInfo 
+         instance("TXlsxwriter", ::TXlsxwriter::Class_Version(), "TalysLib.hh", 82,
+                  typeid(::TXlsxwriter), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &::TXlsxwriter::Dictionary, isa_proxy, 16,
+                  sizeof(::TXlsxwriter) );
+      instance.SetNew(&new_TXlsxwriter);
+      instance.SetNewArray(&newArray_TXlsxwriter);
+      instance.SetDelete(&delete_TXlsxwriter);
+      instance.SetDeleteArray(&deleteArray_TXlsxwriter);
+      instance.SetDestructor(&destruct_TXlsxwriter);
+      instance.SetStreamerFunc(&streamer_TXlsxwriter);
+      return &instance;
+   }
+   TGenericClassInfo *GenerateInitInstance(const ::TXlsxwriter*)
+   {
+      return GenerateInitInstanceLocal((::TXlsxwriter*)0);
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const ::TXlsxwriter*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+} // end of namespace ROOT
+
+namespace ROOT {
+   static void *new_OMPStorageData(void *p = 0);
+   static void *newArray_OMPStorageData(Long_t size, void *p);
+   static void delete_OMPStorageData(void *p);
+   static void deleteArray_OMPStorageData(void *p);
+   static void destruct_OMPStorageData(void *p);
+   static void streamer_OMPStorageData(TBuffer &buf, void *obj);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const ::OMPStorageData*)
+   {
+      ::OMPStorageData *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::OMPStorageData >(0);
+      static ::ROOT::TGenericClassInfo 
+         instance("OMPStorageData", ::OMPStorageData::Class_Version(), "TalysLib.hh", 122,
+                  typeid(::OMPStorageData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &::OMPStorageData::Dictionary, isa_proxy, 16,
+                  sizeof(::OMPStorageData) );
+      instance.SetNew(&new_OMPStorageData);
+      instance.SetNewArray(&newArray_OMPStorageData);
+      instance.SetDelete(&delete_OMPStorageData);
+      instance.SetDeleteArray(&deleteArray_OMPStorageData);
+      instance.SetDestructor(&destruct_OMPStorageData);
+      instance.SetStreamerFunc(&streamer_OMPStorageData);
+      return &instance;
+   }
+   TGenericClassInfo *GenerateInitInstance(const ::OMPStorageData*)
+   {
+      return GenerateInitInstanceLocal((::OMPStorageData*)0);
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const ::OMPStorageData*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+} // end of namespace ROOT
+
+namespace ROOT {
+   static void *new_OMPStorage(void *p = 0);
+   static void *newArray_OMPStorage(Long_t size, void *p);
+   static void delete_OMPStorage(void *p);
+   static void deleteArray_OMPStorage(void *p);
+   static void destruct_OMPStorage(void *p);
+   static void streamer_OMPStorage(TBuffer &buf, void *obj);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const ::OMPStorage*)
+   {
+      ::OMPStorage *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::OMPStorage >(0);
+      static ::ROOT::TGenericClassInfo 
+         instance("OMPStorage", ::OMPStorage::Class_Version(), "TalysLib.hh", 134,
+                  typeid(::OMPStorage), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &::OMPStorage::Dictionary, isa_proxy, 16,
+                  sizeof(::OMPStorage) );
+      instance.SetNew(&new_OMPStorage);
+      instance.SetNewArray(&newArray_OMPStorage);
+      instance.SetDelete(&delete_OMPStorage);
+      instance.SetDeleteArray(&deleteArray_OMPStorage);
+      instance.SetDestructor(&destruct_OMPStorage);
+      instance.SetStreamerFunc(&streamer_OMPStorage);
+      return &instance;
+   }
+   TGenericClassInfo *GenerateInitInstance(const ::OMPStorage*)
+   {
+      return GenerateInitInstanceLocal((::OMPStorage*)0);
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const ::OMPStorage*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+} // end of namespace ROOT
+
+namespace ROOT {
+   static void *new_OpticalModelParametersData(void *p = 0);
+   static void *newArray_OpticalModelParametersData(Long_t size, void *p);
+   static void delete_OpticalModelParametersData(void *p);
+   static void deleteArray_OpticalModelParametersData(void *p);
+   static void destruct_OpticalModelParametersData(void *p);
+   static void streamer_OpticalModelParametersData(TBuffer &buf, void *obj);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const ::OpticalModelParametersData*)
+   {
+      ::OpticalModelParametersData *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::OpticalModelParametersData >(0);
+      static ::ROOT::TGenericClassInfo 
+         instance("OpticalModelParametersData", ::OpticalModelParametersData::Class_Version(), "TalysLib.hh", 178,
+                  typeid(::OpticalModelParametersData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &::OpticalModelParametersData::Dictionary, isa_proxy, 16,
+                  sizeof(::OpticalModelParametersData) );
+      instance.SetNew(&new_OpticalModelParametersData);
+      instance.SetNewArray(&newArray_OpticalModelParametersData);
+      instance.SetDelete(&delete_OpticalModelParametersData);
+      instance.SetDeleteArray(&deleteArray_OpticalModelParametersData);
+      instance.SetDestructor(&destruct_OpticalModelParametersData);
+      instance.SetStreamerFunc(&streamer_OpticalModelParametersData);
+      return &instance;
+   }
+   TGenericClassInfo *GenerateInitInstance(const ::OpticalModelParametersData*)
+   {
+      return GenerateInitInstanceLocal((::OpticalModelParametersData*)0);
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const ::OpticalModelParametersData*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+} // end of namespace ROOT
 
 namespace ROOT {
    static void *new_OpticalModelParameters(void *p = 0);
@@ -55,7 +226,7 @@ namespace ROOT {
       ::OpticalModelParameters *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::OpticalModelParameters >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("OpticalModelParameters", ::OpticalModelParameters::Class_Version(), "TalysLib.hh", 68,
+         instance("OpticalModelParameters", ::OpticalModelParameters::Class_Version(), "TalysLib.hh", 197,
                   typeid(::OpticalModelParameters), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::OpticalModelParameters::Dictionary, isa_proxy, 16,
                   sizeof(::OpticalModelParameters) );
@@ -89,7 +260,7 @@ namespace ROOT {
       ::SpinParity *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::SpinParity >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("SpinParity", ::SpinParity::Class_Version(), "TalysLib.hh", 117,
+         instance("SpinParity", ::SpinParity::Class_Version(), "TalysLib.hh", 257,
                   typeid(::SpinParity), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::SpinParity::Dictionary, isa_proxy, 16,
                   sizeof(::SpinParity) );
@@ -123,7 +294,7 @@ namespace ROOT {
       ::GammaTransitionData *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::GammaTransitionData >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("GammaTransitionData", ::GammaTransitionData::Class_Version(), "TalysLib.hh", 135,
+         instance("GammaTransitionData", ::GammaTransitionData::Class_Version(), "TalysLib.hh", 275,
                   typeid(::GammaTransitionData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::GammaTransitionData::Dictionary, isa_proxy, 16,
                   sizeof(::GammaTransitionData) );
@@ -157,7 +328,7 @@ namespace ROOT {
       ::GammaTransition *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::GammaTransition >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("GammaTransition", ::GammaTransition::Class_Version(), "TalysLib.hh", 146,
+         instance("GammaTransition", ::GammaTransition::Class_Version(), "TalysLib.hh", 288,
                   typeid(::GammaTransition), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::GammaTransition::Dictionary, isa_proxy, 16,
                   sizeof(::GammaTransition) );
@@ -191,7 +362,7 @@ namespace ROOT {
       ::LevelData *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::LevelData >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("LevelData", ::LevelData::Class_Version(), "TalysLib.hh", 180,
+         instance("LevelData", ::LevelData::Class_Version(), "TalysLib.hh", 322,
                   typeid(::LevelData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::LevelData::Dictionary, isa_proxy, 16,
                   sizeof(::LevelData) );
@@ -212,6 +383,40 @@ namespace ROOT {
 } // end of namespace ROOT
 
 namespace ROOT {
+   static void *new_LevelDeformationData(void *p = 0);
+   static void *newArray_LevelDeformationData(Long_t size, void *p);
+   static void delete_LevelDeformationData(void *p);
+   static void deleteArray_LevelDeformationData(void *p);
+   static void destruct_LevelDeformationData(void *p);
+   static void streamer_LevelDeformationData(TBuffer &buf, void *obj);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const ::LevelDeformationData*)
+   {
+      ::LevelDeformationData *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::LevelDeformationData >(0);
+      static ::ROOT::TGenericClassInfo 
+         instance("LevelDeformationData", ::LevelDeformationData::Class_Version(), "TalysLib.hh", 338,
+                  typeid(::LevelDeformationData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &::LevelDeformationData::Dictionary, isa_proxy, 16,
+                  sizeof(::LevelDeformationData) );
+      instance.SetNew(&new_LevelDeformationData);
+      instance.SetNewArray(&newArray_LevelDeformationData);
+      instance.SetDelete(&delete_LevelDeformationData);
+      instance.SetDeleteArray(&deleteArray_LevelDeformationData);
+      instance.SetDestructor(&destruct_LevelDeformationData);
+      instance.SetStreamerFunc(&streamer_LevelDeformationData);
+      return &instance;
+   }
+   TGenericClassInfo *GenerateInitInstance(const ::LevelDeformationData*)
+   {
+      return GenerateInitInstanceLocal((::LevelDeformationData*)0);
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const ::LevelDeformationData*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+} // end of namespace ROOT
+
+namespace ROOT {
    static void *new_LevelDeformation(void *p = 0);
    static void *newArray_LevelDeformation(Long_t size, void *p);
    static void delete_LevelDeformation(void *p);
@@ -225,7 +430,7 @@ namespace ROOT {
       ::LevelDeformation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::LevelDeformation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("LevelDeformation", ::LevelDeformation::Class_Version(), "TalysLib.hh", 194,
+         instance("LevelDeformation", ::LevelDeformation::Class_Version(), "TalysLib.hh", 347,
                   typeid(::LevelDeformation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::LevelDeformation::Dictionary, isa_proxy, 16,
                   sizeof(::LevelDeformation) );
@@ -246,6 +451,40 @@ namespace ROOT {
 } // end of namespace ROOT
 
 namespace ROOT {
+   static void *new_DeformationData(void *p = 0);
+   static void *newArray_DeformationData(Long_t size, void *p);
+   static void delete_DeformationData(void *p);
+   static void deleteArray_DeformationData(void *p);
+   static void destruct_DeformationData(void *p);
+   static void streamer_DeformationData(TBuffer &buf, void *obj);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const ::DeformationData*)
+   {
+      ::DeformationData *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::DeformationData >(0);
+      static ::ROOT::TGenericClassInfo 
+         instance("DeformationData", ::DeformationData::Class_Version(), "TalysLib.hh", 360,
+                  typeid(::DeformationData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &::DeformationData::Dictionary, isa_proxy, 16,
+                  sizeof(::DeformationData) );
+      instance.SetNew(&new_DeformationData);
+      instance.SetNewArray(&newArray_DeformationData);
+      instance.SetDelete(&delete_DeformationData);
+      instance.SetDeleteArray(&deleteArray_DeformationData);
+      instance.SetDestructor(&destruct_DeformationData);
+      instance.SetStreamerFunc(&streamer_DeformationData);
+      return &instance;
+   }
+   TGenericClassInfo *GenerateInitInstance(const ::DeformationData*)
+   {
+      return GenerateInitInstanceLocal((::DeformationData*)0);
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const ::DeformationData*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+} // end of namespace ROOT
+
+namespace ROOT {
    static void *new_Deformation(void *p = 0);
    static void *newArray_Deformation(Long_t size, void *p);
    static void delete_Deformation(void *p);
@@ -259,7 +498,7 @@ namespace ROOT {
       ::Deformation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::Deformation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("Deformation", ::Deformation::Class_Version(), "TalysLib.hh", 208,
+         instance("Deformation", ::Deformation::Class_Version(), "TalysLib.hh", 370,
                   typeid(::Deformation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::Deformation::Dictionary, isa_proxy, 16,
                   sizeof(::Deformation) );
@@ -293,7 +532,7 @@ namespace ROOT {
       ::Level *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::Level >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("Level", ::Level::Class_Version(), "TalysLib.hh", 228,
+         instance("Level", ::Level::Class_Version(), "TalysLib.hh", 389,
                   typeid(::Level), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::Level::Dictionary, isa_proxy, 16,
                   sizeof(::Level) );
@@ -327,7 +566,7 @@ namespace ROOT {
       ::NucleusData *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::NucleusData >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("NucleusData", ::NucleusData::Class_Version(), "TalysLib.hh", 274,
+         instance("NucleusData", ::NucleusData::Class_Version(), "TalysLib.hh", 435,
                   typeid(::NucleusData), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::NucleusData::Dictionary, isa_proxy, 16,
                   sizeof(::NucleusData) );
@@ -361,7 +600,7 @@ namespace ROOT {
       ::Nucleus *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::Nucleus >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("Nucleus", ::Nucleus::Class_Version(), "TalysLib.hh", 293,
+         instance("Nucleus", ::Nucleus::Class_Version(), "TalysLib.hh", 467,
                   typeid(::Nucleus), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::Nucleus::Dictionary, isa_proxy, 16,
                   sizeof(::Nucleus) );
@@ -395,7 +634,7 @@ namespace ROOT {
       ::TalysCalculation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::TalysCalculation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("TalysCalculation", ::TalysCalculation::Class_Version(), "TalysLib.hh", 370,
+         instance("TalysCalculation", ::TalysCalculation::Class_Version(), "TalysLib.hh", 625,
                   typeid(::TalysCalculation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::TalysCalculation::Dictionary, isa_proxy, 16,
                   sizeof(::TalysCalculation) );
@@ -416,6 +655,40 @@ namespace ROOT {
 } // end of namespace ROOT
 
 namespace ROOT {
+   static void *new_TLMaterial(void *p = 0);
+   static void *newArray_TLMaterial(Long_t size, void *p);
+   static void delete_TLMaterial(void *p);
+   static void deleteArray_TLMaterial(void *p);
+   static void destruct_TLMaterial(void *p);
+   static void streamer_TLMaterial(TBuffer &buf, void *obj);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const ::TLMaterial*)
+   {
+      ::TLMaterial *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::TLMaterial >(0);
+      static ::ROOT::TGenericClassInfo 
+         instance("TLMaterial", ::TLMaterial::Class_Version(), "TalysLib.hh", 661,
+                  typeid(::TLMaterial), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &::TLMaterial::Dictionary, isa_proxy, 16,
+                  sizeof(::TLMaterial) );
+      instance.SetNew(&new_TLMaterial);
+      instance.SetNewArray(&newArray_TLMaterial);
+      instance.SetDelete(&delete_TLMaterial);
+      instance.SetDeleteArray(&deleteArray_TLMaterial);
+      instance.SetDestructor(&destruct_TLMaterial);
+      instance.SetStreamerFunc(&streamer_TLMaterial);
+      return &instance;
+   }
+   TGenericClassInfo *GenerateInitInstance(const ::TLMaterial*)
+   {
+      return GenerateInitInstanceLocal((::TLMaterial*)0);
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const ::TLMaterial*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+} // end of namespace ROOT
+
+namespace ROOT {
    static void *new_SampleInformation(void *p = 0);
    static void *newArray_SampleInformation(Long_t size, void *p);
    static void delete_SampleInformation(void *p);
@@ -429,7 +702,7 @@ namespace ROOT {
       ::SampleInformation *ptr = 0;
       static ::TVirtualIsAProxy* isa_proxy = new ::TInstrumentedIsAProxy< ::SampleInformation >(0);
       static ::ROOT::TGenericClassInfo 
-         instance("SampleInformation", ::SampleInformation::Class_Version(), "TalysLib.hh", 403,
+         instance("SampleInformation", ::SampleInformation::Class_Version(), "TalysLib.hh", 693,
                   typeid(::SampleInformation), ::ROOT::Internal::DefineBehavior(ptr, ptr),
                   &::SampleInformation::Dictionary, isa_proxy, 16,
                   sizeof(::SampleInformation) );
@@ -448,6 +721,181 @@ namespace ROOT {
    // Static variable to force the class initialization
    static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const ::SampleInformation*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
 } // end of namespace ROOT
+
+//______________________________________________________________________________
+atomic_TClass_ptr AdditionalInformationContainer::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *AdditionalInformationContainer::Class_Name()
+{
+   return "AdditionalInformationContainer";
+}
+
+//______________________________________________________________________________
+const char *AdditionalInformationContainer::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::AdditionalInformationContainer*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int AdditionalInformationContainer::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::AdditionalInformationContainer*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *AdditionalInformationContainer::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::AdditionalInformationContainer*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *AdditionalInformationContainer::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::AdditionalInformationContainer*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+atomic_TClass_ptr TXlsxwriter::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *TXlsxwriter::Class_Name()
+{
+   return "TXlsxwriter";
+}
+
+//______________________________________________________________________________
+const char *TXlsxwriter::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::TXlsxwriter*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int TXlsxwriter::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::TXlsxwriter*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *TXlsxwriter::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::TXlsxwriter*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *TXlsxwriter::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::TXlsxwriter*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+atomic_TClass_ptr OMPStorageData::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *OMPStorageData::Class_Name()
+{
+   return "OMPStorageData";
+}
+
+//______________________________________________________________________________
+const char *OMPStorageData::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::OMPStorageData*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int OMPStorageData::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::OMPStorageData*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *OMPStorageData::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::OMPStorageData*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *OMPStorageData::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::OMPStorageData*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+atomic_TClass_ptr OMPStorage::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *OMPStorage::Class_Name()
+{
+   return "OMPStorage";
+}
+
+//______________________________________________________________________________
+const char *OMPStorage::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::OMPStorage*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int OMPStorage::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::OMPStorage*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *OMPStorage::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::OMPStorage*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *OMPStorage::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::OMPStorage*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+atomic_TClass_ptr OpticalModelParametersData::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *OpticalModelParametersData::Class_Name()
+{
+   return "OpticalModelParametersData";
+}
+
+//______________________________________________________________________________
+const char *OpticalModelParametersData::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::OpticalModelParametersData*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int OpticalModelParametersData::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::OpticalModelParametersData*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *OpticalModelParametersData::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::OpticalModelParametersData*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *OpticalModelParametersData::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::OpticalModelParametersData*)0x0)->GetClass(); }
+   return fgIsA;
+}
 
 //______________________________________________________________________________
 atomic_TClass_ptr OpticalModelParameters::fgIsA(0);  // static to hold class pointer
@@ -625,6 +1073,41 @@ TClass *LevelData::Class()
 }
 
 //______________________________________________________________________________
+atomic_TClass_ptr LevelDeformationData::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *LevelDeformationData::Class_Name()
+{
+   return "LevelDeformationData";
+}
+
+//______________________________________________________________________________
+const char *LevelDeformationData::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::LevelDeformationData*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int LevelDeformationData::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::LevelDeformationData*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *LevelDeformationData::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::LevelDeformationData*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *LevelDeformationData::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::LevelDeformationData*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
 atomic_TClass_ptr LevelDeformation::fgIsA(0);  // static to hold class pointer
 
 //______________________________________________________________________________
@@ -656,6 +1139,41 @@ TClass *LevelDeformation::Dictionary()
 TClass *LevelDeformation::Class()
 {
    if (!fgIsA.load()) { R__LOCKGUARD(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::LevelDeformation*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+atomic_TClass_ptr DeformationData::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *DeformationData::Class_Name()
+{
+   return "DeformationData";
+}
+
+//______________________________________________________________________________
+const char *DeformationData::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::DeformationData*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int DeformationData::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::DeformationData*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *DeformationData::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::DeformationData*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *DeformationData::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::DeformationData*)0x0)->GetClass(); }
    return fgIsA;
 }
 
@@ -835,6 +1353,41 @@ TClass *TalysCalculation::Class()
 }
 
 //______________________________________________________________________________
+atomic_TClass_ptr TLMaterial::fgIsA(0);  // static to hold class pointer
+
+//______________________________________________________________________________
+const char *TLMaterial::Class_Name()
+{
+   return "TLMaterial";
+}
+
+//______________________________________________________________________________
+const char *TLMaterial::ImplFileName()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::TLMaterial*)0x0)->GetImplFileName();
+}
+
+//______________________________________________________________________________
+int TLMaterial::ImplFileLine()
+{
+   return ::ROOT::GenerateInitInstanceLocal((const ::TLMaterial*)0x0)->GetImplFileLine();
+}
+
+//______________________________________________________________________________
+TClass *TLMaterial::Dictionary()
+{
+   fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::TLMaterial*)0x0)->GetClass();
+   return fgIsA;
+}
+
+//______________________________________________________________________________
+TClass *TLMaterial::Class()
+{
+   if (!fgIsA.load()) { R__LOCKGUARD(gInterpreterMutex); fgIsA = ::ROOT::GenerateInitInstanceLocal((const ::TLMaterial*)0x0)->GetClass(); }
+   return fgIsA;
+}
+
+//______________________________________________________________________________
 atomic_TClass_ptr SampleInformation::fgIsA(0);  // static to hold class pointer
 
 //______________________________________________________________________________
@@ -870,17 +1423,496 @@ TClass *SampleInformation::Class()
 }
 
 //______________________________________________________________________________
-void OpticalModelParameters::Streamer(TBuffer &R__b)
+void AdditionalInformationContainer::Streamer(TBuffer &R__b)
 {
-   // Stream an object of class OpticalModelParameters.
+   // Stream an object of class AdditionalInformationContainer.
+
+   UInt_t R__s, R__c;
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(&R__s, &R__c); if (R__v) { }
+      {
+         map<string,double> &R__stl =  AdditionalInformationMap;
+         R__stl.clear();
+         int R__i, R__n;
+         R__b >> R__n;
+         for (R__i = 0; R__i < R__n; R__i++) {
+            string R__t;
+            {TString R__str;
+             R__str.Streamer(R__b);
+             R__t = R__str.Data();}
+            double R__t2;
+            R__b >> R__t2;
+            typedef class std::__cxx11::basic_string<char> Value_t;
+            std::pair<Value_t const, double > R__t3(R__t,R__t2);
+            R__stl.insert(R__t3);
+         }
+      }
+      R__b.CheckByteCount(R__s, R__c, AdditionalInformationContainer::IsA());
+   } else {
+      R__c = R__b.WriteVersion(AdditionalInformationContainer::IsA(), kTRUE);
+      {
+         map<string,double> &R__stl =  AdditionalInformationMap;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+            map<string,double>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            {TString R__str(((*R__k).first ).c_str());
+             R__str.Streamer(R__b);};
+            R__b << ((*R__k).second);
+            }
+         }
+      }
+      R__b.SetByteCount(R__c, kTRUE);
+   }
+}
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_AdditionalInformationContainer(void *p) {
+      return  p ? new(p) ::AdditionalInformationContainer : new ::AdditionalInformationContainer;
+   }
+   static void *newArray_AdditionalInformationContainer(Long_t nElements, void *p) {
+      return p ? new(p) ::AdditionalInformationContainer[nElements] : new ::AdditionalInformationContainer[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_AdditionalInformationContainer(void *p) {
+      delete ((::AdditionalInformationContainer*)p);
+   }
+   static void deleteArray_AdditionalInformationContainer(void *p) {
+      delete [] ((::AdditionalInformationContainer*)p);
+   }
+   static void destruct_AdditionalInformationContainer(void *p) {
+      typedef ::AdditionalInformationContainer current_t;
+      ((current_t*)p)->~current_t();
+   }
+   // Wrapper around a custom streamer member function.
+   static void streamer_AdditionalInformationContainer(TBuffer &buf, void *obj) {
+      ((::AdditionalInformationContainer*)obj)->::AdditionalInformationContainer::Streamer(buf);
+   }
+} // end of namespace ROOT for class ::AdditionalInformationContainer
+
+//______________________________________________________________________________
+void TXlsxwriter::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class TXlsxwriter.
 
    UInt_t R__s, R__c;
    if (R__b.IsReading()) {
       Version_t R__v = R__b.ReadVersion(&R__s, &R__c); if (R__v) { }
       TObject::Streamer(R__b);
-      R__b.StreamObject(&(Potential),typeid(Potential));
-      R__b.StreamObject(&(PotentialDisp),typeid(PotentialDisp));
-      R__b.StreamObject(&(PotentialKoning),typeid(PotentialKoning));
+      R__b >> Opened;
+      R__b >> workbook;
+      {
+         vector<lxw_worksheet*> &R__stl =  worksheets;
+         R__stl.clear();
+         TClass *R__tcl1 = TBuffer::GetClass(typeid(struct lxw_worksheet *));
+         if (R__tcl1==0) {
+            Error("worksheets streamer","Missing the TClass object for struct lxw_worksheet *!");
+            return;
+         }
+         int R__i, R__n;
+         R__b >> R__n;
+         R__stl.reserve(R__n);
+         for (R__i = 0; R__i < R__n; R__i++) {
+            lxw_worksheet* R__t;
+            R__t = (lxw_worksheet*)R__b.ReadObjectAny(R__tcl1);
+            R__stl.push_back(R__t);
+         }
+      }
+      {
+         vector<lxw_format*> &R__stl =  formats;
+         R__stl.clear();
+         TClass *R__tcl1 = TBuffer::GetClass(typeid(struct lxw_format *));
+         if (R__tcl1==0) {
+            Error("formats streamer","Missing the TClass object for struct lxw_format *!");
+            return;
+         }
+         int R__i, R__n;
+         R__b >> R__n;
+         R__stl.reserve(R__n);
+         for (R__i = 0; R__i < R__n; R__i++) {
+            lxw_format* R__t;
+            R__t = (lxw_format*)R__b.ReadObjectAny(R__tcl1);
+            R__stl.push_back(R__t);
+         }
+      }
+      R__b >> CurrentFormat;
+      {
+         vector<string> &R__stl =  FormatNames;
+         R__stl.clear();
+         int R__i, R__n;
+         R__b >> R__n;
+         R__stl.reserve(R__n);
+         for (R__i = 0; R__i < R__n; R__i++) {
+            string R__t;
+            {TString R__str;
+             R__str.Streamer(R__b);
+             R__t = R__str.Data();}
+            R__stl.push_back(R__t);
+         }
+      }
+      R__b >> CurrentWorksheet;
+      R__b >> CurrentWorksheetNumber;
+      {
+         vector<string> &R__stl =  worksheetNames;
+         R__stl.clear();
+         int R__i, R__n;
+         R__b >> R__n;
+         R__stl.reserve(R__n);
+         for (R__i = 0; R__i < R__n; R__i++) {
+            string R__t;
+            {TString R__str;
+             R__str.Streamer(R__b);
+             R__t = R__str.Data();}
+            R__stl.push_back(R__t);
+         }
+      }
+      { TString R__str; R__str.Streamer(R__b); Filename = R__str.Data(); }
+      {
+         vector<int> &R__stl =  CeilX;
+         R__stl.clear();
+         int R__i, R__n;
+         R__b >> R__n;
+         R__stl.reserve(R__n);
+         for (R__i = 0; R__i < R__n; R__i++) {
+            int R__t;
+            R__b >> R__t;
+            R__stl.push_back(R__t);
+         }
+      }
+      {
+         vector<int> &R__stl =  CeilY;
+         R__stl.clear();
+         int R__i, R__n;
+         R__b >> R__n;
+         R__stl.reserve(R__n);
+         for (R__i = 0; R__i < R__n; R__i++) {
+            int R__t;
+            R__b >> R__t;
+            R__stl.push_back(R__t);
+         }
+      }
+      {
+         vector<int> &R__stl =  XBorder;
+         R__stl.clear();
+         int R__i, R__n;
+         R__b >> R__n;
+         R__stl.reserve(R__n);
+         for (R__i = 0; R__i < R__n; R__i++) {
+            int R__t;
+            R__b >> R__t;
+            R__stl.push_back(R__t);
+         }
+      }
+      R__b.CheckByteCount(R__s, R__c, TXlsxwriter::IsA());
+   } else {
+      R__c = R__b.WriteVersion(TXlsxwriter::IsA(), kTRUE);
+      TObject::Streamer(R__b);
+      R__b << Opened;
+      R__b << workbook;
+      {
+         vector<lxw_worksheet*> &R__stl =  worksheets;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+         TClass *R__tcl1 = TBuffer::GetClass(typeid(struct lxw_worksheet *));
+         if (R__tcl1==0) {
+            Error("worksheets streamer","Missing the TClass object for struct lxw_worksheet *!");
+            return;
+         }
+            vector<lxw_worksheet*>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            R__b.WriteObjectAny((*R__k),R__tcl1);
+            }
+         }
+      }
+      {
+         vector<lxw_format*> &R__stl =  formats;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+         TClass *R__tcl1 = TBuffer::GetClass(typeid(struct lxw_format *));
+         if (R__tcl1==0) {
+            Error("formats streamer","Missing the TClass object for struct lxw_format *!");
+            return;
+         }
+            vector<lxw_format*>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            R__b.WriteObjectAny((*R__k),R__tcl1);
+            }
+         }
+      }
+      R__b << CurrentFormat;
+      {
+         vector<string> &R__stl =  FormatNames;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+            vector<string>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            {TString R__str((*R__k).c_str());
+             R__str.Streamer(R__b);};
+            }
+         }
+      }
+      R__b << CurrentWorksheet;
+      R__b << CurrentWorksheetNumber;
+      {
+         vector<string> &R__stl =  worksheetNames;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+            vector<string>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            {TString R__str((*R__k).c_str());
+             R__str.Streamer(R__b);};
+            }
+         }
+      }
+      { TString R__str = Filename.c_str(); R__str.Streamer(R__b);}
+      {
+         vector<int> &R__stl =  CeilX;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+            vector<int>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            R__b << (*R__k);
+            }
+         }
+      }
+      {
+         vector<int> &R__stl =  CeilY;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+            vector<int>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            R__b << (*R__k);
+            }
+         }
+      }
+      {
+         vector<int> &R__stl =  XBorder;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+            vector<int>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            R__b << (*R__k);
+            }
+         }
+      }
+      R__b.SetByteCount(R__c, kTRUE);
+   }
+}
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_TXlsxwriter(void *p) {
+      return  p ? new(p) ::TXlsxwriter : new ::TXlsxwriter;
+   }
+   static void *newArray_TXlsxwriter(Long_t nElements, void *p) {
+      return p ? new(p) ::TXlsxwriter[nElements] : new ::TXlsxwriter[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_TXlsxwriter(void *p) {
+      delete ((::TXlsxwriter*)p);
+   }
+   static void deleteArray_TXlsxwriter(void *p) {
+      delete [] ((::TXlsxwriter*)p);
+   }
+   static void destruct_TXlsxwriter(void *p) {
+      typedef ::TXlsxwriter current_t;
+      ((current_t*)p)->~current_t();
+   }
+   // Wrapper around a custom streamer member function.
+   static void streamer_TXlsxwriter(TBuffer &buf, void *obj) {
+      ((::TXlsxwriter*)obj)->::TXlsxwriter::Streamer(buf);
+   }
+} // end of namespace ROOT for class ::TXlsxwriter
+
+//______________________________________________________________________________
+void OMPStorageData::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class OMPStorageData.
+
+   UInt_t R__s, R__c;
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(&R__s, &R__c); if (R__v) { }
+      TObject::Streamer(R__b);
+      R__b >> Vv;
+      R__b >> Wv;
+      R__b >> Rv;
+      R__b >> Av;
+      R__b >> Wd;
+      R__b >> Rd;
+      R__b >> Ad;
+      R__b >> Vso;
+      R__b >> Wso;
+      R__b >> Rso;
+      R__b >> Aso;
+      R__b >> Rc;
+      R__b >> v1;
+      R__b >> v2;
+      R__b >> v3;
+      R__b >> v4;
+      R__b >> w1;
+      R__b >> w2;
+      R__b >> d1;
+      R__b >> d2;
+      R__b >> d3;
+      R__b >> vso1;
+      R__b >> vso2;
+      R__b >> wso1;
+      R__b >> wso2;
+      R__b >> A;
+      R__b >> N;
+      R__b >> Z;
+      R__b >> ProjectileEnergy;
+      R__b >> Ef;
+      R__b >> Vc;
+      R__b >> ReadFlag;
+      R__b >> Evaled;
+      R__b >> SaveEnergyDependence;
+      R__b >> Type;
+      { TString R__str; R__str.Streamer(R__b); Projectile = R__str.Data(); }
+      { TString R__str; R__str.Streamer(R__b); HRPotentialType = R__str.Data(); }
+      R__b.CheckByteCount(R__s, R__c, OMPStorageData::IsA());
+   } else {
+      R__c = R__b.WriteVersion(OMPStorageData::IsA(), kTRUE);
+      TObject::Streamer(R__b);
+      R__b << Vv;
+      R__b << Wv;
+      R__b << Rv;
+      R__b << Av;
+      R__b << Wd;
+      R__b << Rd;
+      R__b << Ad;
+      R__b << Vso;
+      R__b << Wso;
+      R__b << Rso;
+      R__b << Aso;
+      R__b << Rc;
+      R__b << v1;
+      R__b << v2;
+      R__b << v3;
+      R__b << v4;
+      R__b << w1;
+      R__b << w2;
+      R__b << d1;
+      R__b << d2;
+      R__b << d3;
+      R__b << vso1;
+      R__b << vso2;
+      R__b << wso1;
+      R__b << wso2;
+      R__b << A;
+      R__b << N;
+      R__b << Z;
+      R__b << ProjectileEnergy;
+      R__b << Ef;
+      R__b << Vc;
+      R__b << ReadFlag;
+      R__b << Evaled;
+      R__b << SaveEnergyDependence;
+      R__b << Type;
+      { TString R__str = Projectile.c_str(); R__str.Streamer(R__b);}
+      { TString R__str = HRPotentialType.c_str(); R__str.Streamer(R__b);}
+      R__b.SetByteCount(R__c, kTRUE);
+   }
+}
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_OMPStorageData(void *p) {
+      return  p ? new(p) ::OMPStorageData : new ::OMPStorageData;
+   }
+   static void *newArray_OMPStorageData(Long_t nElements, void *p) {
+      return p ? new(p) ::OMPStorageData[nElements] : new ::OMPStorageData[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_OMPStorageData(void *p) {
+      delete ((::OMPStorageData*)p);
+   }
+   static void deleteArray_OMPStorageData(void *p) {
+      delete [] ((::OMPStorageData*)p);
+   }
+   static void destruct_OMPStorageData(void *p) {
+      typedef ::OMPStorageData current_t;
+      ((current_t*)p)->~current_t();
+   }
+   // Wrapper around a custom streamer member function.
+   static void streamer_OMPStorageData(TBuffer &buf, void *obj) {
+      ((::OMPStorageData*)obj)->::OMPStorageData::Streamer(buf);
+   }
+} // end of namespace ROOT for class ::OMPStorageData
+
+//______________________________________________________________________________
+void OMPStorage::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class OMPStorage.
+
+   UInt_t R__s, R__c;
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(&R__s, &R__c); if (R__v) { }
+      OMPStorageData::Streamer(R__b);
+      R__b >> Nuclide;
+      GrVv.Streamer(R__b);
+      GrWv.Streamer(R__b);
+      GrVso.Streamer(R__b);
+      GrWso.Streamer(R__b);
+      R__b.CheckByteCount(R__s, R__c, OMPStorage::IsA());
+   } else {
+      R__c = R__b.WriteVersion(OMPStorage::IsA(), kTRUE);
+      OMPStorageData::Streamer(R__b);
+      R__b << Nuclide;
+      GrVv.Streamer(R__b);
+      GrWv.Streamer(R__b);
+      GrVso.Streamer(R__b);
+      GrWso.Streamer(R__b);
+      R__b.SetByteCount(R__c, kTRUE);
+   }
+}
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_OMPStorage(void *p) {
+      return  p ? new(p) ::OMPStorage : new ::OMPStorage;
+   }
+   static void *newArray_OMPStorage(Long_t nElements, void *p) {
+      return p ? new(p) ::OMPStorage[nElements] : new ::OMPStorage[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_OMPStorage(void *p) {
+      delete ((::OMPStorage*)p);
+   }
+   static void deleteArray_OMPStorage(void *p) {
+      delete [] ((::OMPStorage*)p);
+   }
+   static void destruct_OMPStorage(void *p) {
+      typedef ::OMPStorage current_t;
+      ((current_t*)p)->~current_t();
+   }
+   // Wrapper around a custom streamer member function.
+   static void streamer_OMPStorage(TBuffer &buf, void *obj) {
+      ((::OMPStorage*)obj)->::OMPStorage::Streamer(buf);
+   }
+} // end of namespace ROOT for class ::OMPStorage
+
+//______________________________________________________________________________
+void OpticalModelParametersData::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class OpticalModelParametersData.
+
+   UInt_t R__s, R__c;
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(&R__s, &R__c); if (R__v) { }
+      TObject::Streamer(R__b);
+      PotentialData.Streamer(R__b);
+      PotentialDispData.Streamer(R__b);
+      PotentialKoningData.Streamer(R__b);
       R__b >> nOMP;
       R__b >> NormalisationMode;
       R__b >> Read;
@@ -904,18 +1936,16 @@ void OpticalModelParameters::Streamer(TBuffer &R__b)
             R__stl.push_back(R__t);
          }
       }
-      R__b >> PointToPasteChangedOMP;
-      R__b >> Nuclide;
       R__b >> A;
       R__b >> Z;
       R__b >> N;
-      R__b.CheckByteCount(R__s, R__c, OpticalModelParameters::IsA());
+      R__b.CheckByteCount(R__s, R__c, OpticalModelParametersData::IsA());
    } else {
-      R__c = R__b.WriteVersion(OpticalModelParameters::IsA(), kTRUE);
+      R__c = R__b.WriteVersion(OpticalModelParametersData::IsA(), kTRUE);
       TObject::Streamer(R__b);
-      R__b.StreamObject(&(Potential),typeid(Potential));
-      R__b.StreamObject(&(PotentialDisp),typeid(PotentialDisp));
-      R__b.StreamObject(&(PotentialKoning),typeid(PotentialKoning));
+      PotentialData.Streamer(R__b);
+      PotentialDispData.Streamer(R__b);
+      PotentialKoningData.Streamer(R__b);
       R__b << nOMP;
       R__b << NormalisationMode;
       R__b << Read;
@@ -937,11 +1967,63 @@ void OpticalModelParameters::Streamer(TBuffer &R__b)
             }
          }
       }
-      R__b << PointToPasteChangedOMP;
-      R__b << Nuclide;
       R__b << A;
       R__b << Z;
       R__b << N;
+      R__b.SetByteCount(R__c, kTRUE);
+   }
+}
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_OpticalModelParametersData(void *p) {
+      return  p ? new(p) ::OpticalModelParametersData : new ::OpticalModelParametersData;
+   }
+   static void *newArray_OpticalModelParametersData(Long_t nElements, void *p) {
+      return p ? new(p) ::OpticalModelParametersData[nElements] : new ::OpticalModelParametersData[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_OpticalModelParametersData(void *p) {
+      delete ((::OpticalModelParametersData*)p);
+   }
+   static void deleteArray_OpticalModelParametersData(void *p) {
+      delete [] ((::OpticalModelParametersData*)p);
+   }
+   static void destruct_OpticalModelParametersData(void *p) {
+      typedef ::OpticalModelParametersData current_t;
+      ((current_t*)p)->~current_t();
+   }
+   // Wrapper around a custom streamer member function.
+   static void streamer_OpticalModelParametersData(TBuffer &buf, void *obj) {
+      ((::OpticalModelParametersData*)obj)->::OpticalModelParametersData::Streamer(buf);
+   }
+} // end of namespace ROOT for class ::OpticalModelParametersData
+
+//______________________________________________________________________________
+void OpticalModelParameters::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class OpticalModelParameters.
+
+   UInt_t R__s, R__c;
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(&R__s, &R__c); if (R__v) { }
+      OpticalModelParametersData::Streamer(R__b);
+      R__b >> DefaultOMP;
+      Potential.Streamer(R__b);
+      PotentialDisp.Streamer(R__b);
+      PotentialKoning.Streamer(R__b);
+      R__b >> PointToPasteChangedOMP;
+      R__b >> Nuclide;
+      R__b.CheckByteCount(R__s, R__c, OpticalModelParameters::IsA());
+   } else {
+      R__c = R__b.WriteVersion(OpticalModelParameters::IsA(), kTRUE);
+      OpticalModelParametersData::Streamer(R__b);
+      R__b << DefaultOMP;
+      Potential.Streamer(R__b);
+      PotentialDisp.Streamer(R__b);
+      PotentialKoning.Streamer(R__b);
+      R__b << PointToPasteChangedOMP;
+      R__b << Nuclide;
       R__b.SetByteCount(R__c, kTRUE);
    }
 }
@@ -1054,6 +2136,7 @@ void GammaTransitionData::Streamer(TBuffer &R__b)
       { TString R__str; R__str.Streamer(R__b); nuclide = R__str.Data(); }
       { TString R__str; R__str.Streamer(R__b); reaction = R__str.Data(); }
       { TString R__str; R__str.Streamer(R__b); Origin = R__str.Data(); }
+      AI.Streamer(R__b);
       R__b.CheckByteCount(R__s, R__c, GammaTransitionData::IsA());
    } else {
       R__c = R__b.WriteVersion(GammaTransitionData::IsA(), kTRUE);
@@ -1085,6 +2168,7 @@ void GammaTransitionData::Streamer(TBuffer &R__b)
       { TString R__str = nuclide.c_str(); R__str.Streamer(R__b);}
       { TString R__str = reaction.c_str(); R__str.Streamer(R__b);}
       { TString R__str = Origin.c_str(); R__str.Streamer(R__b);}
+      AI.Streamer(R__b);
       R__b.SetByteCount(R__c, kTRUE);
    }
 }
@@ -1261,6 +2345,18 @@ void LevelData::Streamer(TBuffer &R__b)
          }
       }
       {
+         vector<float> &R__stl =  AngleLab;
+         R__stl.clear();
+         int R__i, R__n;
+         R__b >> R__n;
+         R__stl.reserve(R__n);
+         for (R__i = 0; R__i < R__n; R__i++) {
+            float R__t;
+            R__b >> R__t;
+            R__stl.push_back(R__t);
+         }
+      }
+      {
          vector<float> &R__stl =  Branching;
          R__stl.clear();
          int R__i, R__n;
@@ -1284,6 +2380,7 @@ void LevelData::Streamer(TBuffer &R__b)
             R__stl.push_back(R__t);
          }
       }
+      AI.Streamer(R__b);
       R__b.CheckByteCount(R__s, R__c, LevelData::IsA());
    } else {
       R__c = R__b.WriteVersion(LevelData::IsA(), kTRUE);
@@ -1368,6 +2465,17 @@ void LevelData::Streamer(TBuffer &R__b)
          }
       }
       {
+         vector<float> &R__stl =  AngleLab;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+            vector<float>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            R__b << (*R__k);
+            }
+         }
+      }
+      {
          vector<float> &R__stl =  Branching;
          int R__n=int(R__stl.size());
          R__b << R__n;
@@ -1389,6 +2497,7 @@ void LevelData::Streamer(TBuffer &R__b)
             }
          }
       }
+      AI.Streamer(R__b);
       R__b.SetByteCount(R__c, kTRUE);
    }
 }
@@ -1419,9 +2528,9 @@ namespace ROOT {
 } // end of namespace ROOT for class ::LevelData
 
 //______________________________________________________________________________
-void LevelDeformation::Streamer(TBuffer &R__b)
+void LevelDeformationData::Streamer(TBuffer &R__b)
 {
-   // Stream an object of class LevelDeformation.
+   // Stream an object of class LevelDeformationData.
 
    UInt_t R__s, R__c;
    if (R__b.IsReading()) {
@@ -1446,11 +2555,9 @@ void LevelDeformation::Streamer(TBuffer &R__b)
             R__stl.push_back(R__t);
          }
       }
-      R__b >> fLevel;
-      R__b >> fDeformation;
-      R__b.CheckByteCount(R__s, R__c, LevelDeformation::IsA());
+      R__b.CheckByteCount(R__s, R__c, LevelDeformationData::IsA());
    } else {
-      R__c = R__b.WriteVersion(LevelDeformation::IsA(), kTRUE);
+      R__c = R__b.WriteVersion(LevelDeformationData::IsA(), kTRUE);
       TObject::Streamer(R__b);
       R__b << TypeOfLevel;
       R__b << TypeOfDeformation;
@@ -1470,6 +2577,50 @@ void LevelDeformation::Streamer(TBuffer &R__b)
             }
          }
       }
+      R__b.SetByteCount(R__c, kTRUE);
+   }
+}
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_LevelDeformationData(void *p) {
+      return  p ? new(p) ::LevelDeformationData : new ::LevelDeformationData;
+   }
+   static void *newArray_LevelDeformationData(Long_t nElements, void *p) {
+      return p ? new(p) ::LevelDeformationData[nElements] : new ::LevelDeformationData[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_LevelDeformationData(void *p) {
+      delete ((::LevelDeformationData*)p);
+   }
+   static void deleteArray_LevelDeformationData(void *p) {
+      delete [] ((::LevelDeformationData*)p);
+   }
+   static void destruct_LevelDeformationData(void *p) {
+      typedef ::LevelDeformationData current_t;
+      ((current_t*)p)->~current_t();
+   }
+   // Wrapper around a custom streamer member function.
+   static void streamer_LevelDeformationData(TBuffer &buf, void *obj) {
+      ((::LevelDeformationData*)obj)->::LevelDeformationData::Streamer(buf);
+   }
+} // end of namespace ROOT for class ::LevelDeformationData
+
+//______________________________________________________________________________
+void LevelDeformation::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class LevelDeformation.
+
+   UInt_t R__s, R__c;
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(&R__s, &R__c); if (R__v) { }
+      LevelDeformationData::Streamer(R__b);
+      R__b >> fLevel;
+      R__b >> fDeformation;
+      R__b.CheckByteCount(R__s, R__c, LevelDeformation::IsA());
+   } else {
+      R__c = R__b.WriteVersion(LevelDeformation::IsA(), kTRUE);
+      LevelDeformationData::Streamer(R__b);
       R__b << fLevel;
       R__b << fDeformation;
       R__b.SetByteCount(R__c, kTRUE);
@@ -1502,9 +2653,9 @@ namespace ROOT {
 } // end of namespace ROOT for class ::LevelDeformation
 
 //______________________________________________________________________________
-void Deformation::Streamer(TBuffer &R__b)
+void DeformationData::Streamer(TBuffer &R__b)
 {
-   // Stream an object of class Deformation.
+   // Stream an object of class DeformationData.
 
    UInt_t R__s, R__c;
    if (R__b.IsReading()) {
@@ -1516,13 +2667,13 @@ void Deformation::Streamer(TBuffer &R__b)
       R__b >> TypeOfCollectivity;
       R__b >> TypeOfDeformation;
       {
-         vector<LevelDeformation> &R__stl =  LevelDeformations;
+         vector<LevelDeformationData> &R__stl =  LevelDeformationsData;
          R__stl.clear();
          int R__i, R__n;
          R__b >> R__n;
          R__stl.reserve(R__n);
          for (R__i = 0; R__i < R__n; R__i++) {
-            LevelDeformation R__t;
+            LevelDeformationData R__t;
             R__t.Streamer(R__b);
             R__stl.push_back(R__t);
          }
@@ -1541,10 +2692,9 @@ void Deformation::Streamer(TBuffer &R__b)
             R__stl.push_back(R__t);
          }
       }
-      R__b >> PointToPastChangedDeformation;
-      R__b.CheckByteCount(R__s, R__c, Deformation::IsA());
+      R__b.CheckByteCount(R__s, R__c, DeformationData::IsA());
    } else {
-      R__c = R__b.WriteVersion(Deformation::IsA(), kTRUE);
+      R__c = R__b.WriteVersion(DeformationData::IsA(), kTRUE);
       TObject::Streamer(R__b);
       R__b << A;
       R__b << Z;
@@ -1552,13 +2702,13 @@ void Deformation::Streamer(TBuffer &R__b)
       R__b << TypeOfCollectivity;
       R__b << TypeOfDeformation;
       {
-         vector<LevelDeformation> &R__stl =  LevelDeformations;
+         vector<LevelDeformationData> &R__stl =  LevelDeformationsData;
          int R__n=int(R__stl.size());
          R__b << R__n;
          if(R__n) {
-            vector<LevelDeformation>::iterator R__k;
+            vector<LevelDeformationData>::iterator R__k;
             for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
-            ((LevelDeformation&)(*R__k)).Streamer(R__b);
+            ((LevelDeformationData&)(*R__k)).Streamer(R__b);
             }
          }
       }
@@ -1571,6 +2721,72 @@ void Deformation::Streamer(TBuffer &R__b)
             for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
             {TString R__str((*R__k).c_str());
              R__str.Streamer(R__b);};
+            }
+         }
+      }
+      R__b.SetByteCount(R__c, kTRUE);
+   }
+}
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_DeformationData(void *p) {
+      return  p ? new(p) ::DeformationData : new ::DeformationData;
+   }
+   static void *newArray_DeformationData(Long_t nElements, void *p) {
+      return p ? new(p) ::DeformationData[nElements] : new ::DeformationData[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_DeformationData(void *p) {
+      delete ((::DeformationData*)p);
+   }
+   static void deleteArray_DeformationData(void *p) {
+      delete [] ((::DeformationData*)p);
+   }
+   static void destruct_DeformationData(void *p) {
+      typedef ::DeformationData current_t;
+      ((current_t*)p)->~current_t();
+   }
+   // Wrapper around a custom streamer member function.
+   static void streamer_DeformationData(TBuffer &buf, void *obj) {
+      ((::DeformationData*)obj)->::DeformationData::Streamer(buf);
+   }
+} // end of namespace ROOT for class ::DeformationData
+
+//______________________________________________________________________________
+void Deformation::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class Deformation.
+
+   UInt_t R__s, R__c;
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(&R__s, &R__c); if (R__v) { }
+      DeformationData::Streamer(R__b);
+      {
+         vector<LevelDeformation> &R__stl =  LevelDeformations;
+         R__stl.clear();
+         int R__i, R__n;
+         R__b >> R__n;
+         R__stl.reserve(R__n);
+         for (R__i = 0; R__i < R__n; R__i++) {
+            LevelDeformation R__t;
+            R__t.Streamer(R__b);
+            R__stl.push_back(R__t);
+         }
+      }
+      R__b >> PointToPastChangedDeformation;
+      R__b.CheckByteCount(R__s, R__c, Deformation::IsA());
+   } else {
+      R__c = R__b.WriteVersion(Deformation::IsA(), kTRUE);
+      DeformationData::Streamer(R__b);
+      {
+         vector<LevelDeformation> &R__stl =  LevelDeformations;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+            vector<LevelDeformation>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            ((LevelDeformation&)(*R__k)).Streamer(R__b);
             }
          }
       }
@@ -1729,6 +2945,7 @@ void NucleusData::Streamer(TBuffer &R__b)
       { TString R__str; R__str.Streamer(R__b); Name = R__str.Data(); }
       { TString R__str; R__str.Streamer(R__b); Reaction = R__str.Data(); }
       { TString R__str; R__str.Streamer(R__b); Projectile = R__str.Data(); }
+      { TString R__str; R__str.Streamer(R__b); addition = R__str.Data(); }
       R__b >> A;
       R__b >> Z;
       {
@@ -1758,8 +2975,24 @@ void NucleusData::Streamer(TBuffer &R__b)
       R__b >> TalysCalculated;
       R__b >> Abundance;
       R__b >> ProjectileEnergy;
+      R__b >> ProjectileEnergyCM;
+      R__b >> Mass;
+      R__b >> ProjectileMass;
+      R__b >> OutgoingParticleMass;
       {
          vector<float> &R__stl =  Angle;
+         R__stl.clear();
+         int R__i, R__n;
+         R__b >> R__n;
+         R__stl.reserve(R__n);
+         for (R__i = 0; R__i < R__n; R__i++) {
+            float R__t;
+            R__b >> R__t;
+            R__stl.push_back(R__t);
+         }
+      }
+      {
+         vector<float> &R__stl =  AngleLab;
          R__stl.clear();
          int R__i, R__n;
          R__b >> R__n;
@@ -1811,6 +3044,7 @@ void NucleusData::Streamer(TBuffer &R__b)
       R__b >> TOTPProd;
       R__b >> TOTDProd;
       R__b >> TOTAProd;
+      R__b >> TOTTauProd;
       R__b >> TotElastic;
       R__b >> CompoundElastic;
       R__b >> DirectElastic;
@@ -1828,6 +3062,19 @@ void NucleusData::Streamer(TBuffer &R__b)
       R__b >> TEISTot;
       R__b >> TEISCont;
       R__b >> TEISDiscr;
+      R__b >> TalysGroundStateExsists;
+      R__b >> FastFlag;
+      R__b >> FastCalculated;
+      R__b >> OMPoptionN;
+      R__b >> OMPoptionP;
+      R__b >> WriteOMPOrUseKoningP;
+      R__b >> WriteOMPOrUseKoningN;
+      R__b >> ThreadNumber;
+      R__b >> WriteDeformation;
+      AI.Streamer(R__b);
+      OMPNData.Streamer(R__b);
+      OMPPData.Streamer(R__b);
+      DefData.Streamer(R__b);
       R__b.CheckByteCount(R__s, R__c, NucleusData::IsA());
    } else {
       R__c = R__b.WriteVersion(NucleusData::IsA(), kTRUE);
@@ -1835,6 +3082,7 @@ void NucleusData::Streamer(TBuffer &R__b)
       { TString R__str = Name.c_str(); R__str.Streamer(R__b);}
       { TString R__str = Reaction.c_str(); R__str.Streamer(R__b);}
       { TString R__str = Projectile.c_str(); R__str.Streamer(R__b);}
+      { TString R__str = addition.c_str(); R__str.Streamer(R__b);}
       R__b << A;
       R__b << Z;
       {
@@ -1862,8 +3110,23 @@ void NucleusData::Streamer(TBuffer &R__b)
       R__b << TalysCalculated;
       R__b << Abundance;
       R__b << ProjectileEnergy;
+      R__b << ProjectileEnergyCM;
+      R__b << Mass;
+      R__b << ProjectileMass;
+      R__b << OutgoingParticleMass;
       {
          vector<float> &R__stl =  Angle;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+            vector<float>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            R__b << (*R__k);
+            }
+         }
+      }
+      {
+         vector<float> &R__stl =  AngleLab;
          int R__n=int(R__stl.size());
          R__b << R__n;
          if(R__n) {
@@ -1911,6 +3174,7 @@ void NucleusData::Streamer(TBuffer &R__b)
       R__b << TOTPProd;
       R__b << TOTDProd;
       R__b << TOTAProd;
+      R__b << TOTTauProd;
       R__b << TotElastic;
       R__b << CompoundElastic;
       R__b << DirectElastic;
@@ -1928,6 +3192,19 @@ void NucleusData::Streamer(TBuffer &R__b)
       R__b << TEISTot;
       R__b << TEISCont;
       R__b << TEISDiscr;
+      R__b << TalysGroundStateExsists;
+      R__b << FastFlag;
+      R__b << FastCalculated;
+      R__b << OMPoptionN;
+      R__b << OMPoptionP;
+      R__b << WriteOMPOrUseKoningP;
+      R__b << WriteOMPOrUseKoningN;
+      R__b << ThreadNumber;
+      R__b << WriteDeformation;
+      AI.Streamer(R__b);
+      OMPNData.Streamer(R__b);
+      OMPPData.Streamer(R__b);
+      DefData.Streamer(R__b);
       R__b.SetByteCount(R__c, kTRUE);
    }
 }
@@ -1967,6 +3244,8 @@ void Nucleus::Streamer(TBuffer &R__b)
       Version_t R__v = R__b.ReadVersion(&R__s, &R__c); if (R__v) { }
       NucleusData::Streamer(R__b);
       R__b >> PlottedADist;
+      R__b >> kAlwaysNewGraphs;
+      R__b >> ConvertToLab;
       {
          vector<Level> &R__stl =  Levels;
          R__stl.clear();
@@ -2027,6 +3306,8 @@ void Nucleus::Streamer(TBuffer &R__b)
             R__stl.push_back(R__t);
          }
       }
+      { TString R__str; R__str.Streamer(R__b); PathToCalculationDir = R__str.Data(); }
+      { TString R__str; R__str.Streamer(R__b); OutgoingParticle = R__str.Data(); }
       OMPN.Streamer(R__b);
       OMPP.Streamer(R__b);
       Def.Streamer(R__b);
@@ -2050,13 +3331,8 @@ void Nucleus::Streamer(TBuffer &R__b)
       TEISGraphTot.Streamer(R__b);
       TEISGraphCont.Streamer(R__b);
       TEISGraphDiscr.Streamer(R__b);
-      R__b >> TalysGroundStateExsists;
-      R__b >> FastFlag;
-      R__b >> FastCalculated;
-      R__b >> WriteOMPOrUseKoningP;
-      R__b >> WriteOMPOrUseKoningN;
-      R__b >> WriteDeformation;
       R__b >> fMotherNucleus;
+      R__b >> fTalysCalculation;
       {
          vector<Nucleus> &R__stl =  Products;
          R__stl.clear();
@@ -2074,6 +3350,8 @@ void Nucleus::Streamer(TBuffer &R__b)
       R__c = R__b.WriteVersion(Nucleus::IsA(), kTRUE);
       NucleusData::Streamer(R__b);
       R__b << PlottedADist;
+      R__b << kAlwaysNewGraphs;
+      R__b << ConvertToLab;
       {
          vector<Level> &R__stl =  Levels;
          int R__n=int(R__stl.size());
@@ -2119,6 +3397,8 @@ void Nucleus::Streamer(TBuffer &R__b)
             }
          }
       }
+      { TString R__str = PathToCalculationDir.c_str(); R__str.Streamer(R__b);}
+      { TString R__str = OutgoingParticle.c_str(); R__str.Streamer(R__b);}
       OMPN.Streamer(R__b);
       OMPP.Streamer(R__b);
       Def.Streamer(R__b);
@@ -2142,13 +3422,8 @@ void Nucleus::Streamer(TBuffer &R__b)
       TEISGraphTot.Streamer(R__b);
       TEISGraphCont.Streamer(R__b);
       TEISGraphDiscr.Streamer(R__b);
-      R__b << TalysGroundStateExsists;
-      R__b << FastFlag;
-      R__b << FastCalculated;
-      R__b << WriteOMPOrUseKoningP;
-      R__b << WriteOMPOrUseKoningN;
-      R__b << WriteDeformation;
       R__b << fMotherNucleus;
+      R__b << fTalysCalculation;
       {
          vector<Nucleus> &R__stl =  Products;
          int R__n=int(R__stl.size());
@@ -2210,6 +3485,7 @@ void TalysCalculation::Streamer(TBuffer &R__b)
             R__stl.push_back(R__t);
          }
       }
+      R__b >> EnableMultiThreading;
       R__b >> FinalResult;
       { TString R__str; R__str.Streamer(R__b); Target = R__str.Data(); }
       { TString R__str; R__str.Streamer(R__b); Proj = R__str.Data(); }
@@ -2259,6 +3535,7 @@ void TalysCalculation::Streamer(TBuffer &R__b)
             }
          }
       }
+      R__b << EnableMultiThreading;
       R__b << FinalResult;
       { TString R__str = Target.c_str(); R__str.Streamer(R__b);}
       { TString R__str = Proj.c_str(); R__str.Streamer(R__b);}
@@ -2318,6 +3595,164 @@ namespace ROOT {
       ((::TalysCalculation*)obj)->::TalysCalculation::Streamer(buf);
    }
 } // end of namespace ROOT for class ::TalysCalculation
+
+//______________________________________________________________________________
+void TLMaterial::Streamer(TBuffer &R__b)
+{
+   // Stream an object of class TLMaterial.
+
+   UInt_t R__s, R__c;
+   if (R__b.IsReading()) {
+      Version_t R__v = R__b.ReadVersion(&R__s, &R__c); if (R__v) { }
+      TObject::Streamer(R__b);
+      R__b >> EnableMultiThreading;
+      R__b >> NThreads;
+      R__b >> GeneratedLineList;
+      {
+         vector<GammaTransition*> &R__stl =  Gammas;
+         R__stl.clear();
+         TClass *R__tcl1 = TBuffer::GetClass(typeid(class GammaTransition *));
+         if (R__tcl1==0) {
+            Error("Gammas streamer","Missing the TClass object for class GammaTransition *!");
+            return;
+         }
+         int R__i, R__n;
+         R__b >> R__n;
+         R__stl.reserve(R__n);
+         for (R__i = 0; R__i < R__n; R__i++) {
+            GammaTransition* R__t;
+            R__t = (GammaTransition*)R__b.ReadObjectAny(R__tcl1);
+            R__stl.push_back(R__t);
+         }
+      }
+      {
+         vector<GammaTransition> &R__stl =  Bkg;
+         R__stl.clear();
+         int R__i, R__n;
+         R__b >> R__n;
+         R__stl.reserve(R__n);
+         for (R__i = 0; R__i < R__n; R__i++) {
+            GammaTransition R__t;
+            R__t.Streamer(R__b);
+            R__stl.push_back(R__t);
+         }
+      }
+      { TString R__str; R__str.Streamer(R__b); MaterialFormula = R__str.Data(); }
+      R__b >> Density;
+      R__b >> MolarMass;
+      R__b >> Calculated;
+      {
+         vector<Nucleus*> &R__stl =  Nuclides;
+         R__stl.clear();
+         TClass *R__tcl1 = TBuffer::GetClass(typeid(class Nucleus *));
+         if (R__tcl1==0) {
+            Error("Nuclides streamer","Missing the TClass object for class Nucleus *!");
+            return;
+         }
+         int R__i, R__n;
+         R__b >> R__n;
+         R__stl.reserve(R__n);
+         for (R__i = 0; R__i < R__n; R__i++) {
+            Nucleus* R__t;
+            R__t = (Nucleus*)R__b.ReadObjectAny(R__tcl1);
+            R__stl.push_back(R__t);
+         }
+      }
+      {
+         vector<int> &R__stl =  Quantities;
+         R__stl.clear();
+         int R__i, R__n;
+         R__b >> R__n;
+         R__stl.reserve(R__n);
+         for (R__i = 0; R__i < R__n; R__i++) {
+            int R__t;
+            R__b >> R__t;
+            R__stl.push_back(R__t);
+         }
+      }
+      R__b.CheckByteCount(R__s, R__c, TLMaterial::IsA());
+   } else {
+      R__c = R__b.WriteVersion(TLMaterial::IsA(), kTRUE);
+      TObject::Streamer(R__b);
+      R__b << EnableMultiThreading;
+      R__b << NThreads;
+      R__b << GeneratedLineList;
+      {
+         vector<GammaTransition*> &R__stl =  Gammas;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+            vector<GammaTransition*>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            R__b << (*R__k);
+            }
+         }
+      }
+      {
+         vector<GammaTransition> &R__stl =  Bkg;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+            vector<GammaTransition>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            ((GammaTransition&)(*R__k)).Streamer(R__b);
+            }
+         }
+      }
+      { TString R__str = MaterialFormula.c_str(); R__str.Streamer(R__b);}
+      R__b << Density;
+      R__b << MolarMass;
+      R__b << Calculated;
+      {
+         vector<Nucleus*> &R__stl =  Nuclides;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+            vector<Nucleus*>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            R__b << (*R__k);
+            }
+         }
+      }
+      {
+         vector<int> &R__stl =  Quantities;
+         int R__n=int(R__stl.size());
+         R__b << R__n;
+         if(R__n) {
+            vector<int>::iterator R__k;
+            for (R__k = R__stl.begin(); R__k != R__stl.end(); ++R__k) {
+            R__b << (*R__k);
+            }
+         }
+      }
+      R__b.SetByteCount(R__c, kTRUE);
+   }
+}
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_TLMaterial(void *p) {
+      return  p ? new(p) ::TLMaterial : new ::TLMaterial;
+   }
+   static void *newArray_TLMaterial(Long_t nElements, void *p) {
+      return p ? new(p) ::TLMaterial[nElements] : new ::TLMaterial[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_TLMaterial(void *p) {
+      delete ((::TLMaterial*)p);
+   }
+   static void deleteArray_TLMaterial(void *p) {
+      delete [] ((::TLMaterial*)p);
+   }
+   static void destruct_TLMaterial(void *p) {
+      typedef ::TLMaterial current_t;
+      ((current_t*)p)->~current_t();
+   }
+   // Wrapper around a custom streamer member function.
+   static void streamer_TLMaterial(TBuffer &buf, void *obj) {
+      ((::TLMaterial*)obj)->::TLMaterial::Streamer(buf);
+   }
+} // end of namespace ROOT for class ::TLMaterial
 
 //______________________________________________________________________________
 void SampleInformation::Streamer(TBuffer &R__b)
@@ -2627,6 +4062,132 @@ namespace ROOT {
       ((current_t*)p)->~current_t();
    }
 } // end of namespace ROOT for class vector<string>
+
+namespace ROOT {
+   static TClass *vectorlElxw_worksheetmUgR_Dictionary();
+   static void vectorlElxw_worksheetmUgR_TClassManip(TClass*);
+   static void *new_vectorlElxw_worksheetmUgR(void *p = 0);
+   static void *newArray_vectorlElxw_worksheetmUgR(Long_t size, void *p);
+   static void delete_vectorlElxw_worksheetmUgR(void *p);
+   static void deleteArray_vectorlElxw_worksheetmUgR(void *p);
+   static void destruct_vectorlElxw_worksheetmUgR(void *p);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const vector<lxw_worksheet*>*)
+   {
+      vector<lxw_worksheet*> *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<lxw_worksheet*>));
+      static ::ROOT::TGenericClassInfo 
+         instance("vector<lxw_worksheet*>", -2, "vector", 216,
+                  typeid(vector<lxw_worksheet*>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &vectorlElxw_worksheetmUgR_Dictionary, isa_proxy, 0,
+                  sizeof(vector<lxw_worksheet*>) );
+      instance.SetNew(&new_vectorlElxw_worksheetmUgR);
+      instance.SetNewArray(&newArray_vectorlElxw_worksheetmUgR);
+      instance.SetDelete(&delete_vectorlElxw_worksheetmUgR);
+      instance.SetDeleteArray(&deleteArray_vectorlElxw_worksheetmUgR);
+      instance.SetDestructor(&destruct_vectorlElxw_worksheetmUgR);
+      instance.AdoptCollectionProxyInfo(TCollectionProxyInfo::Generate(TCollectionProxyInfo::Pushback< vector<lxw_worksheet*> >()));
+      return &instance;
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const vector<lxw_worksheet*>*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+
+   // Dictionary for non-ClassDef classes
+   static TClass *vectorlElxw_worksheetmUgR_Dictionary() {
+      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const vector<lxw_worksheet*>*)0x0)->GetClass();
+      vectorlElxw_worksheetmUgR_TClassManip(theClass);
+   return theClass;
+   }
+
+   static void vectorlElxw_worksheetmUgR_TClassManip(TClass* ){
+   }
+
+} // end of namespace ROOT
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_vectorlElxw_worksheetmUgR(void *p) {
+      return  p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<lxw_worksheet*> : new vector<lxw_worksheet*>;
+   }
+   static void *newArray_vectorlElxw_worksheetmUgR(Long_t nElements, void *p) {
+      return p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<lxw_worksheet*>[nElements] : new vector<lxw_worksheet*>[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_vectorlElxw_worksheetmUgR(void *p) {
+      delete ((vector<lxw_worksheet*>*)p);
+   }
+   static void deleteArray_vectorlElxw_worksheetmUgR(void *p) {
+      delete [] ((vector<lxw_worksheet*>*)p);
+   }
+   static void destruct_vectorlElxw_worksheetmUgR(void *p) {
+      typedef vector<lxw_worksheet*> current_t;
+      ((current_t*)p)->~current_t();
+   }
+} // end of namespace ROOT for class vector<lxw_worksheet*>
+
+namespace ROOT {
+   static TClass *vectorlElxw_formatmUgR_Dictionary();
+   static void vectorlElxw_formatmUgR_TClassManip(TClass*);
+   static void *new_vectorlElxw_formatmUgR(void *p = 0);
+   static void *newArray_vectorlElxw_formatmUgR(Long_t size, void *p);
+   static void delete_vectorlElxw_formatmUgR(void *p);
+   static void deleteArray_vectorlElxw_formatmUgR(void *p);
+   static void destruct_vectorlElxw_formatmUgR(void *p);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const vector<lxw_format*>*)
+   {
+      vector<lxw_format*> *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<lxw_format*>));
+      static ::ROOT::TGenericClassInfo 
+         instance("vector<lxw_format*>", -2, "vector", 216,
+                  typeid(vector<lxw_format*>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &vectorlElxw_formatmUgR_Dictionary, isa_proxy, 0,
+                  sizeof(vector<lxw_format*>) );
+      instance.SetNew(&new_vectorlElxw_formatmUgR);
+      instance.SetNewArray(&newArray_vectorlElxw_formatmUgR);
+      instance.SetDelete(&delete_vectorlElxw_formatmUgR);
+      instance.SetDeleteArray(&deleteArray_vectorlElxw_formatmUgR);
+      instance.SetDestructor(&destruct_vectorlElxw_formatmUgR);
+      instance.AdoptCollectionProxyInfo(TCollectionProxyInfo::Generate(TCollectionProxyInfo::Pushback< vector<lxw_format*> >()));
+      return &instance;
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const vector<lxw_format*>*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+
+   // Dictionary for non-ClassDef classes
+   static TClass *vectorlElxw_formatmUgR_Dictionary() {
+      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const vector<lxw_format*>*)0x0)->GetClass();
+      vectorlElxw_formatmUgR_TClassManip(theClass);
+   return theClass;
+   }
+
+   static void vectorlElxw_formatmUgR_TClassManip(TClass* ){
+   }
+
+} // end of namespace ROOT
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_vectorlElxw_formatmUgR(void *p) {
+      return  p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<lxw_format*> : new vector<lxw_format*>;
+   }
+   static void *newArray_vectorlElxw_formatmUgR(Long_t nElements, void *p) {
+      return p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<lxw_format*>[nElements] : new vector<lxw_format*>[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_vectorlElxw_formatmUgR(void *p) {
+      delete ((vector<lxw_format*>*)p);
+   }
+   static void deleteArray_vectorlElxw_formatmUgR(void *p) {
+      delete [] ((vector<lxw_format*>*)p);
+   }
+   static void destruct_vectorlElxw_formatmUgR(void *p) {
+      typedef vector<lxw_format*> current_t;
+      ((current_t*)p)->~current_t();
+   }
+} // end of namespace ROOT for class vector<lxw_format*>
 
 namespace ROOT {
    static TClass *vectorlEintgR_Dictionary();
@@ -3007,6 +4568,132 @@ namespace ROOT {
 } // end of namespace ROOT for class vector<Nucleus>
 
 namespace ROOT {
+   static TClass *vectorlENucleusmUgR_Dictionary();
+   static void vectorlENucleusmUgR_TClassManip(TClass*);
+   static void *new_vectorlENucleusmUgR(void *p = 0);
+   static void *newArray_vectorlENucleusmUgR(Long_t size, void *p);
+   static void delete_vectorlENucleusmUgR(void *p);
+   static void deleteArray_vectorlENucleusmUgR(void *p);
+   static void destruct_vectorlENucleusmUgR(void *p);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const vector<Nucleus*>*)
+   {
+      vector<Nucleus*> *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<Nucleus*>));
+      static ::ROOT::TGenericClassInfo 
+         instance("vector<Nucleus*>", -2, "vector", 216,
+                  typeid(vector<Nucleus*>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &vectorlENucleusmUgR_Dictionary, isa_proxy, 0,
+                  sizeof(vector<Nucleus*>) );
+      instance.SetNew(&new_vectorlENucleusmUgR);
+      instance.SetNewArray(&newArray_vectorlENucleusmUgR);
+      instance.SetDelete(&delete_vectorlENucleusmUgR);
+      instance.SetDeleteArray(&deleteArray_vectorlENucleusmUgR);
+      instance.SetDestructor(&destruct_vectorlENucleusmUgR);
+      instance.AdoptCollectionProxyInfo(TCollectionProxyInfo::Generate(TCollectionProxyInfo::Pushback< vector<Nucleus*> >()));
+      return &instance;
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const vector<Nucleus*>*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+
+   // Dictionary for non-ClassDef classes
+   static TClass *vectorlENucleusmUgR_Dictionary() {
+      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const vector<Nucleus*>*)0x0)->GetClass();
+      vectorlENucleusmUgR_TClassManip(theClass);
+   return theClass;
+   }
+
+   static void vectorlENucleusmUgR_TClassManip(TClass* ){
+   }
+
+} // end of namespace ROOT
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_vectorlENucleusmUgR(void *p) {
+      return  p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<Nucleus*> : new vector<Nucleus*>;
+   }
+   static void *newArray_vectorlENucleusmUgR(Long_t nElements, void *p) {
+      return p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<Nucleus*>[nElements] : new vector<Nucleus*>[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_vectorlENucleusmUgR(void *p) {
+      delete ((vector<Nucleus*>*)p);
+   }
+   static void deleteArray_vectorlENucleusmUgR(void *p) {
+      delete [] ((vector<Nucleus*>*)p);
+   }
+   static void destruct_vectorlENucleusmUgR(void *p) {
+      typedef vector<Nucleus*> current_t;
+      ((current_t*)p)->~current_t();
+   }
+} // end of namespace ROOT for class vector<Nucleus*>
+
+namespace ROOT {
+   static TClass *vectorlELevelDeformationDatagR_Dictionary();
+   static void vectorlELevelDeformationDatagR_TClassManip(TClass*);
+   static void *new_vectorlELevelDeformationDatagR(void *p = 0);
+   static void *newArray_vectorlELevelDeformationDatagR(Long_t size, void *p);
+   static void delete_vectorlELevelDeformationDatagR(void *p);
+   static void deleteArray_vectorlELevelDeformationDatagR(void *p);
+   static void destruct_vectorlELevelDeformationDatagR(void *p);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const vector<LevelDeformationData>*)
+   {
+      vector<LevelDeformationData> *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<LevelDeformationData>));
+      static ::ROOT::TGenericClassInfo 
+         instance("vector<LevelDeformationData>", -2, "vector", 216,
+                  typeid(vector<LevelDeformationData>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &vectorlELevelDeformationDatagR_Dictionary, isa_proxy, 0,
+                  sizeof(vector<LevelDeformationData>) );
+      instance.SetNew(&new_vectorlELevelDeformationDatagR);
+      instance.SetNewArray(&newArray_vectorlELevelDeformationDatagR);
+      instance.SetDelete(&delete_vectorlELevelDeformationDatagR);
+      instance.SetDeleteArray(&deleteArray_vectorlELevelDeformationDatagR);
+      instance.SetDestructor(&destruct_vectorlELevelDeformationDatagR);
+      instance.AdoptCollectionProxyInfo(TCollectionProxyInfo::Generate(TCollectionProxyInfo::Pushback< vector<LevelDeformationData> >()));
+      return &instance;
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const vector<LevelDeformationData>*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+
+   // Dictionary for non-ClassDef classes
+   static TClass *vectorlELevelDeformationDatagR_Dictionary() {
+      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const vector<LevelDeformationData>*)0x0)->GetClass();
+      vectorlELevelDeformationDatagR_TClassManip(theClass);
+   return theClass;
+   }
+
+   static void vectorlELevelDeformationDatagR_TClassManip(TClass* ){
+   }
+
+} // end of namespace ROOT
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_vectorlELevelDeformationDatagR(void *p) {
+      return  p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<LevelDeformationData> : new vector<LevelDeformationData>;
+   }
+   static void *newArray_vectorlELevelDeformationDatagR(Long_t nElements, void *p) {
+      return p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<LevelDeformationData>[nElements] : new vector<LevelDeformationData>[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_vectorlELevelDeformationDatagR(void *p) {
+      delete ((vector<LevelDeformationData>*)p);
+   }
+   static void deleteArray_vectorlELevelDeformationDatagR(void *p) {
+      delete [] ((vector<LevelDeformationData>*)p);
+   }
+   static void destruct_vectorlELevelDeformationDatagR(void *p) {
+      typedef vector<LevelDeformationData> current_t;
+      ((current_t*)p)->~current_t();
+   }
+} // end of namespace ROOT for class vector<LevelDeformationData>
+
+namespace ROOT {
    static TClass *vectorlELevelDeformationgR_Dictionary();
    static void vectorlELevelDeformationgR_TClassManip(TClass*);
    static void *new_vectorlELevelDeformationgR(void *p = 0);
@@ -3384,6 +5071,132 @@ namespace ROOT {
    }
 } // end of namespace ROOT for class vector<GammaTransition>
 
+namespace ROOT {
+   static TClass *vectorlEGammaTransitionmUgR_Dictionary();
+   static void vectorlEGammaTransitionmUgR_TClassManip(TClass*);
+   static void *new_vectorlEGammaTransitionmUgR(void *p = 0);
+   static void *newArray_vectorlEGammaTransitionmUgR(Long_t size, void *p);
+   static void delete_vectorlEGammaTransitionmUgR(void *p);
+   static void deleteArray_vectorlEGammaTransitionmUgR(void *p);
+   static void destruct_vectorlEGammaTransitionmUgR(void *p);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const vector<GammaTransition*>*)
+   {
+      vector<GammaTransition*> *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(vector<GammaTransition*>));
+      static ::ROOT::TGenericClassInfo 
+         instance("vector<GammaTransition*>", -2, "vector", 216,
+                  typeid(vector<GammaTransition*>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &vectorlEGammaTransitionmUgR_Dictionary, isa_proxy, 0,
+                  sizeof(vector<GammaTransition*>) );
+      instance.SetNew(&new_vectorlEGammaTransitionmUgR);
+      instance.SetNewArray(&newArray_vectorlEGammaTransitionmUgR);
+      instance.SetDelete(&delete_vectorlEGammaTransitionmUgR);
+      instance.SetDeleteArray(&deleteArray_vectorlEGammaTransitionmUgR);
+      instance.SetDestructor(&destruct_vectorlEGammaTransitionmUgR);
+      instance.AdoptCollectionProxyInfo(TCollectionProxyInfo::Generate(TCollectionProxyInfo::Pushback< vector<GammaTransition*> >()));
+      return &instance;
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const vector<GammaTransition*>*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+
+   // Dictionary for non-ClassDef classes
+   static TClass *vectorlEGammaTransitionmUgR_Dictionary() {
+      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const vector<GammaTransition*>*)0x0)->GetClass();
+      vectorlEGammaTransitionmUgR_TClassManip(theClass);
+   return theClass;
+   }
+
+   static void vectorlEGammaTransitionmUgR_TClassManip(TClass* ){
+   }
+
+} // end of namespace ROOT
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_vectorlEGammaTransitionmUgR(void *p) {
+      return  p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<GammaTransition*> : new vector<GammaTransition*>;
+   }
+   static void *newArray_vectorlEGammaTransitionmUgR(Long_t nElements, void *p) {
+      return p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) vector<GammaTransition*>[nElements] : new vector<GammaTransition*>[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_vectorlEGammaTransitionmUgR(void *p) {
+      delete ((vector<GammaTransition*>*)p);
+   }
+   static void deleteArray_vectorlEGammaTransitionmUgR(void *p) {
+      delete [] ((vector<GammaTransition*>*)p);
+   }
+   static void destruct_vectorlEGammaTransitionmUgR(void *p) {
+      typedef vector<GammaTransition*> current_t;
+      ((current_t*)p)->~current_t();
+   }
+} // end of namespace ROOT for class vector<GammaTransition*>
+
+namespace ROOT {
+   static TClass *maplEstringcOdoublegR_Dictionary();
+   static void maplEstringcOdoublegR_TClassManip(TClass*);
+   static void *new_maplEstringcOdoublegR(void *p = 0);
+   static void *newArray_maplEstringcOdoublegR(Long_t size, void *p);
+   static void delete_maplEstringcOdoublegR(void *p);
+   static void deleteArray_maplEstringcOdoublegR(void *p);
+   static void destruct_maplEstringcOdoublegR(void *p);
+
+   // Function generating the singleton type initializer
+   static TGenericClassInfo *GenerateInitInstanceLocal(const map<string,double>*)
+   {
+      map<string,double> *ptr = 0;
+      static ::TVirtualIsAProxy* isa_proxy = new ::TIsAProxy(typeid(map<string,double>));
+      static ::ROOT::TGenericClassInfo 
+         instance("map<string,double>", -2, "map", 99,
+                  typeid(map<string,double>), ::ROOT::Internal::DefineBehavior(ptr, ptr),
+                  &maplEstringcOdoublegR_Dictionary, isa_proxy, 0,
+                  sizeof(map<string,double>) );
+      instance.SetNew(&new_maplEstringcOdoublegR);
+      instance.SetNewArray(&newArray_maplEstringcOdoublegR);
+      instance.SetDelete(&delete_maplEstringcOdoublegR);
+      instance.SetDeleteArray(&deleteArray_maplEstringcOdoublegR);
+      instance.SetDestructor(&destruct_maplEstringcOdoublegR);
+      instance.AdoptCollectionProxyInfo(TCollectionProxyInfo::Generate(TCollectionProxyInfo::MapInsert< map<string,double> >()));
+      return &instance;
+   }
+   // Static variable to force the class initialization
+   static ::ROOT::TGenericClassInfo *_R__UNIQUE_DICT_(Init) = GenerateInitInstanceLocal((const map<string,double>*)0x0); R__UseDummy(_R__UNIQUE_DICT_(Init));
+
+   // Dictionary for non-ClassDef classes
+   static TClass *maplEstringcOdoublegR_Dictionary() {
+      TClass* theClass =::ROOT::GenerateInitInstanceLocal((const map<string,double>*)0x0)->GetClass();
+      maplEstringcOdoublegR_TClassManip(theClass);
+   return theClass;
+   }
+
+   static void maplEstringcOdoublegR_TClassManip(TClass* ){
+   }
+
+} // end of namespace ROOT
+
+namespace ROOT {
+   // Wrappers around operator new
+   static void *new_maplEstringcOdoublegR(void *p) {
+      return  p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) map<string,double> : new map<string,double>;
+   }
+   static void *newArray_maplEstringcOdoublegR(Long_t nElements, void *p) {
+      return p ? ::new((::ROOT::Internal::TOperatorNewHelper*)p) map<string,double>[nElements] : new map<string,double>[nElements];
+   }
+   // Wrapper around operator delete
+   static void delete_maplEstringcOdoublegR(void *p) {
+      delete ((map<string,double>*)p);
+   }
+   static void deleteArray_maplEstringcOdoublegR(void *p) {
+      delete [] ((map<string,double>*)p);
+   }
+   static void destruct_maplEstringcOdoublegR(void *p) {
+      typedef map<string,double> current_t;
+      ((current_t*)p)->~current_t();
+   }
+} // end of namespace ROOT for class map<string,double>
+
 namespace {
   void TriggerDictionaryInitialization_TalysLibDict_Impl() {
     static const char* headers[] = {
@@ -3391,8 +5204,8 @@ namespace {
 0
     };
     static const char* includePaths[] = {
-"/home/tangra/Program/root/root-install/include",
-"/home/tangra/Documents/TalysLib/",
+"/home/terawatt/Programs/root/install/include/",
+"/home/terawatt/Documents/TalysLib/",
 0
     };
     static const char* fwdDeclCode = R"DICTFWDDCLS(
@@ -3401,51 +5214,65 @@ namespace {
 #pragma clang diagnostic ignored "-Wignored-attributes"
 #pragma clang diagnostic ignored "-Wreturn-type-c-linkage"
 extern int __Cling_Autoloading_Map;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  AdditionalInformationContainer;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  TXlsxwriter;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  OMPStorageData;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  OMPStorage;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  OpticalModelParametersData;
 class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  OpticalModelParameters;
 class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  SpinParity;
 class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  GammaTransitionData;
 class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  GammaTransition;
 class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  LevelData;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  LevelDeformationData;
 class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  LevelDeformation;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  DeformationData;
 class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  Deformation;
 class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  Level;
 class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  NucleusData;
 class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  Nucleus;
 class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  TalysCalculation;
+class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  TLMaterial;
 class __attribute__((annotate("$clingAutoload$TalysLib.hh")))  SampleInformation;
 )DICTFWDDCLS";
     static const char* payloadCode = R"DICTPAYLOAD(
 #line 1 "TalysLibDict dictionary payload"
 
-#ifndef G__VECTOR_HAS_CLASS_ITERATOR
-  #define G__VECTOR_HAS_CLASS_ITERATOR 1
-#endif
 
 #define _BACKWARD_BACKWARD_WARNING_H
+// Inline headers
 #include "TalysLib.hh"
 
 #undef  _BACKWARD_BACKWARD_WARNING_H
 )DICTPAYLOAD";
-    static const char* classesHeaders[]={
+    static const char* classesHeaders[] = {
+"AdditionalInformationContainer", payloadCode, "@",
 "Deformation", payloadCode, "@",
+"DeformationData", payloadCode, "@",
 "GammaTransition", payloadCode, "@",
 "GammaTransitionData", payloadCode, "@",
 "Level", payloadCode, "@",
 "LevelData", payloadCode, "@",
 "LevelDeformation", payloadCode, "@",
+"LevelDeformationData", payloadCode, "@",
 "Nucleus", payloadCode, "@",
 "NucleusData", payloadCode, "@",
+"OMPStorage", payloadCode, "@",
+"OMPStorageData", payloadCode, "@",
 "OpticalModelParameters", payloadCode, "@",
+"OpticalModelParametersData", payloadCode, "@",
 "SampleInformation", payloadCode, "@",
 "SpinParity", payloadCode, "@",
+"TLMaterial", payloadCode, "@",
+"TXlsxwriter", payloadCode, "@",
 "TalysCalculation", payloadCode, "@",
-nullptr};
-
+nullptr
+};
     static bool isInitialized = false;
     if (!isInitialized) {
       TROOT::RegisterModule("TalysLibDict",
         headers, includePaths, payloadCode, fwdDeclCode,
-        TriggerDictionaryInitialization_TalysLibDict_Impl, {}, classesHeaders, /*has no C++ module*/false);
+        TriggerDictionaryInitialization_TalysLibDict_Impl, {}, classesHeaders, /*hasCxxModule*/false);
       isInitialized = true;
     }
   }

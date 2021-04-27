@@ -1,15 +1,23 @@
 [ TalysLib.so ]
 # List of selected classes
+class AdditionalInformationContainer
 class Deformation
+class DeformationData
 class GammaTransition
 class GammaTransitionData
 class Level
 class LevelData
 class LevelDeformation
+class LevelDeformationData
 class Nucleus
 class NucleusData
+class OMPStorage
+class OMPStorageData
 class OpticalModelParameters
+class OpticalModelParametersData
 class SampleInformation
 class SpinParity
+class TLMaterial
+class TXlsxwriter
 class TalysCalculation
 header TalysLib.hh

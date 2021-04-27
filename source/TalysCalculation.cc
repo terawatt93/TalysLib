@@ -17,6 +17,7 @@
 #include "LevelProperties.cc"
 #include "NucleiProperties.cc"
 
+
 #pragma once
 
 void TalysCalculation::ReadParametersFromFile(string filename)
@@ -114,25 +115,76 @@ void TalysCalculation::ExecuteCalculation()
 	}
 }
 
+void EvalInThread(TalysCalculation *c,unsigned int index)
+{
+	c->Results[index].GenerateProducts(c->Results[index].Projectile);
+}
+
 void TalysCalculation::ExecuteCalculation(void (*VarChangeFunction)(Nucleus *Nuclide,double value))
 {
+	if(EnableMultiThreading)
+	{
+		ROOT::EnableThreadSafety();
+	}
 	if(VarValues.size()>0)
 	{
 		Nucleus Nucl(Target);
 		Nucl.Projectile=Proj;
 		Nucl.TalysOptions=TalysOptions;
 		Nucl.ProjectileEnergy=ProjectileEnergy;
+		Nucl.fTalysCalculation=this;
 		for(unsigned int i=0;i<VarValues.size();i++)
 		{
 			VarChangeFunction(&Nucl,VarValues[i]);
+			if(EnableMultiThreading)
+			{
+				Nucl.SetThreadNumber(i);
+			}
 			Results.push_back(Nucl);
 		}
-		for(unsigned int i=0;i<Results.size();i++)
+		if(EnableMultiThreading)
 		{
-			Results[i].GenerateProducts(Proj);
+			vector<thread> threads;
+			for(unsigned int i=0;i<Results.size();i++)
+			{
+				threads.emplace_back(EvalInThread,this,i);
+			}
+			for(unsigned int i=0;i<Results.size();i++)
+			{
+				threads[i].join();
+			}
+		}
+		else
+		{
+			for(unsigned int i=0;i<Results.size();i++)
+			{
+				Results[i].GenerateProducts(Proj);
+			}
 		}
 	}
 }
+
+void TalysCalculation::ExecuteCalculation(void (*VarChangeFunction)(Nucleus *Nuclide,vector<double> &value),vector<vector<double> > &VariableValues)
+{
+	Results.resize(0);
+	VarValues.resize(0);
+	for(unsigned int i=0;i<VariableValues.size();i++)
+	{
+		Nucleus Nucl(Target);
+		Nucl.Projectile=Proj;
+		Nucl.TalysOptions=TalysOptions;
+		Nucl.ProjectileEnergy=ProjectileEnergy;
+		Nucl.fTalysCalculation=this;
+		VarChangeFunction(&Nucl,VariableValues[i]);
+		Results.push_back(Nucl);
+		VarValues.push_back(i);
+	}
+	for(unsigned int i=0;i<Results.size();i++)
+	{
+		Results[i].GenerateProducts(Proj);
+	}
+}
+
 
 void TalysCalculation::GenerateGraphs()
 {

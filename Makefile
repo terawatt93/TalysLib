@@ -12,7 +12,7 @@ all: $(PROGRAM)
 TalysLibDict.cxx: $(HDRS) TalysLinkDef.h
 	@echo "Generating dictionary ..."
 	#@rootcint -f $@ -c -p $^
-	@rootcling -f TalysLibDict.cxx -rml TalysLib.so -rmf TalysLib.rootmap TalysLib.hh TalysLinkDef.h
+	@rootcling -f TalysLibDict.cxx -rml TalysLib.so -rmf TalysLib.rootmap TalysLib.hh TalysLinkDef.h 
 
 $(PROGRAM): $(SRCS)
 	@echo "Building $(PROGRAM) ..."
@@ -21,4 +21,4 @@ $(PROGRAM): $(SRCS)
 	@echo "done"
 
 clean:; @rm -rf core *.so *.rootmap *.cxx *.pcm
-install:; @echo 'export LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:'`pwd`>>~/.bashrc; echo 'export CPATH=$$CPATH:'`pwd`>>~/.bashrc
+install:; @echo 'export LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:'`pwd`>>~/.bashrc; echo 'export CPATH=$$CPATH:'`pwd`>>~/.bashrc; echo 'export TALYSLIBDIR='`pwd` >> ~/.bashrc

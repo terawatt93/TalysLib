@@ -1,0 +1,9 @@
+projectile n
+element C
+mass 12
+energy 14.1
+outdiscrete y
+outgamdis y
+outangle y
+outexcitation y
+ channels y

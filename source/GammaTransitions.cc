@@ -15,6 +15,10 @@
 #pragma once
 
 //Методы класса GammaTransition
+double& GammaTransitionData::AdditionalInformation(string Key)
+{
+	return AI(Key);
+}
 GammaTransition::GammaTransition(GammaTransitionData d)
 {
 	Energy=d.Energy; EnergyErr=d.EnergyErr; Intensity=d.Intensity; CrossSection=d.CrossSection; E_in=d.E_in; Tolerancy=d.Tolerancy;
@@ -22,6 +26,7 @@ GammaTransition::GammaTransition(GammaTransitionData d)
 	TalysJP_i=d.TalysJP_i; TalysJP_f=d.TalysJP_f;
 	TalysMultipolarity=d.TalysMultipolarity;
 	Multipolarity=d.Multipolarity; nuclide=d.nuclide; reaction=d.reaction;
+	AI=d.AI;
 }
 bool GammaTransition::ReadTransition(string line,string ReadNuclName, float E_in)
 {

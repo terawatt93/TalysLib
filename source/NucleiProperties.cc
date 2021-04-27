@@ -15,20 +15,47 @@
 #include "Deformations.cc"
 #include "GammaTransitions.cc"
 #include "LevelProperties.cc"
+#include <TVector3.h>
+#include "TXlswriter.cpp"
 
 #pragma once
 
-//Методы класса Nucleus
-Nucleus::Nucleus(NucleusData ND)
+double ConvertAngleToLab(double angle, double ma, double Ta, double mA, double mb, double mB, double Tb)
+{
+	double P_mv_b=mb/(mb+mB)*sqrt(2*ma*Ta);
+	double P_b_CM=sqrt(2*mb*Tb);
+	TVector3 P_b_CM_v(P_b_CM*cos(angle/180*3.1416),P_b_CM*sin(angle/180*3.1416),0);
+	TVector3 P_mv_b_v(P_mv_b,0,0);
+	TVector3 v_lab=P_b_CM_v+P_mv_b_v;
+	return v_lab.Angle(P_mv_b_v)*180/3.1416;
+}
+double& NucleusData::AdditionalInformation(string Key)
+{
+	return AI(Key);
+}
+void Nucleus::GetFromNucleusData(NucleusData ND)
 {
 	Name=ND.Name; Reaction=ND.Reaction;
 	A=ND.A; Z=ND.Z;
 	Abundance=ND.Abundance;
+	AI=ND.AI;
+	OMPN=OpticalModelParameters(ND.OMPNData);
+	OMPP=OpticalModelParameters(ND.OMPPData);
 	OMPN.Nuclide=this;
 	OMPP.Nuclide=this;
-	OMPN.ReadOMP("n");
-	OMPP.ReadOMP("p");
-	AssignPointers();
+	OMPoptionN=ND.OMPoptionN; OMPoptionP=ND.OMPoptionN;
+	TOTGamProd=ND.TOTGamProd; TOTNProd=ND.TOTNProd; TOTPProd=ND.TOTPProd; TOTDProd=ND.TOTDProd; TOTAProd=ND.TOTAProd;
+	TotElastic=ND.TotElastic; CompoundElastic=ND.CompoundElastic; DirectElastic=ND.DirectElastic; TotInelastic=ND.TotInelastic;
+	CompoundInelastic=ND.CompoundInelastic; DirectInelastic=ND.DirectInelastic; TotTalys=ND.TotTalys;
+	BNECS_g=ND.BNECS_g, BNECS_n=ND.BNECS_n, BNECS_p=ND.BNECS_p, BNECS_d=ND.BNECS_d, BNECS_t=ND.BNECS_t, BNECS_tau=ND.BNECS_tau, BNECS_a=ND.BNECS_a, TEISTot=ND.TEISTot; TEISCont=ND.TEISCont,TEISDiscr=ND.TEISDiscr;
+	TalysGroundStateExsists=ND.TalysGroundStateExsists, FastFlag=ND.FastFlag, FastCalculated=ND.FastCalculated;
+	OMPoptionN=ND.OMPoptionN, OMPoptionP=ND.OMPoptionN;
+	WriteOMPOrUseKoningP=ND.WriteOMPOrUseKoningP;
+	WriteOMPOrUseKoningN=ND.WriteOMPOrUseKoningN;
+	ThreadNumber=ND.ThreadNumber;
+	WriteDeformation=ND.WriteDeformation;
+	//OMPN.ReadOMP("n");
+	//OMPP.ReadOMP("p");
 	for(unsigned int i=0;i<ND.LevelsData.size();i++)
 	{
 		Levels.emplace_back(ND.LevelsData[i]);
@@ -37,10 +64,17 @@ Nucleus::Nucleus(NucleusData ND)
 	{
 		Products.emplace_back(ND.ProductsData[i]);
 	}	
-	Def.SetZA(Z,A);
-	Def.ReadDeformation();
-	AssignDeformationsToLevels();
+	Def=Deformation(ND.DefData);
+	
+	//Def.SetZA(Z,A);
+	//Def.ReadDeformation();
 	AssignPointers();
+}
+
+//Методы класса Nucleus
+Nucleus::Nucleus(NucleusData ND)
+{
+	GetFromNucleusData(ND);
 }
 void Nucleus::ReadENSDFFile(string filename,string Nuclide)
 {
@@ -95,6 +129,13 @@ void Nucleus::ReadENSDFFile(string filename,string Nuclide)
 		Levels[i].Print();
 	}
 }*/
+
+void Nucleus::SetThreadNumber(int _ThreadNumber)
+{
+	ROOT::EnableThreadSafety();
+	ThreadNumber=_ThreadNumber;
+}
+
 void Nucleus::ReadLevelsFromTalysDatabase(string type)
 {
 	string Filename=GetPathToTalysData()+"/structure/levels/"+type+"/"+GetNucleusName(Z)+".lev";
@@ -209,20 +250,60 @@ Nucleus::Nucleus(string Name,string Reaction)
 {
 	this->Name=Name;
 	this->Reaction=Reaction;
-	GetAZ(Name,Z,A);
-	TalysCalculated=false;
-	fMotherNucleus=0;
-	Abundance=GetAbundance(Name);
-	ReadLevelsFromTalysDatabase();
+	if(Name.find("BKG")==string::npos)
+	{
+		GetAZ(Name,Z,A);
+		TalysCalculated=false;
+		fMotherNucleus=0;
+		Abundance=GetAbundance(Name);
+		ReadLevelsFromTalysDatabase();
+		
+		Def.SetZA(Z,A);
+		Def.ReadDeformation();
+		OMPN.Nuclide=this;
+		OMPP.Nuclide=this;
+		OMPN.ReadOMP("n");
+		OMPP.ReadOMP("p");
+		AssignPointers();
+		TString R_tmp(Reaction.c_str());//получим из реакции вторичную частицу
+		R_tmp.ReplaceAll(","," ");
+		R_tmp.ReplaceAll(")"," ");
+		R_tmp.ReplaceAll("("," ");
+		R_tmp.ReplaceAll("'","");
+		stringstream s(R_tmp.Data());
+		string tmp;
+		if(Reaction.size()>1)
+		{
+			s>>Projectile>>OutgoingParticle;
+			OutgoingParticleMass=GetNuclearMass(OutgoingParticle);
+			ProjectileMass=GetNuclearMass(Projectile); 
+		}
+		Mass=GetNuclearMass(Name); 
+	}
+	else
+	{
+		stringstream s(Name);
+		string tmp;
+		string PathToFile;
+		s>>tmp>>PathToFile;
+		ifstream ifs(PathToFile.c_str());
+		string line;
+		Levels.resize(1);
+		while(getline(ifs,line))
+		{
+			if(line.find("bkg")!=string::npos)
+			{
+				stringstream g_stream(line);
+				string origin; double E;
+				g_stream>>tmp>>E>>origin;
+				Levels[0].Gammas.emplace_back(E,"");
+				Levels[0].Gammas[Levels[0].Gammas.size()-1].Origin=origin;
+			}
+		}
+		fMotherNucleus=this;
+	}
 	AssignPointers();
-	Def.SetZA(Z,A);
-	Def.ReadDeformation();
-	AssignDeformationsToLevels();
-	OMPN.Nuclide=this;
-	OMPP.Nuclide=this;
-	OMPN.ReadOMP("n");
-	OMPP.ReadOMP("p");
-	AssignPointers();
+	
 }
 void Nucleus::SetProjectileEnergy(double E)
 {
@@ -231,22 +312,16 @@ void Nucleus::SetProjectileEnergy(double E)
 void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 {
 	Projectile=_Projectile;
-	string PathToCalculationDir=GetPathToTalysData()+"/CalculationResults/";
+	PathToCalculationDir=GetPathToTalysData()+"/CalculationResults/";
 	if(FastFlag)
 	{
-		PathToCalculationDir="/dev/shm/CalculationResults/";
-		system("mkdir /dev/shm/CalculationResults");
+		PathToCalculationDir=TString::Format("/dev/shm/CalculationResults%d/",ThreadNumber);
+		system(string("mkdir "+PathToCalculationDir).c_str());
 		FastCalculated=true;
 	}
 	mkdir((PathToCalculationDir+Name).c_str(),S_IRWXU);
 	string filename=PathToCalculationDir+Name+"/input";
 	ofstream ofs(filename.c_str());
-	string ShellScript;
-	ShellScript="#/bin/bash \n cd "+PathToCalculationDir+Name+"\n talys <input >output";//адский костыль!
-	ofstream ofs_shell("run_talys.sh");
-	ofs_shell<<ShellScript<<"\n";
-	ofs_shell.close();
-	system("chmod 777 run_talys.sh");
 	ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\noutexcitation y\n channels y\n";
 	for(unsigned int i=0;i<TalysOptions.size();i++)
 	{
@@ -275,7 +350,7 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 		Def.WriteDeformation(PathToCalculationDir+Name+"/"+GetNucleusName(Z)+".def");
 	}
 	ofs.close();
-	system("./run_talys.sh");
+	system(string("cd "+PathToCalculationDir+Name+"/; talys <input >output").c_str());
 }
 
 void Nucleus::SortingLevels()
@@ -399,18 +474,15 @@ Nucleus* Nucleus::FindProductByName(string _Name)
 void Nucleus::ReadTalysCalculationResult()
 {
 	
-	string filename=GetPathToTalysData();
-	if(FastFlag)
-	{
-		filename="/dev/shm";
-	}
+	string filename;
+	PlottedADist=false;
 	if(fMotherNucleus)
 	{
-		filename+="/CalculationResults/"+fMotherNucleus->Name+"/output";
+		filename=fMotherNucleus->PathToCalculationDir+fMotherNucleus->Name+"/output";
 	}
 	else
 	{
-		filename+="/CalculationResults/"+Name+"/output";
+		filename=PathToCalculationDir+Name+"/output";
 	}
 	ifstream ifs(filename.c_str());
 	string line;
@@ -419,13 +491,8 @@ void Nucleus::ReadTalysCalculationResult()
 	//сбросим данные для уровней
 	for(unsigned int i=0;i<Levels.size();i++)
 	{
-		Levels[i].ADTot.resize(0);
-		Levels[i].ADDirect.resize(0);
-		Levels[i].ADCompound.resize(0);
-		Levels[i].Angle.resize(0);
+		Levels[i].Reset();
 	}
-							
-	
 	//TOTGamProd=0, TOTNProd=0, TOTPProd=0, TOTDProd=0, TOTAProd=0;
 	while(getline(ifs,line))
 	{
@@ -568,6 +635,19 @@ void Nucleus::ReadTalysCalculationResult()
 						UsedLevel->ADDirect.push_back(Direct);
 						UsedLevel->ADCompound.push_back(Compound);
 						UsedLevel->Angle.push_back(Angle);
+						//ConvertAngleToLab(double angle, double ma, double Ta, double mA, double mb, double mB, double Tb)
+						double MNMass, PrEnergy, PrMass;
+						if(fMotherNucleus)
+						{
+							MNMass=fMotherNucleus->Mass;
+							PrEnergy=fMotherNucleus->ProjectileEnergy;
+							PrMass=fMotherNucleus->ProjectileMass;
+						}
+						else
+						{
+							MNMass=Mass;
+						}
+						UsedLevel->AngleLab.push_back(ConvertAngleToLab(Angle,PrMass,PrEnergy,MNMass,OutgoingParticleMass,Mass,UsedLevel->OutgoingParticleEnergy));
 					}
 				}
 			}
@@ -588,24 +668,16 @@ void Nucleus::ReadTalysCalculationResult()
 }
 void Nucleus::ReadElastic()
 {
-	string filename=GetPathToTalysData();
-
+	string filename;
 	if(fMotherNucleus)
 	{
-		if(fMotherNucleus->FastFlag)
-		{
-			filename="/dev/shm";
-		}
-		filename+="/CalculationResults/"+fMotherNucleus->Name+"/output";
+		filename=PathToCalculationDir+fMotherNucleus->Name+"/output";
 	}
 	else
 	{
-		if(FastFlag)
-		{
-			filename="/dev/shm";
-		}
-		filename+="/CalculationResults/"+Name+"/output";
+		filename=PathToCalculationDir+Name+"/output";
 	}
+	
 	ifstream ifs(filename.c_str());
 	bool ElasticFlag=false;
 	string ElasticMark="Elastic scattering angular distribution";
@@ -625,6 +697,12 @@ void Nucleus::ReadElastic()
 	
 	while(getline(ifs,line))
 	{
+		if(line.find("Center-of-mass energy:")!=string::npos)
+		{
+			string tmp;
+			stringstream s(line);
+			s>>tmp>>tmp>>ProjectileEnergyCM;
+		}		
 		if((int)line.find("Total particle production cross sections")>-1)
 		{
 			ProdFlag=true;
@@ -655,12 +733,17 @@ void Nucleus::ReadElastic()
 			if((int)line.find("deuteron=")>-1)
 			{
 				string tmp;
-				s>>tmp>>tmp>>TOTDProd;
+				s>>tmp>>TOTDProd;
 			}
 			if((int)line.find("alpha   =")>-1)
 			{
 				string tmp;
 				s>>tmp>>tmp>>TOTAProd;
+			}
+			if((int)line.find("helium-3=")>-1)
+			{
+				string tmp;
+				s>>tmp>>TOTTauProd;
 			}
 		}
 		if(((int)line.find(ElasticMark)>-1))
@@ -681,6 +764,8 @@ void Nucleus::ReadElastic()
 			if(Tot>0)
 			{
 				Angle.push_back(A);
+				//ConvertAngleToLab(double angle, double ma, double Ta, double mA, double mb, double mB, double Tb)
+				AngleLab.push_back(ConvertAngleToLab(A,ProjectileMass,ProjectileEnergy,Mass,ProjectileMass,Mass,ProjectileEnergyCM));
 				ElTot.push_back(Tot);
 				ElCompound.push_back(Comp);
 				ElDirect.push_back(Dir);
@@ -742,7 +827,7 @@ void Nucleus::ReadElastic()
 		{
 			stringstream s(line);
 			string tmp;
-			cout<<line<<"\n";
+		//	cout<<line<<"\n";
 			s>>tmp>>TEISTot>>TEISDiscr>>TEISCont;
 			ifs.close();
 			return;
@@ -760,12 +845,22 @@ TGraph* Nucleus::GetElasticAngularDistribution(string type,string option)
 {
 	if(!fMotherNucleus)
 	{
-		if((!PlottedADist)||(option=="new"))
+		if((!PlottedADist)||(option=="new")||kAlwaysNewGraphs)
 		{
 			//ElacticTotTalys, ElasticDirectTalys,ElasticCompoundTalys; Angle, ElTot, ElCompound, ElDirect;
-			ElacticTotTalys=TGraph(Angle.size(), &Angle[0], &ElTot[0]);
-			ElasticCompoundTalys=TGraph(Angle.size(), &Angle[0], &ElCompound[0]);
-			ElasticDirectTalys=TGraph(Angle.size(), &Angle[0], &ElDirect[0]);
+			if(ConvertToLab)
+			{
+				ElacticTotTalys=TGraph(Angle.size(), &AngleLab[0], &ElTot[0]);
+				ElasticCompoundTalys=TGraph(Angle.size(), &AngleLab[0], &ElCompound[0]);
+				ElasticDirectTalys=TGraph(Angle.size(), &AngleLab[0], &ElDirect[0]);
+			}
+			else
+			{
+				ElacticTotTalys=TGraph(Angle.size(), &Angle[0], &ElTot[0]);
+				ElasticCompoundTalys=TGraph(Angle.size(), &Angle[0], &ElCompound[0]);
+				ElasticDirectTalys=TGraph(Angle.size(), &Angle[0], &ElDirect[0]);
+			}
+			
 			string TotName="ElTotTalys";
 			string CompName="ElCompTalys";
 			string DirName="ElDirTalys";
@@ -847,6 +942,12 @@ void Nucleus::GenerateProducts(string _Projectile)
 {
 	Products.resize(0);
 	Projectile=_Projectile;
+	ProjectileMass=GetNuclearMass(Projectile); 
+	if(Name.find("BKG")!=string::npos)
+	{
+		return;
+	}
+	
 	ExecuteCalculationInTalys(Projectile);
 	int ProjZ,ProjA;
 	
@@ -1101,9 +1202,13 @@ void Nucleus::AssignPointers()
 	{
 		Products[i].AssignPointers();
 		Products[i].fMotherNucleus=this;
+		Products[i].fTalysCalculation=fTalysCalculation;
 	}
-	OMPN.Nuclide=this;
-	OMPP.Nuclide=this; 
+	OMPN.AssignPointers(this);
+	OMPP.AssignPointers(this); 
+	OMPN.SetDefaultOMP(OMPoptionN);
+	OMPP.SetDefaultOMP(OMPoptionP);
+	AssignDeformationsToLevels();
 }
 void Nucleus::AssignSimilarLevels(float Tolerancy)
 {
@@ -1180,6 +1285,21 @@ vector<GammaTransition*> Nucleus::GetGammaTransitions(string option,int BetterTh
 			}
 		}
 	}
+	for(unsigned int i=0;i<Products.size();i++)
+	{
+		vector <GammaTransition*> gt=Products[i].GetGammaTransitions(option,BetterThan,tolerancy,intensity);
+		result.insert(end(result), begin(gt), end(gt));
+	}
+	for(unsigned int i=0;i<result.size();i++)
+	{
+		for(unsigned int j=0;j<i;j++)
+		{
+			if(result[i]->Energy<result[j]->Energy)
+			{
+				swap(result[i],result[j]);
+			}
+		}
+	}
 	return result;
 }
 /*const char *Nucleus::GetName()  const
@@ -1222,6 +1342,10 @@ NucleusData Nucleus::ToNucleusData()
 	{
 		result.ProductsData.push_back(Products[i].ToNucleusData());
 	}
+	result.AI=AI;
+	result.DefData=Def.ToDeformationData();
+	result.OMPNData=OMPN.ToOpticalModelParametersData();
+	result.OMPPData=OMPN.ToOpticalModelParametersData();
 	return result;
 }
 
@@ -1237,6 +1361,22 @@ void Nucleus::AssignDeformationsToLevels()
 				Def.LevelDeformations[j].fLevel=&Levels[i];
 			}
 		}
+	}
+}
+void Nucleus::SetOMPOption(string Particle, int _OMPoption)
+{
+	if(Particle=="n")
+	{
+		OMPoptionN=_OMPoption;
+		OMPN.SetDefaultOMP(OMPoptionN);
+		WriteOMPOrUseKoningN=OMPoptionN;
+		
+	}
+	if(Particle=="p")
+	{
+		OMPoptionP=_OMPoption;
+		OMPP.SetDefaultOMP(OMPoptionP);
+		WriteOMPOrUseKoningP=OMPoptionP;
 	}
 }
 void Nucleus::SetTGraphNameAndTitle(string ValName)
@@ -1367,6 +1507,214 @@ Nucleus::~Nucleus()
 {
 	if((FastFlag)&&(FastCalculated))
 	{
-		system("rm -rf /dev/shm/CalculationResults/");
+		system(string("rm -rf "+PathToCalculationDir).c_str());
 	}
 }	
+Nucleus& Nucleus::Copy()
+{
+	Nucleus& result=*this;
+	result.AssignPointers();
+	result.OMPN.SetDefaultOMP(WriteOMPOrUseKoningN);
+	result.OMPP.SetDefaultOMP(WriteOMPOrUseKoningN);
+	return result;
+}
+void Nucleus::SaveToRootFile(TFile *f,string Addition)
+{
+	if(!f)
+	{
+		cout<<"This is Nucleus::SaveToRootFile() error: pointer to file is invalid! returned\n";
+		return;
+	}
+	NucleusData ND=ToNucleusData();
+	if(Addition.size()>0)
+	{
+		ND.Name+="_"+Addition;
+	}
+	f->WriteTObject(&ND);
+}
+void Nucleus::ReadFromRootFile(TFile *f,string _Name)
+{
+	if(!f)
+	{
+		cout<<"This is Nucleus::ReadFromRootFile() error: pointer to file is invalid! returned\n";
+		return;
+	}
+	NucleusData *ND=(NucleusData*)f->Get(_Name.c_str());
+	if(!ND)
+	{
+		cout<<"This is Nucleus::ReadFromRootFile() error: Nucleus object with name "<<Name<<"Does not exsists! returned\n";
+		return ;
+	}
+	GetFromNucleusData(*ND);
+	TString ts(Name.c_str());
+	ts.ReplaceAll("_"," ");
+	stringstream s(ts.Data());
+	s>>Name;
+	
+}
+void Nucleus::ReadFromRootFile(string FileName,string _Name)
+{
+	TFile f(FileName.c_str());
+	ReadFromRootFile(&f,_Name);
+}
+void PrintDeformationToXLSX(TXlsxwriter &xlsx,LevelDeformation *df)
+{
+	xlsx<<df->fLevel->Energy<<df->fLevel->TalysJP.GetLine()<<df->fLevel->fNucleus->Name<<df->TypeOfLevel<<df->fLevel->fNucleus->Def.TypeOfCollectivity<<df->NumberOfBand<<df->LOfBand<<df->NumberOfPhonons<<df->MagneticNumber;
+	for(unsigned int j=0;j<df->Beta.size();j++)
+	{
+		xlsx<<df->Beta[j];
+	}
+	xlsx<<"\n";
+}
+void PrintOMPToXLSX(TXlsxwriter &xlsx,OpticalModelParameters *OMP)
+{
+	if(!OMP->DefaultOMP)
+	{
+		xlsx<<"No user-defined OMP type";
+		xlsx<<"Talys default";
+		if(OMP->Koning)
+		{
+			xlsx<<"Koning";
+		}
+		else
+		{
+			xlsx<<"PredefSTD";
+		}
+	}
+	else
+	{
+		xlsx<<"Used:"<<OMP->DefaultOMP->HRPotentialType;
+	}
+	xlsx<<"\n";
+	xlsx<<" "<<"Vv"<<"Wv"<<"Rv"<<"Av"<<"Wd"<<"Rd"<<"Ad"<<"Vso"<<"Wso"<<"Rso"<<"Aso"<<"Rc"<<"Vc"<<"\n";
+	if(OMP->Potential.ReadFlag)
+	{
+		OMP->Potential.EvalPotential();
+		xlsx<<"PredefSTD"<<OMP->Potential.Vv<<OMP->Potential.Wv<<OMP->Potential.Rv<<OMP->Potential.Av<<OMP->Potential.Wd<<OMP->Potential.Rd<<OMP->Potential.Ad<<OMP->Potential.Vso<<OMP->Potential.Wso<<OMP->Potential.Rso<<OMP->Potential.Aso<<OMP->Potential.Rc<<OMP->Potential.Vc<<"\n";
+	}
+	OMP->PotentialKoning.EvalPotential();
+	xlsx<<"PotentialKoning"<<OMP->PotentialKoning.Vv<<OMP->PotentialKoning.Wv<<OMP->PotentialKoning.Rv<<OMP->PotentialKoning.Av<<OMP->PotentialKoning.Wd<<OMP->PotentialKoning.Rd<<OMP->PotentialKoning.Ad<<OMP->PotentialKoning.Vso<<OMP->PotentialKoning.Wso<<OMP->PotentialKoning.Rso<<OMP->PotentialKoning.Aso<<OMP->PotentialKoning.Rc<<OMP->PotentialKoning.Vc<<"\n";
+	xlsx<<"\n";
+	xlsx<<"Energy-dependent coefficients"<<"\n";
+	xlsx<<" "<<"v1"<<"v2"<<"v3"<<"v4"<<"w1"<<"w2"<<"d1"<<"d2"<<"d3"<<"vso1"<<"vso2"<<"wso1"<<"wso2"<<"\n";
+	if(OMP->Potential.ReadFlag)
+	{
+		xlsx<<"PredefSTD"<<OMP->Potential.v1<<OMP->Potential.v2<<OMP->Potential.v3<<OMP->Potential.v4<<OMP->Potential.w1<<OMP->Potential.w2<<OMP->Potential.d1<<OMP->Potential.d2<<OMP->Potential.d3<<OMP->Potential.vso1<<OMP->Potential.vso2<<OMP->Potential.wso1<<OMP->Potential.wso2<<"\n";
+	}
+	xlsx<<"Koning"<<OMP->PotentialKoning.v1<<OMP->PotentialKoning.v2<<OMP->PotentialKoning.v3<<OMP->PotentialKoning.v4<<OMP->PotentialKoning.w1<<OMP->PotentialKoning.w2<<OMP->PotentialKoning.d1<<OMP->PotentialKoning.d2<<OMP->PotentialKoning.d3<<OMP->PotentialKoning.vso1<<OMP->PotentialKoning.vso2<<OMP->PotentialKoning.wso1<<OMP->PotentialKoning.wso2<<"\n";
+	xlsx<<"\n";
+}
+void Nucleus::SaveToXLSX(string filename)
+{
+	TXlsxwriter xlsx;
+	xlsx.Open(filename);
+	xlsx.GoToWorksheet("General");
+	xlsx<<"Nucleus"<<Name<<"\n";
+	xlsx<<"A"<<A<<"\n";
+	xlsx<<"Z"<<Z<<"\n";
+	xlsx<<"N"<<A-Z<<"\n";
+	xlsx<<"Mass,MeV"<<Mass<<"\n";
+	xlsx<<"Abundance"<<Abundance<<"\n";
+	xlsx<<"Projectile"<<Projectile<<"\n";
+	xlsx<<"ProjectileEnergy"<<ProjectileEnergy<<"In CM:"<<ProjectileEnergyCM<<"\n";
+	xlsx<<"\n";
+	for(unsigned int i=0;i<Products.size();i++)
+	{
+		xlsx<<"Product:"<<Products[i].Name<<"Reaction"<<Products[i].Reaction<<"\n";
+		xlsx<<"A"<<Products[i].A<<"\n";
+		xlsx<<"Z"<<Products[i].Z<<"\n";
+		xlsx<<"N"<<Products[i].A-Products[i].Z<<"\n";
+		xlsx<<"Mass,MeV"<<Products[i].Mass<<"\n";
+		xlsx<<"NLevels"<<Products[i].Levels.size()<<"\n";
+		xlsx<<"\n";
+	}
+	xlsx.GoToWorksheet("Gammas");
+	vector<GammaTransition*> gs=GetGammaTransitions();
+	xlsx<<"E_gamma"<<"E_i"<<"JPi"<<"E_f"<<"JPf"<<"Target"<<"Reaction"<<"Product"<<"CS"<<"\n";
+	for(unsigned int i=0;i<gs.size();i++)
+	{
+		xlsx<<gs[i]->Energy<<gs[i]->TalysE_i<<gs[i]->TalysJP_i.GetLine()<<gs[i]->TalysE_f<<gs[i]->TalysJP_f.GetLine()<<gs[i]->fLevel->fNucleus->fMotherNucleus->Name<<gs[i]->fLevel->fNucleus->Reaction<<gs[i]->fLevel->fNucleus->Name<<gs[i]->TalysCrossSection<<"\n";
+	}
+	xlsx.GoToWorksheet("LevelExcitationCS");
+	xlsx<<"E_level"<<"JP"<<"Nucleus"<<"CSCompound"<<"CSDirect"<<"CSTotal"<<"\n";
+	for(unsigned int i=0;i<Products.size();i++)
+	{
+		for(unsigned int j=0;j<Products[i].Levels.size();j++)
+		{
+			Level* l=&(Products[i].Levels[j]);
+			if((l->TalysCS>0)||(l->Energy==0))
+			{
+				xlsx<<l->Energy<<l->TalysJP.GetLine()<<l->fNucleus->Name<<l->TalysCSCompound<<l->TalysCSDirect<<l->TalysCS<<"\n";
+			}
+			
+		}
+		xlsx<<"\n";
+	}
+	xlsx.GoToWorksheet("Deformations");
+	xlsx<<"E_level"<<"JP"<<"Nucleus"<<"LevelType"<<"CollType"<<"BandNo"<<"BandL"<<"NumberOfPhonons"<<"MagN"<<"Beta"<<"\n";
+	for(unsigned int i=0;i<Levels.size();i++)
+	{
+		if(Levels[i].deformation!=0)
+		{
+			LevelDeformation* df=Levels[i].deformation;
+			PrintDeformationToXLSX(xlsx,df);
+		}
+	}
+	xlsx<<"\n";
+	xlsx<<"Products"<<"\n";
+	for(unsigned int i=0;i<Products.size();i++)
+	{
+		for(unsigned int j=0;j<Products[i].Levels.size();j++)
+		{
+			if(Products[i].Levels[j].deformation!=0)
+			{
+				LevelDeformation* df=Products[i].Levels[j].deformation;
+				PrintDeformationToXLSX(xlsx,df);
+			}
+		}
+		xlsx<<"\n";
+	}
+	xlsx.GoToWorksheet("OMP(N)");
+	xlsx<<"Target"<<Name<<"\n";
+	PrintOMPToXLSX(xlsx,&OMPN);
+	xlsx<<"Products"<<"\n";
+	for(unsigned int i=0;i<Products.size();i++)
+	{
+		xlsx<<Products[i].Name<<"\n";
+		PrintOMPToXLSX(xlsx,&(Products[i].OMPN));
+		xlsx<<"\n";
+	}
+	xlsx.GoToWorksheet("OMP(P)");
+	xlsx<<"Target"<<Name<<"\n";
+	PrintOMPToXLSX(xlsx,&OMPP);
+	xlsx<<"Products"<<"\n";
+	for(unsigned int i=0;i<Products.size();i++)
+	{
+		xlsx<<Products[i].Name<<"\n";
+		PrintOMPToXLSX(xlsx,&(Products[i].OMPP));
+	}
+	xlsx.GoToWorksheet("ParticleProduction");
+	xlsx<<" "<<"1"<<"Total"<<"\n";
+	xlsx<<"gamma"<<BNECS_g<<TOTGamProd<<"\n";
+	xlsx<<"neutron"<<BNECS_n<<TOTNProd<<"\n";
+	xlsx<<"proton"<<BNECS_p<<TOTPProd<<"\n";
+	xlsx<<"deutron"<<BNECS_d<<TOTDProd<<"\n";
+	xlsx<<"3He"<<BNECS_tau<<TOTTauProd<<"\n";
+	xlsx<<"alpha"<<BNECS_a<<TOTAProd<<"\n";
+	xlsx<<"Cross-sections"<<"\n";
+	xlsx<<"Total"<<TotTalys<<"\n";
+	xlsx<<"Total elastic"<<TotElastic<<"\n";
+	xlsx<<"Shape elastic"<<DirectElastic<<"\n";
+	xlsx<<"Compound elastic"<<CompoundElastic<<"\n"<<"\n";
+	xlsx<<"Reaction CS"<<"\n";
+	for(unsigned int i=0;i<Products.size();i++)
+	{
+		
+		xlsx<<Products[i].Reaction<<Products[i].Name<<"\n";
+		xlsx<<"Total"<<Products[i].TotInelastic<<"\n";
+		xlsx<<"Direct"<<Products[i].DirectInelastic<<"\n";
+		xlsx<<"Compound"<<Products[i].CompoundInelastic<<"\n";
+	}
+	
+
+}

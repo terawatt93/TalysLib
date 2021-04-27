@@ -18,6 +18,10 @@
 #pragma once
 
 //Методы класса Level
+double& LevelData::AdditionalInformation(string Key)
+{
+	return AI(Key);
+}
 bool Level::ReadLevel(string line,string ReadNuclName)
 {
 	string type;
@@ -61,6 +65,12 @@ void Level::ReadTransition(string line)
 void Level::Reset()
 {
 	Gammas.resize(0);
+	ADTot.resize(0);
+	ADDirect.resize(0);
+	ADCompound.resize(0);
+	Angle.resize(0);
+	AngleLab.resize(0);
+	PlottedADist=false;
 }
 /*void Level::Print()
 {
@@ -209,9 +219,13 @@ Level::Level(LevelData ld)
 	deformation=0;
 	Nuclide=ld.Nuclide; HalfLife=ld.HalfLife; HalfLifeErr=ld.HalfLifeErr; JP=ld.JP; Origin=ld.Origin;
 	JP_values=ld.JP_values;
-	
+	AI=ld.AI;
 	Mark=ld.Mark;//величина, определяющая достоверность уровня: размер вектора с JP, если JP.size=0, то Mark=99,если есть неопределенность (скобки), то размер ветора*2
 	Energy=ld.Energy; EnergyErr=ld.EnergyErr, TalysCS=ld.TalysCS; TalysJP=ld.TalysJP;
+	
+	float Energy, EnergyErr, TalysCS, TalysCSCompound, TalysCSDirect, OutgoingParticleEnergy; SpinParity TalysJP;
+	ADTot=ld.ADTot; ADDirect=ld.ADDirect; ADCompound=ld.ADCompound; Angle=ld.Angle; AngleLab=ld.AngleLab; Branching=ld.Branching;
+	NumbersOfFinalLevels=ld.NumbersOfFinalLevels;
 	for(unsigned int i=0;i<ld.GammasData.size();i++)
 	{
 		Gammas.emplace_back(ld.GammasData[i]);
@@ -221,9 +235,30 @@ TGraph* Level::GetAngularDistribution(string type,string option)//если гр�
 {
 	if((!PlottedADist)||(option=="new"))
 	{
-		AdistTotalTalys=TGraph(Angle.size(), &Angle[0], &ADTot[0]);
-		AdistCompoundTalys=TGraph(Angle.size(), &Angle[0], &ADCompound[0]);
-		AdistDirectTalys=TGraph(Angle.size(), &Angle[0], &ADDirect[0]);
+		bool ToLab=false;
+		if(fNucleus)
+		{
+			if(fNucleus->fMotherNucleus)
+			{
+				ToLab=fNucleus->fMotherNucleus->ConvertToLab;
+			}
+			else
+			{
+				ToLab=fNucleus->ConvertToLab;
+			}
+		}
+		if(ToLab)
+		{
+			AdistTotalTalys=TGraph(Angle.size(), &AngleLab[0], &ADTot[0]);
+			AdistCompoundTalys=TGraph(Angle.size(), &AngleLab[0], &ADCompound[0]);
+			AdistDirectTalys=TGraph(Angle.size(), &AngleLab[0], &ADDirect[0]);
+		}
+		else
+		{
+			AdistTotalTalys=TGraph(Angle.size(), &Angle[0], &ADTot[0]);
+			AdistCompoundTalys=TGraph(Angle.size(), &Angle[0], &ADCompound[0]);
+			AdistDirectTalys=TGraph(Angle.size(), &Angle[0], &ADDirect[0]);
+		}
 		string TotName="ADTotalTalysL"+to_string(Number);
 		string CompName="ADCompTalysL"+to_string(Number);
 		string DirName="ADDirTalysL"+to_string(Number);
