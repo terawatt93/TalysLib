@@ -1,3 +1,3 @@
 #/bin/bash 
- cd /dev/shm/CalculationResults/56Fe
+ cd /dev/shm/CalculationResults0/12C
  talys <input >output

@@ -12,15 +12,14 @@
 #include <cstdlib>
 #define AngularMomentumSize 7
 using namespace std;
-const int Z_number[]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111};
-const string Atomic_symbols[]={"H","He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe","Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu","Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra","Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es","Fm","Md","No","Lr","Rf","Db","Sg","Bh","Hs","Mt","Ds","Rg"};
+const int Z_number[]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24,25,26,27,28,29,30,31,32,33,34,35,36,37,38,39,40,41,42,43,44,45,46,47,48,49,50,51,52,53,54,55,56,57,58,59,60,61,62,63,64,65,66,67,68,69,70,71,72,73,74,75,76,77,78,79,80,81,82,83,84,85,86,87,88,89,90,91,92,93,94,95,96,97,98,99,100,101,102,103,104,105,106,107,108,109,110,111,112,113,114,115,116,117,118};
+const string Atomic_symbols[]={"H","He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe","Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu","Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra","Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es","Fm","Md","No","Lr","Rf","Db","Sg","Bh","Hs","Mt","Ds","Rg","Cn","Nh","Fl","Mc","Lv","Ts","Og"};
 
 const char AngularMomentum[]={'s','p','d','f','g','h','i'};
 
 void EscapeNextNLines(ifstream &ifs,unsigned int N)
 {
 	string line;
-	unsigned int iterator;
 	if(N==0)
 	{
 		return;
@@ -190,7 +189,7 @@ vector<int> StringLToInt(string L_string)
 
 string GetNucleusName(int Z)
 {
-	if((Z>0)&&(Z<111))
+	if((Z>0)&&(Z<119))
 	{
 		return Atomic_symbols[Z-1];
 	}
@@ -563,7 +562,16 @@ vector<string> ListFiles(string mask)
 		{
 			if((s[0]>='!')&&(s[0]<='z'))
 			{
-				FileNames.push_back(s);
+				if(FileNames.size()>0)
+				{
+					if(FileNames[FileNames.size()-1]!=s)
+					FileNames.push_back(s);
+				}
+				else
+				{
+					FileNames.push_back(s);
+				}
+				
 			}
 		}
 	}
@@ -647,11 +655,11 @@ vector<string> FindFile(vector<string> Paths, string Mask)
 	}
 	return Result;
 }
+
 void GenerateListOfElements(string composition, vector<string> &Elements, vector<int> &Quantity)
 {
 	Elements.resize(0);
 	Quantity.resize(0);
-	bool ElementFlag=false;
 	string tmpElement;
 	vector<string> Q_values;
 	for(unsigned int i=0;i<composition.size();i++)
@@ -710,59 +718,33 @@ void GenerateListOfElements(string composition, vector<string> &Elements, vector
 			Quantity.push_back(atoi(Q_values[i].c_str()));
 		}
 	}
-	//compositions-строка, описывающая состав вещества, вводится как H2O1, например
-	/*string NuclTmp;
-	int Q;
-	int SymbolIterator=0;
-	Elements.resize(0);
-	Quantity.resize(0);
-	for(unsigned int i=0;i<compositions.size();i++)
-	{
-		if((compositions[i]>='0')&&(compositions[i]<='9'))
-		{
-			Q=atoi(&compositions[i]);
-			Elements.push_back(NuclTmp);
-			NuclTmp.resize(0);
-			Quantity.push_back(Q);
-			SymbolIterator=0;
-		}
-		else
-		{
-			if(SymbolIterator<2)
-			{
-				if((SymbolIterator==1)&&(compositions[i]>='A')&&(compositions[i]<='Z'))
-				{
-					Elements.push_back(NuclTmp);
-					Quantity.push_back(1);
-					NuclTmp=compositions[i];
-					SymbolIterator=1;
-				}
-				else
-				{
-					NuclTmp+=compositions[i];
-					SymbolIterator++;
-				}
-				if(SymbolIterator==2)
-				{
-					Elements.push_back(NuclTmp);
-					NuclTmp.resize(0);
-					Quantity.push_back(1);
-					SymbolIterator=0;
-				}
-			}
-			if(i==(compositions.size()-1))
-			{
-				if(NuclTmp.size()>0)
-				{
-					Elements.push_back(NuclTmp);
-					SymbolIterator=0;
-					Quantity.push_back(1);
-				}
-			}
-			Q=0;
-		}
-	}*/
 }
+double GetMolarMass(string Composition)
+{
+	double MolarMass=0;
+	vector<string> Elements;
+	vector<int> Q;
+	GenerateListOfElements(Composition,Elements,Q);
+	for(unsigned int i=0;i<Elements.size();i++)
+	{
+		MolarMass+=GetAverageMass(Elements[i])*Q[i];
+	}
+	return MolarMass;
+}
+
+vector<double> GetMolarMassFractions(string Composition)
+{
+	vector<double> MolarMass;
+	vector<string> Elements;
+	vector<int> Q;
+	GenerateListOfElements(Composition,Elements,Q);
+	for(unsigned int i=0;i<Elements.size();i++)
+	{
+		MolarMass.push_back(GetAverageMass(Elements[i])*Q[i]);
+	}
+	return MolarMass;
+}
+
 string InvertString(string line)
 {
 	string line2;
@@ -790,8 +772,8 @@ string GetFileType(string line)
 			s>>type;
 			return InvertString(type);
 		}
-	
 	}
+	return "";
 }
 
 float GetEnergyFromFileName(string line)
@@ -844,9 +826,9 @@ string GetFileName(string line)
 {
 	stringstream s;
 	string name;
-	int flag_dot=0;
-	int dot_iterator=0;
-	int first_dot_iterator=0;
+	unsigned int flag_dot=0;
+	unsigned int dot_iterator=0;
+	unsigned int first_dot_iterator=0;
 	for(unsigned int i=0;i<line.size();i++)
 	{
 		if(line[line.size()-i-1]=='.')
@@ -863,7 +845,6 @@ string GetFileName(string line)
 			s>>name;
 			return InvertString(name);
 		}
-		//if((flag_dot==1)&&(line[line.size()-i-1]!='.'))
 		if((flag_dot==1)&&(i!=first_dot_iterator))
 		{
 			s<<line[line.size()-i-1];

@@ -17,6 +17,10 @@
 #include "source/LevelProperties.cc" //contains Level class methods
 #include "source/NucleiProperties.cc" //contains Nucleus class methods
 #include "source/TalysCalculation.cc" //contains TalysCalculation class methods
+#include "source/Radionuclide.cc" 
+#include "source/TalysFitter.cc" 
+#include "source/TalysFitterMT.cc" 
+#include "source/AdditionalInformation.cc"
 
 GammaTransition* GetBestTransitionFromVector(float Energy, float Tolerancy,vector<Nucleus> &Nuclei)
 {
@@ -118,5 +122,203 @@ void ReadNucleiFromRootFile(vector<Nucleus> &Nuclei,TFile *f)
 		Nuclei[i].AssignPointers();
 	}
 }
+void TLMaterial::SetDensity(double _Density)
+{
+	Density=_Density;
+}
+double TLMaterial::GetDensity()
+{
+	return Density;
+}
 
+void EvalInThreadForTLMaterial(Nucleus *Nucl,int NThread)
+{
+	Nucl->SetThreadNumber(NThread);
+	Nucl->GenerateProducts();
+}
 
+TLMaterial::TLMaterial(string _MaterialFormula)
+{
+	MaterialFormula=_MaterialFormula;
+	vector<string> Elements;
+	vector<int> Q;
+	GenerateListOfElements(MaterialFormula,Elements,Q);
+	for(unsigned int i=0;i<Elements.size();i++)
+	{
+		MolarMass+=GetAverageMass(Elements[i])*Q[i];
+		AddElement(Elements[i],Q[i]);
+	}
+	
+	if(EnableMultiThreading)
+	{
+		vector<thread> threads;
+		unsigned int CurrIndex=0;
+		for(unsigned int p=0;p<Nuclides.size();p++)
+		{
+			if(CurrIndex<Nuclides.size())
+			{
+				threads.emplace_back(EvalInThreadForTLMaterial,Nuclides[CurrIndex],p);
+				CurrIndex++;
+			}
+		}
+		for(unsigned int p=0;p<threads.size();p++)
+		{
+			threads[p].join();
+		}
+		
+		
+		/*bool Calculated=false;
+		while(!Calculated)
+		{
+			vector<thread> threads;
+			unsigned int CurrIndex=0;
+			for(unsigned int p=0;p<Nuclides.size();p++)
+			{
+				if(CurrIndex<Nuclides.size())
+				{
+					threads.emplace_back(EvalInThreadForTLMaterial,Nuclides[CurrIndex],p);
+					CurrIndex++;
+				}
+			}
+			for(unsigned int p=0;p<threads.size();p++)
+			{
+				threads[p].join();
+			}
+			if(CurrIndex==Nuclides.size())
+			{
+				return;
+			}
+		}*/
+	}
+	else
+	{
+		for(unsigned int p=0;p<Nuclides.size();p++)
+		{
+			EvalInThreadForTLMaterial(Nuclides[p],0);
+		}
+	}
+
+}
+double TLMaterial::GetMolarMass()
+{
+	return MolarMass;
+}
+void TLMaterial::AddElement(string Element, int Q)
+{
+	vector<int> A_values;
+	vector<double> Abundances;
+	GetAbundance(Element,A_values,Abundances);
+	for(unsigned int j=0;j<A_values.size();j++)
+	{
+		Nucleus *N=new Nucleus(to_string(A_values[j])+Element);
+		N->GenerateProducts();
+		Nuclides.push_back(N);
+		Quantities.push_back(Q);
+	}
+}
+void TLMaterial::AddBackground(string PathToBackground)
+{
+	Nucleus* bkg=new Nucleus("BKG "+PathToBackground);
+	Nuclides.push_back(bkg);
+	Quantities.push_back(0);
+}
+void TLMaterial::SaveToXLSX(string filename)
+{
+	TXlsxwriter xlsx;
+	xlsx.Open(filename);
+	xlsx.GoToWorksheet("General");
+	xlsx<<"Composition:"<<MaterialFormula<<"\n";
+	xlsx<<"Molar mass:"<<MolarMass<<"\n";
+	xlsx<<"Nucleus"<<"Abundancy"<<"\n";
+	for(unsigned int i=0;i<Nuclides.size();i++)
+	{
+		xlsx<<Nuclides[i]->Name<<Nuclides[i]->Abundance<<"\n";
+	}
+	xlsx.GoToWorksheet("Gammas");
+	GetGammaTransitions(0,true);
+	xlsx<<"E_gamma"<<"E_i"<<"JPi"<<"E_f"<<"JPf"<<"Target"<<"Reaction"<<"Product"<<"CS"<<"Abun*CS"<<"\n";
+	for(unsigned int i=0;i<Gammas.size();i++)
+	{
+		xlsx<<Gammas[i]->Energy<<Gammas[i]->TalysE_i<<Gammas[i]->TalysJP_i.GetLine()<<Gammas[i]->TalysE_f<<Gammas[i]->TalysJP_f.GetLine()<<Gammas[i]->fLevel->fNucleus->fMotherNucleus->Name<<Gammas[i]->fLevel->fNucleus->Reaction<<Gammas[i]->fLevel->fNucleus->Name<<Gammas[i]->TalysCrossSection<<Gammas[i]->TalysCrossSection*(Gammas[i]->fLevel->fNucleus->fMotherNucleus->Abundance)<<"\n";
+	}
+}
+void TLMaterial::PrintGammas(double CrossSectionThreshold,bool UseAbundancy)
+{
+	GetGammaTransitions(CrossSectionThreshold,UseAbundancy);
+	cout<<"E_gamma E_i JPi E_f JPf Target Reaction Product CS Abun*CS \n";
+	for(unsigned int i=0;i<Gammas.size();i++)
+	{
+		cout<<Gammas[i]->Energy<<" "<<Gammas[i]->TalysE_i<<" "<<Gammas[i]->TalysJP_i.GetLine()<<" "<<Gammas[i]->TalysE_f<<" "<<Gammas[i]->TalysJP_f.GetLine()<<" "<<Gammas[i]->fLevel->fNucleus->fMotherNucleus->Name<<" "<<Gammas[i]->fLevel->fNucleus->Reaction<<" "<<Gammas[i]->fLevel->fNucleus->Name<<" "<<Gammas[i]->TalysCrossSection<<" "<<Gammas[i]->TalysCrossSection*(Gammas[i]->fLevel->fNucleus->fMotherNucleus->Abundance)<<" "<<"\n";
+	}
+}
+vector<GammaTransition*> TLMaterial::GetGammaTransitions(double CrossSectionThreshold,bool UseAbundancy)
+{
+	vector<GammaTransition*> result;
+	for(unsigned int i=0;i<Nuclides.size();i++)
+	{
+		vector<GammaTransition*> GT;
+		if(Nuclides[i]->Name.find("BKG")!=string::npos)
+		{
+			for(unsigned int p=0;p<Nuclides[i]->Levels[0].Gammas.size();p++)
+			{
+				GT.push_back(&Nuclides[i]->Levels[0].Gammas[p]);
+			}
+		}
+		for(unsigned int j=0;j<Nuclides[i]->Products.size();j++)
+		{
+			for(unsigned int k=0;k<Nuclides[i]->Products[j].Levels.size();k++)
+			{
+				for(unsigned int p=0;p<Nuclides[i]->Products[j].Levels[k].Gammas.size();p++)
+				{
+					
+					GT.push_back(&Nuclides[i]->Products[j].Levels[k].Gammas[p]);
+				}
+			}
+		}
+		for(unsigned int j=0;j<GT.size();j++)
+		{
+			double Threshold=CrossSectionThreshold;
+			if(UseAbundancy)
+			{
+				Threshold=Threshold/GT[j]->fLevel->fNucleus->fMotherNucleus->Abundance;
+			}
+			if((GT[j]->TalysCrossSection>Threshold)||(GT[j]->fLevel->fNucleus->Name.find("BKG")!=string::npos))
+			{
+				result.push_back(GT[j]);
+			}
+		}
+	}
+	GeneratedLineList=true;
+	if(result.size()<2)
+	{
+		Gammas=result;
+		return result;
+	}
+	for(unsigned int i=0;i<result.size()-1;i++)
+	{
+		for (unsigned int j = 0; j <result.size()-i-1; j++)
+		{
+			//cout<<Levels.size()<<" "<<i<<" "<<j<<"\n";
+			if(result[j]->Energy>result[j+1]->Energy)
+			{
+				swap(result[j],result[j+1]);
+			}
+		}
+	}
+	Gammas=result;
+	return result;
+}
+
+vector<GammaTransition*> TLMaterial::GetGammaTransitionsE(double EnergyThreshold,double CrossSectionThreshold,bool UseAbundancy)
+{
+	vector<GammaTransition*> result;
+	vector<GammaTransition*> v=GetGammaTransitions(CrossSectionThreshold,UseAbundancy);
+	for(unsigned int i=0;i<v.size();i++)
+	{
+		if(v[i]->Energy>EnergyThreshold)
+		{
+			result.push_back(v[i]);
+		}
+	}
+	return result;
+}

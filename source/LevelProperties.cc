@@ -1,6 +1,6 @@
 #include "../TalysLib.hh"
 #include <sys/stat.h>
-
+#include "TalysLibManager.cc"
 #include <bits/stdc++.h>
 #include <cstring>
 #include <algorithm>
@@ -18,6 +18,10 @@
 #pragma once
 
 //Методы класса Level
+double& LevelData::AdditionalInformation(string Key)
+{
+	return AI(Key);
+}
 bool Level::ReadLevel(string line,string ReadNuclName)
 {
 	string type;
@@ -61,6 +65,12 @@ void Level::ReadTransition(string line)
 void Level::Reset()
 {
 	Gammas.resize(0);
+	ADTot.resize(0);
+	ADDirect.resize(0);
+	ADCompound.resize(0);
+	Angle.resize(0);
+	AngleLab.resize(0);
+	PlottedADist=false;
 }
 /*void Level::Print()
 {
@@ -101,6 +111,7 @@ void Level::AddLineFromTalys(double E, double CS, double E_i, double E_f, SpinPa
 	g.TalysJP_i=JP_i;
 	g.InitLevelNumber=InitLevelNumber;
 	g.FinalLevelNumber=FinalLevelNumber;
+	g.EvalMultipolarity();
 	Gammas.push_back(g);
 }
 vector<GammaTransition*> Level::GetTransition(float E,float Tolerancy,float intensity)
@@ -209,21 +220,53 @@ Level::Level(LevelData ld)
 	deformation=0;
 	Nuclide=ld.Nuclide; HalfLife=ld.HalfLife; HalfLifeErr=ld.HalfLifeErr; JP=ld.JP; Origin=ld.Origin;
 	JP_values=ld.JP_values;
-	
+	AI=ld.AI;
 	Mark=ld.Mark;//величина, определяющая достоверность уровня: размер вектора с JP, если JP.size=0, то Mark=99,если есть неопределенность (скобки), то размер ветора*2
 	Energy=ld.Energy; EnergyErr=ld.EnergyErr, TalysCS=ld.TalysCS; TalysJP=ld.TalysJP;
+	ADTot=ld.ADTot; ADDirect=ld.ADDirect; ADCompound=ld.ADCompound; Angle=ld.Angle; AngleLab=ld.AngleLab; Branching=ld.Branching;
+	NumbersOfFinalLevels=ld.NumbersOfFinalLevels;
+	
+	CSValues=ld.CSValues; CSCompoundValues=ld.CSCompoundValues; CSDirectValues=ld.CSDirectValues;
+	X_Values=ld.X_Values;
+	ADTotValues=ld.ADTotValues;
+	ADDirectValues=ld.ADDirectValues;
+	ADCompoundValues=ld.ADCompoundValues;
+	AngleLabValues=ld.AngleLabValues;
+	
 	for(unsigned int i=0;i<ld.GammasData.size();i++)
 	{
 		Gammas.emplace_back(ld.GammasData[i]);
 	}
+	
 }
 TGraph* Level::GetAngularDistribution(string type,string option)//если график уже построен, выдается сохраненный, если нет, или option=="new", строится заново
 {
 	if((!PlottedADist)||(option=="new"))
 	{
-		AdistTotalTalys=TGraph(Angle.size(), &Angle[0], &ADTot[0]);
-		AdistCompoundTalys=TGraph(Angle.size(), &Angle[0], &ADCompound[0]);
-		AdistDirectTalys=TGraph(Angle.size(), &Angle[0], &ADDirect[0]);
+		bool ToLab=false;
+		if(fNucleus)
+		{
+			if(fNucleus->fMotherNucleus)
+			{
+				ToLab=fNucleus->fMotherNucleus->ConvertToLab;
+			}
+			else
+			{
+				ToLab=fNucleus->ConvertToLab;
+			}
+		}
+		if(ToLab)
+		{
+			AdistTotalTalys=TGraph(Angle.size(), &AngleLab[0], &ADTot[0]);
+			AdistCompoundTalys=TGraph(Angle.size(), &AngleLab[0], &ADCompound[0]);
+			AdistDirectTalys=TGraph(Angle.size(), &AngleLab[0], &ADDirect[0]);
+		}
+		else
+		{
+			AdistTotalTalys=TGraph(Angle.size(), &Angle[0], &ADTot[0]);
+			AdistCompoundTalys=TGraph(Angle.size(), &Angle[0], &ADCompound[0]);
+			AdistDirectTalys=TGraph(Angle.size(), &Angle[0], &ADDirect[0]);
+		}
 		string TotName="ADTotalTalysL"+to_string(Number);
 		string CompName="ADCompTalysL"+to_string(Number);
 		string DirName="ADDirTalysL"+to_string(Number);
@@ -324,7 +367,7 @@ void Level::SetTGraphNameAndTitle(string ValName)
 	}
 }
 
-void Level::SetDeformation(char LevT, int BandN, int BandL, int NPhon, int MagN, vector<float> *Def)
+void Level::SetDeformation(char LevT, int BandN, int BandL, int MagN, int NPhon, vector<float> *Def)
 {
 	if(deformation!=0)
 	{
@@ -384,15 +427,53 @@ void Level::AddPoint(double x_value,Level *level)
 			Gammas[i].AddPoint(x_value,&(level->Gammas[j]));
 		}
 	}
-	int N=CSGraph.GetN();
-	CSGraph.SetPoint(N,x_value,level->TalysCS); 
+	//int N=CSGraph.GetN();
+	CSValues.push_back(level->TalysCS);
+	CSCompoundValues.push_back(level->TalysCSCompound);
+	CSDirectValues.push_back(level->TalysCSDirect);
+	X_Values.push_back(x_value);
+	
+	ADTotValues.push_back(level->ADTot); ADDirectValues.push_back(level->ADDirect); ADCompoundValues.push_back(level->ADCompound);
+	Angle=level->Angle;
+	
+	IsGraphGenerated=false;
+	/*CSGraph.SetPoint(N,x_value,level->TalysCS); 
 	CSCompoundGraph.SetPoint(N,x_value,level->TalysCSCompound);
-	CSDirectGraph.SetPoint(N,x_value,level->TalysCSDirect);
+	CSDirectGraph.SetPoint(N,x_value,level->TalysCSDirect);*/
 }
+
+void Level::AddPoint(Level *level)
+{
+	if(!level)
+	return ;
+	if(Number!=level->Number)
+	return ;
+	for(unsigned int i=0;i<Gammas.size();i++)
+	{
+		for(unsigned int j=0;j<level->Gammas.size();j++)
+		{
+			Gammas[i].AddPoint(&(level->Gammas[j]));
+		}
+	}
+	//int N=CSGraph.GetN();
+	CSValues.push_back(level->TalysCS);
+	CSCompoundValues.push_back(level->TalysCSCompound);
+	CSDirectValues.push_back(level->TalysCSDirect);
+	
+	ADTotValues.push_back(level->ADTot); ADDirectValues.push_back(level->ADDirect); ADCompoundValues.push_back(level->ADCompound);
+	Angle=level->Angle;
+	
+	IsGraphGenerated=false;
+	/*CSGraph.SetPoint(N,x_value,level->TalysCS); 
+	CSCompoundGraph.SetPoint(N,x_value,level->TalysCSCompound);
+	CSDirectGraph.SetPoint(N,x_value,level->TalysCSDirect);*/
+}
+
 
 TGraph* Level::GetCSGraph(string type)
 {
 	TGraph* result = 0;
+	
 	if(type=="Total")
 	{
 		result=&CSGraph;
@@ -406,4 +487,117 @@ TGraph* Level::GetCSGraph(string type)
 		result=&CSDirectGraph;
 	}
 	return result;
+}
+TGraph2D* Level::GetAngularDistribution2D(string type,string option)//если график уже построен, выдается сохраненный, если нет, или option=="new", строится заново
+{
+	bool ToLab=false;
+	if((!PlottedADist2D)||(option=="new"))
+	{
+		if(fNucleus)
+		{
+			if(fNucleus->fMotherNucleus)
+			{
+				ToLab=fNucleus->fMotherNucleus->ConvertToLab;
+			}
+			else
+			{
+				ToLab=fNucleus->ConvertToLab;
+			}
+		}
+		int PointIterator=0;
+		vector<float> *x=0;
+		if(X_Values.size()!=0)
+		{
+			x=&X_Values;
+		}
+		else
+		{
+			x=&(fNucleus->fMotherNucleus->EnergyGrid);
+		}
+		if(ToLab)
+		{
+			for(unsigned int i=0;i<x->size();i++)
+			{
+				for(unsigned int j=0;j<AngleLabValues[i].size();j++)
+				{
+					AdistTotalTalys2D.SetPoint(PointIterator,x->at(i),AngleLabValues[i][j],ADTotValues[i][j]);
+					AdistCompoundTalys2D.SetPoint(PointIterator,x->at(i),AngleLabValues[i][j],ADDirectValues[i][j]);
+					AdistDirectTalys2D.SetPoint(PointIterator,x->at(i),AngleLabValues[i][j],ADCompoundValues[i][j]);
+					PointIterator++;
+				}
+			}
+		}
+		else
+		{
+			for(unsigned int i=0;i<x->size();i++)
+			{
+				for(unsigned int j=0;j<Angle.size();j++)
+				{
+					AdistTotalTalys2D.SetPoint(PointIterator,x->at(i),Angle[j],ADTotValues[i][j]);
+					AdistCompoundTalys2D.SetPoint(PointIterator,x->at(i),Angle[j],ADDirectValues[i][j]);
+					AdistDirectTalys2D.SetPoint(PointIterator,x->at(i),Angle[j],ADCompoundValues[i][j]);
+					PointIterator++;
+				}
+			}
+		}
+		string TotName="ADTotalTalysL2D"+to_string(Number);
+		string CompName="ADCompTalysL2D"+to_string(Number);
+		string DirName="ADDirTalysL2D"+to_string(Number);
+		TString TotTitle=TString::Format("Total #frac{d#sigma}{d#Omega} for %s%s%s, E_{l}=%.1f, JP=%s; E, MeV;Angle, deg;#frac{d#sigma}{d#Omega},mb",(fNucleus->fMotherNucleus->Name).c_str(),(fNucleus->Reaction).c_str(),(fNucleus->Name).c_str(), Energy,TalysJP.GetLine().c_str());
+		TString CompTitle=TString::Format("Compound #frac{d#sigma}{d#Omega} for %s%s%s, E_{l}=%.1f, JP=%s; E, MeV; Angle, deg;#frac{d#sigma}{d#Omega},mb",(fNucleus->fMotherNucleus->Name).c_str(),(fNucleus->Reaction).c_str(),(fNucleus->Name).c_str(), Energy,TalysJP.GetLine().c_str());
+		TString DirTitle=TString::Format("Direct #frac{d#sigma}{d#Omega} for %s%s%s, E_{l}=%.1f, JP=%s; E, MeV; Angle, deg;#frac{d#sigma}{d#Omega},mb",(fNucleus->fMotherNucleus->Name).c_str(),(fNucleus->Reaction).c_str(),(fNucleus->Name).c_str(), Energy,TalysJP.GetLine().c_str());
+		AdistTotalTalys2D.SetName(TotName.c_str());
+		AdistCompoundTalys2D.SetName(CompName.c_str());
+		AdistDirectTalys2D.SetName(DirName.c_str());
+		
+		AdistCompoundTalys2D.SetLineColor(2);
+		AdistDirectTalys2D.SetLineColor(4);
+		
+		AdistTotalTalys2D.SetTitle(TotTitle);
+		AdistCompoundTalys2D.SetTitle(CompTitle);
+		AdistDirectTalys2D.SetTitle(DirTitle);
+	}
+
+	if(type=="Total")
+	{
+		return &AdistTotalTalys2D;
+	}
+	if(type=="Compound")
+	{
+		return &AdistCompoundTalys2D;
+	}
+	if(type=="Direct")
+	{
+		return &AdistDirectTalys2D;
+	}
+	return 0;
+	
+}
+TGraph* Level::GetAngularDistributionAtEnergy(float PrEnergy,string type,string option)
+{
+	TGraph2D *refGraph=GetAngularDistribution2D(type,option);
+	if((PrEnergy>=fNucleus->fMotherNucleus->MinEnergy)&&(PrEnergy<=fNucleus->fMotherNucleus->MaxEnergy))
+	{
+		TGraph result;
+		for(unsigned int i=0;i<Angle.size();i++)
+		{
+			result.SetPoint(i,Angle[i],refGraph->Interpolate(PrEnergy,Angle[i]));
+		}
+		result.SetName(TString::Format("Inelastic_at_E%.1f_E_level_%.1f",PrEnergy,Energy));
+		TString Title=TString::Format("%s #frac{d#sigma_{%s}}{d#Omega} for E_{%s}=%.1f MeV, E_{l}=%.1f keV; #theta, deg; #frac{d#sigma}{d#Omega}, mb/str",fNucleus->Reaction.c_str(),type.c_str(),fNucleus->fMotherNucleus->Projectile.c_str(),PrEnergy,Energy);
+		result.SetTitle(Title);
+		GeneratedGraphsList.push_back(result);
+		return &(GeneratedGraphsList.back());
+	}
+	else//пока не работает из-за того, что GenerateProducts все очищает. Переделать потом
+	{
+		if(fNucleus->fMotherNucleus->EnergyGrid.size()>0)
+		{
+			fNucleus->fMotherNucleus->EnergyGrid.push_back(PrEnergy);
+			fNucleus->fMotherNucleus->MainNucleusFlag=0;
+			fNucleus->fMotherNucleus->GenerateProducts(fNucleus->fMotherNucleus->Projectile);
+			return GetAngularDistributionAtEnergy(PrEnergy,type,option);
+		}
+	}
+	return 0;
 }

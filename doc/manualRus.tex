@@ -1,3 +1,4 @@
+% !TeX program = xelatex
 \documentclass[a4paper,12pt]{extarticle} 
 \usepackage{extsizes}
 \usepackage{amsmath}
@@ -47,16 +48,20 @@
 \subsection{Класс Nucleus}
 Класс Nucleus включает в себя набор объектов и методов для работы со свойствами ядра. Описание методов и членов этого класса приведено ниже
 \subsubsection{Name,Reaction,Projectile}
-string Name-имя ядра вида "56Fe". string Reaction-реакция, приводящая к образованию данного ядра, строка вида "(n,p)". string Projectile-налетающая частица, строка вида "n". Возможные значения данного параметра-n, p, d, t, h, a, g.
+string Name -- имя ядра вида "56Fe".
+
+string Reaction -- реакция, приводящая к образованию данного ядра, строка вида "(n,p)".
+
+string Projectile -- налетающая частица, строка вида "n". Возможные значения данного параметра: n, p, d, t, h, a, g.
 \subsubsection{vector<Level> Levels}
 Вектор, содержащий объекты типа Level-информацию о свойствах ядерных уровней.
 \subsubsection{OpticalModelParameters OMPN, OMPP}
 Объекты, содержащие в себе информацию об оптическом потенциале для нейтронов (OMPN) и протонов (OMPP)
 \subsubsection{Deformation}
 Объект, содержащий в себе сведения о деформации ядра в основном и возбужденных состояниях, а так же о природе этих состояний.
-\subsubsection{TGraph ElacticTotTalys, ElasticDirectTalys,ElasticCompoundTalys}
-Графики углового распределения упруго рассеянных частиц:  ElacticTotTalys-полное сечение, ElasticDirectTalys-прямая компонента упругого рассеяния, ElasticCompoundTalys-компаунд-компонента. Данные графики заполняются функцией Nucleus::GetElasticAngularDistribution(string type,string option) из векторов Angle, ElTot; Angle, ElCompound; Angle, ElDirect соответственно.
-\subsubsection{InelasticTotTalysV, InelasticDirectTalysV,InelasticCompoundTalysV, ElasticTotTalysV, ElasticDirectTalysV,ElasticCompoundTalysV, TotTalysV}
+\subsubsection{TGraph ElacticTotTalys, ElasticDirectTalys, ElasticCompoundTalys}
+Графики углового распределения упруго рассеянных частиц:  ElacticTotTalys -- полное сечение, ElasticDirectTalys -- прямая компонента упругого рассеяния, ElasticCompoundTalys -- компаунд-компонента. Данные графики заполняются функцией Nucleus::GetElasticAngularDistribution(string type, string option) из векторов Angle, ElTot; Angle, ElCompound; Angle, ElDirect соответственно.
+\subsubsection{InelasticTotTalysV, InelasticDirectTalysV, InelasticCompoundTalysV, ElasticTotTalysV, ElasticDirectTalysV, ElasticCompoundTalysV, TotTalysV}
 Графики сечений в зависимости от некоторого, определяемого пользователем, параметра V. Заполняются функцией Nucleus::AddPoint(double x_value, Nucleus* Nucl) из значений TotInelastic, CompoundInelastic, DirectInelastic, TotElastic, CompoundElastic, DirectElastic,  TotTalys соответственно. Величины TotInelastic, CompoundInelastic, DirectInelastic, TotElastic, CompoundElastic, DirectElastic,  TotTalys, в свою очередь, считываются непосредственно из output файла функцией Nucleus::ReadElastic().
 \subsubsection{BNECS_gamma, BNECS_neutron, BNECS_proton, BNECS_deuteron, BNECS_triton, BNECS_3He, BNECS_alpha}
 Данные графики представляют собой полные сечения рождения частиц $\gamma$, n, p, d, $^3$H, $^3$He, $\alpha$ соответственно, в выходном файле данные величины названы <<Binary non-elastic cross sections (non-exclusive)>>. Заполнение этих графиков производится функцией Nucleus::AddPoint(double x_value, Nucleus* Nucl) из величин BNECS_g, BNECS_n, BNECS_p, BNECS_d, BNECS_t, BNECS_tau, BNECS_a соответственно, а они, в свою очередь, считываются из output файла функцией Nucleus::ReadElastic().
@@ -65,7 +70,7 @@ string Name-имя ядра вида "56Fe". string Reaction-реакция, п�
 \subsubsection{void ReadElastic()}
 Функция, считывающая output файл и записывающая в переменные TOTGamProd, TOTNProd, TOTPProd, TOTDProd, TOTAProd полные сечения образования $\gamma$, n, p, d, $\alpha$ соответственно;  в TotElastic, CompoundElastic, DirectElastic записываются сечения упругого рассеяния и вклады отдельных компонент, а в TotInelastic, CompoundInelastic, DirectInelastic - сечения неупругого рассеяния. В переменную TotTalys записываются значения полного сечения.
 \subsubsection{TGraph* GetElasticAngularDistribution(string type="Total",string option=" ")}
-Данная функция строит угловое распределение рассеянных нейтронов и возвращает указатель на соответствующий график. Переменная type задает возможные варианты графика. Возможные значения: "Total"-полное сечение, "Compound"-компаунд-компонента, "Direct"-прямая компонента. Аргумент option принимает 2 значения: "" (по-умолчанию) и "new". В первом случае функция вернет уже построенный график, во втором-перестроит его.
+Данная функция строит угловое распределение рассеянных нейтронов и возвращает указатель на соответствующий график. Переменная type задает возможные варианты графика. Возможные значения: "Total" - полное сечение, "Compound" - компаунд-компонента, "Direct" - прямая компонента. Аргумент option принимает 2 значения: "" (по-умолчанию) и "new". В первом случае функция вернет уже построенный график, во втором-перестроит его.
 \subsubsection{int WriteOMPOrUseKoningP, WriteOMPOrUseKoningN}
 Данные переменные задают алгоритм работы с оптической моделью для протонов и нейтронов соответственно. Если значение переменной равно -1, то в расчете будет использован потенциал "по-умолчанию", либо заданный в input файле, если WriteOMPOrUseKoning=0, то будет использован потенциал, считанный из базы TALYS. Этот потенциал может быть изменен пользователем. Если в базе потенциала для данного ядра нет, будет использован потенциал "по-умолчанию". В случае, если если WriteOMPOrUseKoning=1, то будет использован потенциал из базы, а если его не окажется-то потенциал Кёнинга. Если WriteOMPOrUseKoning=2, то будет использован потенциал Кёнинга вне зависимости от наличия в базе потенциала для данного ядра.
 \subsubsection{void MergeLevels(float tolerancy)}
@@ -90,21 +95,21 @@ string Name-имя ядра вида "56Fe". string Reaction-реакция, п�
 Функция, считывающая параметры уровней из базы TALYS. В качестве аргумента принимает тип информации об уровнях. Возможные значения аргумента: "final", "exp", "hfb", описание приведено в TALYS manual (v 1.9), p. 137.
 \subsubsection{SetProjectileEnergy(double E)}
 Функция, устанавливающая энергию начальной частицы в МэВ.
-\subsubsection{vector<Level*> GetLevelsWithCorrespondingTransitions(float Energy, float tolerancy=1,float intensity=0)}
+\subsubsection{vector<Level*> GetLevelsWithCorrespondingTransitions(float Energy, float tolerancy=1, float intensity=0)}
 Функция, выполняющая поиск уровней с гамма-переходами энергии Energy, энергия гамма-перехода может отличаться от заданной на tolerancy, интенсивность должна быть не ниже intensity. Использовалась для поиска подходящих гамма-переходов в данных, считанных из ENSDF (ну, или, NDS). Использование в дальнейшем не предполагается.
-\subsubsection{Level* FindLevelFromTalys(float Energy,SpinParity JP)}
+\subsubsection{Level* FindLevelFromTalys(float Energy, SpinParity JP)}
 Функция, выполняющая поиск уровня, полученного из базы TALYS с данной энергией и спин-четностью JP. В случае успеха возвращает указатель на найденный уровень, в противном случае-NULL.
-\subsubsection{Level* FindBestLevelByEJP(float Energy,SpinParity JP,float tolerancy=1)}
+\subsubsection{Level* FindBestLevelByEJP(float Energy, SpinParity JP, float tolerancy=1)}
 Функция, выполняющая поиск уровня, лучше всего подходящего под заданные энергии. В случае, когда есть несколько уровней в пределах tolerancy от Energy, лучшим будет признан тот, который имеет спин-четности, совпадающие с JP. В случае успеха возвращает указатель на найденный уровень, в противном случае-NULL.
-\subsubsection{FindLevelByEnergy(float Energy,float tolerancy=1)}
+\subsubsection{FindLevelByEnergy(float Energy, float tolerancy=1)}
 Функция, выполняющая поиск уровня с энергией Energy, энергия уровня может отличаться на tolerancy от величины Energy. В случае успеха возвращает указатель на найденный уровень, в противном случае-NULL.
 \subsubsection{Level* FindLevelByNumber(int number)}
 Функция, выполняющая поиск уровня с данным порядковым номером (соответствует нумерации TALYS). Нумерация начинается с основного состояния, ему присвоен номер 0. В случае успеха возвращает указатель на найденный уровень, в противном случае-NULL.
-\subsubsection{GammaTransition* GetBestTransition(float Energy,float tolerancy=1)}
+\subsubsection{GammaTransition* GetBestTransition(float Energy, float tolerancy=1)}
 Функция, выполняющая поиск гамма-перехода с энергией, наиболее близкой к Energy в пределах tolerancy. В случае успеха возвращает указатель на найденный уровень, в противном случае-NULL.
-\subsubsection{vector<GammaTransition*> GetGammaTransition(float Energy, float tolerancy=1,float intensity=0)}
+\subsubsection{vector<GammaTransition*> GetGammaTransition(float Energy, float tolerancy=1, float intensity=0)}
 Функция, выполняющая поиск гамма-переходов с энергией, наиболее близкой к Energy в пределах tolerancy. Возвращает вектор указателей на найденные переходы.
-\subsubsection{vector<GammaTransition*> GetGammaTransitions(string option="Talys",int BetterThan=100,float tolerancy=1,float intensity=0)}
+\subsubsection{vector<GammaTransition*> GetGammaTransitions(string option="Talys",int BetterThan=100, float tolerancy=1, float intensity=0)}
 Функция, выполняющая поиск гамма-переходов с происхождением и надежностью, задаваемыми аргументами функции. Использование в дальнейшем не предполагается.
 \subsubsection{vector<Nucleus> Products}
 Вектор, содержащий объекты типа Nucleus. В случае, когда рассматриваемое ядро является начальным, содержит ядра-продукты, в случае же, когдя рассматриваемое ядро само является продуктом, пуст. Заполняется функцией Nucleus::GenerateProducts().
@@ -148,5 +153,72 @@ string Name-имя ядра вида "56Fe". string Reaction-реакция, п�
 \subsubsection{void SetTGraphNameAndTitle(string ValName)}
 Функция, задающая имена и подписи осей для графиков. В качестве аргумента принимает имя переменной, которая соответствует оси $x$.
 \subsubsection{void AddPoint(double x_value, Nucleus* Nucl)}
-Функция, выполняющая заполнение графиков InelasticTotTalysV, InelasticDirectTalysV,InelasticCompoundTalysV, ElasticTotTalysV, ElasticDirectTalysV,ElasticCompoundTalysV, TotTalysV, BNECS_gamma, BNECS_neutron, BNECS_proton, BNECS_deuteron, BNECS_triton, BNECS_3He, BNECS_alpha, TEISGraphTot, TEISGraphCont, TEISGraphDiscr значениями, находящимися в объекте, на который указывает указатель Nucleus* Nucl, в качестве переменной $x$ передается x_value. Вызывает аналогичную функцию для уровней (void Level::AddPoint(double x_value,Level *level)). Используется классом TalysCalculation для построения графиков зависимости результатов вычислений от переменных, задаваемых пользователем.
+Функция, выполняющая заполнение графиков InelasticTotTalysV, InelasticDirectTalysV, InelasticCompoundTalysV, ElasticTotTalysV, ElasticDirectTalysV, ElasticCompoundTalysV, TotTalysV, BNECS_gamma, BNECS_neutron, BNECS_proton, BNECS_deuteron, BNECS_triton, BNECS_3He, BNECS_alpha, TEISGraphTot, TEISGraphCont, TEISGraphDiscr значениями, находящимися в объекте, на который указывает указатель Nucleus* Nucl, в качестве переменной $x$ передается x_value. Вызывает аналогичную функцию для уровней (void Level::AddPoint(double x_value,Level *level)). Используется классом TalysCalculation для построения графиков зависимости результатов вычислений от переменных, задаваемых пользователем.
+
+\subsection{Класс TalysCalculation}
+Класс TalysCalculation включает в себя набор объектов и методов для работы с вычислениями в TALYS. Присутствуют методы для запуска расчётов, изменения параметров вычислений. Описание методов и членов этого класса приведено ниже
+\subsubsection{Results, FinalResult}
+В FinalResult хранится расчёт с максимальным значением параметра, в нем будут графики для неупругих сечений
+\subsubsection{Target, Proj}
+
+\subsubsection{TalysOptions}
+
+\subsubsection{Variable}
+
+\subsubsection{Elastic, Inelastic, GeneratedGraphs}
+
+\subsubsection{VarValues}
+Вектор значений параметров деформации, которые перебираются при вариации. Можно задать с помощью функции TalysCalculation::SetVarValues(min,max,step).
+\subsubsection{GeneratedGraphs}
+
+\subsubsection{ProjectileEnergy}
+
+\subsubsection{void ReadParametersFromFile(string filename)}
+Функция, 
+\subsubsection{void ExecuteCalculation(), void ExecuteCalculation(void (*VarChangeFunction)(Nucleus *Nuclide, double value))}
+Функции, 
+\subsubsection{void SetTarget(string _Target), void SetProjectile(string _Proj), void SetVarValues(double min, double max, double step)}
+Функции, 
+\subsubsection{void ExecuteCalculation(), ExecuteCalculation(void (*VarChangeFunction)(Nucleus *Nuclide,double value))}
+Функции, 
+\subsubsection{void GenerateGraphs()}
+Функция, 
+\subsubsection{TGraph* GetLevelExcitationCrossSection(double LevelEnergy, string NucleusName, string Option)}
+Функция, 
+\subsubsection{TGraph* GetGammaTransitionCrossSction(double GammaEnergy, string NucleusName)}
+Функция, 
+\subsubsection{TMultiGraph* GetAngularDistributionsForLevel(double LevelEnergy,string NucleusName, string type, string option, TLegend *leg)}
+Функция, 
+\subsubsection{TMultiGraph* GetElasticAngularDistributions(string type, string option, TLegend *leg)}
+GetElasticAngularDistributions возвращает TMultiGraph с угловыми распределениями, соответствующими значениям VarValues.
+
+\subsection{Класс OpticalModelParameters}
+
+\subsection{Класс TalysFitter}
+Класс TalysFitter нужен для подбора параметров оптического потенциала, лучше всего описывающие экспериментальные сечения. 
+\subsubsection{bool Calculated}
+=false;
+\subsubsection{bool ParTrackingFlag}
+=false;
+\subsubsection{bool ParChanged}
+=false;
+\subsubsection{double x_val}
+
+\subsubsection{TalysFitter(string NuclName)}
+Конструктор класса
+\subsubsection{Nucleus Nuclide}
+
+\subsubsection{void (*ParAssignmentFunction)(TalysFitter *PointetToTF)}
+\subsubsection{vector<double> PreviousParameters}
+\subsubsection{vector<double> Parameters}
+\subsubsection{vector<string> ParNames}
+\subsubsection{TF1}
+\subsubsection{TF1}
+\subsubsection{void EnableParTracking()}
+\subsubsection{void DisableParTracking()}
+\subsubsection{void TrackParChanges()}
+\subsubsection{double Eval(double *x, double *p)}
+\subsubsection{double (*GetEvaluationResult)(double x_value,TalysFitter *PointetToTF)}
+\subsubsection{TF1 GenerateTF1(string name, double x_min,double x_max)}
+
 \end{document}

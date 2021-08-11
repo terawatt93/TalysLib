@@ -1,0 +1,20 @@
+Nuclide ; Ba-137m 
+Element ; Barium
+Z ; 56
+Daughter(s) ; (I.T.) ; Ba-137 ; 100
+QIT ; 661.659
+Half-life (min) ; 2.552 ; 0.001
+Half-life (s) ; 153.12 ; 0.06
+Decay constant (1/s) ; 4.5268E-3 ; 0.0018E-3
+Specific activity (Bq/g) ; 19.899E18 ; 0.008E18
+Reference ; LNHB, INEEL, PTB - 1999
+Emissions (6 lines) sorted by increasing energy
+----------------------------------------------------------------------------------------------------------
+Energy (keV) ; Ener. unc. (keV) ; Intensity (%) ; Int. unc. (%) ; Type ; Origin ; Lvl. start ; Lvl. end
+4.8815 ;  ; 0.95 ; 0.05 ; XL ; Ba-137 ;  ; 
+31.8174 ;  ; 2.06 ; 0.04 ; XKa2 ; Ba-137 ;  ; 
+32.1939 ;  ; 3.80 ; 0.07 ; XKa1 ; Ba-137 ;  ; 
+36.4457 ;  ; 1.12 ; 0.02 ; XK'b1 ; Ba-137 ;  ; 
+37.3317 ;  ; 0.28 ; 0.01 ; XK'b2 ; Ba-137 ;  ; 
+661.657 ; 0.003 ; 90.07 ; 0.20 ; g ; Ba-137 ; 1 ; 0
+==========================================================================================================
