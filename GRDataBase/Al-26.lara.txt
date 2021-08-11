@@ -1,0 +1,20 @@
+Nuclide ; Al-26 
+Element ; Aluminium
+Z ; 13
+Daughter(s) ; (B+, EC) ; Mg-26 ; 100
+Q+ ; 4004.19
+Half-life (a) ; 717E3 ; 24E3
+Half-life (s) ; 22.6E12 ; 0.8E12
+Decay constant (1/s) ; 30.6E-15 ; 1.0E-15
+Specific activity (Bq/g) ; 710E6 ; 24E6
+Reference ; LBNL - 1998
+Emissions (6 lines) sorted by increasing energy
+----------------------------------------------------------------------------------------------------------
+Energy (keV) ; Ener. unc. (keV) ; Intensity (%) ; Int. unc. (%) ; Type ; Origin ; Lvl. start ; Lvl. end
+1.2536 ;  ; 0.318 ; 0.011 ; XKa1 ; Mg-26 ;  ; 
+1.2536 ;  ; 0.160 ; 0.006 ; XKa2 ; Mg-26 ;  ; 
+511 ;  ; 163.5 ; 0.4 ; g511 ; Mg-26 ; -1 ; -1
+1129.67 ; 0.10 ; 2.5 ; 0.2 ; g ; Mg-26 ; 2 ; 1
+1808.65 ; 0.07 ; 99.76 ; 0.04 ; g ; Mg-26 ; 1 ; 0
+2938 ; 1 ; 0.24 ; 0.04 ; g ; Mg-26 ; 2 ; 0
+==========================================================================================================

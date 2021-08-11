@@ -1,6 +1,6 @@
 #include "../TalysLib.hh"
 #include <sys/stat.h>
-
+#include "TalysLibManager.cc"
 #include <bits/stdc++.h>
 #include <cstring>
 #include <algorithm>
@@ -15,13 +15,25 @@
 #pragma once
 
 //Методы класса LevelDeformation
+
+bool CheckFieldContent(string s)
+{
+	for(unsigned int i=0;i<s.length();i++)
+	{
+		if(s[i]!=' ')
+		{
+			return true;
+		}
+	}
+	return false;
+}
 void LevelDeformation::GetFromString(string input)
 {
 	
 	string NumOfLevelS=input.substr(0,4);
 	string TypeOfLevelS=input.substr(7,1);
 	string NumberOfBandS=input.substr(8,4);
-	NumberOfBand=0; NumberOfLevel=0; LOfBand=0; NumberOfPhonons=0; MagneticNumber=0;
+	NumberOfBand=-1; NumberOfLevel=-1; LOfBand=-1; NumberOfPhonons=-1; MagneticNumber=-1;
 	//cout<<NumOfLevelS<<"|"<<TypeOfLevelS<<"|"<<NumberOfBandS<<"\n";
 	if(input.size()>25)
 	{
@@ -37,9 +49,18 @@ void LevelDeformation::GetFromString(string input)
 			if(b!=0)
 			Beta.push_back(b);
 		}
-		LOfBand=atoi(LOfBandS.c_str());
-		NumberOfPhonons=atoi(NumberOfPhononsS.c_str());
-		MagneticNumber=atoi(MagneticNumberS.c_str());
+		if(CheckFieldContent(LOfBandS))
+		{
+			LOfBand=atoi(LOfBandS.c_str());
+		}
+		if(CheckFieldContent(NumberOfPhononsS))
+		{
+			NumberOfPhonons=atoi(NumberOfPhononsS.c_str());
+		}
+		if(CheckFieldContent(MagneticNumberS))
+		{
+			MagneticNumber=atoi(MagneticNumberS.c_str());
+		}
 		//cout<<"NBand:"<<NumberOfBand<<" L:"<<LOfBand<<" NF:"<<NumberOfPhonons<<" Mag:"<<MagneticNumber<<" Type:"<<TypeOfLevel<<" ";
 		/*for(unsigned int i=0;i<Beta.size();i++)
 		{
@@ -48,7 +69,11 @@ void LevelDeformation::GetFromString(string input)
 	}
 	TypeOfLevel=TypeOfLevelS[0];
 	NumberOfLevel=atoi(NumOfLevelS.c_str());
-	NumberOfBand=atoi(NumberOfBandS.c_str());
+	if(CheckFieldContent(NumberOfBandS))
+	{
+		NumberOfBand=atoi(NumberOfBandS.c_str());
+	}
+	
 	//cout<<NumberOfLevel<<"|"<<TypeOfLevel<<"|"<<NumberOfBand<<"|"<<LOfBand<<"|"<<NumberOfPhonons<<"|"<<MagneticNumber<<"|\n";
 }
 void LevelDeformation::TurnToBeta(int A)
@@ -71,16 +96,16 @@ TString GenerateMainDefString(int Z, int A, int NLevels, char ColType, char DefU
 }
 TString Add4IValue(int value)//ну реально, их как-то дофига
 {
-	if(value>0)
+	if(value>=0)
 	{
 		return TString::Format("%4i",value);
 	}
 	return "    ";
 }
-TString GenerateLevelDefString(int LevN, char LevT, int BandN=-1, int BandL=-1, int NPhon=-1, int MagN=-1, vector<float> *Def=0)
+TString GenerateLevelDefString(int LevN, char LevT, int BandN=-1, int BandL=-1, int MagN=-1, int NPhon=-1, vector<float> *Def=0)
 {
 	TString result=TString::Format("%4i   %c",LevN,LevT);
-	result+=(Add4IValue(BandN)+Add4IValue(BandL)+Add4IValue(NPhon)+Add4IValue(MagN));
+	result+=(Add4IValue(BandN)+Add4IValue(BandL)+Add4IValue(MagN)+Add4IValue(NPhon));
 	if(Def)
 	{
 		for(unsigned int i=0;i<Def->size();i++)
@@ -97,7 +122,19 @@ TString LevelDeformation::GenerateStringForDefFile()
 {
 	return GenerateLevelDefString(NumberOfLevel,TypeOfLevel,NumberOfBand,LOfBand,NumberOfPhonons,MagneticNumber,&Beta);
 }
+LevelDeformationData LevelDeformation::ToLevelDeformationData()
+{
+	LevelDeformationData result = *((LevelDeformationData*)this);
+	result.Beta=Beta;
+	return result;
+}
 //Методы класса Deformation
+LevelDeformation::LevelDeformation(LevelDeformationData d)
+{
+	TypeOfLevel=d.TypeOfLevel; TypeOfDeformation=d.TypeOfDeformation;
+	NumberOfBand=d.NumberOfBand; NumberOfLevel=d.NumberOfLevel; LOfBand=d.LOfBand; NumberOfPhonons=d.NumberOfPhonons; MagneticNumber=d.MagneticNumber;
+	Beta=d.Beta;
+}
 void Deformation::SetZA(int _Z,int _A)
 {
 	Z=_Z; A=_A;
@@ -112,18 +149,21 @@ void Deformation::ReadDeformation()
 	ifstream ifs(Filename.c_str());
 	if(!ifs.good())
 	{
+		if(TalysLibManager::Instance().IsEnableWarning())
 		cout<<"Warning: deformation file for "<<GetNucleusName(Z)<<" does not exsists!\n";
 	}
 	string line;
 	while(getline(ifs,line))
 	{
-		int _Z, _A, Nlevels;
-		sscanf(line.c_str(),"%4d%4d%4d   %c   %c",&_Z,&_A,&Nlevels,&TypeOfCollectivity,&TypeOfDeformation);
+		int _Z=0, _A=0, Nlevels=0;
+		char _TypeOfCollectivity,_TypeOfDeformation;
+		sscanf(line.c_str(),"%4d%4d%4d   %c   %c",&_Z,&_A,&Nlevels,&_TypeOfCollectivity,&_TypeOfDeformation);
 		if(_Z==Z&&_A==A)
 		{
+			TypeOfCollectivity=_TypeOfCollectivity; TypeOfDeformation=_TypeOfDeformation;
 			PointToPastChangedDeformation=ContentOfFile.size();
 			NLevels=Nlevels;
-			for(unsigned int i=0;i<Nlevels;i++)
+			for(int i=0;i<Nlevels;i++)
 			{
 				LevelDeformation d(TypeOfDeformation);
 				getline(ifs,line);
@@ -141,7 +181,7 @@ void Deformation::ReadDeformation()
 void Deformation::WriteDeformation(string filename)
 {
 	ofstream ofs(filename.c_str());
-	bool IsDeformationWritten=false;
+	//IsDeformationWritten=false;
 	for(unsigned int i=0;i<PointToPastChangedDeformation;i++)
 	{
 		ofs<<ContentOfFile[i]<<"\n";
@@ -152,7 +192,7 @@ void Deformation::WriteDeformation(string filename)
 	{
 		ofs<<LevelDeformations[i].GenerateStringForDefFile()<<"\n";
 	}
-	IsDeformationWritten=true;
+	//IsDeformationWritten=true;
 	for(unsigned int i=PointToPastChangedDeformation;i<ContentOfFile.size();i++)
 	{
 		ofs<<ContentOfFile[i]<<"\n";
@@ -169,7 +209,7 @@ void Deformation::Sort()
 	}
 	for(unsigned int i=0;i<LevelDeformations.size()-1;i++)
 	{
-		for (int j = 0; j <LevelDeformations.size()-i-1; j++)
+		for (unsigned int j = 0; j <LevelDeformations.size()-i-1; j++)
 		{
 			//cout<<Levels.size()<<" "<<i<<" "<<j<<"\n";
 			if(LevelDeformations[j].NumberOfLevel>LevelDeformations[j+1].NumberOfLevel)
@@ -187,7 +227,7 @@ void Deformation::Sort()
 		}
 	}
 }
-void Deformation::SetDeformation(Level *l,char LevT, int BandN, int BandL, int NPhon, int MagN, vector<float> *Def)//для совместимости с root6.14
+void Deformation::SetDeformation(Level *l,char LevT, int BandN, int BandL, int MagN, int NPhon, vector<float> *Def)//для совместимости с root6.14
 {
 	LevelDeformation *ld=0;
 	if(l==0)
@@ -196,6 +236,10 @@ void Deformation::SetDeformation(Level *l,char LevT, int BandN, int BandL, int N
 		return;
 	}
 	int LevN=l->Number;
+	if(kUseLevelJP==BandL)
+	{
+		BandL=l->TalysJP.J;
+	}
 	for(unsigned int i=0;i<LevelDeformations.size();i++)
 	{
 		if(LevelDeformations[i].NumberOfLevel==LevN)
@@ -233,5 +277,32 @@ void Deformation::AssignPointers()
 	for(unsigned int i=0;i<LevelDeformations.size();i++)
 	{
 		LevelDeformations[i].fDeformation=this;
+	}
+}
+DeformationData Deformation::ToDeformationData()
+{
+	DeformationData result=*((DeformationData*)this);
+	for(unsigned int i=0;i<LevelDeformations.size();i++)
+	{
+		result.LevelDeformationsData.push_back(LevelDeformations[i].ToLevelDeformationData());
+	}
+	return result;
+}
+Deformation::Deformation(DeformationData d)
+{
+	A=d.A; Z=d.Z; NLevels=d.NLevels;
+	TypeOfCollectivity=d.TypeOfCollectivity; TypeOfDeformation=d.TypeOfDeformation;
+	ContentOfFile=d.ContentOfFile;
+	for(unsigned int i=0;i<d.LevelDeformationsData.size();i++)
+	{
+		LevelDeformations.emplace_back(d.LevelDeformationsData[i]);
+	}
+	AssignPointers();
+}
+void Deformation::SetDefaultDeformationType(char _Type)
+{
+	for(unsigned int i=0;i<LevelDeformations.size();i++)
+	{
+		LevelDeformations[i].TypeOfLevel=_Type;
 	}
 }

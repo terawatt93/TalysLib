@@ -5,8 +5,8 @@
 //вектор этих значений можно задать через TalysCalculation::SetVarValues(min,max,step);
 void ChangeOMP(Nucleus *Nuclide,double value)
 {
-	Nuclide->OMPN.Potential.v1=value;//изменить значение величины v1 в опт. потенциале для нейтронов
-	Nuclide->WriteOMPOrUseKoningN=0;//установить флаг ОМ для нейтронов (Для n и p используются разные параметры и, соответственно, разные флаги)
+	Nuclide->OMPN.PotentialKoning.v1=value;//изменить значение величины v1 в опт. потенциале для нейтронов
+	Nuclide->WriteOMPOrUseKoningN=2;//установить флаг ОМ для нейтронов (Для n и p используются разные параметры и, соответственно, разные флаги)
 	//WriteOMPOrUseKoningN=-1: не менять оптический пот-л для нейтронов
 	//WriteOMPOrUseKoningN=0: взять потенциал из базы Talys, потом записать его. Если в базе нет потенциала, ничего не делать
 	//WriteOMPOrUseKoningN=1: взять потенциал из базы Talys, если его нет, использовать Кенинга, потом записать его.
@@ -16,21 +16,56 @@ void ChangeOMP(Nucleus *Nuclide,double value)
 void VariateOMP()
 {
 	TalysCalculation Calculation;
+	Calculation.EnableMultiThreading=true;
 	Calculation.Variable="v1";//имя переменной, оно будет на оси х графиков и в легенде
-	Calculation.Target="56Fe";//мишень
+	Calculation.Target="12C";//мишень
 	Calculation.Proj="n";//начальная частица
 	Calculation.ProjectileEnergy=14.1;//энергия частицы
-	Calculation.SetVarValues(30,60,2);//задать значения переменной
+	Calculation.SetVarValues(10,60,1);//задать значения переменной
 	Calculation.ExecuteCalculation(ChangeOMP);//выполнить вычисления
 	Calculation.GenerateGraphs();//создать графики и поместить их в Nucleus *FinalResult
 	TCanvas cc1;
-	//TGraph CS=Calculation.FinalResult->TotTalysV; //построить полное сечение от Variable
+	cc1.Print("VarV1.pdf[","pdf");
+	TGraph CS=Calculation.FinalResult->TotTalysV; //построить полное сечение от Variable
+	CS.Draw("alp");
+	cc1.Print("VarV1.pdf","pdf");
 	TLegend l(0.7,0.7,0.9,0.9);
-	//TMultiGraph* mgr=Calculation.GetAngularDistributionsForLevel(846.8,"56Fe","Direct","",&l);//построить MultiGraph с сечениями неупругого рассеяния на уровне 846кэВ 
-	//56Fe
-	TMultiGraph* mgr=Calculation.GetElasticAngularDistributions("Compound","",&l);//построить MultiGraph с сечениями упругого рассеяния на уровне 846кэВ 
-	//56Fe
+	gPad->SetLogy(1);
+	TMultiGraph* mgr=Calculation.GetElasticAngularDistributions("Total","",&l);
 	mgr->Draw("alp");
 	l.Draw();
-	cc1.Print("test.pdf","pdf");
+	cc1.Print("VarV1.pdf","pdf");
+	cc1.Clear();
+	l.Clear();
+	mgr=Calculation.GetElasticAngularDistributions("Compound","",&l);
+	mgr->Draw("alp");
+	l.Draw();
+	cc1.Print("VarV1.pdf","pdf");
+	cc1.Clear();
+	l.Clear();
+	mgr=Calculation.GetElasticAngularDistributions("Direct","",&l);
+	mgr->Draw("alp");
+	l.Draw();
+	cc1.Print("VarV1.pdf","pdf");
+	cc1.Clear();
+	l.Clear();
+	mgr=Calculation.GetAngularDistributionsForLevel(4439.82 ,"12C","Total","",&l);//построить MultiGraph с сечениями неупругого рассеяния на уровне 846кэВ 
+	mgr->Draw("alp");
+	l.Draw();
+	cc1.Print("VarV1.pdf","pdf");
+	cc1.Clear();
+	l.Clear();
+	mgr=Calculation.GetAngularDistributionsForLevel(4439.82 ,"12C","Compound","",&l);//построить MultiGraph с сечениями неупругого рассеяния на уровне 846кэВ 
+	mgr->Draw("alp");
+	l.Draw();
+	cc1.Print("VarV1.pdf","pdf");
+	cc1.Clear();
+	l.Clear();
+	mgr=Calculation.GetAngularDistributionsForLevel(4439.82 ,"12C","Direct","",&l);//построить MultiGraph с сечениями неупругого рассеяния на уровне 846кэВ 
+	mgr->Draw("alp");
+	l.Draw();
+	cc1.Print("VarV1.pdf","pdf");
+	cc1.Clear();
+	l.Clear();
+	cc1.Print("VarV1.pdf]","pdf");
 }

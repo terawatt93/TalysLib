@@ -1,6 +1,6 @@
 #include "../TalysLib.hh"
 #include <sys/stat.h>
-
+#include "TalysLibManager.cc"
 #include <bits/stdc++.h>
 #include <cstring>
 #include <algorithm>
@@ -15,6 +15,10 @@
 #pragma once
 
 //Методы класса GammaTransition
+double& GammaTransitionData::AdditionalInformation(string Key)
+{
+	return AI(Key);
+}
 GammaTransition::GammaTransition(GammaTransitionData d)
 {
 	Energy=d.Energy; EnergyErr=d.EnergyErr; Intensity=d.Intensity; CrossSection=d.CrossSection; E_in=d.E_in; Tolerancy=d.Tolerancy;
@@ -22,6 +26,9 @@ GammaTransition::GammaTransition(GammaTransitionData d)
 	TalysJP_i=d.TalysJP_i; TalysJP_f=d.TalysJP_f;
 	TalysMultipolarity=d.TalysMultipolarity;
 	Multipolarity=d.Multipolarity; nuclide=d.nuclide; reaction=d.reaction;
+	AI=d.AI;
+	TalysCrossSections=d.TalysCrossSections;
+	X_Values=d.X_Values;
 }
 bool GammaTransition::ReadTransition(string line,string ReadNuclName, float E_in)
 {
@@ -92,10 +99,30 @@ void GammaTransition::SetInformationExtractedFromTalys(float TalysE_f, float Tal
 	this->TalysE_i=TalysE_i;
 	this->TalysJP_f=JP_f;
 	this->TalysJP_i=JP_i;
+	EvalMultipolarity();
 }
 double GammaTransition::GetEnergy()
 {
 	return Energy;
+}
+double GammaTransition::GetIntensity()
+{
+	return Intensity;
+}
+double GammaTransition::GetRelativeIntensity()
+{
+	Radionuclide *Nucl=(Radionuclide*)fLevel->fNucleus;
+	double BranchRatio=1;
+	if(Nucl)
+	{
+		while((((Radionuclide*)Nucl->fMotherNucleus)->BranchRatio)>0)
+		{			
+		//	cout<<"GetRelativeIntensity():"<<Nucl->fMotherNucleus->Name<<" "<<Energy<<" "<<BranchRatio<<" "<<((Radionuclide*)Nucl->fMotherNucleus)->BranchRatio<<"\n";
+			Nucl=Nucl->fMotherNucleus;
+			BranchRatio=BranchRatio*Nucl->BranchRatio;
+		}
+	}
+	return Intensity*BranchRatio;
 }
 void GammaTransition::FindFinalLevel(double Tolerancy)
 {
@@ -188,7 +215,11 @@ void GammaTransition::FindFinalLevel(double Tolerancy)
 		}
 	}*/
 }
-
+void GammaTransition::EvalMultipolarity()
+{
+	SpinParity GammaMP(1,-1);
+	TalysMultipolarity=SpinParity::QSum(TalysJP_i,TalysJP_f,GammaMP);
+}
 void GammaTransition::ErasePointers()
 {
 	fLevel=0;
@@ -209,8 +240,11 @@ void GammaTransition::SetTGraphNameAndTitle(string ValName)
 }
 void GammaTransition::AddPoint(double x_value, double y_value)
 {
-	int N=CSGraph.GetN();
-	CSGraph.SetPoint(N,x_value,y_value);
+	//int N=CSGraph.GetN();
+	//CSGraph.SetPoint(N,x_value,y_value);
+	TalysCrossSections.push_back(y_value);
+	X_Values.push_back(x_value);
+	IsCSGraphGenerated=false;
 }
 void GammaTransition::AddPoint(double x_value, GammaTransition *g)
 {
@@ -219,9 +253,79 @@ void GammaTransition::AddPoint(double x_value, GammaTransition *g)
 	if((g->InitLevelNumber==InitLevelNumber)&&(g->FinalLevelNumber==FinalLevelNumber))
 	{
 		AddPoint(x_value,g->TalysCrossSection);
+		IsCSGraphGenerated=false;
+	}
+}
+void GammaTransition::AddPoint(GammaTransition *g)
+{
+	if((g->InitLevelNumber==InitLevelNumber)&&(g->FinalLevelNumber==FinalLevelNumber))
+	{
+		TalysCrossSections.push_back(g->TalysCrossSection);
+		IsCSGraphGenerated=false;
+	}
+}
+SpinParity GammaTransition::GetMostProbableMultipolarity()
+{
+	if(TalysMultipolarity.size()>0)
+	{
+		if(pow(-1,TalysMultipolarity[0].J)==TalysMultipolarity[0].Parity)//EJ
+		{
+			return TalysMultipolarity[0];
+		}
+		else//MJ
+		{
+			if(TalysMultipolarity.size()>1)
+			{
+				return TalysMultipolarity[1];
+			}
+			else
+			{
+				return TalysMultipolarity[0];
+			}
+		}
+	}
+	return 0;
+}
+void GammaTransition::GenerateGraphs()
+{
+	if(X_Values.size()!=TalysCrossSections.size())
+	{
+		if(!fLevel)
+		{
+			cout<<"This is GammaTransition::GenerateGraphs(): Graph generation error. Cannot access fLevel because pointer is invalid\n";
+			return;
+		}
+		if(!fLevel->fNucleus)
+		{
+			cout<<"This is GammaTransition::GenerateGraphs(): Graph generation error. Cannot access fLevel->fNucleus because pointer fNucleus is invalid\n";
+			return;
+		}
+		if(!fLevel->fNucleus->fMotherNucleus)
+		{
+			cout<<"This is GammaTransition::GenerateGraphs(): Graph generation error. Cannot access fLevel->fNucleus->fMotherNucleus because pointer fMotherNucleus is invalid\n";
+			return;
+		}
+		if(!IsCSGraphGenerated)
+		{
+			for(unsigned int i=0;i<TalysCrossSections.size();i++)
+			{
+				CSGraph.SetPoint(i,fLevel->fNucleus->fMotherNucleus->EnergyGrid[i],TalysCrossSections[i]);
+			}
+		}
+	}
+	else
+	{
+		for(unsigned int i=0;i<TalysCrossSections.size();i++)
+		{
+			CSGraph.SetPoint(i,X_Values[i],TalysCrossSections[i]);
+		}
 	}
 }
 TGraph* GammaTransition::GetCSGraph()
 {
+	if(CSGraph.GetN()==0)
+	{
+		GenerateGraphs();
+	}
 	return &CSGraph;
 }

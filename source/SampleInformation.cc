@@ -1,6 +1,6 @@
 #include "../TalysLib.hh"
 #include <sys/stat.h>
-
+#include "TalysLibManager.cc"
 #include <bits/stdc++.h>
 #include <cstring>
 #include <algorithm>

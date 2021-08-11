@@ -9,6 +9,7 @@
 #include <TText.h>
 #include <TList.h>
 #include <TKey.h>
+#include "TalysLibManager.cc"
 #pragma once
 //Методы класса SpinParity
 
@@ -42,6 +43,32 @@ string SpinParity::GetLine()
 	ss>>s;
 	return s;
 }
+TString SpinParity::GetTLatex()
+{
+	if(J==(int)J)
+	{
+		if(Parity>0)
+		{
+			return TString::Format("%d^{+}",(int)J);
+		}
+		else
+		{
+			return TString::Format("%d^{-}",(int)J);
+		}
+	}
+	else
+	{
+		if(Parity>0)
+		{
+			return TString::Format("%d/2^{+}",(int)(J*2));
+		}
+		else
+		{
+			return TString::Format("%d/2^{-}",(int)(J*2));
+		}
+	}
+	return "";
+}
 /*SpinParity::SpinParity()
 {
 	J=0;
@@ -50,7 +77,6 @@ string SpinParity::GetLine()
 
 std::istream& operator >> (std::istream &istr,SpinParity &JP)
 {
-	int Parity=0;
 	string str;
 	istr>>str;
 	JP=SpinParity(str);
@@ -165,13 +191,56 @@ vector<SpinParity> ENSDFJPToNormalJP(string JP, int &Mark)
 	return result;
 }
 
-vector<SpinParity> GenerateGammaMultipolarity(SpinParity &JPi,SpinParity &JPf)
+string SpinParity::GetStringAsGammaMultipolarity()
+{
+	if(J==int(J))
+	{
+		if(Parity==pow(-1,J))
+		{
+			return string(TString::Format("E%d",int(J)).Data());
+		}
+		else if(Parity!=0)
+		{
+			return string(TString::Format("M%d",int(J)).Data());
+		}
+	
+	}
+	return "InvalidJP";
+	
+}
+
+vector<SpinParity> SpinParity::QSum(SpinParity &JPi,SpinParity &JPf)
 {
 	vector<double> J=QuantumSum(JPi.J,JPf.J);
 	vector<SpinParity> result;
 	for(unsigned int i=0;i<J.size();i++)
 	{
 		result.emplace_back(J[i],JPi.Parity*JPf.Parity);
+	}
+	return result;
+}
+vector<SpinParity> SpinParity::QSum(SpinParity &JPi,SpinParity &JPf,SpinParity &RadJP)
+{
+	double Ji=JPi.J, Jf=JPf.J;
+	/*if(Ji<Jf)
+	{
+		Ji=abs(Ji-RadJP.J);
+		Jf=abs(Jf+RadJP.J);
+	}
+	else
+	{
+		Ji=abs(Ji+RadJP.J);
+		Jf=abs(Jf-RadJP.J);
+	}*/
+	vector<double> J=QuantumSum(Ji,Jf);
+	vector<SpinParity> result;
+	for(unsigned int i=0;i<J.size();i++)
+	{
+		if(J[i]>=RadJP.J)
+		{
+			result.emplace_back(J[i],JPi.Parity*JPf.Parity);
+		}
+		
 	}
 	return result;
 }
