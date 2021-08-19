@@ -19,6 +19,6 @@ $(PROGRAM): $(SRCS)
 	@rm -f $(PROGRAM)
 	@$(CXX) $(CXXFLAGS) $(SHARED) -o $@ $^ $(ROOTLIBS)
 	@echo "done"
-
+#options:
 clean:; @rm -rf core *.so *.rootmap *.cxx *.pcm
 install:; @echo 'export LD_LIBRARY_PATH=$$LD_LIBRARY_PATH:'`pwd`>>~/.bashrc; echo 'export CPATH=$$CPATH:'`pwd`>>~/.bashrc; echo 'export TALYSLIBDIR='`pwd` >> ~/.bashrc
