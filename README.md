@@ -1,18 +1,27 @@
 # TalysLib
 This library requires ROOT6 (https://root.cern/) and TALYS 1.8 or 1.9 (https://tendl.web.psi.ch/tendl_2019/talys.html)
 Compilation: make
-Variable TALYSDIR=PATH_TO_TALYS_DIRECTORY should be defined in .bashrc; Path to Talys executable file should be written in PATH variable.
-A modified talys.setup macro could be used for Talys installation to assign these variables automatically.
+Variable TALYSDIR=PATH_TO_TALYS_DIRECTORY should be defined in .bashrc; 
+Path to Talys executable file should be written in PATH variable.
+A modified talys.setup macro can be used for TALYS installation to assign these variables automatically.
 
 Installation instruction:
-1) Copy the talys.setup and LoadAndInstallTalys.sh to folder where TALYS will be installed
-2) Launch LoadAndInstallTalys.sh
-3) Execute MakeLibraries.sh
-4) Execute "make install"
 
-Make install is needed only one time!
+    A. In case of TALYS installation:
+    1) Copy the talys.setup and LoadAndInstallTalys.sh files to directory where TALYS will be installed
+    2) Launch LoadAndInstallTalys.sh script in the directory
+    3) Go to TalysLib directory
+    4) Launch MakeLibraries.sh script in the directory
+    5) Execute "make install"
 
-Example of changes in .bashrc
+    B. In case TALYS is already installed:
+    1) Go to TalysLib directory
+    2) Launch MakeLibraries.sh script in the directory
+    3) Execute "make install"
+
+Command "make install" to be executed in terminal only once!
+
+Example of changes in .bashrc:
 export TALYSDIR=/path/to/talys
 export TALYSLIBDIR=/path/to/TalysLib
 export PATH=$PATH:/path/to/talys
