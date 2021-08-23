@@ -1,6 +1,10 @@
 # TalysLib
 This library requires ROOT6 (https://root.cern/) and TALYS 1.8 or 1.9 (https://tendl.web.psi.ch/tendl_2019/talys.html)
+
 Compilation: make
+
+Before installation make sure there are needed variables in the .bashrc file: 
+
 Variable TALYSDIR=PATH_TO_TALYS_DIRECTORY should be defined in .bashrc; 
 Path to Talys executable file should be written in PATH variable.
 A modified talys.setup macro can be used for TALYS installation to assign these variables automatically.
