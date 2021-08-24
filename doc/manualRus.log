@@ -1,1092 +1,741 @@
-This is XeTeX, Version 3.14159265-2.6-0.99998 (TeX Live 2017/Debian) (preloaded format=xelatex 2020.5.16)  9 DEC 2020 19:16
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.5.29)  24 AUG 2021 22:54
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
 **manualRus.tex
 (./manualRus.tex
-LaTeX2e <2017-04-15>
-Babel <3.18> and hyphenation patterns for 84 language(s) loaded.
-(/usr/share/texlive/texmf-dist/tex/latex/extsizes/extarticle.cls
+LaTeX2e <2020-10-01> patch level 4
+L3 programming layer <2021-02-18>
+(/usr/local/texlive/2021/texmf-dist/tex/latex/extsizes/extarticle.cls
 Document Class: extarticle 1996/10/08 v1.0 Non Standard LaTeX document class
-(/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo
-File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/base/exscale.sty
-Package: exscale 2014/09/29 v2.1h Standard LaTeX package exscale
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/exscale.sty
+Package: exscale 2018/09/24 v2.1i Standard LaTeX package exscale
 LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 57.
 LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
 (Font)                  OMX/cmex/m/n --> OMX/cmex/m/n on input line 57.
 LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
 (Font)                  OMX/cmex/m/n --> OMX/cmex/m/n on input line 57.
-\big@size=\dimen102
+\big@size=\dimen138
 )
-\c@part=\count79
-\c@section=\count80
-\c@subsection=\count81
-\c@subsubsection=\count82
-\c@paragraph=\count83
-\c@subparagraph=\count84
-\c@figure=\count85
-\c@table=\count86
-\abovecaptionskip=\skip41
-\belowcaptionskip=\skip42
-\bibindent=\dimen103
+\c@part=\count175
+\c@section=\count176
+\c@subsection=\count177
+\c@subsubsection=\count178
+\c@paragraph=\count179
+\c@subparagraph=\count180
+\c@figure=\count181
+\c@table=\count182
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen139
 )
-(/usr/share/texlive/texmf-dist/tex/latex/extsizes/extsizes.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/extsizes/extsizes.sty
 Package: extsizes 1996/10/08 v1.0 Non Standard LaTeX Package
 
 
 Package ExtSizes Warning: It is better to use one of the extsizes classes,
  if you can.
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/size12.clo
-File: size12.clo 2014/09/29 v1.4h Standard LaTeX file (size option)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
+LaTeX Info: The control sequence `\normalsize' is already robust on input line 
+56.
+LaTeX Info: Redefining \small on input line 58.
+LaTeX Info: Redefining \footnotesize on input line 69.
+LaTeX Info: Redefining \scriptsize on input line 80.
+LaTeX Info: Redefining \tiny on input line 81.
+LaTeX Info: Redefining \large on input line 82.
+LaTeX Info: Redefining \Large on input line 83.
+LaTeX Info: Redefining \LARGE on input line 84.
+LaTeX Info: Redefining \huge on input line 85.
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsmath.sty
-Package: amsmath 2017/09/02 v2.17a AMS math features
-\@mathmargin=\skip43
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2020/09/23 v2.17i AMS math features
+\@mathmargin=\skip49
 
 For additional information on amsmath, use the `?' option.
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amstext.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amstext.sty
 Package: amstext 2000/06/29 v2.01 AMS text
 
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsgen.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsgen.sty
 File: amsgen.sty 1999/11/30 v2.0 generic functions
-\@emptytoks=\toks14
-\ex@=\dimen104
+\@emptytoks=\toks15
+\ex@=\dimen140
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsbsy.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsbsy.sty
 Package: amsbsy 1999/11/29 v1.2d Bold Symbols
-\pmbraise@=\dimen105
+\pmbraise@=\dimen141
 )
-(/usr/share/texlive/texmf-dist/tex/latex/amsmath/amsopn.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsopn.sty
 Package: amsopn 2016/03/08 v2.02 operator names
 )
-\inf@bad=\count87
-LaTeX Info: Redefining \frac on input line 213.
-\uproot@=\count88
-\leftroot@=\count89
-LaTeX Info: Redefining \overline on input line 375.
-\classnum@=\count90
-\DOTSCASE@=\count91
-LaTeX Info: Redefining \ldots on input line 472.
-LaTeX Info: Redefining \dots on input line 475.
-LaTeX Info: Redefining \cdots on input line 596.
-\Mathstrutbox@=\box26
-\strutbox@=\box27
-\big@size=\dimen106
-LaTeX Font Info:    Redeclaring font encoding OML on input line 712.
-LaTeX Font Info:    Redeclaring font encoding OMS on input line 713.
-\macc@depth=\count92
-\c@MaxMatrixCols=\count93
-\dotsspace@=\muskip10
-\c@parentequation=\count94
-\dspbrk@lvl=\count95
-\tag@help=\toks15
-\row@=\count96
-\column@=\count97
-\maxfields@=\count98
-\andhelp@=\toks16
-\eqnshift@=\dimen107
-\alignsep@=\dimen108
-\tagshift@=\dimen109
-\tagwidth@=\dimen110
-\totwidth@=\dimen111
-\lineht@=\dimen112
-\@envbody=\toks17
-\multlinegap=\skip44
-\multlinetaggap=\skip45
-\mathdisplay@stack=\toks18
-LaTeX Info: Redefining \[ on input line 2817.
-LaTeX Info: Redefining \] on input line 2818.
+\inf@bad=\count183
+LaTeX Info: Redefining \frac on input line 234.
+\uproot@=\count184
+\leftroot@=\count185
+LaTeX Info: Redefining \overline on input line 399.
+\classnum@=\count186
+\DOTSCASE@=\count187
+LaTeX Info: Redefining \ldots on input line 496.
+LaTeX Info: Redefining \dots on input line 499.
+LaTeX Info: Redefining \cdots on input line 620.
+\Mathstrutbox@=\box47
+\strutbox@=\box48
+\big@size=\dimen142
+LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
+\macc@depth=\count188
+\c@MaxMatrixCols=\count189
+\dotsspace@=\muskip16
+\c@parentequation=\count190
+\dspbrk@lvl=\count191
+\tag@help=\toks16
+\row@=\count192
+\column@=\count193
+\maxfields@=\count194
+\andhelp@=\toks17
+\eqnshift@=\dimen143
+\alignsep@=\dimen144
+\tagshift@=\dimen145
+\tagwidth@=\dimen146
+\totwidth@=\dimen147
+\lineht@=\dimen148
+\@envbody=\toks18
+\multlinegap=\skip50
+\multlinetaggap=\skip51
+\mathdisplay@stack=\toks19
+LaTeX Info: Redefining \[ on input line 2923.
+LaTeX Info: Redefining \] on input line 2924.
 )
-(/usr/share/texlive/texmf-dist/tex/latex/tools/indentfirst.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/tools/indentfirst.sty
 Package: indentfirst 1995/11/23 v1.03 Indent first paragraph (DPC)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
-Package: fontenc 2017/04/05 v2.0i Standard LaTeX package
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2020/08/10 v2.0s Standard LaTeX package
 
-(/usr/share/texlive/texmf-dist/tex/latex/cyrillic/t2aenc.def
+(/usr/local/texlive/2021/texmf-dist/tex/latex/cyrillic/t2aenc.def
 File: t2aenc.def 2005/09/27 v1.0i Cyrillic encoding definition file
 )
-LaTeX Font Info:    Try loading font information for T2A+lmr on input line 105.
+LaTeX Font Info:    Trying to load font information for T2A+lmr on input line 1
+12.
+LaTeX Font Info:    No file T2Almr.fd. on input line 112.
+LaTeX Font Info:    Trying to load font information for T2A+cmr on input line 1
+12.
 
-LaTeX Font Info:    No file T2Almr.fd. on input line 105.
-LaTeX Font Info:    Try loading font information for T2A+cmr on input line 105.
-
-
-(/usr/share/texlive/texmf-dist/tex/latex/cyrillic/t2acmr.fd
+(/usr/local/texlive/2021/texmf-dist/tex/latex/cyrillic/t2acmr.fd
 File: t2acmr.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
 )
 
 LaTeX Font Warning: Font shape `T2A/lmr/m/n' undefined
-(Font)              using `T2A/cmr/m/n' instead on input line 105.
+(Font)              using `T2A/cmr/m/n' instead on input line 112.
 
-) (/usr/share/texlive/texmf-dist/tex/latex/setspace/setspace.sty
+! Font T2A/cmr/m/n/12=larm1200 at 12.0pt not loadable: Metric (TFM) file or ins
+talled font not found.
+<to be read again> 
+                   relax 
+l.112 ...\familydefault\seriesdefault\shapedefault
+                                                  
+? 
+) (/usr/local/texlive/2021/texmf-dist/tex/latex/setspace/setspace.sty
 Package: setspace 2011/12/19 v6.7a set line spacing
 )
-(/usr/share/texlive/texmf-dist/tex/latex/caption/caption.sty
-Package: caption 2016/02/21 v3.3-144 Customizing captions (AR)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/caption/caption3.sty
-Package: caption3 2016/05/22 v1.7-166 caption3 kernel (AR)
-Package caption3 Info: TeX engine: e-TeX on input line 67.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/keyval.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/keyval.sty
 Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
-\KV@toks@=\toks19
+\KV@toks@=\toks20
 )
-\captionmargin=\dimen113
-\captionmargin@=\dimen114
-\captionwidth=\dimen115
-\caption@tempdima=\dimen116
-\caption@indent=\dimen117
-\caption@parindent=\dimen118
-\caption@hangindent=\dimen119
+\captionmargin=\dimen149
+\captionmargin@=\dimen150
+\captionwidth=\dimen151
+\caption@tempdima=\dimen152
+\caption@indent=\dimen153
+\caption@parindent=\dimen154
+\caption@hangindent=\dimen155
+Package caption Info: Standard document class detected.
 )
-\c@ContinuedFloat=\count99
+\c@caption@flags=\count195
+\c@continuedfloat=\count196
 )
-(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.sty
-Package: babel 2018/02/14 3.18 The Babel package
+(/usr/local/texlive/2021/texmf-dist/tex/generic/babel/babel.sty
+Package: babel 2021/03/24 3.56 The Babel package
 
-(/usr/share/texlive/texmf-dist/tex/generic/babel/switch.def
-File: switch.def 2018/02/14 3.18 Babel switching mechanism
-)
-(/usr/share/texlive/texmf-dist/tex/generic/babel-russian/russianb.ldf
-Language: russian 2017/08/12 1.3j Russian support for the Babel system
+(/usr/local/texlive/2021/texmf-dist/tex/generic/babel/babel.def
+File: babel.def 2021/03/24 3.56 Babel common definitions
+\babel@savecnt=\count197
+\U@D=\dimen156
+\l@babelnohyphens=\language42
 
-(/usr/share/texlive/texmf-dist/tex/generic/babel/babel.def
-File: babel.def 2018/02/14 3.18 Babel common definitions
-\babel@savecnt=\count100
-\U@D=\dimen120
-
-(/usr/share/texlive/texmf-dist/tex/generic/babel/xebabel.def
-(/usr/share/texlive/texmf-dist/tex/generic/babel/txtbabel.def))
-\bbl@dirlevel=\count101
+(/usr/local/texlive/2021/texmf-dist/tex/generic/babel/xebabel.def
+(/usr/local/texlive/2021/texmf-dist/tex/generic/babel/txtbabel.def))
+\bbl@readstream=\read2
 )
-Package babel Info: Making " an active character on input line 120.
-Package babel Info: Default for \cyrdash is provided on input line 157.
+\bbl@dirlevel=\count198
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/babel-russian/russianb.ldf
+File: russianb.ldf 2021/01/10 1.3m Russian support for the Babel system
+Language: russian 2020/09/09 1.3k Russian support for the Babel system
+Package babel Info: Making " an active character on input line 124.
+Package babel Info: Default for \cyrdash is provided on input line 163.
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/base/inputenc.sty
-Package: inputenc 2015/03/17 v1.2c Input encoding file
-\inpenc@prehook=\toks20
-\inpenc@posthook=\toks21
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2020/08/01 v1.3d Input encoding file
+\inpenc@prehook=\toks21
+\inpenc@posthook=\toks22
 
 
 Package inputenc Warning: inputenc package ignored with utf8 based engines.
 
-) (/usr/share/texlive/texmf-dist/tex/latex/cmap/cmap.sty
-Package: cmap 2008/03/06 v1.0h CMap support: searchable PDF
+) (/usr/local/texlive/2021/texmf-dist/tex/latex/cmap/cmap.sty
+Package: cmap 2021/02/06 v1.0j CMap support: searchable PDF
 
 
 Package cmap Warning: pdftex not detected - exiting.
 
-) (/usr/share/texlive/texmf-dist/tex/latex/graphics/graphicx.sty
-Package: graphicx 2017/06/01 v1.1a Enhanced LaTeX Graphics (DPC,SPQR)
+) (/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2020/09/09 v1.2b Enhanced LaTeX Graphics (DPC,SPQR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/graphics.sty
-Package: graphics 2017/06/25 v1.2c Standard LaTeX Graphics (DPC,SPQR)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2020/08/30 v1.4c Standard LaTeX Graphics (DPC,SPQR)
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/trig.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/trig.sty
 Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
 File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
 )
-Package graphics Info: Driver file: xetex.def on input line 99.
+Package graphics Info: Driver file: xetex.def on input line 105.
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics-def/xetex.def
-File: xetex.def 2017/06/24 v5.0h Graphics/color driver for xetex
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics-def/xetex.def
+File: xetex.def 2021/03/18 v5.0k Graphics/color driver for xetex
 ))
-\Gin@req@height=\dimen121
-\Gin@req@width=\dimen122
+\Gin@req@height=\dimen157
+\Gin@req@width=\dimen158
 )
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/lscape.sty
-Package: lscape 2000/10/22 v3.01 Landscape Pages (DPC)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/tools/longtable.sty
-Package: longtable 2014/10/28 v4.11 Multi-page Table package (DPC)
-\LTleft=\skip46
-\LTright=\skip47
-\LTpre=\skip48
-\LTpost=\skip49
-\LTchunksize=\count102
-\LTcapwidth=\dimen123
-\LT@head=\box28
-\LT@firsthead=\box29
-\LT@foot=\box30
-\LT@lastfoot=\box31
-\LT@cols=\count103
-\LT@rows=\count104
-\c@LT@tables=\count105
-\c@LT@chunks=\count106
-\LT@p@ftn=\toks22
+(/usr/local/texlive/2021/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2020/01/07 v4.13 Multi-page Table package (DPC)
+\LTleft=\skip52
+\LTright=\skip53
+\LTpre=\skip54
+\LTpost=\skip55
+\LTchunksize=\count199
+\LTcapwidth=\dimen159
+\LT@head=\box49
+\LT@firsthead=\box50
+\LT@foot=\box51
+\LT@lastfoot=\box52
+\LT@cols=\count266
+\LT@rows=\count267
+\c@LT@tables=\count268
+\c@LT@chunks=\count269
+\LT@p@ftn=\toks23
 )
-(/usr/share/texlive/texmf-dist/tex/latex/geometry/geometry.sty
-Package: geometry 2010/09/12 v5.6 Page Geometry
+(/usr/local/texlive/2021/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifpdf.sty
-Package: ifpdf 2017/03/15 v3.2 Provides the ifpdf switch
-)
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/ifvtex.sty
-Package: ifvtex 2016/05/16 v1.6 Detect VTeX and its facilities (HO)
-Package ifvtex Info: VTeX not detected.
-)
-(/usr/share/texlive/texmf-dist/tex/generic/ifxetex/ifxetex.sty
-Package: ifxetex 2010/09/12 v0.6 Provides ifxetex conditional
-)
-\Gm@cnth=\count107
-\Gm@cntv=\count108
-\c@Gm@tempcnt=\count109
-\Gm@bindingoffset=\dimen124
-\Gm@wd@mp=\dimen125
-\Gm@odd@mp=\dimen126
-\Gm@even@mp=\dimen127
-\Gm@layoutwidth=\dimen128
-\Gm@layoutheight=\dimen129
-\Gm@layouthoffset=\dimen130
-\Gm@layoutvoffset=\dimen131
-\Gm@dimlist=\toks23
-)
-(/usr/share/texlive/texmf-dist/tex/latex/breqn/breqn.sty
-(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3.sty
-Package: expl3 2018/02/21 L3 programming layer (loader) 
+(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
 
-(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/expl3-code.tex
-Package: expl3 2018/02/21 L3 programming layer (code)
-\c_max_int=\count110
-\l_tmpa_int=\count111
-\l_tmpb_int=\count112
-\g_tmpa_int=\count113
-\g_tmpb_int=\count114
-\g__intarray_font_int=\count115
-\g__prg_map_int=\count116
-\c_log_iow=\count117
-\l_iow_line_count_int=\count118
-\l__iow_line_target_int=\count119
-\l__iow_one_indent_int=\count120
-\l__iow_indent_int=\count121
-\c_zero_dim=\dimen132
-\c_max_dim=\dimen133
-\l_tmpa_dim=\dimen134
-\l_tmpb_dim=\dimen135
-\g_tmpa_dim=\dimen136
-\g_tmpb_dim=\dimen137
-\c_zero_skip=\skip50
-\c_max_skip=\skip51
-\l_tmpa_skip=\skip52
-\l_tmpb_skip=\skip53
-\g_tmpa_skip=\skip54
-\g_tmpb_skip=\skip55
-\c_zero_muskip=\muskip11
-\c_max_muskip=\muskip12
-\l_tmpa_muskip=\muskip13
-\l_tmpb_muskip=\muskip14
-\g_tmpa_muskip=\muskip15
-\g_tmpb_muskip=\muskip16
-\l_keys_choice_int=\count122
-\c__fp_leading_shift_int=\count123
-\c__fp_middle_shift_int=\count124
-\c__fp_trailing_shift_int=\count125
-\c__fp_big_leading_shift_int=\count126
-\c__fp_big_middle_shift_int=\count127
-\c__fp_big_trailing_shift_int=\count128
-\c__fp_Bigg_leading_shift_int=\count129
-\c__fp_Bigg_middle_shift_int=\count130
-\c__fp_Bigg_trailing_shift_int=\count131
-\l__sort_length_int=\count132
-\l__sort_min_int=\count133
-\l__sort_top_int=\count134
-\l__sort_max_int=\count135
-\l__sort_true_max_int=\count136
-\l__sort_block_int=\count137
-\l__sort_begin_int=\count138
-\l__sort_end_int=\count139
-\l__sort_A_int=\count140
-\l__sort_B_int=\count141
-\l__sort_C_int=\count142
-\l__tl_build_start_index_int=\count143
-\l__tl_build_index_int=\count144
-\l__tl_analysis_normal_int=\count145
-\l__tl_analysis_index_int=\count146
-\l__tl_analysis_nesting_int=\count147
-\l__tl_analysis_type_int=\count148
-\l__regex_internal_a_int=\count149
-\l__regex_internal_b_int=\count150
-\l__regex_internal_c_int=\count151
-\l__regex_balance_int=\count152
-\l__regex_group_level_int=\count153
-\l__regex_mode_int=\count154
-\c__regex_cs_in_class_mode_int=\count155
-\c__regex_cs_mode_int=\count156
-\l__regex_catcodes_int=\count157
-\l__regex_default_catcodes_int=\count158
-\c__regex_catcode_L_int=\count159
-\c__regex_catcode_O_int=\count160
-\c__regex_catcode_A_int=\count161
-\c__regex_all_catcodes_int=\count162
-\l__regex_show_lines_int=\count163
-\l__regex_min_state_int=\count164
-\l__regex_max_state_int=\count165
-\l__regex_left_state_int=\count166
-\l__regex_right_state_int=\count167
-\l__regex_capturing_group_int=\count168
-\l__regex_min_pos_int=\count169
-\l__regex_max_pos_int=\count170
-\l__regex_curr_pos_int=\count171
-\l__regex_start_pos_int=\count172
-\l__regex_success_pos_int=\count173
-\l__regex_curr_char_int=\count174
-\l__regex_curr_catcode_int=\count175
-\l__regex_last_char_int=\count176
-\l__regex_case_changed_char_int=\count177
-\l__regex_curr_state_int=\count178
-\l__regex_step_int=\count179
-\l__regex_min_active_int=\count180
-\l__regex_max_active_int=\count181
-\l__regex_replacement_csnames_int=\count182
-\l__regex_match_count_int=\count183
-\l__regex_min_submatch_int=\count184
-\l__regex_submatch_int=\count185
-\l__regex_zeroth_submatch_int=\count186
-\g__regex_trace_regex_int=\count187
-\c_empty_box=\box32
-\l_tmpa_box=\box33
-\l_tmpb_box=\box34
-\g_tmpa_box=\box35
-\g_tmpb_box=\box36
-\l__box_top_dim=\dimen138
-\l__box_bottom_dim=\dimen139
-\l__box_left_dim=\dimen140
-\l__box_right_dim=\dimen141
-\l__box_top_new_dim=\dimen142
-\l__box_bottom_new_dim=\dimen143
-\l__box_left_new_dim=\dimen144
-\l__box_right_new_dim=\dimen145
-\l__box_internal_box=\box37
-\l__coffin_internal_box=\box38
-\l__coffin_internal_dim=\dimen146
-\l__coffin_offset_x_dim=\dimen147
-\l__coffin_offset_y_dim=\dimen148
-\l__coffin_x_dim=\dimen149
-\l__coffin_y_dim=\dimen150
-\l__coffin_x_prime_dim=\dimen151
-\l__coffin_y_prime_dim=\dimen152
-\c_empty_coffin=\box39
-\l__coffin_aligned_coffin=\box40
-\l__coffin_aligned_internal_coffin=\box41
-\l_tmpa_coffin=\box42
-\l_tmpb_coffin=\box43
-\l__coffin_display_coffin=\box44
-\l__coffin_display_coord_coffin=\box45
-\l__coffin_display_pole_coffin=\box46
-\l__coffin_display_offset_dim=\dimen153
-\l__coffin_display_x_dim=\dimen154
-\l__coffin_display_y_dim=\dimen155
-\l__coffin_bounding_shift_dim=\dimen156
-\l__coffin_left_corner_dim=\dimen157
-\l__coffin_right_corner_dim=\dimen158
-\l__coffin_bottom_corner_dim=\dimen159
-\l__coffin_top_corner_dim=\dimen160
-\l__coffin_scaled_total_height_dim=\dimen161
-\l__coffin_scaled_width_dim=\dimen162
-)
-(/usr/share/texlive/texmf-dist/tex/latex/l3kernel/l3xdvipdfmx.def
-File: l3xdvidpfmx.def 2017/03/18 v L3 Experimental driver: xdvipdfmx
-\g__driver_image_int=\count188
-\l__driver_tmp_box=\box47
+(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
 ))
-Package: breqn 2017/01/27 v0.98e Breaking equations
+\Gm@cnth=\count270
+\Gm@cntv=\count271
+\c@Gm@tempcnt=\count272
+\Gm@bindingoffset=\dimen160
+\Gm@wd@mp=\dimen161
+\Gm@odd@mp=\dimen162
+\Gm@even@mp=\dimen163
+\Gm@layoutwidth=\dimen164
+\Gm@layoutheight=\dimen165
+\Gm@layouthoffset=\dimen166
+\Gm@layoutvoffset=\dimen167
+\Gm@dimlist=\toks24
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/breqn/breqn.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2021-02-18 L3 programming layer (loader) 
 
-(/usr/share/texlive/texmf-dist/tex/latex/breqn/flexisym.sty
-Package: flexisym 2017/01/27 v0.98e Make math characters macros
-LaTeX Info: Redefining \textprime on input line 300.
-LaTeX Info: Redefining \not on input line 358.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
+File: l3backend-xetex.def 2021-03-18 L3 backend support: XeTeX
 
-(/usr/share/texlive/texmf-dist/tex/latex/breqn/cmbase.sym
+(|extractbb --version)
+\c__kernel_sys_dvipdfmx_version_int=\count273
+\l__color_backend_stack_int=\count274
+\g__graphics_track_int=\count275
+\l__pdf_internal_box=\box53
+\g__pdf_backend_object_int=\count276
+\g__pdf_backend_annotation_int=\count277
+\g__pdf_backend_link_int=\count278
+))
+Package: breqn 2020/09/24 v0.98k Breaking equations
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/breqn/flexisym.sty
+Package: flexisym 2020/09/24 v0.98k Make math characters macros
+LaTeX Info: Redefining \textprime on input line 299.
+LaTeX Info: Redefining \not on input line 357.
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/breqn/cmbase.sym
 File: cmbase.sym 2007/12/19 v0.92
-LaTeX Info: Redefining \hbar on input line 325.
-LaTeX Info: Redefining \surd on input line 327.
-LaTeX Info: Redefining \angle on input line 335.
-LaTeX Info: Redefining \neq on input line 336.
-LaTeX Info: Redefining \mapsto on input line 337.
-LaTeX Info: Redefining \cong on input line 338.
-LaTeX Info: Redefining \notin on input line 341.
-LaTeX Info: Redefining \rightleftharpoons on input line 342.
-LaTeX Info: Redefining \doteq on input line 343.
-LaTeX Info: Redefining \hookrightarrow on input line 344.
-LaTeX Info: Redefining \hookleftarrow on input line 345.
-LaTeX Info: Redefining \bowtie on input line 346.
-LaTeX Info: Redefining \models on input line 347.
-LaTeX Info: Redefining \Longrightarrow on input line 348.
-LaTeX Info: Redefining \longrightarrow on input line 349.
-LaTeX Info: Redefining \Longleftarrow on input line 350.
-LaTeX Info: Redefining \longleftarrow on input line 351.
-LaTeX Info: Redefining \longmapsto on input line 352.
-LaTeX Info: Redefining \longleftrightarrow on input line 353.
-LaTeX Info: Redefining \Longleftrightarrow on input line 354.
-LaTeX Info: Redefining \cdots on input line 358.
-LaTeX Info: Redefining \vdots on input line 361.
-LaTeX Info: Redefining \ddots on input line 366.
+LaTeX Info: Redefining \hbar on input line 324.
+LaTeX Info: Redefining \surd on input line 326.
+LaTeX Info: Redefining \angle on input line 334.
+LaTeX Info: Redefining \neq on input line 335.
+LaTeX Info: Redefining \mapsto on input line 336.
+LaTeX Info: Redefining \cong on input line 337.
+LaTeX Info: Redefining \notin on input line 340.
+LaTeX Info: Redefining \rightleftharpoons on input line 341.
+LaTeX Info: Redefining \doteq on input line 342.
+LaTeX Info: Redefining \hookrightarrow on input line 343.
+LaTeX Info: Redefining \hookleftarrow on input line 344.
+LaTeX Info: Redefining \bowtie on input line 345.
+LaTeX Info: Redefining \models on input line 346.
+LaTeX Info: Redefining \Longrightarrow on input line 347.
+LaTeX Info: Redefining \longrightarrow on input line 348.
+LaTeX Info: Redefining \Longleftarrow on input line 349.
+LaTeX Info: Redefining \longleftarrow on input line 350.
+LaTeX Info: Redefining \longmapsto on input line 351.
+LaTeX Info: Redefining \longleftrightarrow on input line 352.
+LaTeX Info: Redefining \Longleftrightarrow on input line 353.
+LaTeX Info: Redefining \cdots on input line 357.
+LaTeX Info: Redefining \vdots on input line 360.
+LaTeX Info: Redefining \ddots on input line 365.
 )
-(/usr/share/texlive/texmf-dist/tex/latex/breqn/mathstyle.sty
-Package: mathstyle 2017/01/27 0.98e Tracking mathstyle implicitly
-LaTeX Info: Redefining \displaystyle on input line 93.
-LaTeX Info: Redefining \textstyle on input line 95.
-LaTeX Info: Redefining \scriptstyle on input line 97.
-LaTeX Info: Redefining \scriptscriptstyle on input line 99.
-LaTeX Info: Redefining \genfrac on input line 145.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/breqn/mathstyle.sty
+Package: mathstyle 2020/09/24 v0.98k Tracking mathstyle implicitly
+LaTeX Info: Redefining \displaystyle on input line 95.
+LaTeX Info: Redefining \textstyle on input line 97.
+LaTeX Info: Redefining \scriptstyle on input line 99.
+LaTeX Info: Redefining \scriptscriptstyle on input line 101.
+LaTeX Info: Redefining \genfrac on input line 149.
 ))
-(/usr/share/texlive/texmf-dist/tex/latex/tools/calc.sty
-Package: calc 2014/10/28 v4.3 Infix arithmetic (KKT,FJ)
-\calc@Acount=\count189
-\calc@Bcount=\count190
-\calc@Adimen=\dimen163
-\calc@Bdimen=\dimen164
+(/usr/local/texlive/2021/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count279
+\calc@Bcount=\count280
+\calc@Adimen=\dimen168
+\calc@Bdimen=\dimen169
 \calc@Askip=\skip56
 \calc@Bskip=\skip57
 LaTeX Info: Redefining \setlength on input line 80.
 LaTeX Info: Redefining \addtolength on input line 81.
-\calc@Ccount=\count191
+\calc@Ccount=\count281
 \calc@Cskip=\skip58
 )
-\inf@bad=\count192
-\maxint=\count193
-\listwidth=\dimen165
-\eqnumsep=\dimen166
-\eqmargin=\dimen167
+\inf@bad=\count282
+\maxint=\count283
+\listwidth=\dimen170
+\eqnumsep=\dimen171
+\eqmargin=\dimen172
 \eqlinespacing=\skip59
 \eqlineskip=\skip60
-\eqlineskiplimit=\dimen168
+\eqlineskiplimit=\dimen173
 \eqbinoffset=\muskip17
 \eqdelimoffset=\muskip18
-\eqindentstep=\dimen169
-\eqstyle=\toks24
-\eqbreakdepth=\count194
-\eqinterlinepenalty=\count195
-\intereqpenalty=\count196
+\eqindentstep=\dimen174
+\eqstyle=\toks25
+\eqbreakdepth=\count284
+\eqinterlinepenalty=\count285
+\intereqpenalty=\count286
 \intereqskip=\skip61
-\prerelpenalty=\count197
-\prebinoppenalty=\count198
+\prerelpenalty=\count287
+\prebinoppenalty=\count288
 \Dmedmuskip=\muskip19
 \Dthickmuskip=\muskip20
 \eqleftskip=\skip62
 \eqrightskip=\skip63
 \eq@vspan=\skip64
 \eq@binoffset=\muskip21
-\EQ@box=\box48
-\EQ@copy=\box49
-\EQ@numbox=\box50
-\eq@wdNum=\dimen170
-\GRP@numbox=\box51
-\grp@wdNum=\dimen171
-\eq@lines=\count199
-\eq@curline=\count266
-\eq@badness=\count267
-\EQ@vims=\count268
-\eq@dp=\dimen172
-\eq@wdL=\dimen173
-\eq@wdT=\dimen174
-\eq@wdMin=\dimen175
-\grp@wdL=\dimen176
-\grp@wdR=\dimen177
-\grp@wdT=\dimen178
-\eq@wdRmax=\dimen179
-\eq@firstht=\dimen180
-\eq@wdCond=\dimen181
-\eq@indentstep=\dimen182
-\eq@linewidth=\dimen183
-\grp@linewidth=\dimen184
-\eq@hshift=\dimen185
-\eq@given@sidespace=\dimen186
-\mathindent=\dimen187
-\eq@final@linecount=\count269
-\eq@wdR=\dimen188
-\EQ@continue=\toks25
-\lr@level=\count270
-\GRP@queue=\toks26
-\GRP@box=\box52
-\GRP@wholebox=\box53
+\EQ@box=\box54
+\EQ@copy=\box55
+\EQ@numbox=\box56
+\eq@wdNum=\dimen175
+\GRP@numbox=\box57
+\grp@wdNum=\dimen176
+\eq@lines=\count289
+\eq@curline=\count290
+\eq@badness=\count291
+\EQ@vims=\count292
+\eq@dp=\dimen177
+\eq@wdL=\dimen178
+\eq@wdT=\dimen179
+\eq@wdMin=\dimen180
+\grp@wdL=\dimen181
+\grp@wdR=\dimen182
+\grp@wdT=\dimen183
+\eq@wdRmax=\dimen184
+\eq@firstht=\dimen185
+\eq@wdCond=\dimen186
+\eq@indentstep=\dimen187
+\eq@linewidth=\dimen188
+\grp@linewidth=\dimen189
+\eq@hshift=\dimen190
+\eq@given@sidespace=\dimen191
+\mathindent=\dimen192
+\eq@final@linecount=\count293
+\eq@wdR=\dimen193
+\EQ@continue=\toks26
+\lr@level=\count294
+\GRP@queue=\toks27
+\GRP@box=\box58
+\GRP@wholebox=\box59
 \darraycolsep=\skip65
-\cur@row=\count271
-\cur@col=\count272
+\cur@row=\count295
+\cur@col=\count296
 \conditionsep=\skip66
 )
-(/usr/share/texlive/texmf-dist/tex/latex/graphics/color.sty
-Package: color 2016/07/10 v1.1e Standard LaTeX Color (DPC)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2020/02/24 v1.2b Standard LaTeX Color (DPC)
 
-(/usr/share/texlive/texmf-dist/tex/latex/graphics-cfg/color.cfg
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics-cfg/color.cfg
 File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package color Info: Driver file: xetex.def on input line 147.
 )
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hyperref.sty
-Package: hyperref 2018/02/06 v6.86b Hypertext links for LaTeX
+(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2021-02-27 v7.00k Hypertext links for LaTeX
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-hyperref.sty
-Package: hobsub-hyperref 2016/05/16 v1.14 Bundle oberdiek, subset hyperref (HO)
-
-
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/hobsub-generic.sty
-Package: hobsub-generic 2016/05/16 v1.14 Bundle oberdiek, subset generic (HO)
-Package: hobsub 2016/05/16 v1.14 Construct package bundles (HO)
-Package: infwarerr 2016/05/16 v1.4 Providing info/warning/error messages (HO)
-Package: ltxcmds 2016/05/16 v1.23 LaTeX kernel commands for general use (HO)
-Package: ifluatex 2016/05/16 v1.4 Provides the ifluatex switch (HO)
-Package ifluatex Info: LuaTeX not detected.
-Package hobsub Info: Skipping package `ifvtex' (already loaded).
-Package: intcalc 2016/05/16 v1.2 Expandable calculations with integers (HO)
-Package hobsub Info: Skipping package `ifpdf' (already loaded).
-Package: etexcmds 2016/05/16 v1.6 Avoid name clashes with e-TeX commands (HO)
-Package etexcmds Info: Could not find \expanded.
-(etexcmds)             That can mean that you are not using pdfTeX 1.50 or
-(etexcmds)             that some package has redefined \expanded.
-(etexcmds)             In the latter case, load this package earlier.
-Package: kvsetkeys 2016/05/16 v1.17 Key value parser (HO)
-Package: kvdefinekeys 2016/05/16 v1.4 Define keys (HO)
-Package: pdftexcmds 2018/01/21 v0.26 Utility functions of pdfTeX for LuaTeX (HO
+(/usr/local/texlive/2021/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
 )
-Package pdftexcmds Info: LuaTeX not detected.
-Package pdftexcmds Info: pdfTeX >= 1.30 not detected.
+(/usr/local/texlive/2021/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
 Package pdftexcmds Info: \pdf@primitive is available.
 Package pdftexcmds Info: \pdf@ifprimitive is available.
 Package pdftexcmds Info: \pdfdraftmode not found.
-Package: pdfescape 2016/05/16 v1.14 Implements pdfTeX's escape features (HO)
-Package: bigintcalc 2016/05/16 v1.4 Expandable calculations on big integers (HO
 )
-Package: bitset 2016/05/16 v1.2 Handle bit-vector datatype (HO)
-Package: uniquecounter 2016/05/16 v1.3 Provide unlimited unique counter (HO)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
 )
-Package hobsub Info: Skipping package `hobsub' (already loaded).
-Package: letltxmacro 2016/05/16 v1.5 Let assignment for LaTeX macros (HO)
-Package: hopatch 2016/05/16 v1.3 Wrapper for package hooks (HO)
-Package: xcolor-patch 2016/05/16 xcolor patch
-Package: atveryend 2016/05/16 v1.9 Hooks at the very end of document (HO)
-Package atveryend Info: \enddocument detected (standard20110627).
-Package: atbegshi 2016/06/09 v1.18 At begin shipout hook (HO)
-Package: refcount 2016/05/16 v3.5 Data extraction from label references (HO)
-Package: hycolor 2016/05/16 v1.8 Color options for hyperref/bookmark (HO)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/auxhook.sty
-Package: auxhook 2016/05/16 v1.4 Hooks for auxiliary files (HO)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/kvoptions.sty
-Package: kvoptions 2016/05/16 v3.12 Key value format for package options (HO)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/hycolor/hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
 )
-\@linkdim=\dimen189
-\Hy@linkcounter=\count273
-\Hy@pagecounter=\count274
+(/usr/local/texlive/2021/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty
+Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/auxhook/auxhook.sty
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
+)
+\@linkdim=\dimen194
+\Hy@linkcounter=\count297
+\Hy@pagecounter=\count298
 
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/pd1enc.def
-File: pd1enc.def 2018/02/06 v6.86b Hyperref: PDFDocEncoding definition (HO)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2021-02-27 v7.00k Hyperref: PDFDocEncoding definition (HO)
 )
-\Hy@SavedSpaceFactor=\count275
-Package hyperref Info: Option `unicode' set `true' on input line 3456.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hyperref-langpatches.def
+File: hyperref-langpatches.def 2021-02-27 v7.00k Hyperref: patches for babel la
+nguages
+) (/usr/local/texlive/2021/texmf-dist/tex/generic/intcalc/intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/etexcmds/etexcmds.sty
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
+)
+\Hy@SavedSpaceFactor=\count299
 
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/puenc.def
-File: puenc.def 2018/02/06 v6.86b Hyperref: PDF Unicode definition (HO)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2021-02-27 v7.00k Hyperref: PDF Unicode definition (HO)
 )
-(/usr/share/texlive/texmf-dist/tex/latex/latexconfig/hyperref.cfg
-File: hyperref.cfg 2002/06/06 v1.2 hyperref configuration of TeXLive
-)
-Package hyperref Info: Hyper figures OFF on input line 4509.
-Package hyperref Info: Link nesting OFF on input line 4514.
-Package hyperref Info: Hyper index ON on input line 4517.
-Package hyperref Info: Plain pages OFF on input line 4524.
-Package hyperref Info: Backreferencing OFF on input line 4529.
+Package hyperref Info: Option `unicode' set `true' on input line 3167.
+Package hyperref Info: Hyper figures OFF on input line 4192.
+Package hyperref Info: Link nesting OFF on input line 4197.
+Package hyperref Info: Hyper index ON on input line 4200.
+Package hyperref Info: Plain pages OFF on input line 4207.
+Package hyperref Info: Backreferencing OFF on input line 4212.
 Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
-Package hyperref Info: Bookmarks ON on input line 4762.
-\c@Hy@tempcnt=\count276
+Package hyperref Info: Bookmarks ON on input line 4445.
+\c@Hy@tempcnt=\count300
 
-(/usr/share/texlive/texmf-dist/tex/latex/url/url.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/url/url.sty
 \Urlmuskip=\muskip22
 Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
 )
-LaTeX Info: Redefining \url on input line 5115.
-\XeTeXLinkMargin=\dimen190
-\Fld@menulength=\count277
-\Field@Width=\dimen191
-\Fld@charsize=\dimen192
-Package hyperref Info: Hyper figures OFF on input line 6369.
-Package hyperref Info: Link nesting OFF on input line 6374.
-Package hyperref Info: Hyper index ON on input line 6377.
-Package hyperref Info: backreferencing OFF on input line 6384.
-Package hyperref Info: Link coloring OFF on input line 6389.
-Package hyperref Info: Link coloring with OCG OFF on input line 6394.
-Package hyperref Info: PDF/A mode OFF on input line 6399.
-LaTeX Info: Redefining \ref on input line 6439.
-LaTeX Info: Redefining \pageref on input line 6443.
-\Hy@abspage=\count278
-\c@Item=\count279
-\c@Hfootnote=\count280
+LaTeX Info: Redefining \url on input line 4804.
+\XeTeXLinkMargin=\dimen195
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/bitset/bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count301
+\Field@Width=\dimen196
+\Fld@charsize=\dimen197
+Package hyperref Info: Hyper figures OFF on input line 6075.
+Package hyperref Info: Link nesting OFF on input line 6080.
+Package hyperref Info: Hyper index ON on input line 6083.
+Package hyperref Info: backreferencing OFF on input line 6090.
+Package hyperref Info: Link coloring OFF on input line 6095.
+Package hyperref Info: Link coloring with OCG OFF on input line 6100.
+Package hyperref Info: PDF/A mode OFF on input line 6105.
+LaTeX Info: Redefining \ref on input line 6145.
+LaTeX Info: Redefining \pageref on input line 6149.
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/atbegshi-ltx.sty
+Package: atbegshi-ltx 2020/08/17 v1.0a Emulation of the original atbegshi packa
+ge
+with kernel methods
+)
+\Hy@abspage=\count302
+\c@Item=\count303
+\c@Hfootnote=\count304
 )
 Package hyperref Info: Driver (autodetected): hxetex.
 
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/hxetex.def
-File: hxetex.def 2018/02/06 v6.86b Hyperref driver for XeTeX
+(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hxetex.def
+File: hxetex.def 2021-02-27 v7.00k Hyperref driver for XeTeX
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/stringenc.sty
-Package: stringenc 2016/05/16 v1.11 Convert strings between diff. encodings (HO
+(/usr/local/texlive/2021/texmf-dist/tex/generic/stringenc/stringenc.sty
+Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
 )
 )
-\pdfm@box=\box54
-\c@Hy@AnnotLevel=\count281
-\HyField@AnnotCount=\count282
-\Fld@listcount=\count283
-\c@bookmark@seq@number=\count284
+\pdfm@box=\box60
+\c@Hy@AnnotLevel=\count305
+\HyField@AnnotCount=\count306
+\Fld@listcount=\count307
+\c@bookmark@seq@number=\count308
 
-(/usr/share/texlive/texmf-dist/tex/latex/oberdiek/rerunfilecheck.sty
-Package: rerunfilecheck 2016/05/16 v1.8 Rerun checks for auxiliary files (HO)
-Package rerunfilecheck Info: Feature \pdfmdfivesum is not available
-(rerunfilecheck)             (e.g. pdfTeX or LuaTeX with package `pdftexcmds').
-
-(rerunfilecheck)             Therefore file contents cannot be checked efficien
-tly
-(rerunfilecheck)             and the loading of the package is aborted.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/atveryend-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atvery packag
+e
+with kernel methods
+)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+86.
 )
 \Hy@SectionHShift=\skip67
-)
-(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec.sty
-(/usr/share/texlive/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
-Package: xparse 2018/02/21 L3 Experimental document command parser
-\l__xparse_current_arg_int=\count285
-\g__xparse_grabber_int=\count286
-\l__xparse_m_args_int=\count287
-\l__xparse_mandatory_args_int=\count288
-\l__xparse_v_nesting_int=\count289
-)
-Package: fontspec 2017/11/09 v2.6g Font selection for XeLaTeX and LuaLaTeX
+) (/usr/local/texlive/2021/texmf-dist/tex/latex/fontspec/fontspec.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/l3packages/xparse/xparse-2020-10-
+01.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/l3packages/xparse/xparse-generic.
+tex)))
+Package: fontspec 2020/02/21 v2.7i Font selection for XeLaTeX and LuaLaTeX
 
-(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
-Package: fontspec-xetex 2017/11/09 v2.6g Font selection for XeLaTeX and LuaLaTe
+(/usr/local/texlive/2021/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
+Package: fontspec-xetex 2020/02/21 v2.7i Font selection for XeLaTeX and LuaLaTe
 X
-\l__fontspec_script_int=\count290
-\l__fontspec_language_int=\count291
-\l__fontspec_strnum_int=\count292
-\l__fontspec_tmp_int=\count293
-\l__fontspec_em_int=\count294
-\l__fontspec_emdef_int=\count295
-\l__fontspec_strong_int=\count296
-\l__fontspec_strongdef_int=\count297
-\l__fontspec_tmpa_dim=\dimen193
-\l__fontspec_tmpb_dim=\dimen194
-\l__fontspec_tmpc_dim=\dimen195
-\g__file_internal_ior=\read1
+\l__fontspec_script_int=\count309
+\l__fontspec_language_int=\count310
+\l__fontspec_strnum_int=\count311
+\l__fontspec_tmp_int=\count312
+\l__fontspec_tmpa_int=\count313
+\l__fontspec_tmpb_int=\count314
+\l__fontspec_tmpc_int=\count315
+\l__fontspec_em_int=\count316
+\l__fontspec_emdef_int=\count317
+\l__fontspec_strong_int=\count318
+\l__fontspec_strongdef_int=\count319
+\l__fontspec_tmpa_dim=\dimen198
+\l__fontspec_tmpb_dim=\dimen199
+\l__fontspec_tmpc_dim=\dimen256
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/fontenc.sty
-Package: fontenc 2017/04/05 v2.0i Standard LaTeX package
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2020/08/10 v2.0s Standard LaTeX package
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/fontspec/fontspec.cfg)))
+(/usr/local/texlive/2021/texmf-dist/tex/xelatex/xltxtra/xltxtra.sty
+Package: xltxtra 2018/12/31 v0.7 Improvements for the "XeLaTeX" format
 
-(/usr/share/texlive/texmf-dist/tex/latex/base/tuenc.def
-File: tuenc.def 2017/04/05 v2.0i Standard LaTeX file
-LaTeX Font Info:    Redeclaring font encoding TU on input line 82.
-))
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \fontspec with sig. 'O{}mO{}' on line 542.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \setmainfont with sig. 'O{}mO{}' on line 546.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \setsansfont with sig. 'O{}mO{}' on line 550.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \setmonofont with sig. 'O{}mO{}' on line 554.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \setmathrm with sig. 'O{}mO{}' on line 558.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \setboldmathrm with sig. 'O{}mO{}' on line 562.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \setmathsf with sig. 'O{}mO{}' on line 566.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \setmathtt with sig. 'O{}mO{}' on line 570.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \setromanfont with sig. 'O{}mO{}' on line 574.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \newfontfamily with sig. 'mO{}mO{}' on line 578.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \newfontface with sig. 'mO{}mO{}' on line 582.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \defaultfontfeatures with sig. 't+om' on line 586.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \addfontfeatures with sig. 'm' on line 590.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \addfontfeature with sig. 'm' on line 594.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \newfontfeature with sig. 'mm' on line 598.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \newAATfeature with sig. 'mmmm' on line 602.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \newopentypefeature with sig. 'mmm' on line 606.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \newICUfeature with sig. 'mmm' on line 610.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \aliasfontfeature with sig. 'mm' on line 614.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \aliasfontfeatureoption with sig. 'mmm' on line 618.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \newfontscript with sig. 'mm' on line 622.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \newfontlanguage with sig. 'mm' on line 626.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \DeclareFontsExtensions with sig. 'm' on line 630.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \IfFontFeatureActiveTF with sig. 'mmm' on line 634.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \EncodingCommand with sig. 'mO{}m' on line 3632.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \EncodingAccent with sig. 'mm' on line 3638.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \EncodingSymbol with sig. 'mm' on line 3644.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \EncodingComposite with sig. 'mmm' on line 3650.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \EncodingCompositeCommand with sig. 'mmm' on line 3656.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \DeclareUnicodeEncoding with sig. 'mm' on line 3681.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \UndeclareSymbol with sig. 'm' on line 3687.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \UndeclareAccent with sig. 'm' on line 3693.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \UndeclareCommand with sig. 'm' on line 3699.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \UndeclareComposite with sig. 'mm' on line 3706.
-.................................................
-
-(/usr/share/texlive/texmf-dist/tex/latex/fontspec/fontspec.cfg)
-LaTeX Info: Redefining \itshape on input line 3891.
-LaTeX Info: Redefining \slshape on input line 3896.
-LaTeX Info: Redefining \scshape on input line 3901.
-LaTeX Info: Redefining \upshape on input line 3906.
-LaTeX Info: Redefining \em on input line 3936.
-LaTeX Info: Redefining \emph on input line 3961.
-LaTeX Info: Redefining \- on input line 4015.
-.................................................
-. LaTeX info: "xparse/redefine-command"
-. 
-. Redefining command \oldstylenums with sig. 'm' on line 4110.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \liningnums with sig. 'm' on line 4114.
-.................................................
-))
-(/usr/share/texlive/texmf-dist/tex/latex/xltxtra/xltxtra.sty
-Package: xltxtra 2016/01/21 v0.6 Improvements for the "XeLaTeX" format
-
-(/usr/share/texlive/texmf-dist/tex/latex/realscripts/realscripts.sty
+(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/ifluatex.sty
+Package: ifluatex 2019/10/25 v1.5 ifluatex legacy package. Use iftex instead.
+)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/ifxetex.sty
+Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/realscripts/realscripts.sty
 Package: realscripts 2016/02/13 v0.3d Access OpenType subscripts and superscrip
 ts
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \fakesubscript with sig. 'm' on line 19.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \fakesuperscript with sig. 'm' on line 22.
-.................................................
-.................................................
-. LaTeX info: "xparse/redefine-command"
-. 
-. Redefining command \textsubscript with sig. 's' on line 25.
-.................................................
-.................................................
-. LaTeX info: "xparse/redefine-command"
-. 
-. Redefining command \textsuperscript with sig. 's' on line 28.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \realsubscript with sig. 'm' on line 45.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \realsuperscript with sig. 'm' on line 60.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \textsubsuperscript with sig. 'sO{l}mm' on line 138.
-.................................................
-.................................................
-. LaTeX info: "xparse/define-command"
-. 
-. Defining command \textsupersubscript with sig. 'sO{l}mm' on line 143.
-.................................................
-\subsupersep=\dimen196
+\subsupersep=\dimen257
 )
-(/usr/share/texlive/texmf-dist/tex/latex/metalogo/metalogo.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/metalogo/metalogo.sty
 Package: metalogo 2010/05/29 v0.12 Extended TeX logo macros
-\xl@everylogo=\toks27
-\xl@@everylogo=\toks28
+\xl@everylogo=\toks28
+\xl@@everylogo=\toks29
 LaTeX Info: Redefining \TeX on input line 193.
 LaTeX Info: Redefining \LaTeX on input line 202.
 LaTeX Info: Redefining \LaTeXe on input line 219.
 )
-\l__xetex_show_hyphens_wrapping_box=\box55
-\l__xetex_show_hyphens_temp_box=\box56
-\l__xetex_show_hyphens_final_box=\box57
-\g__xetex_show_hyphens_word_box=\box58
+\l__xetex_show_hyphens_wrapping_box=\box61
+\l__xetex_show_hyphens_temp_box=\box62
+\l__xetex_show_hyphens_final_box=\box63
+\g__xetex_show_hyphens_word_box=\box64
 )
-(/usr/share/texlive/texmf-dist/tex/xelatex/xunicode/xunicode.sty
+(/usr/local/texlive/2021/texmf-dist/tex/xelatex/xunicode/xunicode.sty
 File: xunicode.sty 2011/09/09 v0.981 provides access to latin accents and many 
 other characters in Unicode lower plane
 
 *** you should *not* be loading the inputenc package
 *** XeTeX expects the source to be in UTF8 encoding
 *** some features of other encodings may conflict, resulting in poor output.
-(/usr/share/texmf/tex/latex/tipa/t3enc.def
+(/usr/local/texlive/2021/texmf-dist/tex/latex/tipa/t3enc.def
 File: t3enc.def 2001/12/31 T3 encoding
 )
-\tipaTiiicode=\count298
-\tipasavetokens=\toks29
-\tipachecktokens=\toks30
+\tipaTiiicode=\count320
+\tipasavetokens=\toks30
+\tipachecktokens=\toks31
 )
-.................................................
-. fontspec info: "no-scripts"
-. 
-. Font "Times New Roman" does not contain any OpenType `Script' information.
-.................................................
-.................................................
-. fontspec info: "set-scale"
-. 
-. Times New Roman scale = 0.9636326419213974.
-.................................................
-\g__fontspec_family_TimesNewRoman_int=\count299
-.................................................
-. fontspec info: "set-scale"
-. 
-. Times New Roman scale = 0.9636326419213974.
-.................................................
-.................................................
-. fontspec info: "set-scale"
-. 
-. Times New Roman/B scale = 0.9440508021390374.
-.................................................
-.................................................
-. fontspec info: "set-scale"
-. 
-. Times New Roman/I scale = 0.9753453038674033.
-.................................................
-.................................................
-. fontspec info: "set-scale"
-. 
-. Times New Roman/BI scale = 0.952197950377562.
-.................................................
-.................................................
-. fontspec info: "defining-font"
-. 
-. Font family 'TimesNewRoman(0)' created for font 'Times New Roman' with
-. options [Scale=MatchLowercase,Mapping=tex-text,Ligatures=TeX].
-.  
-.  This font family consists of the following NFSS series/shapes:
-.  
-. - 'normal' (m/n) with NFSS spec.: <->s*[0.9636326419213974]"Times New
-. Roman/OT:mapping=tex-text;"
-. - 'small caps'  (m/sc) with NFSS spec.: 
-. - 'bold' (bx/n) with NFSS spec.: <->s*[0.9440508021390374]"Times New
-. Roman/B/OT:mapping=tex-text;"
-. - 'bold small caps'  (bx/sc) with NFSS spec.: 
-. - 'italic' (m/it) with NFSS spec.: <->s*[0.9753453038674033]"Times New
-. Roman/I/OT:mapping=tex-text;"
-. - 'italic small caps'  (m/itsc) with NFSS spec.: 
-. - 'bold italic' (bx/it) with NFSS spec.: <->s*[0.952197950377562]"Times New
-. Roman/BI/OT:mapping=tex-text;"
-. - 'bold italic small caps'  (bx/itsc) with NFSS spec.: 
-.................................................
-LaTeX Info: Redefining \rmfamily on input line 31.
+
+Package fontspec Info: Times New Roman scale = 0.9636299023440277.
+
+
+Package fontspec Info: Times New Roman scale = 0.9636299023440277.
+
+
+Package fontspec Info: Times New Roman/B scale = 0.9440481727713549.
+
+
+Package fontspec Info: Times New Roman/I scale = 0.9753424972879338.
+
+
+Package fontspec Info: Times New Roman/BI scale = 0.9521952754312876.
+
+
+Package fontspec Info: Font family 'TimesNewRoman(0)' created for font 'Times
+(fontspec)             New Roman' with options
+(fontspec)             [Scale=MatchLowercase,Mapping=tex-text,Ligatures=TeX].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->s*[0.9636299023440277]"Times New
+(fontspec)             Roman/OT:language=dflt;mapping=tex-text;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.9440481727713549]"Times New
+(fontspec)             Roman/B/OT:language=dflt;mapping=tex-text;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+(fontspec)             - 'italic' (m/it) with NFSS spec.:
+(fontspec)             <->s*[0.9753424972879338]"Times New
+(fontspec)             Roman/I/OT:language=dflt;mapping=tex-text;"
+(fontspec)             - 'italic small caps'  (m/scit) with NFSS spec.: 
+(fontspec)             - 'bold italic' (b/it) with NFSS spec.:
+(fontspec)             <->s*[0.9521952754312876]"Times New
+(fontspec)             Roman/BI/OT:language=dflt;mapping=tex-text;"
+(fontspec)             - 'bold italic small caps'  (b/scit) with NFSS spec.: 
+
 LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/m/n' will be
-(Font)              scaled to size 11.56366pt on input line 31.
-.................................................
-. fontspec info: "set-scale"
-. 
-. Liberation Sans scale = 0.8157973274799754.
-.................................................
-\g__fontspec_family_LiberationSans_int=\count300
-.................................................
-. fontspec info: "set-scale"
-. 
-. Liberation Sans scale = 0.8157973274799754.
-.................................................
-.................................................
-. fontspec info: "set-scale"
-. 
-. Liberation Sans/B scale = 0.8157973274799754.
-.................................................
-.................................................
-. fontspec info: "set-scale"
-. 
-. Liberation Sans/I scale = 0.8157973274799754.
-.................................................
-.................................................
-. fontspec info: "set-scale"
-. 
-. Liberation Sans/BI scale = 0.8157973274799754.
-.................................................
-.................................................
-. fontspec info: "defining-font"
-. 
-. Font family 'LiberationSans(0)' created for font 'Liberation Sans' with
-. options [Scale=MatchLowercase,Mapping=tex-text,Ligatures=TeX].
-.  
-.  This font family consists of the following NFSS series/shapes:
-.  
-. - 'normal' (m/n) with NFSS spec.: <->s*[0.8157973274799754]"Liberation
-. Sans/OT:script=latn;language=DFLT;mapping=tex-text;"
-. - 'small caps'  (m/sc) with NFSS spec.: 
-. - 'bold' (bx/n) with NFSS spec.: <->s*[0.8157973274799754]"Liberation
-. Sans/B/OT:script=latn;language=DFLT;mapping=tex-text;"
-. - 'bold small caps'  (bx/sc) with NFSS spec.: 
-. - 'italic' (m/it) with NFSS spec.: <->s*[0.8157973274799754]"Liberation
-. Sans/I/OT:script=latn;language=DFLT;mapping=tex-text;"
-. - 'italic small caps'  (m/itsc) with NFSS spec.: 
-. - 'bold italic' (bx/it) with NFSS spec.:
-. <->s*[0.8157973274799754]"Liberation
-. Sans/BI/OT:script=latn;language=DFLT;mapping=tex-text;"
-. - 'bold italic small caps'  (bx/itsc) with NFSS spec.: 
-.................................................
-LaTeX Info: Redefining \sffamily on input line 32.
+(Font)              scaled to size 11.56348pt on input line 33.
+
+Package fontspec Info: Liberation Sans scale = 0.8157833300039231.
+
+
+Package fontspec Info: Liberation Sans scale = 0.8157833300039231.
+
+
+Package fontspec Info: Liberation Sans/B scale = 0.8157833300039231.
+
+
+Package fontspec Info: Liberation Sans/I scale = 0.8157833300039231.
+
+
+Package fontspec Info: Liberation Sans/BI scale = 0.8157833300039231.
+
+
+Package fontspec Info: Font family 'LiberationSans(0)' created for font
+(fontspec)             'Liberation Sans' with options
+(fontspec)             [Scale=MatchLowercase,Mapping=tex-text,Ligatures=TeX].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->s*[0.8157833300039231]"Liberation
+(fontspec)             Sans/OT:script=latn;language=dflt;mapping=tex-text;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.8157833300039231]"Liberation
+(fontspec)             Sans/B/OT:script=latn;language=dflt;mapping=tex-text;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+(fontspec)             - 'italic' (m/it) with NFSS spec.:
+(fontspec)             <->s*[0.8157833300039231]"Liberation
+(fontspec)             Sans/I/OT:script=latn;language=dflt;mapping=tex-text;"
+(fontspec)             - 'italic small caps'  (m/scit) with NFSS spec.: 
+(fontspec)             - 'bold italic' (b/it) with NFSS spec.:
+(fontspec)             <->s*[0.8157833300039231]"Liberation
+(fontspec)             Sans/BI/OT:script=latn;language=dflt;mapping=tex-text;"
+(fontspec)             - 'bold italic small caps'  (b/scit) with NFSS spec.: 
+
  (./manualRus.aux)
 \openout1 = `manualRus.aux'.
 
-LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for T2A/cmr/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 33.
-LaTeX Font Info:    ... okay on input line 33.
-LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 33.
-LaTeX Font Info:    Try loading font information for T3+cmr on input line 33.
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 34.
+LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 3
+4.
+ (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ts1cmr.fd
+File: ts1cmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for T2A/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 34.
+LaTeX Font Info:    Trying to load font information for T3+cmr on input line 34
+.
 
-(/usr/share/texmf/tex/latex/tipa/t3cmr.fd
+(/usr/local/texlive/2021/texmf-dist/tex/latex/tipa/t3cmr.fd
 File: t3cmr.fd 2001/12/31 TIPA font definitions
 )
-LaTeX Font Info:    ... okay on input line 33.
+LaTeX Font Info:    ... okay on input line 34.
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: hyperref package is loaded.
 Package caption Info: longtable package is loaded.
 
-(/usr/share/texlive/texmf-dist/tex/latex/caption/ltcaption.sty
-Package: ltcaption 2013/06/09 v1.4-94 longtable captions (AR)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/caption/ltcaption.sty
+Package: ltcaption 2020/05/30 v1.4b longtable captions (AR)
 )
 Package caption Info: End \AtBeginDocument code.
+LaTeX Info: Redefining \th on input line 34.
 
 *geometry* driver: auto-detecting
 *geometry* detected driver: xetex
@@ -1122,21 +771,23 @@ Package caption Info: End \AtBeginDocument code.
 * \@reversemarginfalse
 * (1in=72.27pt=25.4mm, 1cm=28.453pt)
 
-\AtBeginShipoutBox=\box59
-Package hyperref Info: Link coloring OFF on input line 33.
-(/usr/share/texlive/texmf-dist/tex/latex/hyperref/nameref.sty
-Package: nameref 2016/05/21 v2.44 Cross-referencing by name of section
+Package hyperref Info: Link coloring OFF on input line 34.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
 
-(/usr/share/texlive/texmf-dist/tex/generic/oberdiek/gettitlestring.sty
-Package: gettitlestring 2016/05/16 v1.5 Cleanup title references (HO)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/refcount/refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
 )
-\c@section@level=\count301
+(/usr/local/texlive/2021/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
+ty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
 )
-LaTeX Info: Redefining \ref on input line 33.
-LaTeX Info: Redefining \pageref on input line 33.
-LaTeX Info: Redefining \nameref on input line 33.
-
-(./manualRus.out) (./manualRus.out)
+\c@section@level=\count321
+)
+LaTeX Info: Redefining \ref on input line 34.
+LaTeX Info: Redefining \pageref on input line 34.
+LaTeX Info: Redefining \nameref on input line 34.
+ (./manualRus.out) (./manualRus.out)
 \@outlinefile=\write3
 \openout3 = `manualRus.out'.
 
@@ -1145,847 +796,426 @@ LaTeX Info: Redefining \nameref on input line 33.
 *** XeTeX expects the source to be in UTF8 encoding
 *** some features of other encodings may conflict, resulting in poor output.
 LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/m/n' will be
-(Font)              scaled to size 16.65166pt on input line 38.
-LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/bx/n' will be
-(Font)              scaled to size 16.31311pt on input line 38.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 40.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 40.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 40.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 40.
+(Font)              scaled to size 16.6514pt on input line 39.
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/b/n' will be
+(Font)              scaled to size 16.31311pt on input line 39.
 [1
 
 ] (./manualRus.toc
-LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/bx/n' will be
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/b/n' will be
 (Font)              scaled to size 11.32855pt on input line 2.
 
-Overfull \hbox (12.98428pt too wide) in paragraph at lines 10--10
+Overfull \hbox (12.97745pt too wide) in paragraph at lines 10--10
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 InelasticTotTalysV, InelasticDirectTalysV
 , InelasticCompoundTalysV, 
  []
 
 
-Overfull \hbox (28.7281pt too wide) in paragraph at lines 10--10
+Overfull \hbox (28.72101pt too wide) in paragraph at lines 10--10
  \TU/TimesNewRoman(0)/m/n/12 ElasticTotTalysV, ElasticDirectTalysV, ElasticComp
 oundTalysV, TotTalysV[] [][]  
  []
 
 
-Overfull \hbox (21.74654pt too wide) in paragraph at lines 11--11
+Overfull \hbox (21.73956pt too wide) in paragraph at lines 11--11
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 BNECS_gamma, BNECS_neutron, BNECS_proton,
  BNECS_deuteron, 
  []
 
 
-Overfull \hbox (31.72961pt too wide) in paragraph at lines 14--14
+Overfull \hbox (31.7225pt too wide) in paragraph at lines 14--14
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 TGraph* GetElasticAngularDistribution(str
 ing type=”Total string option= 
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 25.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 25.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 25.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 25.
 [2]
-Overfull \hbox (20.97382pt too wide) in paragraph at lines 27--27
+Overfull \hbox (20.96686pt too wide) in paragraph at lines 27--27
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 vector<Level*> GetLevelsWithCorresponding
 Transitions(float Energy, 
  []
 
 
-Overfull \hbox (25.96236pt too wide) in paragraph at lines 29--29
+Overfull \hbox (25.95534pt too wide) in paragraph at lines 29--29
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 Level* FindBestLevelByEJP(float Energy, S
 pinParity JP, float tolerancy=1)[] [][]  
  []
 
 
-Overfull \hbox (2.94421pt too wide) in paragraph at lines 32--32
+Overfull \hbox (2.93756pt too wide) in paragraph at lines 32--32
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 GammaTransition* GetBestTransition(float 
 Energy, float tolerancy=1)[] [][]  
  []
 
 
-Overfull \hbox (11.38922pt too wide) in paragraph at lines 33--33
+Overfull \hbox (11.38243pt too wide) in paragraph at lines 33--33
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 vector<GammaTransition*> GetGammaTransiti
 on(float Energy, float 
  []
 
 
-Overfull \hbox (43.20671pt too wide) in paragraph at lines 34--34
+Overfull \hbox (43.19942pt too wide) in paragraph at lines 34--34
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 vector<GammaTransition*> GetGammaTransiti
 ons(string option=”Talys int 
  []
 
 
-Overfull \hbox (7.56946pt too wide) in paragraph at lines 44--44
+Overfull \hbox (7.56273pt too wide) in paragraph at lines 44--44
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 void SetLevelDeformation(int LevelNumber,
 char LevT, int BandN=- 
  []
 
 
-Overfull \hbox (21.8377pt too wide) in paragraph at lines 45--45
+Overfull \hbox (21.83075pt too wide) in paragraph at lines 45--45
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 void SetLevelDeformation(double LevelEner
 gy,char LevT, int BandN=- 
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 47.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 47.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 47.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 47.
 [3]
-Overfull \hbox (46.74174pt too wide) in paragraph at lines 51--51
+Overfull \hbox (46.73438pt too wide) in paragraph at lines 51--51
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 void GenerateGammaSpectrum(TH1F *Spectrum
 , TF1* ResolutionFunction, 
  []
 
 
-Overfull \hbox (104.8151pt too wide) in paragraph at lines 64--64
+Overfull \hbox (104.80681pt too wide) in paragraph at lines 64--64
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 void ExecuteCalculation(), void ExecuteCa
 lculation(void (*VarChangeFunction)(Nucleus 
  []
 
 
-Overfull \hbox (2.30527pt too wide) in paragraph at lines 65--65
+Overfull \hbox (2.29861pt too wide) in paragraph at lines 65--65
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 void SetTarget(string _Target), void SetP
 rojectile(string _Proj), void 
  []
 
 
-Overfull \hbox (82.32957pt too wide) in paragraph at lines 66--66
+Overfull \hbox (82.32164pt too wide) in paragraph at lines 66--66
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 void ExecuteCalculation(), ExecuteCalcula
 tion(void (*VarChangeFunction)(Nucleus 
  []
 
 
-Overfull \hbox (14.59067pt too wide) in paragraph at lines 68--68
+Overfull \hbox (14.58382pt too wide) in paragraph at lines 68--68
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 TGraph* GetLevelExcitationCrossSection(do
 uble LevelEnergy, string 
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 69.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 69.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 69.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 69.
 [4]
-Overfull \hbox (1.35286pt too wide) in paragraph at lines 69--69
+Overfull \hbox (1.3462pt too wide) in paragraph at lines 69--69
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 TGraph* GetGammaTransitionCrossSction(dou
 ble GammaEnergy, 
  []
 
 
-Overfull \hbox (44.15761pt too wide) in paragraph at lines 70--70
+Overfull \hbox (44.15027pt too wide) in paragraph at lines 70--70
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 TMultiGraph* GetAngularDistributionsForLe
 vel(double LevelEnergy,string 
  []
 
 
-Overfull \hbox (25.55772pt too wide) in paragraph at lines 71--71
+Overfull \hbox (25.5507pt too wide) in paragraph at lines 71--71
  [][] [][]\TU/TimesNewRoman(0)/m/n/12 TMultiGraph* GetElasticAngularDistributio
 ns(string type, string option, 
+ []
+
+
+Overfull \hbox (20.37587pt too wide) in paragraph at lines 90--90
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 double (*GetEvaluationResult)(double x_va
+lue,TalysFitter *PointetToTF)[] [][]  
  []
 
 )
 \tf@toc=\write4
 \openout4 = `manualRus.toc'.
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 43.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 43.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 43.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 43.
- [5]
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 44.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 44.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 46.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 46.
-LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/m/n' will be
-(Font)              scaled to size 13.87637pt on input line 48.
-LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/bx/n' will be
-(Font)              scaled to size 13.59425pt on input line 48.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 48.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 48.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 50.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 50.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 56.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 56.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 56.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 56.
- [1]
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 56.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 56.
+ [5] [6]
+Overfull \hbox (7.50299pt too wide) in paragraph at lines 50--51
+\TU/TimesNewRoman(0)/m/n/12 кроме того, хранит список $\OML/cmm/m/it/12 ^^M$\TU
+/TimesNewRoman(0)/m/n/12 -переходов в виде вектора объектов GammaTransition. 
+ []
 
-Overfull \hbox (6.41159pt too wide) in paragraph at lines 57--58
+[1]
+File: images//TalysLibScheme.eps Graphic file (type eps)
+<images//TalysLibScheme.eps>
+ [2]
+Overfull \hbox (8.46173pt too wide) in paragraph at lines 66--67
+[]\TU/TimesNewRoman(0)/m/n/12 Структура выходного файла TALYS значительно более
+ проста, чем файла ENSDF, 
+ []
+
+File: images//TalysLibSpectrum.eps Graphic file (type eps)
+<images//TalysLibSpectrum.eps>
+File: images//MinimisationSketch.eps Graphic file (type eps)
+<images//MinimisationSketch.eps>
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/m/it' will be
+(Font)              scaled to size 11.7041pt on input line 82.
+[3] [4] [5]
+File: images//Minimization.png Graphic file (type bmp)
+<images//Minimization.png>
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/m/n' will be
+(Font)              scaled to size 13.87616pt on input line 112.
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/b/n' will be
+(Font)              scaled to size 13.59425pt on input line 112.
+ [6] [7]
+Overfull \hbox (6.40536pt too wide) in paragraph at lines 121--122
 []\TU/TimesNewRoman(0)/m/n/12 Вектор, содержащий объекты типа Level-информацию 
 о свойствах ядерных уров-
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 58.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 58.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 60.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 60.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 62.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 62.
 
-Overfull \hbox (61.14703pt too wide) in paragraph at lines 63--64
+Overfull \hbox (61.1395pt too wide) in paragraph at lines 127--128
 \TU/TimesNewRoman(0)/m/n/12 полное сечение, ElasticDirectTalys – прямая компоне
 нта упругого рассеяния, ElasticCompoundTalys
  []
 
 
-Overfull \hbox (117.22069pt too wide) in paragraph at lines 63--64
+Overfull \hbox (117.2122pt too wide) in paragraph at lines 127--128
 \TU/TimesNewRoman(0)/m/n/12 – компаунд-компонента. Данные графики заполняются ф
 ункцией Nucleus::GetElasticAngularDistribution(string
  []
 
 
-Overfull \hbox (32.68687pt too wide) in paragraph at lines 64--64
-[]\TU/TimesNewRoman(0)/bx/n/12 InelasticTotTalysV, InelasticDirectTalysV, Inela
-sticCompoundTalysV, ElasticTotTalysV,
+Overfull \hbox (32.68687pt too wide) in paragraph at lines 128--128
+[]\TU/TimesNewRoman(0)/b/n/12 InelasticTotTalysV, InelasticDirectTalysV, Inelas
+ticCompoundTalysV, ElasticTotTalysV,
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 64.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 64.
 
-Overfull \hbox (1.75058pt too wide) in paragraph at lines 65--66
+Overfull \hbox (1.74393pt too wide) in paragraph at lines 129--130
 \TU/TimesNewRoman(0)/m/n/12 параметра V. Заполняются функцией Nucleus::AddPoint
 (double x_value, Nucleus* Nucl)
  []
 
 
-Overfull \hbox (6.09364pt too wide) in paragraph at lines 65--66
+Overfull \hbox (6.08693pt too wide) in paragraph at lines 129--130
 \TU/TimesNewRoman(0)/m/n/12 из значений TotInelastic, CompoundInelastic, Direct
 Inelastic, TotElastic, CompoundElastic,
  []
 
 
-Overfull \hbox (48.26514pt too wide) in paragraph at lines 65--66
+Overfull \hbox (48.25772pt too wide) in paragraph at lines 129--130
 \TU/TimesNewRoman(0)/m/n/12 DirectElastic, TotTalys соответственно. Величины To
 tInelastic, CompoundInelastic, DirectInelastic,
  []
 
 
-Overfull \hbox (1.88623pt too wide) in paragraph at lines 65--66
+Overfull \hbox (1.87956pt too wide) in paragraph at lines 129--130
 \TU/TimesNewRoman(0)/m/n/12 TotElastic, CompoundElastic, DirectElastic, TotTaly
 s, в свою очередь, считываются непо-
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 66.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 66.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 66.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 66.
-[2]
-Overfull \hbox (32.12831pt too wide) in paragraph at lines 66--66
-[]\TU/TimesNewRoman(0)/bx/n/12 BNECS_gamma, BNECS_neutron, BNECS_proton, BNECS_
-deuteron, BNECS_triton,
+[8]
+Overfull \hbox (32.12831pt too wide) in paragraph at lines 130--130
+[]\TU/TimesNewRoman(0)/b/n/12 BNECS_gamma, BNECS_neutron, BNECS_proton, BNECS_d
+euteron, BNECS_triton,
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 66.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 66.
 
-Overfull \hbox (10.65019pt too wide) in paragraph at lines 67--68
+Overfull \hbox (10.64342pt too wide) in paragraph at lines 131--132
 \TU/TimesNewRoman(0)/m/n/12 non-elastic cross sections (non-exclusive)». Заполн
 ение этих графиков производится функ-
  []
 
 
-Overfull \hbox (9.22351pt too wide) in paragraph at lines 67--68
+Overfull \hbox (9.21674pt too wide) in paragraph at lines 131--132
 \TU/TimesNewRoman(0)/m/n/12 цией Nucleus::AddPoint(double x_value, Nucleus* Nuc
 l) из величин BNECS_g, BNECS_n,
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 68.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 68.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 70.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 70.
 
-Overfull \hbox (9.58485pt too wide) in paragraph at lines 71--72
+Overfull \hbox (9.57852pt too wide) in paragraph at lines 135--136
 []\TU/TimesNewRoman(0)/m/n/12 Функция, считывающая output файл и записывающая в
  переменные TOTGamProd,
  []
 
 
-Overfull \hbox (2.39334pt too wide) in paragraph at lines 71--72
+Overfull \hbox (2.38667pt too wide) in paragraph at lines 135--136
 \TU/TimesNewRoman(0)/m/n/12 упругого рассеяния и вклады отдельных компонент, а 
 в TotInelastic, CompoundInelastic,
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 72.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 72.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 72.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 72.
-[3]
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 72.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 72.
-
+[9]
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                \kern 2.31268pt
-(hyperref)                removed on input line 72.
+(hyperref)                \kern 2.31265pt
+(hyperref)                removed on input line 136.
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 74.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 74.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 76.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 76.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 78.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 78.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 80.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 80.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 80.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 80.
-[4]
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 80.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 80.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 82.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 82.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 84.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 84.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 86.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 86.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 88.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 88.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 90.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 90.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 90.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 90.
- [5]
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 90.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 90.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 92.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 92.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 94.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 94.
-
-Overfull \hbox (68.40425pt too wide) in paragraph at lines 95--96
+[10] [11]
+Overfull \hbox (68.39655pt too wide) in paragraph at lines 159--160
 \TU/TimesNewRoman(0)/m/n/12 мента принимает тип информации об уровнях. Возможны
 е значения аргумента: ”final ”exp ”hfb опи-
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 96.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 96.
 
-Overfull \hbox (49.80418pt too wide) in paragraph at lines 98--98
-[]\TU/TimesNewRoman(0)/bx/n/12 vector<Level*> GetLevelsWithCorrespondingTransit
-ions(float Energy, float tolerancy=1,
+Overfull \hbox (49.80418pt too wide) in paragraph at lines 162--162
+[]\TU/TimesNewRoman(0)/b/n/12 vector<Level*> GetLevelsWithCorrespondingTransiti
+ons(float Energy, float tolerancy=1,
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 98.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 98.
 
-Overfull \hbox (11.42563pt too wide) in paragraph at lines 99--100
+Overfull \hbox (11.41882pt too wide) in paragraph at lines 163--164
 \TU/TimesNewRoman(0)/m/n/12 должна быть не ниже intensity. Использовалась для п
 оиска подходящих гамма-переходов
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 100.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 100.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 100.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 100.
-[6]
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 100.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 100.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 102.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 102.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 104.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 104.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 106.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 106.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 108.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 108.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 110.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 110.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 110.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 110.
- [7]
-Overfull \hbox (19.15958pt too wide) in paragraph at lines 110--110
-[]\TU/TimesNewRoman(0)/bx/n/12 vector<GammaTransition*> GetGammaTransition(floa
-t Energy, float tolerancy=1,
+[12] [13]
+Overfull \hbox (19.15958pt too wide) in paragraph at lines 174--174
+[]\TU/TimesNewRoman(0)/b/n/12 vector<GammaTransition*> GetGammaTransition(float
+ Energy, float tolerancy=1,
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 110.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 110.
 
-Overfull \hbox (74.40335pt too wide) in paragraph at lines 112--112
-[]\TU/TimesNewRoman(0)/bx/n/12 vector<GammaTransition*> GetGammaTransitions(str
-ing option=”Talys int BetterThan=100,
+Overfull \hbox (74.40335pt too wide) in paragraph at lines 176--176
+[]\TU/TimesNewRoman(0)/b/n/12 vector<GammaTransition*> GetGammaTransitions(stri
+ng option=”Talys int BetterThan=100,
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 112.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 112.
 
 Package hyperref Warning: Token not allowed in a PDF string (Unicode):
-(hyperref)                \kern 2.31268pt
-(hyperref)                removed on input line 112.
+(hyperref)                \kern 2.31265pt
+(hyperref)                removed on input line 176.
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 114.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 114.
 
-Overfull \hbox (29.95593pt too wide) in paragraph at lines 115--116
+Overfull \hbox (29.94884pt too wide) in paragraph at lines 179--180
 \TU/TimesNewRoman(0)/m/n/12 мое ядро само является продуктом, пуст. Заполняется
  функцией Nucleus::GenerateProducts(). 
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 116.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 116.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 118.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 118.
-
-Overfull \hbox (6.84357pt too wide) in paragraph at lines 119--120
+[14]
+Overfull \hbox (6.83684pt too wide) in paragraph at lines 183--184
 \TU/TimesNewRoman(0)/m/n/12 могут быть добавлены дополнительные команды, находя
 щиеся в Nucleus::TalysOptions. 
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 120.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 120.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 120.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 120.
-[8]
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 120.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 120.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 127.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 127.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 129.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 129.
 
-Overfull \hbox (24.31703pt too wide) in paragraph at lines 130--131
+Overfull \hbox (24.31001pt too wide) in paragraph at lines 194--195
 \TU/TimesNewRoman(0)/m/n/12 мента принимает сечение излучения гамма-кванта, пер
 еходы с сечением менее MinTalysCS
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 131.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 131.
-
-Overfull \hbox (49.6418pt too wide) in paragraph at lines 132--133
+[15]
+Overfull \hbox (49.63486pt too wide) in paragraph at lines 196--197
 []\TU/TimesNewRoman(0)/m/n/12 Функция, приписывающая указателям правильные знач
 ения. Присваивает fMotherNucleus
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 133.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 133.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 133.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 133.
-[9]
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 133.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 133.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 135.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 135.
 
-Overfull \hbox (62.38733pt too wide) in paragraph at lines 136--137
+Overfull \hbox (62.38019pt too wide) in paragraph at lines 200--201
 []\TU/TimesNewRoman(0)/m/n/12 Функция, приписывающая уровням указатель на соотв
 етствующий объект LevelDeformation,
  []
 
 
-Overfull \hbox (16.64824pt too wide) in paragraph at lines 137--137
-[]\TU/TimesNewRoman(0)/bx/n/12 void SetLevelDeformation(int LevelNumber,char Le
-vT, int BandN=-1, int BandL=-
+Overfull \hbox (16.64824pt too wide) in paragraph at lines 201--201
+[]\TU/TimesNewRoman(0)/b/n/12 void SetLevelDeformation(int LevelNumber,char Lev
+T, int BandN=-1, int BandL=-
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 137.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 137.
 
-Overfull \hbox (23.92087pt too wide) in paragraph at lines 138--139
+Overfull \hbox (23.91429pt too wide) in paragraph at lines 202--203
 []\TU/TimesNewRoman(0)/m/n/12 Функция, позволяющая установить деформацию для ур
 овня c номером LevelNumber.
  []
 
 
-Overfull \hbox (1.23026pt too wide) in paragraph at lines 138--139
+Overfull \hbox (1.22363pt too wide) in paragraph at lines 202--203
 \TU/TimesNewRoman(0)/m/n/12 момент полосы или мультипольность(?) (multipolarity
 ), NPhon-число фононов (phonon
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 139.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 139.
-
-Overfull \hbox (18.4157pt too wide) in paragraph at lines 140--141
+[16]
+Overfull \hbox (18.40921pt too wide) in paragraph at lines 204--205
 []\TU/TimesNewRoman(0)/m/n/12 Функция, позволяющая установить деформацию для ур
 овня c энергией LevelEnergy
  []
 
 
-Overfull \hbox (2.30649pt too wide) in paragraph at lines 140--141
+Overfull \hbox (2.30034pt too wide) in paragraph at lines 204--205
 \TU/TimesNewRoman(0)/m/n/12 магнитное квантовое число (magnetic quantum number)
 . Значения деформации ($\OML/cmm/m/it/12 ^^L[]:::^^L[]$\TU/TimesNewRoman(0)/m/n
 /12 )
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 141.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 141.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 141.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 141.
-[10]
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 141.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 141.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 143.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 143.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 145.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 145.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 147.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 147.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 149.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 149.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 151.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 151.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 153.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 153.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 153.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 153.
- [11]
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 153.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 153.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 155.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 155.
-
-Overfull \hbox (30.79242pt too wide) in paragraph at lines 156--157
+[17]
+Overfull \hbox (30.78577pt too wide) in paragraph at lines 220--221
 []\TU/TimesNewRoman(0)/m/n/12 Функция, выполняющая заполнение графиков Inelasti
 cTotTalysV, InelasticDirectTalysV,
  []
 
 
-Overfull \hbox (6.57532pt too wide) in paragraph at lines 156--157
+Overfull \hbox (6.56859pt too wide) in paragraph at lines 220--221
 \TU/TimesNewRoman(0)/m/n/12 InelasticCompoundTalysV, ElasticTotTalysV, ElasticD
 irectTalysV, ElasticCompoundTalysV,
  []
 
 
-Overfull \hbox (36.05113pt too wide) in paragraph at lines 156--157
+Overfull \hbox (36.04393pt too wide) in paragraph at lines 220--221
 \TU/TimesNewRoman(0)/m/n/12 TotTalysV, BNECS_gamma, BNECS_neutron, BNECS_proton
 , BNECS_deuteron, BNECS_triton,
  []
 
 
-Overfull \hbox (19.73134pt too wide) in paragraph at lines 156--157
+Overfull \hbox (19.72441pt too wide) in paragraph at lines 220--221
 \TU/TimesNewRoman(0)/m/n/12 (void Level::AddPoint(double x_value,Level *level))
 . Используется классом TalysCalculation
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 158.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 158.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 160.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 160.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 162.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 162.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 164.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 164.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 166.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 166.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 168.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 168.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 170.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 170.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 172.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 172.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 174.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 174.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 176.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 176.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 178.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 178.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 178.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 178.
-[12]
-Overfull \hbox (48.00092pt too wide) in paragraph at lines 178--178
-[]\TU/TimesNewRoman(0)/bx/n/12 void ExecuteCalculation(), void ExecuteCalculati
-on(void (*VarChangeFunction)(Nucleus
+[18] [19]
+Overfull \hbox (48.00092pt too wide) in paragraph at lines 242--242
+[]\TU/TimesNewRoman(0)/b/n/12 void ExecuteCalculation(), void ExecuteCalculatio
+n(void (*VarChangeFunction)(Nucleus
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 178.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 178.
 
-Overfull \hbox (47.24402pt too wide) in paragraph at lines 180--180
-[]\TU/TimesNewRoman(0)/bx/n/12 void SetTarget(string _Target), void SetProjecti
-le(string _Proj), void SetVarValues(double
+Overfull \hbox (47.24402pt too wide) in paragraph at lines 244--244
+[]\TU/TimesNewRoman(0)/b/n/12 void SetTarget(string _Target), void SetProjectil
+e(string _Proj), void SetVarValues(double
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 180.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 180.
 
-Overfull \hbox (25.33644pt too wide) in paragraph at lines 182--182
-[]\TU/TimesNewRoman(0)/bx/n/12 void ExecuteCalculation(), ExecuteCalculation(vo
-id (*VarChangeFunction)(Nucleus
+Overfull \hbox (25.33644pt too wide) in paragraph at lines 246--246
+[]\TU/TimesNewRoman(0)/b/n/12 void ExecuteCalculation(), ExecuteCalculation(voi
+d (*VarChangeFunction)(Nucleus
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 182.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 182.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 184.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 184.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 186.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 186.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 186.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 186.
-[13]
-Overfull \hbox (29.00014pt too wide) in paragraph at lines 186--186
-[]\TU/TimesNewRoman(0)/bx/n/12 TGraph* GetLevelExcitationCrossSection(double Le
-velEnergy, string NucleusName,
+
+Overfull \hbox (29.00014pt too wide) in paragraph at lines 250--250
+[]\TU/TimesNewRoman(0)/b/n/12 TGraph* GetLevelExcitationCrossSection(double Lev
+elEnergy, string NucleusName,
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 186.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 186.
 
-Overfull \hbox (50.52328pt too wide) in paragraph at lines 188--188
-[]\TU/TimesNewRoman(0)/bx/n/12 TGraph* GetGammaTransitionCrossSction(double Gam
-maEnergy, string NucleusName) 
+Overfull \hbox (50.52328pt too wide) in paragraph at lines 252--252
+[]\TU/TimesNewRoman(0)/b/n/12 TGraph* GetGammaTransitionCrossSction(double Gamm
+aEnergy, string NucleusName) 
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 188.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 188.
 
-Overfull \hbox (63.20428pt too wide) in paragraph at lines 190--190
-[]\TU/TimesNewRoman(0)/bx/n/12 TMultiGraph* GetAngularDistributionsForLevel(dou
-ble LevelEnergy,string NucleusName,
+Overfull \hbox (63.20428pt too wide) in paragraph at lines 254--254
+[]\TU/TimesNewRoman(0)/b/n/12 TMultiGraph* GetAngularDistributionsForLevel(doub
+le LevelEnergy,string NucleusName,
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 190.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 190.
-
-Overfull \hbox (18.55388pt too wide) in paragraph at lines 192--192
-[]\TU/TimesNewRoman(0)/bx/n/12 TMultiGraph* GetElasticAngularDistributions(stri
-ng type, string option, TLegend
+[20]
+Overfull \hbox (18.55388pt too wide) in paragraph at lines 256--256
+[]\TU/TimesNewRoman(0)/b/n/12 TMultiGraph* GetElasticAngularDistributions(strin
+g type, string option, TLegend
  []
 
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 192.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 192.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 195.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 195.
-Package atveryend Info: Empty hook `BeforeClearDocument' on input line 196.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 196.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 196.
-Package babel Info: Redefining russian shorthand "|
-(babel)             in language  on input line 196.
-Package babel Info: Redefining russian shorthand "~
-(babel)             in language  on input line 196.
-[14]
-Package atveryend Info: Empty hook `AfterLastShipout' on input line 196.
- (./manualRus.aux)
-Package atveryend Info: Empty hook `AtVeryEndDocument' on input line 196.
-Package atveryend Info: Empty hook `AtEndAfterFileList' on input line 196.
-
+[21] [22] (./manualRus.aux)
 
 LaTeX Font Warning: Some font shapes were not available, defaults substituted.
 
-Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 196.
+Package rerunfilecheck Info: File `manualRus.out' has not changed.
+(rerunfilecheck)             Checksum: C9E208AA8BDDCE43BC3B6B0E004393AD;26686.
  ) 
 Here is how much of TeX's memory you used:
- 24966 strings out of 493007
- 454711 string characters out of 6136719
- 560448 words of memory out of 5000000
- 28719 multiletter control sequences out of 15000+600000
- 535012 words of font info for 57 fonts, out of 8000000 for 9000
- 1348 hyphenation exceptions out of 8191
- 46i,6n,116p,10378b,541s stack positions out of 5000i,500n,10000p,200000b,80000s
+ 17923 strings out of 477574
+ 321651 string characters out of 5841804
+ 703421 words of memory out of 5000000
+ 37552 multiletter control sequences out of 15000+600000
+ 408384 words of font info for 75 fonts, out of 8000000 for 9000
+ 1040 hyphenation exceptions out of 8191
+ 73i,9n,123p,966b,532s stack positions out of 5000i,500n,10000p,200000b,80000s
 
-Output written on manualRus.pdf (19 pages).
+Output written on manualRus.pdf (28 pages).
