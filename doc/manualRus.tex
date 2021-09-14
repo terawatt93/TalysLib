@@ -44,21 +44,23 @@
 \section{Введение}
 Библиотека \textbf{TalysLib} представляет собой основанный на \href{https://root.cern/}{ROOT} набор классов, облегчающий взаимодействие программ, создаваемых пользователем, с базами данных и результатами расчетов \href{https://tendl.web.psi.ch/tendl_2019/talys.html}{TALYS}. Библиотека не требует вмешательства в исходный код TALYS, и предполагается, что это позволит обеспечить хорошую совместимость с разными версиями TALYS. Для получения параметров ядра (деформаций, оптических потенциалов, масс, наборов уровней с соответствующими квантовыми числами) производится чтение базы данных TALYS (расположена в директории structure), результаты расчета извлекаются из выдачи TALYS (обычно, перенаправляемой в файл output) путем поиска ключевых слов и считывания соответствующих значений.
 \section{Структура библиотеки}
-Библиотека состоит из набора классов, описывающих различные физические свойства ядер. 
+Библиотека состоит из набора классов, описывающих различные физические свойства ядер, классов управления и классов хранения данных. 
+\subsection{Класс TalysLibManager}
+
 \subsection{Класс Nucleus}
 Класс Nucleus включает в себя набор объектов и методов для работы со свойствами ядра. Описание методов и членов этого класса приведено ниже
-\subsubsection{Name,Reaction,Projectile}
-string Name -- имя ядра вида "56Fe".
+\subsubsection{string Name,Reaction,Projectile}
+Name -- строка string, содержащая имя ядра вида "56Fe".
 
-string Reaction -- реакция, приводящая к образованию данного ядра, строка вида "(n,p)".
+Reaction -- строка string, содержащая реакцию, приводящая к образованию данного ядра, строка вида "(n,p)".
 
-string Projectile -- налетающая частица, строка вида "n". Возможные значения данного параметра: n, p, d, t, h, a, g.
+Projectile -- строка string, содержащая, налетающую частица, строка вида "n". Возможные значения данного параметра: n, p, d, t, h, a, g.
 \subsubsection{vector<Level> Levels}
 Вектор, содержащий объекты типа Level-информацию о свойствах ядерных уровней.
 \subsubsection{OpticalModelParameters OMPN, OMPP}
-Объекты, содержащие в себе информацию об оптическом потенциале для нейтронов (OMPN) и протонов (OMPP)
-\subsubsection{Deformation}
-Объект, содержащий в себе сведения о деформации ядра в основном и возбужденных состояниях, а так же о природе этих состояний.
+Объекты, класса OpticalModelParameters, содержащие в себе информацию об оптическом потенциале для нейтронов (OMPN) и протонов (OMPP).
+\subsubsection{Deformation Def}
+Объект, класса Deformation, содержащий в себе сведения о деформации ядра в основном и возбужденных состояниях, а так же о природе этих состояний.
 \subsubsection{TGraph ElacticTotTalys, ElasticDirectTalys, ElasticCompoundTalys}
 Графики углового распределения упруго рассеянных частиц:  ElacticTotTalys -- полное сечение, ElasticDirectTalys -- прямая компонента упругого рассеяния, ElasticCompoundTalys -- компаунд-компонента. Данные графики заполняются функцией Nucleus::GetElasticAngularDistribution(string type, string option) из векторов Angle, ElTot; Angle, ElCompound; Angle, ElDirect соответственно.
 \subsubsection{InelasticTotTalysV, InelasticDirectTalysV, InelasticCompoundTalysV, ElasticTotTalysV, ElasticDirectTalysV, ElasticCompoundTalysV, TotTalysV}
@@ -69,7 +71,7 @@ string Projectile -- налетающая частица, строка вида 
 Данные графики представляют собой сечения неупругого рассеяния, т.е., реакций вида $(n,1nx)$: полное, в континууме и на дискретных уровнях соответственно, в выходном файле данные величины названы <<Total exclusive Inelastic scattering>>. Заполнение этих графиков производится функцией Nucleus::AddPoint(double x_value, Nucleus* Nucl) из величин TEISTot,TEISCont,TEISDiscr соответственно, а они, в свою очередь, считываются из output файла функцией Nucleus::ReadElastic().
 \subsubsection{void ReadElastic()}
 Функция, считывающая output файл и записывающая в переменные TOTGamProd, TOTNProd, TOTPProd, TOTDProd, TOTAProd полные сечения образования $\gamma$, n, p, d, $\alpha$ соответственно;  в TotElastic, CompoundElastic, DirectElastic записываются сечения упругого рассеяния и вклады отдельных компонент, а в TotInelastic, CompoundInelastic, DirectInelastic - сечения неупругого рассеяния. В переменную TotTalys записываются значения полного сечения.
-\subsubsection{TGraph* GetElasticAngularDistribution(string type="Total",string option=" ")}
+\subsubsection{TGraph* GetElasticAngularDistribution(string type,string option)}
 Данная функция строит угловое распределение рассеянных нейтронов и возвращает указатель на соответствующий график. Переменная type задает возможные варианты графика. Возможные значения: "Total" - полное сечение, "Compound" - компаунд-компонента, "Direct" - прямая компонента. Аргумент option принимает 2 значения: "" (по-умолчанию) и "new". В первом случае функция вернет уже построенный график, во втором-перестроит его.
 \subsubsection{int WriteOMPOrUseKoningP, WriteOMPOrUseKoningN}
 Данные переменные задают алгоритм работы с оптической моделью для протонов и нейтронов соответственно. Если значение переменной равно -1, то в расчете будет использован потенциал "по-умолчанию", либо заданный в input файле, если WriteOMPOrUseKoning=0, то будет использован потенциал, считанный из базы TALYS. Этот потенциал может быть изменен пользователем. Если в базе потенциала для данного ядра нет, будет использован потенциал "по-умолчанию". В случае, если если WriteOMPOrUseKoning=1, то будет использован потенциал из базы, а если его не окажется-то потенциал Кёнинга. Если WriteOMPOrUseKoning=2, то будет использован потенциал Кёнинга вне зависимости от наличия в базе потенциала для данного ядра.
@@ -191,9 +193,21 @@ string Projectile -- налетающая частица, строка вида 
 Функция, 
 \subsubsection{TMultiGraph* GetElasticAngularDistributions(string type, string option, TLegend *leg)}
 GetElasticAngularDistributions возвращает TMultiGraph с угловыми распределениями, соответствующими значениям VarValues.
-
+\subsection{Класс OMPStorageData}
+Наследник класса TObject программы CERN ROOT.
+\subsection{Класс OMPStorage}
+Наследник класса OMPStorageData.
+\subsection{Класс OpticalModelParametersData}
+Наследник класса TObject программы CERN ROOT. Содержит в себе объекты класса OMPStorageData.
+\subsubsection{OMPStorageData PotentialData, PotentialDispData, PotentialKoningData}
+Объекты класса OMPStorageData, хранящие в себе наборы параметров для разных типов оптического потенциала.\\
+PotentialData -- текущий (рабочий) набор.\\
+PotentialDispData -- набор оптической дисперсионной модели.\\
+PotentialKoningData -- набор для глобальной параметризации Кёнинга.
 \subsection{Класс OpticalModelParameters}
-
+Наследник класса OpticalModelParametersData. Содержит в себе данные и методы работы с оптическими параметрами ядра.
+\subsubsection{Класс OpticalModelParameters}
+\subsubsection{Класс OpticalModelParameters}
 \subsection{Класс TalysFitter}
 Класс TalysFitter нужен для подбора параметров оптического потенциала, лучше всего описывающие экспериментальные сечения. 
 \subsubsection{bool Calculated}
