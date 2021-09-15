@@ -146,6 +146,59 @@ void OMPStorage::SetRc(double value)
 {
 	Rc=value;
 }
+void OMPStorage::Setv1(double value)
+{
+	v1=value;
+}
+void OMPStorage::Setv2(double value)
+{
+	v2=value;
+}
+void OMPStorage::Setv3(double value)
+{
+	v3=value;
+}
+void OMPStorage::Setv4(double value)
+{
+	v4=value;
+}
+void OMPStorage::Setw1(double value)
+{
+	w1=value;
+}
+void OMPStorage::Setw2(double value)
+{
+	w2=value;
+}
+void OMPStorage::Setd1(double value)
+{
+	d1=value;
+}
+void OMPStorage::Setd2(double value)
+{
+	d2=value;
+}
+void OMPStorage::Setd3(double value)
+{
+	d3=value;
+}
+void OMPStorage::Setvso1(double value)
+{
+	vso1=value;
+}
+void OMPStorage::Setvso2(double value)
+{
+	vso2=value;
+}
+void OMPStorage::Setwso1(double value)
+{
+	wso1=value;
+}
+void OMPStorage::Setwso2(double value)
+{
+	wso2=value;
+}
+
 double OMPStorage::GetVv()
 {
 	double E=Nuclide->ProjectileEnergy;
@@ -817,6 +870,132 @@ double OpticalModelParameters::GetAso()
 		return DefaultOMP->GetAso();
 	}
 	cout<<"OpticalModelParameters::GetAso() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}
+double OpticalModelParameters::GetRc()
+{
+		if(DefaultOMP!=0)
+	{
+		return DefaultOMP->GetRc();
+	}
+	cout<<"OpticalModelParameters::GetRc() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}	
+double OpticalModelParameters::Getv1()
+{
+		if(DefaultOMP!=0)
+	{
+		return DefaultOMP->Getv1();
+	}
+	cout<<"OpticalModelParameters::Getv1() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}
+double OpticalModelParameters::Getv2()
+{
+		if(DefaultOMP!=0)
+	{
+		return DefaultOMP->Getv2();
+	}
+	cout<<"OpticalModelParameters::Getv2() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}
+double OpticalModelParameters::Getv3()
+{
+		if(DefaultOMP!=0)
+	{
+		return DefaultOMP->Getv3();
+	}
+	cout<<"OpticalModelParameters::Getv3() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}
+double OpticalModelParameters::Getv4()
+{
+		if(DefaultOMP!=0)
+	{
+		return DefaultOMP->Getv4();
+	}
+	cout<<"OpticalModelParameters::Getv4() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}
+double OpticalModelParameters::Getw1()
+{
+		if(DefaultOMP!=0)
+	{
+		return DefaultOMP->Getw1();
+	}
+	cout<<"OpticalModelParameters::Getw1() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}
+double OpticalModelParameters::Getw2()
+{
+		if(DefaultOMP!=0)
+	{
+		return DefaultOMP->Getw2();
+	}
+	cout<<"OpticalModelParameters::Getw2() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}
+double OpticalModelParameters::Getd1()
+{
+		if(DefaultOMP!=0)
+	{
+		return DefaultOMP->Getd1();
+	}
+	cout<<"OpticalModelParameters::Getd1() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}
+double OpticalModelParameters::Getd2()
+{
+		if(DefaultOMP!=0)
+	{
+		return DefaultOMP->Getd2();
+	}
+	cout<<"OpticalModelParameters::Getd2() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}
+double OpticalModelParameters::Getd3()
+{
+		if(DefaultOMP!=0)
+	{
+		return DefaultOMP->Getd3();
+	}
+	cout<<"OpticalModelParameters::Getd3() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}
+double OpticalModelParameters::Getvso1()
+{
+		if(DefaultOMP!=0)
+	{
+		return DefaultOMP->Getvso1();
+	}
+	cout<<"OpticalModelParameters::Getvso1() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}
+double OpticalModelParameters::Getvso2()
+{
+		if(DefaultOMP!=0)
+	{
+		return DefaultOMP->Getvso2();
+	}
+	cout<<"OpticalModelParameters::Getvso2() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}
+double OpticalModelParameters::Getwso1()
+{
+		if(DefaultOMP!=0)
+	{
+		return DefaultOMP->Getwso1();
+	}
+	cout<<"OpticalModelParameters::Getwso1s() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}
+double OpticalModelParameters::Getwso2()
+{
+		if(DefaultOMP!=0)
+	{
+		return DefaultOMP->Getwso2();
+	}
+	cout<<"OpticalModelParameters::Getwso2() error: DefaultOMP does not set! -1 returned\n";
 	return -1;
 }
 
