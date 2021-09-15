@@ -10,3 +10,7 @@ doc/manualRus.aux
 *.out
 *.log
 *.toc
+*.rootmap
+*.so
+*.cxx
+*.pcm
