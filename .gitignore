@@ -5,3 +5,8 @@
 doc/manualRus.pdf
 doc/manualRus.synctex.gz
 *.toc
+doc/manualRus.aux
+*.aux
+*.out
+*.log
+*.toc
