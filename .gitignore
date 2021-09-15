@@ -1,0 +1,7 @@
+
+*.aux
+*.log
+*.out
+doc/manualRus.pdf
+doc/manualRus.synctex.gz
+*.toc
