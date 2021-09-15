@@ -108,9 +108,9 @@ D(x)=
 Выбросы на графике $\chi^2$ (Рис.~\ref{fig:MinimizationPicture}.) связаны с расчетами в разных точках, лежащих на градиенте, необходимых для выбора набора параметров, который будет использоваться на следующем шаге минимизации. Видно, что величина $\chi^2$, в среднем, убывает с каждой итерацией.
 
 \section{Структура библиотеки}
-Библиотека состоит из набора классов, описывающих различные физические свойства ядер, классов управления и классов хранения данных. 
+Библиотека состоит из набора классов, описывающих различные физические свойства ядер, <<классов управления>> и классов хранения данных. В данном разделе перечислены и описаны созданные для библиотеки пользовательские классы. 
 \subsection{Класс TalysLibManager}
-
+<<Управляющий>> класс
 \subsection{Класс Nucleus}
 Класс Nucleus включает в себя набор объектов и методов для работы со свойствами ядра. Описание методов и членов этого класса приведено ниже
 \subsubsection{string Name,Reaction,Projectile}
@@ -258,20 +258,24 @@ Projectile -- строка string, содержащая, налетающую ч
 \subsubsection{TMultiGraph* GetElasticAngularDistributions(string type, string option, TLegend *leg)}
 GetElasticAngularDistributions возвращает TMultiGraph с угловыми распределениями, соответствующими значениям VarValues.
 \subsection{Класс OMPStorageData}
-Наследник класса TObject программы CERN ROOT.
+Класс для хранения данных (выполняет роль структуры). Наследник класса \href{https://root.cern/doc/master/classTObject.html}{TObject} программы \href{https://root.cern}{CERN ROOT}, гарантированно может быть записан в root-файл. 
 \subsection{Класс OMPStorage}
-Наследник класса OMPStorageData.
+Наследник класса OMPStorageData. Владеет своими гетерами и сеттерами для оптических параметров.
+\subsubsection{OMPStorageData ToOMPStorageData()}
+
 \subsection{Класс OpticalModelParametersData}
-Наследник класса TObject программы CERN ROOT. Содержит в себе объекты класса OMPStorageData.
+Наследник класса \href{https://root.cern/doc/master/classTObject.html}{TObject} программы \href{https://root.cern}{CERN ROOT}. Содержит в себе объекты класса OMPStorageData.
 \subsubsection{OMPStorageData PotentialData, PotentialDispData, PotentialKoningData}
-Объекты класса OMPStorageData, хранящие в себе наборы параметров для разных типов оптического потенциала.\\
+Объекты класса OMPStorageData, хранящие в себе наборы параметров для разных типов оптического потенциала:\\
 PotentialData -- текущий (рабочий) набор.\\
 PotentialDispData -- набор оптической дисперсионной модели.\\
 PotentialKoningData -- набор для глобальной параметризации Кёнинга.
 \subsection{Класс OpticalModelParameters}
-Наследник класса OpticalModelParametersData. Содержит в себе данные и методы работы с оптическими параметрами ядра.
-\subsubsection{Класс OpticalModelParameters}
-\subsubsection{Класс OpticalModelParameters}
+Основной класс для работы с оптическими параметрами. Наследник класса OpticalModelParametersData. Содержит в себе данные и методы работы с оптическими параметрами ядра. Владеет своими гетерами и сеттерами для оптических параметров, которые используют гетеры и сеттеры класса OMPStorage.
+\subsubsection{OpticalModelParametersData ToOpticalModelParametersData()}
+Объект класса OpticalModelParametersData
+\subsubsection{OMPStorage Potential, PotentialDisp, PotentialKoning}
+Объекты класса OMPStorage
 \subsection{Класс TalysFitter}
 Класс TalysFitter нужен для подбора параметров оптического потенциала, лучше всего описывающие экспериментальные сечения. 
 \subsubsection{bool Calculated}
@@ -298,5 +302,8 @@ PotentialKoningData -- набор для глобальной параметри
 \subsubsection{double Eval(double *x, double *p)}
 \subsubsection{double (*GetEvaluationResult)(double x_value,TalysFitter *PointetToTF)}
 \subsubsection{TF1 GenerateTF1(string name, double x_min,double x_max)}
+
+\subsection{Класс TalysFitterMT}
+Класс TalysFitterMT нужен для многопоточного подбора параметров оптического потенциала, лучше всего описывающие экспериментальные сечения. 
 
 \end{document}
