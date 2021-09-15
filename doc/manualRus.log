@@ -1,0 +1,1221 @@
+This is XeTeX, Version 3.141592653-2.6-0.999993 (TeX Live 2021) (preloaded format=xelatex 2021.5.29)  24 AUG 2021 22:54
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**manualRus.tex
+(./manualRus.tex
+LaTeX2e <2020-10-01> patch level 4
+L3 programming layer <2021-02-18>
+(/usr/local/texlive/2021/texmf-dist/tex/latex/extsizes/extarticle.cls
+Document Class: extarticle 1996/10/08 v1.0 Non Standard LaTeX document class
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/exscale.sty
+Package: exscale 2018/09/24 v2.1i Standard LaTeX package exscale
+LaTeX Font Info:    Redeclaring symbol font `largesymbols' on input line 57.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `normal'
+(Font)                  OMX/cmex/m/n --> OMX/cmex/m/n on input line 57.
+LaTeX Font Info:    Overwriting symbol font `largesymbols' in version `bold'
+(Font)                  OMX/cmex/m/n --> OMX/cmex/m/n on input line 57.
+\big@size=\dimen138
+)
+\c@part=\count175
+\c@section=\count176
+\c@subsection=\count177
+\c@subsubsection=\count178
+\c@paragraph=\count179
+\c@subparagraph=\count180
+\c@figure=\count181
+\c@table=\count182
+\abovecaptionskip=\skip47
+\belowcaptionskip=\skip48
+\bibindent=\dimen139
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/extsizes/extsizes.sty
+Package: extsizes 1996/10/08 v1.0 Non Standard LaTeX Package
+
+
+Package ExtSizes Warning: It is better to use one of the extsizes classes,
+ if you can.
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/size12.clo
+File: size12.clo 2020/04/10 v1.4m Standard LaTeX file (size option)
+LaTeX Info: The control sequence `\normalsize' is already robust on input line 
+56.
+LaTeX Info: Redefining \small on input line 58.
+LaTeX Info: Redefining \footnotesize on input line 69.
+LaTeX Info: Redefining \scriptsize on input line 80.
+LaTeX Info: Redefining \tiny on input line 81.
+LaTeX Info: Redefining \large on input line 82.
+LaTeX Info: Redefining \Large on input line 83.
+LaTeX Info: Redefining \LARGE on input line 84.
+LaTeX Info: Redefining \huge on input line 85.
+))
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsmath.sty
+Package: amsmath 2020/09/23 v2.17i AMS math features
+\@mathmargin=\skip49
+
+For additional information on amsmath, use the `?' option.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amstext.sty
+Package: amstext 2000/06/29 v2.01 AMS text
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsgen.sty
+File: amsgen.sty 1999/11/30 v2.0 generic functions
+\@emptytoks=\toks15
+\ex@=\dimen140
+))
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsbsy.sty
+Package: amsbsy 1999/11/29 v1.2d Bold Symbols
+\pmbraise@=\dimen141
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/amsmath/amsopn.sty
+Package: amsopn 2016/03/08 v2.02 operator names
+)
+\inf@bad=\count183
+LaTeX Info: Redefining \frac on input line 234.
+\uproot@=\count184
+\leftroot@=\count185
+LaTeX Info: Redefining \overline on input line 399.
+\classnum@=\count186
+\DOTSCASE@=\count187
+LaTeX Info: Redefining \ldots on input line 496.
+LaTeX Info: Redefining \dots on input line 499.
+LaTeX Info: Redefining \cdots on input line 620.
+\Mathstrutbox@=\box47
+\strutbox@=\box48
+\big@size=\dimen142
+LaTeX Font Info:    Redeclaring font encoding OML on input line 743.
+LaTeX Font Info:    Redeclaring font encoding OMS on input line 744.
+\macc@depth=\count188
+\c@MaxMatrixCols=\count189
+\dotsspace@=\muskip16
+\c@parentequation=\count190
+\dspbrk@lvl=\count191
+\tag@help=\toks16
+\row@=\count192
+\column@=\count193
+\maxfields@=\count194
+\andhelp@=\toks17
+\eqnshift@=\dimen143
+\alignsep@=\dimen144
+\tagshift@=\dimen145
+\tagwidth@=\dimen146
+\totwidth@=\dimen147
+\lineht@=\dimen148
+\@envbody=\toks18
+\multlinegap=\skip50
+\multlinetaggap=\skip51
+\mathdisplay@stack=\toks19
+LaTeX Info: Redefining \[ on input line 2923.
+LaTeX Info: Redefining \] on input line 2924.
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/tools/indentfirst.sty
+Package: indentfirst 1995/11/23 v1.03 Indent first paragraph (DPC)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2020/08/10 v2.0s Standard LaTeX package
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/cyrillic/t2aenc.def
+File: t2aenc.def 2005/09/27 v1.0i Cyrillic encoding definition file
+)
+LaTeX Font Info:    Trying to load font information for T2A+lmr on input line 1
+12.
+LaTeX Font Info:    No file T2Almr.fd. on input line 112.
+LaTeX Font Info:    Trying to load font information for T2A+cmr on input line 1
+12.
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/cyrillic/t2acmr.fd
+File: t2acmr.fd 2001/08/11 v1.0a Computer Modern Cyrillic font definitions
+)
+
+LaTeX Font Warning: Font shape `T2A/lmr/m/n' undefined
+(Font)              using `T2A/cmr/m/n' instead on input line 112.
+
+! Font T2A/cmr/m/n/12=larm1200 at 12.0pt not loadable: Metric (TFM) file or ins
+talled font not found.
+<to be read again> 
+                   relax 
+l.112 ...\familydefault\seriesdefault\shapedefault
+                                                  
+? 
+) (/usr/local/texlive/2021/texmf-dist/tex/latex/setspace/setspace.sty
+Package: setspace 2011/12/19 v6.7a set line spacing
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/caption/caption.sty
+Package: caption 2020/10/26 v3.5g Customizing captions (AR)
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/caption/caption3.sty
+Package: caption3 2020/10/21 v2.2e caption3 kernel (AR)
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/keyval.sty
+Package: keyval 2014/10/28 v1.15 key=value parser (DPC)
+\KV@toks@=\toks20
+)
+\captionmargin=\dimen149
+\captionmargin@=\dimen150
+\captionwidth=\dimen151
+\caption@tempdima=\dimen152
+\caption@indent=\dimen153
+\caption@parindent=\dimen154
+\caption@hangindent=\dimen155
+Package caption Info: Standard document class detected.
+)
+\c@caption@flags=\count195
+\c@continuedfloat=\count196
+)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/babel/babel.sty
+Package: babel 2021/03/24 3.56 The Babel package
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/babel/babel.def
+File: babel.def 2021/03/24 3.56 Babel common definitions
+\babel@savecnt=\count197
+\U@D=\dimen156
+\l@babelnohyphens=\language42
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/babel/xebabel.def
+(/usr/local/texlive/2021/texmf-dist/tex/generic/babel/txtbabel.def))
+\bbl@readstream=\read2
+)
+\bbl@dirlevel=\count198
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/babel-russian/russianb.ldf
+File: russianb.ldf 2021/01/10 1.3m Russian support for the Babel system
+Language: russian 2020/09/09 1.3k Russian support for the Babel system
+Package babel Info: Making " an active character on input line 124.
+Package babel Info: Default for \cyrdash is provided on input line 163.
+))
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/inputenc.sty
+Package: inputenc 2020/08/01 v1.3d Input encoding file
+\inpenc@prehook=\toks21
+\inpenc@posthook=\toks22
+
+
+Package inputenc Warning: inputenc package ignored with utf8 based engines.
+
+) (/usr/local/texlive/2021/texmf-dist/tex/latex/cmap/cmap.sty
+Package: cmap 2021/02/06 v1.0j CMap support: searchable PDF
+
+
+Package cmap Warning: pdftex not detected - exiting.
+
+) (/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/graphicx.sty
+Package: graphicx 2020/09/09 v1.2b Enhanced LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/graphics.sty
+Package: graphics 2020/08/30 v1.4c Standard LaTeX Graphics (DPC,SPQR)
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/trig.sty
+Package: trig 2016/01/03 v1.10 sin cos tan (DPC)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics-cfg/graphics.cfg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: xetex.def on input line 105.
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics-def/xetex.def
+File: xetex.def 2021/03/18 v5.0k Graphics/color driver for xetex
+))
+\Gin@req@height=\dimen157
+\Gin@req@width=\dimen158
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/tools/longtable.sty
+Package: longtable 2020/01/07 v4.13 Multi-page Table package (DPC)
+\LTleft=\skip52
+\LTright=\skip53
+\LTpre=\skip54
+\LTpost=\skip55
+\LTchunksize=\count199
+\LTcapwidth=\dimen159
+\LT@head=\box49
+\LT@firsthead=\box50
+\LT@foot=\box51
+\LT@lastfoot=\box52
+\LT@cols=\count266
+\LT@rows=\count267
+\c@LT@tables=\count268
+\c@LT@chunks=\count269
+\LT@p@ftn=\toks23
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/geometry/geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/iftex.sty
+Package: iftex 2020/03/06 v1.0d TeX engine tests
+))
+\Gm@cnth=\count270
+\Gm@cntv=\count271
+\c@Gm@tempcnt=\count272
+\Gm@bindingoffset=\dimen160
+\Gm@wd@mp=\dimen161
+\Gm@odd@mp=\dimen162
+\Gm@even@mp=\dimen163
+\Gm@layoutwidth=\dimen164
+\Gm@layoutheight=\dimen165
+\Gm@layouthoffset=\dimen166
+\Gm@layoutvoffset=\dimen167
+\Gm@dimlist=\toks24
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/breqn/breqn.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/l3kernel/expl3.sty
+Package: expl3 2021-02-18 L3 programming layer (loader) 
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/l3backend/l3backend-xetex.def
+File: l3backend-xetex.def 2021-03-18 L3 backend support: XeTeX
+
+(|extractbb --version)
+\c__kernel_sys_dvipdfmx_version_int=\count273
+\l__color_backend_stack_int=\count274
+\g__graphics_track_int=\count275
+\l__pdf_internal_box=\box53
+\g__pdf_backend_object_int=\count276
+\g__pdf_backend_annotation_int=\count277
+\g__pdf_backend_link_int=\count278
+))
+Package: breqn 2020/09/24 v0.98k Breaking equations
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/breqn/flexisym.sty
+Package: flexisym 2020/09/24 v0.98k Make math characters macros
+LaTeX Info: Redefining \textprime on input line 299.
+LaTeX Info: Redefining \not on input line 357.
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/breqn/cmbase.sym
+File: cmbase.sym 2007/12/19 v0.92
+LaTeX Info: Redefining \hbar on input line 324.
+LaTeX Info: Redefining \surd on input line 326.
+LaTeX Info: Redefining \angle on input line 334.
+LaTeX Info: Redefining \neq on input line 335.
+LaTeX Info: Redefining \mapsto on input line 336.
+LaTeX Info: Redefining \cong on input line 337.
+LaTeX Info: Redefining \notin on input line 340.
+LaTeX Info: Redefining \rightleftharpoons on input line 341.
+LaTeX Info: Redefining \doteq on input line 342.
+LaTeX Info: Redefining \hookrightarrow on input line 343.
+LaTeX Info: Redefining \hookleftarrow on input line 344.
+LaTeX Info: Redefining \bowtie on input line 345.
+LaTeX Info: Redefining \models on input line 346.
+LaTeX Info: Redefining \Longrightarrow on input line 347.
+LaTeX Info: Redefining \longrightarrow on input line 348.
+LaTeX Info: Redefining \Longleftarrow on input line 349.
+LaTeX Info: Redefining \longleftarrow on input line 350.
+LaTeX Info: Redefining \longmapsto on input line 351.
+LaTeX Info: Redefining \longleftrightarrow on input line 352.
+LaTeX Info: Redefining \Longleftrightarrow on input line 353.
+LaTeX Info: Redefining \cdots on input line 357.
+LaTeX Info: Redefining \vdots on input line 360.
+LaTeX Info: Redefining \ddots on input line 365.
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/breqn/mathstyle.sty
+Package: mathstyle 2020/09/24 v0.98k Tracking mathstyle implicitly
+LaTeX Info: Redefining \displaystyle on input line 95.
+LaTeX Info: Redefining \textstyle on input line 97.
+LaTeX Info: Redefining \scriptstyle on input line 99.
+LaTeX Info: Redefining \scriptscriptstyle on input line 101.
+LaTeX Info: Redefining \genfrac on input line 149.
+))
+(/usr/local/texlive/2021/texmf-dist/tex/latex/tools/calc.sty
+Package: calc 2017/05/25 v4.3 Infix arithmetic (KKT,FJ)
+\calc@Acount=\count279
+\calc@Bcount=\count280
+\calc@Adimen=\dimen168
+\calc@Bdimen=\dimen169
+\calc@Askip=\skip56
+\calc@Bskip=\skip57
+LaTeX Info: Redefining \setlength on input line 80.
+LaTeX Info: Redefining \addtolength on input line 81.
+\calc@Ccount=\count281
+\calc@Cskip=\skip58
+)
+\inf@bad=\count282
+\maxint=\count283
+\listwidth=\dimen170
+\eqnumsep=\dimen171
+\eqmargin=\dimen172
+\eqlinespacing=\skip59
+\eqlineskip=\skip60
+\eqlineskiplimit=\dimen173
+\eqbinoffset=\muskip17
+\eqdelimoffset=\muskip18
+\eqindentstep=\dimen174
+\eqstyle=\toks25
+\eqbreakdepth=\count284
+\eqinterlinepenalty=\count285
+\intereqpenalty=\count286
+\intereqskip=\skip61
+\prerelpenalty=\count287
+\prebinoppenalty=\count288
+\Dmedmuskip=\muskip19
+\Dthickmuskip=\muskip20
+\eqleftskip=\skip62
+\eqrightskip=\skip63
+\eq@vspan=\skip64
+\eq@binoffset=\muskip21
+\EQ@box=\box54
+\EQ@copy=\box55
+\EQ@numbox=\box56
+\eq@wdNum=\dimen175
+\GRP@numbox=\box57
+\grp@wdNum=\dimen176
+\eq@lines=\count289
+\eq@curline=\count290
+\eq@badness=\count291
+\EQ@vims=\count292
+\eq@dp=\dimen177
+\eq@wdL=\dimen178
+\eq@wdT=\dimen179
+\eq@wdMin=\dimen180
+\grp@wdL=\dimen181
+\grp@wdR=\dimen182
+\grp@wdT=\dimen183
+\eq@wdRmax=\dimen184
+\eq@firstht=\dimen185
+\eq@wdCond=\dimen186
+\eq@indentstep=\dimen187
+\eq@linewidth=\dimen188
+\grp@linewidth=\dimen189
+\eq@hshift=\dimen190
+\eq@given@sidespace=\dimen191
+\mathindent=\dimen192
+\eq@final@linecount=\count293
+\eq@wdR=\dimen193
+\EQ@continue=\toks26
+\lr@level=\count294
+\GRP@queue=\toks27
+\GRP@box=\box58
+\GRP@wholebox=\box59
+\darraycolsep=\skip65
+\cur@row=\count295
+\cur@col=\count296
+\conditionsep=\skip66
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics/color.sty
+Package: color 2020/02/24 v1.2b Standard LaTeX Color (DPC)
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/graphics-cfg/color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package color Info: Driver file: xetex.def on input line 147.
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hyperref.sty
+Package: hyperref 2021-02-27 v7.00k Hypertext links for LaTeX
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/ltxcmds/ltxcmds.sty
+Package: ltxcmds 2020-05-10 v1.25 LaTeX kernel commands for general use (HO)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/pdftexcmds/pdftexcmds.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/infwarerr/infwarerr.sty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode not found.
+)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/kvsetkeys/kvsetkeys.sty
+Package: kvsetkeys 2019/12/15 v1.18 Key value parser (HO)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/kvdefinekeys/kvdefinekeys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/pdfescape/pdfescape.sty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/hycolor/hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/letltxmacro/letltxmacro.sty
+Package: letltxmacro 2019/12/03 v1.6 Let assignment for LaTeX macros (HO)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/auxhook/auxhook.sty
+Package: auxhook 2019-12-17 v1.6 Hooks for auxiliary files (HO)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/kvoptions/kvoptions.sty
+Package: kvoptions 2020-10-07 v3.14 Key value format for package options (HO)
+)
+\@linkdim=\dimen194
+\Hy@linkcounter=\count297
+\Hy@pagecounter=\count298
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/pd1enc.def
+File: pd1enc.def 2021-02-27 v7.00k Hyperref: PDFDocEncoding definition (HO)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hyperref-langpatches.def
+File: hyperref-langpatches.def 2021-02-27 v7.00k Hyperref: patches for babel la
+nguages
+) (/usr/local/texlive/2021/texmf-dist/tex/generic/intcalc/intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/etexcmds/etexcmds.sty
+Package: etexcmds 2019/12/15 v1.7 Avoid name clashes with e-TeX commands (HO)
+)
+\Hy@SavedSpaceFactor=\count299
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/puenc.def
+File: puenc.def 2021-02-27 v7.00k Hyperref: PDF Unicode definition (HO)
+)
+Package hyperref Info: Option `unicode' set `true' on input line 3167.
+Package hyperref Info: Hyper figures OFF on input line 4192.
+Package hyperref Info: Link nesting OFF on input line 4197.
+Package hyperref Info: Hyper index ON on input line 4200.
+Package hyperref Info: Plain pages OFF on input line 4207.
+Package hyperref Info: Backreferencing OFF on input line 4212.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4445.
+\c@Hy@tempcnt=\count300
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/url/url.sty
+\Urlmuskip=\muskip22
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 4804.
+\XeTeXLinkMargin=\dimen195
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/bitset/bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/bigintcalc/bigintcalc.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count301
+\Field@Width=\dimen196
+\Fld@charsize=\dimen197
+Package hyperref Info: Hyper figures OFF on input line 6075.
+Package hyperref Info: Link nesting OFF on input line 6080.
+Package hyperref Info: Hyper index ON on input line 6083.
+Package hyperref Info: backreferencing OFF on input line 6090.
+Package hyperref Info: Link coloring OFF on input line 6095.
+Package hyperref Info: Link coloring with OCG OFF on input line 6100.
+Package hyperref Info: PDF/A mode OFF on input line 6105.
+LaTeX Info: Redefining \ref on input line 6145.
+LaTeX Info: Redefining \pageref on input line 6149.
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/atbegshi-ltx.sty
+Package: atbegshi-ltx 2020/08/17 v1.0a Emulation of the original atbegshi packa
+ge
+with kernel methods
+)
+\Hy@abspage=\count302
+\c@Item=\count303
+\c@Hfootnote=\count304
+)
+Package hyperref Info: Driver (autodetected): hxetex.
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/hxetex.def
+File: hxetex.def 2021-02-27 v7.00k Hyperref driver for XeTeX
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/stringenc/stringenc.sty
+Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
+)
+)
+\pdfm@box=\box60
+\c@Hy@AnnotLevel=\count305
+\HyField@AnnotCount=\count306
+\Fld@listcount=\count307
+\c@bookmark@seq@number=\count308
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/rerunfilecheck/rerunfilecheck.sty
+Package: rerunfilecheck 2019/12/05 v1.9 Rerun checks for auxiliary files (HO)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/atveryend-ltx.sty
+Package: atveryend-ltx 2020/08/19 v1.0a Emulation of the original atvery packag
+e
+with kernel methods
+)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/uniquecounter/uniquecounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+86.
+)
+\Hy@SectionHShift=\skip67
+) (/usr/local/texlive/2021/texmf-dist/tex/latex/fontspec/fontspec.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/l3packages/xparse/xparse.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/l3packages/xparse/xparse-2020-10-
+01.sty
+(/usr/local/texlive/2021/texmf-dist/tex/latex/l3packages/xparse/xparse-generic.
+tex)))
+Package: fontspec 2020/02/21 v2.7i Font selection for XeLaTeX and LuaLaTeX
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/fontspec/fontspec-xetex.sty
+Package: fontspec-xetex 2020/02/21 v2.7i Font selection for XeLaTeX and LuaLaTe
+X
+\l__fontspec_script_int=\count309
+\l__fontspec_language_int=\count310
+\l__fontspec_strnum_int=\count311
+\l__fontspec_tmp_int=\count312
+\l__fontspec_tmpa_int=\count313
+\l__fontspec_tmpb_int=\count314
+\l__fontspec_tmpc_int=\count315
+\l__fontspec_em_int=\count316
+\l__fontspec_emdef_int=\count317
+\l__fontspec_strong_int=\count318
+\l__fontspec_strongdef_int=\count319
+\l__fontspec_tmpa_dim=\dimen198
+\l__fontspec_tmpb_dim=\dimen199
+\l__fontspec_tmpc_dim=\dimen256
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/base/fontenc.sty
+Package: fontenc 2020/08/10 v2.0s Standard LaTeX package
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/fontspec/fontspec.cfg)))
+(/usr/local/texlive/2021/texmf-dist/tex/xelatex/xltxtra/xltxtra.sty
+Package: xltxtra 2018/12/31 v0.7 Improvements for the "XeLaTeX" format
+
+(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/ifluatex.sty
+Package: ifluatex 2019/10/25 v1.5 ifluatex legacy package. Use iftex instead.
+)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/iftex/ifxetex.sty
+Package: ifxetex 2019/10/25 v0.7 ifxetex legacy package. Use iftex instead.
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/realscripts/realscripts.sty
+Package: realscripts 2016/02/13 v0.3d Access OpenType subscripts and superscrip
+ts
+\subsupersep=\dimen257
+)
+(/usr/local/texlive/2021/texmf-dist/tex/latex/metalogo/metalogo.sty
+Package: metalogo 2010/05/29 v0.12 Extended TeX logo macros
+\xl@everylogo=\toks28
+\xl@@everylogo=\toks29
+LaTeX Info: Redefining \TeX on input line 193.
+LaTeX Info: Redefining \LaTeX on input line 202.
+LaTeX Info: Redefining \LaTeXe on input line 219.
+)
+\l__xetex_show_hyphens_wrapping_box=\box61
+\l__xetex_show_hyphens_temp_box=\box62
+\l__xetex_show_hyphens_final_box=\box63
+\g__xetex_show_hyphens_word_box=\box64
+)
+(/usr/local/texlive/2021/texmf-dist/tex/xelatex/xunicode/xunicode.sty
+File: xunicode.sty 2011/09/09 v0.981 provides access to latin accents and many 
+other characters in Unicode lower plane
+
+*** you should *not* be loading the inputenc package
+*** XeTeX expects the source to be in UTF8 encoding
+*** some features of other encodings may conflict, resulting in poor output.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/tipa/t3enc.def
+File: t3enc.def 2001/12/31 T3 encoding
+)
+\tipaTiiicode=\count320
+\tipasavetokens=\toks30
+\tipachecktokens=\toks31
+)
+
+Package fontspec Info: Times New Roman scale = 0.9636299023440277.
+
+
+Package fontspec Info: Times New Roman scale = 0.9636299023440277.
+
+
+Package fontspec Info: Times New Roman/B scale = 0.9440481727713549.
+
+
+Package fontspec Info: Times New Roman/I scale = 0.9753424972879338.
+
+
+Package fontspec Info: Times New Roman/BI scale = 0.9521952754312876.
+
+
+Package fontspec Info: Font family 'TimesNewRoman(0)' created for font 'Times
+(fontspec)             New Roman' with options
+(fontspec)             [Scale=MatchLowercase,Mapping=tex-text,Ligatures=TeX].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->s*[0.9636299023440277]"Times New
+(fontspec)             Roman/OT:language=dflt;mapping=tex-text;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.9440481727713549]"Times New
+(fontspec)             Roman/B/OT:language=dflt;mapping=tex-text;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+(fontspec)             - 'italic' (m/it) with NFSS spec.:
+(fontspec)             <->s*[0.9753424972879338]"Times New
+(fontspec)             Roman/I/OT:language=dflt;mapping=tex-text;"
+(fontspec)             - 'italic small caps'  (m/scit) with NFSS spec.: 
+(fontspec)             - 'bold italic' (b/it) with NFSS spec.:
+(fontspec)             <->s*[0.9521952754312876]"Times New
+(fontspec)             Roman/BI/OT:language=dflt;mapping=tex-text;"
+(fontspec)             - 'bold italic small caps'  (b/scit) with NFSS spec.: 
+
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/m/n' will be
+(Font)              scaled to size 11.56348pt on input line 33.
+
+Package fontspec Info: Liberation Sans scale = 0.8157833300039231.
+
+
+Package fontspec Info: Liberation Sans scale = 0.8157833300039231.
+
+
+Package fontspec Info: Liberation Sans/B scale = 0.8157833300039231.
+
+
+Package fontspec Info: Liberation Sans/I scale = 0.8157833300039231.
+
+
+Package fontspec Info: Liberation Sans/BI scale = 0.8157833300039231.
+
+
+Package fontspec Info: Font family 'LiberationSans(0)' created for font
+(fontspec)             'Liberation Sans' with options
+(fontspec)             [Scale=MatchLowercase,Mapping=tex-text,Ligatures=TeX].
+(fontspec)              
+(fontspec)              This font family consists of the following NFSS
+(fontspec)             series/shapes:
+(fontspec)              
+(fontspec)             - 'normal' (m/n) with NFSS spec.:
+(fontspec)             <->s*[0.8157833300039231]"Liberation
+(fontspec)             Sans/OT:script=latn;language=dflt;mapping=tex-text;"
+(fontspec)             - 'small caps'  (m/sc) with NFSS spec.: 
+(fontspec)             - 'bold' (b/n) with NFSS spec.:
+(fontspec)             <->s*[0.8157833300039231]"Liberation
+(fontspec)             Sans/B/OT:script=latn;language=dflt;mapping=tex-text;"
+(fontspec)             - 'bold small caps'  (b/sc) with NFSS spec.: 
+(fontspec)             - 'italic' (m/it) with NFSS spec.:
+(fontspec)             <->s*[0.8157833300039231]"Liberation
+(fontspec)             Sans/I/OT:script=latn;language=dflt;mapping=tex-text;"
+(fontspec)             - 'italic small caps'  (m/scit) with NFSS spec.: 
+(fontspec)             - 'bold italic' (b/it) with NFSS spec.:
+(fontspec)             <->s*[0.8157833300039231]"Liberation
+(fontspec)             Sans/BI/OT:script=latn;language=dflt;mapping=tex-text;"
+(fontspec)             - 'bold italic small caps'  (b/scit) with NFSS spec.: 
+
+ (./manualRus.aux)
+\openout1 = `manualRus.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 34.
+LaTeX Font Info:    Trying to load font information for TS1+cmr on input line 3
+4.
+ (/usr/local/texlive/2021/texmf-dist/tex/latex/base/ts1cmr.fd
+File: ts1cmr.fd 2019/12/16 v2.5j Standard LaTeX font definitions
+)
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for TU/lmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for T2A/cmr/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 34.
+LaTeX Font Info:    ... okay on input line 34.
+LaTeX Font Info:    Checking defaults for T3/cmr/m/n on input line 34.
+LaTeX Font Info:    Trying to load font information for T3+cmr on input line 34
+.
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/tipa/t3cmr.fd
+File: t3cmr.fd 2001/12/31 TIPA font definitions
+)
+LaTeX Font Info:    ... okay on input line 34.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: hyperref package is loaded.
+Package caption Info: longtable package is loaded.
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/caption/ltcaption.sty
+Package: ltcaption 2020/05/30 v1.4b longtable captions (AR)
+)
+Package caption Info: End \AtBeginDocument code.
+LaTeX Info: Redefining \th on input line 34.
+
+*geometry* driver: auto-detecting
+*geometry* detected driver: xetex
+*geometry* verbose mode - [ preamble ] result:
+* driver: xetex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: 
+* h-part:(L,W,R)=(89.62709pt, 418.25368pt, 89.6271pt)
+* v-part:(T,H,B)=(101.40665pt, 591.5302pt, 152.11pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=418.25368pt
+* \textheight=591.5302pt
+* \oddsidemargin=17.3571pt
+* \evensidemargin=17.3571pt
+* \topmargin=-7.86334pt
+* \headheight=12.0pt
+* \headsep=25.0pt
+* \topskip=12.0pt
+* \footskip=30.0pt
+* \marginparwidth=35.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.8pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidefalse
+* \@mparswitchfalse
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+Package hyperref Info: Link coloring OFF on input line 34.
+(/usr/local/texlive/2021/texmf-dist/tex/latex/hyperref/nameref.sty
+Package: nameref 2021-04-02 v2.47 Cross-referencing by name of section
+
+(/usr/local/texlive/2021/texmf-dist/tex/latex/refcount/refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(/usr/local/texlive/2021/texmf-dist/tex/generic/gettitlestring/gettitlestring.s
+ty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+)
+\c@section@level=\count321
+)
+LaTeX Info: Redefining \ref on input line 34.
+LaTeX Info: Redefining \pageref on input line 34.
+LaTeX Info: Redefining \nameref on input line 34.
+ (./manualRus.out) (./manualRus.out)
+\@outlinefile=\write3
+\openout3 = `manualRus.out'.
+
+
+*** you should *not* be loading the inputenc package
+*** XeTeX expects the source to be in UTF8 encoding
+*** some features of other encodings may conflict, resulting in poor output.
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/m/n' will be
+(Font)              scaled to size 16.6514pt on input line 39.
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/b/n' will be
+(Font)              scaled to size 16.31311pt on input line 39.
+[1
+
+] (./manualRus.toc
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/b/n' will be
+(Font)              scaled to size 11.32855pt on input line 2.
+
+Overfull \hbox (12.97745pt too wide) in paragraph at lines 10--10
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 InelasticTotTalysV, InelasticDirectTalysV
+, InelasticCompoundTalysV, 
+ []
+
+
+Overfull \hbox (28.72101pt too wide) in paragraph at lines 10--10
+ \TU/TimesNewRoman(0)/m/n/12 ElasticTotTalysV, ElasticDirectTalysV, ElasticComp
+oundTalysV, TotTalysV[] [][]  
+ []
+
+
+Overfull \hbox (21.73956pt too wide) in paragraph at lines 11--11
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 BNECS_gamma, BNECS_neutron, BNECS_proton,
+ BNECS_deuteron, 
+ []
+
+
+Overfull \hbox (31.7225pt too wide) in paragraph at lines 14--14
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 TGraph* GetElasticAngularDistribution(str
+ing type=”Total string option= 
+ []
+
+[2]
+Overfull \hbox (20.96686pt too wide) in paragraph at lines 27--27
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 vector<Level*> GetLevelsWithCorresponding
+Transitions(float Energy, 
+ []
+
+
+Overfull \hbox (25.95534pt too wide) in paragraph at lines 29--29
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 Level* FindBestLevelByEJP(float Energy, S
+pinParity JP, float tolerancy=1)[] [][]  
+ []
+
+
+Overfull \hbox (2.93756pt too wide) in paragraph at lines 32--32
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 GammaTransition* GetBestTransition(float 
+Energy, float tolerancy=1)[] [][]  
+ []
+
+
+Overfull \hbox (11.38243pt too wide) in paragraph at lines 33--33
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 vector<GammaTransition*> GetGammaTransiti
+on(float Energy, float 
+ []
+
+
+Overfull \hbox (43.19942pt too wide) in paragraph at lines 34--34
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 vector<GammaTransition*> GetGammaTransiti
+ons(string option=”Talys int 
+ []
+
+
+Overfull \hbox (7.56273pt too wide) in paragraph at lines 44--44
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 void SetLevelDeformation(int LevelNumber,
+char LevT, int BandN=- 
+ []
+
+
+Overfull \hbox (21.83075pt too wide) in paragraph at lines 45--45
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 void SetLevelDeformation(double LevelEner
+gy,char LevT, int BandN=- 
+ []
+
+[3]
+Overfull \hbox (46.73438pt too wide) in paragraph at lines 51--51
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 void GenerateGammaSpectrum(TH1F *Spectrum
+, TF1* ResolutionFunction, 
+ []
+
+
+Overfull \hbox (104.80681pt too wide) in paragraph at lines 64--64
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 void ExecuteCalculation(), void ExecuteCa
+lculation(void (*VarChangeFunction)(Nucleus 
+ []
+
+
+Overfull \hbox (2.29861pt too wide) in paragraph at lines 65--65
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 void SetTarget(string _Target), void SetP
+rojectile(string _Proj), void 
+ []
+
+
+Overfull \hbox (82.32164pt too wide) in paragraph at lines 66--66
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 void ExecuteCalculation(), ExecuteCalcula
+tion(void (*VarChangeFunction)(Nucleus 
+ []
+
+
+Overfull \hbox (14.58382pt too wide) in paragraph at lines 68--68
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 TGraph* GetLevelExcitationCrossSection(do
+uble LevelEnergy, string 
+ []
+
+[4]
+Overfull \hbox (1.3462pt too wide) in paragraph at lines 69--69
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 TGraph* GetGammaTransitionCrossSction(dou
+ble GammaEnergy, 
+ []
+
+
+Overfull \hbox (44.15027pt too wide) in paragraph at lines 70--70
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 TMultiGraph* GetAngularDistributionsForLe
+vel(double LevelEnergy,string 
+ []
+
+
+Overfull \hbox (25.5507pt too wide) in paragraph at lines 71--71
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 TMultiGraph* GetElasticAngularDistributio
+ns(string type, string option, 
+ []
+
+
+Overfull \hbox (20.37587pt too wide) in paragraph at lines 90--90
+ [][] [][]\TU/TimesNewRoman(0)/m/n/12 double (*GetEvaluationResult)(double x_va
+lue,TalysFitter *PointetToTF)[] [][]  
+ []
+
+)
+\tf@toc=\write4
+\openout4 = `manualRus.toc'.
+
+ [5] [6]
+Overfull \hbox (7.50299pt too wide) in paragraph at lines 50--51
+\TU/TimesNewRoman(0)/m/n/12 кроме того, хранит список $\OML/cmm/m/it/12 ^^M$\TU
+/TimesNewRoman(0)/m/n/12 -переходов в виде вектора объектов GammaTransition. 
+ []
+
+[1]
+File: images//TalysLibScheme.eps Graphic file (type eps)
+<images//TalysLibScheme.eps>
+ [2]
+Overfull \hbox (8.46173pt too wide) in paragraph at lines 66--67
+[]\TU/TimesNewRoman(0)/m/n/12 Структура выходного файла TALYS значительно более
+ проста, чем файла ENSDF, 
+ []
+
+File: images//TalysLibSpectrum.eps Graphic file (type eps)
+<images//TalysLibSpectrum.eps>
+File: images//MinimisationSketch.eps Graphic file (type eps)
+<images//MinimisationSketch.eps>
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/m/it' will be
+(Font)              scaled to size 11.7041pt on input line 82.
+[3] [4] [5]
+File: images//Minimization.png Graphic file (type bmp)
+<images//Minimization.png>
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/m/n' will be
+(Font)              scaled to size 13.87616pt on input line 112.
+LaTeX Font Info:    Font shape `TU/TimesNewRoman(0)/b/n' will be
+(Font)              scaled to size 13.59425pt on input line 112.
+ [6] [7]
+Overfull \hbox (6.40536pt too wide) in paragraph at lines 121--122
+[]\TU/TimesNewRoman(0)/m/n/12 Вектор, содержащий объекты типа Level-информацию 
+о свойствах ядерных уров-
+ []
+
+
+Overfull \hbox (61.1395pt too wide) in paragraph at lines 127--128
+\TU/TimesNewRoman(0)/m/n/12 полное сечение, ElasticDirectTalys – прямая компоне
+нта упругого рассеяния, ElasticCompoundTalys
+ []
+
+
+Overfull \hbox (117.2122pt too wide) in paragraph at lines 127--128
+\TU/TimesNewRoman(0)/m/n/12 – компаунд-компонента. Данные графики заполняются ф
+ункцией Nucleus::GetElasticAngularDistribution(string
+ []
+
+
+Overfull \hbox (32.68687pt too wide) in paragraph at lines 128--128
+[]\TU/TimesNewRoman(0)/b/n/12 InelasticTotTalysV, InelasticDirectTalysV, Inelas
+ticCompoundTalysV, ElasticTotTalysV,
+ []
+
+
+Overfull \hbox (1.74393pt too wide) in paragraph at lines 129--130
+\TU/TimesNewRoman(0)/m/n/12 параметра V. Заполняются функцией Nucleus::AddPoint
+(double x_value, Nucleus* Nucl)
+ []
+
+
+Overfull \hbox (6.08693pt too wide) in paragraph at lines 129--130
+\TU/TimesNewRoman(0)/m/n/12 из значений TotInelastic, CompoundInelastic, Direct
+Inelastic, TotElastic, CompoundElastic,
+ []
+
+
+Overfull \hbox (48.25772pt too wide) in paragraph at lines 129--130
+\TU/TimesNewRoman(0)/m/n/12 DirectElastic, TotTalys соответственно. Величины To
+tInelastic, CompoundInelastic, DirectInelastic,
+ []
+
+
+Overfull \hbox (1.87956pt too wide) in paragraph at lines 129--130
+\TU/TimesNewRoman(0)/m/n/12 TotElastic, CompoundElastic, DirectElastic, TotTaly
+s, в свою очередь, считываются непо-
+ []
+
+[8]
+Overfull \hbox (32.12831pt too wide) in paragraph at lines 130--130
+[]\TU/TimesNewRoman(0)/b/n/12 BNECS_gamma, BNECS_neutron, BNECS_proton, BNECS_d
+euteron, BNECS_triton,
+ []
+
+
+Overfull \hbox (10.64342pt too wide) in paragraph at lines 131--132
+\TU/TimesNewRoman(0)/m/n/12 non-elastic cross sections (non-exclusive)». Заполн
+ение этих графиков производится функ-
+ []
+
+
+Overfull \hbox (9.21674pt too wide) in paragraph at lines 131--132
+\TU/TimesNewRoman(0)/m/n/12 цией Nucleus::AddPoint(double x_value, Nucleus* Nuc
+l) из величин BNECS_g, BNECS_n,
+ []
+
+
+Overfull \hbox (9.57852pt too wide) in paragraph at lines 135--136
+[]\TU/TimesNewRoman(0)/m/n/12 Функция, считывающая output файл и записывающая в
+ переменные TOTGamProd,
+ []
+
+
+Overfull \hbox (2.38667pt too wide) in paragraph at lines 135--136
+\TU/TimesNewRoman(0)/m/n/12 упругого рассеяния и вклады отдельных компонент, а 
+в TotInelastic, CompoundInelastic,
+ []
+
+[9]
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                \kern 2.31265pt
+(hyperref)                removed on input line 136.
+
+[10] [11]
+Overfull \hbox (68.39655pt too wide) in paragraph at lines 159--160
+\TU/TimesNewRoman(0)/m/n/12 мента принимает тип информации об уровнях. Возможны
+е значения аргумента: ”final ”exp ”hfb опи-
+ []
+
+
+Overfull \hbox (49.80418pt too wide) in paragraph at lines 162--162
+[]\TU/TimesNewRoman(0)/b/n/12 vector<Level*> GetLevelsWithCorrespondingTransiti
+ons(float Energy, float tolerancy=1,
+ []
+
+
+Overfull \hbox (11.41882pt too wide) in paragraph at lines 163--164
+\TU/TimesNewRoman(0)/m/n/12 должна быть не ниже intensity. Использовалась для п
+оиска подходящих гамма-переходов
+ []
+
+[12] [13]
+Overfull \hbox (19.15958pt too wide) in paragraph at lines 174--174
+[]\TU/TimesNewRoman(0)/b/n/12 vector<GammaTransition*> GetGammaTransition(float
+ Energy, float tolerancy=1,
+ []
+
+
+Overfull \hbox (74.40335pt too wide) in paragraph at lines 176--176
+[]\TU/TimesNewRoman(0)/b/n/12 vector<GammaTransition*> GetGammaTransitions(stri
+ng option=”Talys int BetterThan=100,
+ []
+
+
+Package hyperref Warning: Token not allowed in a PDF string (Unicode):
+(hyperref)                \kern 2.31265pt
+(hyperref)                removed on input line 176.
+
+
+Overfull \hbox (29.94884pt too wide) in paragraph at lines 179--180
+\TU/TimesNewRoman(0)/m/n/12 мое ядро само является продуктом, пуст. Заполняется
+ функцией Nucleus::GenerateProducts(). 
+ []
+
+[14]
+Overfull \hbox (6.83684pt too wide) in paragraph at lines 183--184
+\TU/TimesNewRoman(0)/m/n/12 могут быть добавлены дополнительные команды, находя
+щиеся в Nucleus::TalysOptions. 
+ []
+
+
+Overfull \hbox (24.31001pt too wide) in paragraph at lines 194--195
+\TU/TimesNewRoman(0)/m/n/12 мента принимает сечение излучения гамма-кванта, пер
+еходы с сечением менее MinTalysCS
+ []
+
+[15]
+Overfull \hbox (49.63486pt too wide) in paragraph at lines 196--197
+[]\TU/TimesNewRoman(0)/m/n/12 Функция, приписывающая указателям правильные знач
+ения. Присваивает fMotherNucleus
+ []
+
+
+Overfull \hbox (62.38019pt too wide) in paragraph at lines 200--201
+[]\TU/TimesNewRoman(0)/m/n/12 Функция, приписывающая уровням указатель на соотв
+етствующий объект LevelDeformation,
+ []
+
+
+Overfull \hbox (16.64824pt too wide) in paragraph at lines 201--201
+[]\TU/TimesNewRoman(0)/b/n/12 void SetLevelDeformation(int LevelNumber,char Lev
+T, int BandN=-1, int BandL=-
+ []
+
+
+Overfull \hbox (23.91429pt too wide) in paragraph at lines 202--203
+[]\TU/TimesNewRoman(0)/m/n/12 Функция, позволяющая установить деформацию для ур
+овня c номером LevelNumber.
+ []
+
+
+Overfull \hbox (1.22363pt too wide) in paragraph at lines 202--203
+\TU/TimesNewRoman(0)/m/n/12 момент полосы или мультипольность(?) (multipolarity
+), NPhon-число фононов (phonon
+ []
+
+[16]
+Overfull \hbox (18.40921pt too wide) in paragraph at lines 204--205
+[]\TU/TimesNewRoman(0)/m/n/12 Функция, позволяющая установить деформацию для ур
+овня c энергией LevelEnergy
+ []
+
+
+Overfull \hbox (2.30034pt too wide) in paragraph at lines 204--205
+\TU/TimesNewRoman(0)/m/n/12 магнитное квантовое число (magnetic quantum number)
+. Значения деформации ($\OML/cmm/m/it/12 ^^L[]:::^^L[]$\TU/TimesNewRoman(0)/m/n
+/12 )
+ []
+
+[17]
+Overfull \hbox (30.78577pt too wide) in paragraph at lines 220--221
+[]\TU/TimesNewRoman(0)/m/n/12 Функция, выполняющая заполнение графиков Inelasti
+cTotTalysV, InelasticDirectTalysV,
+ []
+
+
+Overfull \hbox (6.56859pt too wide) in paragraph at lines 220--221
+\TU/TimesNewRoman(0)/m/n/12 InelasticCompoundTalysV, ElasticTotTalysV, ElasticD
+irectTalysV, ElasticCompoundTalysV,
+ []
+
+
+Overfull \hbox (36.04393pt too wide) in paragraph at lines 220--221
+\TU/TimesNewRoman(0)/m/n/12 TotTalysV, BNECS_gamma, BNECS_neutron, BNECS_proton
+, BNECS_deuteron, BNECS_triton,
+ []
+
+
+Overfull \hbox (19.72441pt too wide) in paragraph at lines 220--221
+\TU/TimesNewRoman(0)/m/n/12 (void Level::AddPoint(double x_value,Level *level))
+. Используется классом TalysCalculation
+ []
+
+[18] [19]
+Overfull \hbox (48.00092pt too wide) in paragraph at lines 242--242
+[]\TU/TimesNewRoman(0)/b/n/12 void ExecuteCalculation(), void ExecuteCalculatio
+n(void (*VarChangeFunction)(Nucleus
+ []
+
+
+Overfull \hbox (47.24402pt too wide) in paragraph at lines 244--244
+[]\TU/TimesNewRoman(0)/b/n/12 void SetTarget(string _Target), void SetProjectil
+e(string _Proj), void SetVarValues(double
+ []
+
+
+Overfull \hbox (25.33644pt too wide) in paragraph at lines 246--246
+[]\TU/TimesNewRoman(0)/b/n/12 void ExecuteCalculation(), ExecuteCalculation(voi
+d (*VarChangeFunction)(Nucleus
+ []
+
+
+Overfull \hbox (29.00014pt too wide) in paragraph at lines 250--250
+[]\TU/TimesNewRoman(0)/b/n/12 TGraph* GetLevelExcitationCrossSection(double Lev
+elEnergy, string NucleusName,
+ []
+
+
+Overfull \hbox (50.52328pt too wide) in paragraph at lines 252--252
+[]\TU/TimesNewRoman(0)/b/n/12 TGraph* GetGammaTransitionCrossSction(double Gamm
+aEnergy, string NucleusName) 
+ []
+
+
+Overfull \hbox (63.20428pt too wide) in paragraph at lines 254--254
+[]\TU/TimesNewRoman(0)/b/n/12 TMultiGraph* GetAngularDistributionsForLevel(doub
+le LevelEnergy,string NucleusName,
+ []
+
+[20]
+Overfull \hbox (18.55388pt too wide) in paragraph at lines 256--256
+[]\TU/TimesNewRoman(0)/b/n/12 TMultiGraph* GetElasticAngularDistributions(strin
+g type, string option, TLegend
+ []
+
+[21] [22] (./manualRus.aux)
+
+LaTeX Font Warning: Some font shapes were not available, defaults substituted.
+
+Package rerunfilecheck Info: File `manualRus.out' has not changed.
+(rerunfilecheck)             Checksum: C9E208AA8BDDCE43BC3B6B0E004393AD;26686.
+ ) 
+Here is how much of TeX's memory you used:
+ 17923 strings out of 477574
+ 321651 string characters out of 5841804
+ 703421 words of memory out of 5000000
+ 37552 multiletter control sequences out of 15000+600000
+ 408384 words of font info for 75 fonts, out of 8000000 for 9000
+ 1040 hyphenation exceptions out of 8191
+ 73i,9n,123p,966b,532s stack positions out of 5000i,500n,10000p,200000b,80000s
+
+Output written on manualRus.pdf (28 pages).
