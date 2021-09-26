@@ -146,7 +146,16 @@ class OMPStorageData:public TObject
 {
 	public:
 	OMPStorageData():TObject() {  }
-	double Vv=0, Wv=0, Rv=0, Av=0, Wd=0, Rd=0, Ad=0, Vso=0, Wso=0, Rso=0, Aso=0, Rc=0, v1=0, v2=0, v3=0, v4=0, w1=0, w2=0, d1=0, d2=0, d3=0, vso1=0, vso2=0, wso1=0, wso2=0, A=0, N=0, Z=0, ProjectileEnergy=0, Ef=0, Vc=0;
+	double Vv=0, Wv=0, Rv=0, Av=0;
+	double Wd=0, Rd=0, Ad=0;
+	double Vso=0, Wso=0, Rso=0, Aso=0;
+	double Rc=0;
+	double v1=0, v2=0, v3=0, v4=0; 
+	double w1=0, w2=0; 
+	double d1=0, d2=0, d3=0; 
+	double vso1=0, vso2=0; 
+	double wso1=0, wso2=0; 
+	double A=0, N=0, Z=0, ProjectileEnergy=0, Ef=0, Vc=0;
 	bool ReadFlag=false;
 	bool Evaled=false;
 	bool SaveEnergyDependence=false;
@@ -157,9 +166,9 @@ class OMPStorageData:public TObject
 class OMPStorage:public OMPStorageData
 {
 	public:
-	OMPStorage() {  }; 
-	OMPStorage(OMPStorageData d);
-	OMPStorageData ToOMPStorageData();
+	OMPStorage() {  }; //конструктор по-умолчанию
+	OMPStorage(OMPStorageData d);//конструктор из родительского класса OMPStorageData
+	OMPStorageData ToOMPStorageData();//объект класса OMPStorageData, задаваемый конструктором по-умолчанию
 	Nucleus *Nuclide;
 	void EvalKoning();
 	void EvalPotential();
@@ -184,6 +193,19 @@ class OMPStorage:public OMPStorageData
 	void SetRso(double value);
 	void SetAso(double value);
 	void SetRc(double value);
+	void Setv1(double value);
+	void Setv2(double value);
+	void Setv3(double value);
+	void Setv4(double value);
+	void Setw1(double value);
+	void Setw2(double value);
+	void Setd1(double value);
+	void Setd2(double value);
+	void Setd3(double value);
+	void Setvso1(double value);
+	void Setvso2(double value);
+	void Setwso1(double value);
+	void Setwso2(double value);
 	double GetVv();
 	double GetWv();
 	double GetWd();
@@ -195,6 +217,20 @@ class OMPStorage:public OMPStorageData
 	double GetAd();
 	double GetRso();
 	double GetAso();
+	double GetRc();
+	double Getv1();
+	double Getv2();
+	double Getv3();
+	double Getv4();
+	double Getw1();
+	double Getw2();
+	double Getd1();
+	double Getd2();
+	double Getd3();
+	double Getvso1();
+	double Getvso2();
+	double Getwso1();
+	double Getwso2();
 	ClassDef(OMPStorage, 1);
 	private:
 	using TObject::Draw;
@@ -225,9 +261,9 @@ class OpticalModelParameters:public OpticalModelParametersData//:public TObject
 	private:
 	
 	public:
-	OpticalModelParameters();
-	OpticalModelParameters(OpticalModelParametersData d);
-	OpticalModelParametersData ToOpticalModelParametersData();
+	OpticalModelParameters();//конструктор по-умолчанию
+	OpticalModelParameters(OpticalModelParametersData d);//конструктор из родительского класса OpticalModelParametersData
+	OpticalModelParametersData ToOpticalModelParametersData();//функция по переводу объекта класса OpticalModelParameters в OpticalModelParametersData
 	OMPStorage *DefaultOMP=0;
 	OMPStorage Potential, PotentialDisp, PotentialKoning;
 	
@@ -276,6 +312,20 @@ class OpticalModelParameters:public OpticalModelParametersData//:public TObject
 	double GetAd();
 	double GetRso();
 	double GetAso();
+	double GetRc();	
+	double Getv1();
+	double Getv2();
+	double Getv3();
+	double Getv4();
+	double Getw1();
+	double Getw2();
+	double Getd1();
+	double Getd2();
+	double Getd3();
+	double Getvso1();
+	double Getvso2();
+	double Getwso1();
+	double Getwso2();
 	void AssignPointers(Nucleus *N=0);
 	ClassDef(OpticalModelParameters, 1);
 };
