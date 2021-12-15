@@ -211,9 +211,12 @@ void TLMaterial::AddElement(string Element, int Q)
 	for(unsigned int j=0;j<A_values.size();j++)
 	{
 		Nucleus *N=new Nucleus(to_string(A_values[j])+Element);
+		N->fMaterial=this;
 		N->GenerateProducts();
 		Nuclides.push_back(N);
 		Quantities.push_back(Q);
+		Shares.push_back(Q*Abundances[j]);
+		MassShares.push_back(Q*Abundances[j]*N->GetMass());
 	}
 }
 void TLMaterial::AddBackground(string PathToBackground)
@@ -251,6 +254,45 @@ void TLMaterial::PrintGammas(double CrossSectionThreshold,bool UseAbundancy)
 		cout<<Gammas[i]->Energy<<" "<<Gammas[i]->TalysE_i<<" "<<Gammas[i]->TalysJP_i.GetLine()<<" "<<Gammas[i]->TalysE_f<<" "<<Gammas[i]->TalysJP_f.GetLine()<<" "<<Gammas[i]->fLevel->fNucleus->fMotherNucleus->Name<<" "<<Gammas[i]->fLevel->fNucleus->Reaction<<" "<<Gammas[i]->fLevel->fNucleus->Name<<" "<<Gammas[i]->TalysCrossSection<<" "<<Gammas[i]->TalysCrossSection*(Gammas[i]->fLevel->fNucleus->fMotherNucleus->Abundance)<<" "<<"\n";
 	}
 }
+double TLMaterial::GetMoleFraction(string _Name)
+{
+	double Norm=0;
+	double Share=0;
+	for(unsigned int i=0;i<Shares.size();i++)
+	{
+		if(_Name==Nuclides[i]->Name)
+		{
+			Share=Shares[i];
+		}
+		Norm+=Shares[i];
+	}
+	return Share/Norm;
+}
+double TLMaterial::GetMoleFraction(Nucleus *Nucl)
+{
+	string _Name=Nucl->Name;
+	return GetMoleFraction(_Name);
+}
+double TLMaterial::GetMassFraction(string _Name)
+{
+	double Norm=0;
+	double Share=0;
+	for(unsigned int i=0;i<Shares.size();i++)
+	{
+		if(_Name==Nuclides[i]->Name)
+		{
+			Share=MassShares[i];
+		}
+		Norm+=MassShares[i];
+	}
+	return Share/Norm;
+}
+double TLMaterial::GetMassFraction(Nucleus *Nucl)
+{
+	string _Name=Nucl->Name;
+	return GetMassFraction(_Name);
+}
+
 vector<GammaTransition*> TLMaterial::GetGammaTransitions(double CrossSectionThreshold,bool UseAbundancy)
 {
 	vector<GammaTransition*> result;
