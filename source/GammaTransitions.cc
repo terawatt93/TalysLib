@@ -69,12 +69,80 @@ string GammaTransition::GetLine(string option)
 	{
 		return (to_string(Energy)+" "+to_string(Intensity)+" "+to_string(CrossSection)+" "+to_string(TalysCrossSection));
 	}
-	if(option=="full")
+	else if(option=="full")
 	{
 		string result;
 		result=to_string(Energy)+" "+to_string(TalysCrossSection)+" "+fLevel->fNucleus->fMotherNucleus->Name+fLevel->fNucleus->Reaction+fLevel->fNucleus->Name+" "+to_string(TalysE_i)+"("+TalysJP_i.GetLine()+"->"+TalysJP_f.GetLine()+")"+to_string(TalysE_f);
 		return result;
 	}
+	else if(option.find("custom")!=string::npos)
+	{
+		stringstream sstr(option);
+		string tmp;
+		sstr>>tmp;
+		string result;
+		while(sstr)
+		{
+			string tmp_opt;
+			sstr>>tmp_opt;
+			if(tmp_opt=="E")
+			{
+				result+=string(TString::Format("%.2f",Energy).Data())+" ";
+			}
+			if(tmp_opt=="CS")
+			{
+				result+="#sigma:"+string(TString::Format("%.2f",TalysCrossSection).Data())+" mb ";
+			}
+			if(tmp_opt=="REACTION")
+			{
+				if(fLevel)
+				{
+					if(fLevel->fNucleus)
+					{
+						if(fLevel->fNucleus->fMotherNucleus)
+						{
+							result+=string((fLevel->fNucleus->ReactionInTLatexFormat("short")).Data())+" ";
+						}
+					}
+				}
+			}
+			if(tmp_opt=="CS*ABUN")
+			{
+				if(fLevel)
+				{
+					if(fLevel->fNucleus)
+					{
+						if(fLevel->fNucleus->fMotherNucleus)
+						{
+							result+="#sigma*AB:"+string(TString::Format("%.2f",TalysCrossSection*fLevel->fNucleus->fMotherNucleus->Abundance).Data())+" mb ";
+						}
+					}
+				}
+			}
+			if(tmp_opt=="CS*ABUN*SHARE")
+			{
+				if(fLevel)
+				{
+					if(fLevel->fNucleus)
+					{
+						if(fLevel->fNucleus->fMotherNucleus)
+						{
+							if(fLevel->fNucleus->fMotherNucleus->fMaterial)
+							{
+								result+="#sigma*AB*%:"+string(TString::Format("%.2f",TalysCrossSection*fLevel->fNucleus->fMotherNucleus->Abundance*fLevel->fNucleus->fMotherNucleus->fMaterial->GetMoleFraction(fLevel->fNucleus->fMotherNucleus)).Data())+" mb ";
+							}
+						}
+					}
+				}
+			}
+			if(tmp_opt=="LEV")
+			{
+				result+=to_string(TalysE_i)+"("+TalysJP_i.GetLine()+"->"+TalysJP_f.GetLine()+")"+to_string(TalysE_f)+" ";
+			}
+		}
+		return result;
+	}
+	
 	return ("E:"+to_string(Energy)+" Mult:"+Multipolarity+"Int:"+to_string(Intensity)+" CS:"+to_string(CrossSection)+" Talys:"+to_string(TalysCrossSection));
 }
 bool GammaTransition::CheckEnergy(float E,float Tolerancy,float intensity)
@@ -328,4 +396,26 @@ TGraph* GammaTransition::GetCSGraph()
 		GenerateGraphs();
 	}
 	return &CSGraph;
+}
+int GammaTransition::GetIntegrityFactor()
+{
+	int factor=0;
+	if(fLevel)
+	{
+		factor++;
+		if(fLevel->fNucleus)
+		{
+			factor++;
+			if(fLevel->fNucleus->fMotherNucleus)
+			{
+				factor++;
+				if(fLevel->fNucleus->fMotherNucleus->fMaterial)
+				{
+					factor++;
+				}
+			}
+		}
+	}
+	return factor;
+	
 }

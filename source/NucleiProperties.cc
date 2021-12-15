@@ -88,6 +88,7 @@ Nucleus::Nucleus(NucleusData ND)
 {
 	TH1::AddDirectory(kFALSE);
 	GetFromNucleusData(ND);
+	fMaterial=0;
 }
 void Nucleus::ReadENSDFFile(string filename,string Nuclide)
 {
@@ -261,6 +262,7 @@ const char* NucleusData::GetName()  const
 }
 Nucleus::Nucleus(string Name,string Reaction)
 {
+	fMaterial=0;
 	TH1::AddDirectory(kFALSE);
 	this->Name=Name;
 	this->Reaction=Reaction;

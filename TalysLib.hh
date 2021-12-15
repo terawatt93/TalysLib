@@ -74,6 +74,7 @@ class Deformation;
 class TalysCalculation;
 class OpticalModelParameters;
 class Radionuclide;
+class TLMaterial;
 
 class TalysLibManager//потом перенсти в отдельный файл!
 {
@@ -407,6 +408,7 @@ class GammaTransition:public GammaTransitionData
 	double GetIntensity();
 	double GetRelativeIntensity();
 	void GenerateGraphs();
+	int GetIntegrityFactor();//показывает уровень "целостности"-наличия указателей на уровень (1), ядро (2),родительское ядро(3), материал(4) 
 	TGraph *GetCSGraph();
 	ClassDef(GammaTransition, 1);
 };
@@ -621,11 +623,13 @@ class Nucleus:public NucleusData
 	Nucleus* FindProductsByReaction(string reaction);
 	Nucleus* FindProductByName(string _Name);
 	Nucleus* fMotherNucleus;
+	TLMaterial *fMaterial;
 	TalysCalculation* fTalysCalculation=0;
 	Nucleus()
 	{
 		TalysCalculated=false;
 		fMotherNucleus=0;
+		fMaterial=0;
 	}
 	void GetFromNucleusData(NucleusData ND);
 	Nucleus(string Name,string Reaction="");
@@ -838,10 +842,16 @@ class TLMaterial:public TObject
 	bool Calculated=false;
 	vector<Nucleus*> Nuclides;
 	vector<int> Quantities;
+	vector<double> Shares;//здесь записаны вклады (т.е. "ненормированные доли")
+	vector<double> MassShares;//здесь записаны вклады (т.е. "ненормированные доли")
 	TLMaterial():TObject(){ };
 	TLMaterial(string _MaterialFormula);
 	void SetDensity(double _Density);
 	double GetDensity();
+	double GetMoleFraction(Nucleus *Nucl);
+	double GetMoleFraction(string _Name);
+	double GetMassFraction(Nucleus *Nucl);
+	double GetMassFraction(string _Name);
 	void AddElement(string Element, int Q);
 	void AddBackground(string PathToBackground);
 	void SaveToXLSX(string filename);
