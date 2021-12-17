@@ -1,4 +1,6 @@
 #!/bin/bash
+talyslibdir=`pwd`
+cd ..
 wget https://tendl.web.psi.ch/tendl_2019/talys/talys.tar
 tar -xzf talys.tar
 cd talys
@@ -11,7 +13,6 @@ unalias -a
 compiler='gfortran'       
 #compiler='lf95 --staticlink' 
 Thome=${HOME}
-bindir=$Thome'/bin'   # destiny directory of the TALYS executable
 #
 # From here on, the rest should work automatically
 #
@@ -57,6 +58,13 @@ then
   echo  'export TALYSDIR='`pwd`>>~/.bashrc 
   echo 'export PATH=$PATH:'`pwd`>>~/.bashrc
   mkdir CalculationResults
+  cd ..
+  rm talys.tar
 else
   echo 'TALYS setup failed'
 fi
+
+cd ${talyslibdir}
+./MakeLibraries.sh
+make install
+
