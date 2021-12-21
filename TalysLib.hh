@@ -68,6 +68,7 @@ using namespace std;
 #define kUseDefaultOMP 4
 #define kUseLevelJP -2
 //Функции, объявленные после класса, описываются в одном файле с этим классом!
+class OMPStorage;
 class Level;
 class Nucleus;
 class Deformation;
@@ -93,6 +94,29 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	TalysLibManager(TalysLibManager const&); // реализация не нужна
 	TalysLibManager& operator= (TalysLibManager const&);  // и тут
 	ClassDef(TalysLibManager, 2);
+};
+
+class OMPManager//:public TObject
+{
+	public:
+	static OMPManager* Instance();
+	static OMPManager *pointer_to_this;
+	vector<OpticalModelParameters> OpticalPotentialsP, OpticalPotentialsN;
+	vector<int> Z_valuesP;
+	vector<int> Z_valuesN;
+	OpticalModelParameters *GetOpticalPotential(int Z, int A, string Projectile);
+	void ReadFromBase(Nucleus *Nucl);
+	void GetOpticalModelParameters(Nucleus *Nucl);
+	void SetOpticalModelParameters(Nucleus *Nucl);
+	void SaveOMP(string PathToCalculationDir,string Projectile);
+	private:
+	OMPManager() { }  // конструктор недоступен
+	~OMPManager() { } // и деструктор
+	// необходимо также запретить копирование
+	OMPManager(OMPManager const&); // реализация не нужна
+	OMPManager& operator= (OMPManager const&);  // и тут
+	public:
+	ClassDef(OMPManager, 1);
 };
 
 class AdditionalInformationContainer
@@ -170,7 +194,7 @@ class OMPStorage:public OMPStorageData
 	OMPStorage() {  }; //конструктор по-умолчанию
 	OMPStorage(OMPStorageData d);//конструктор из родительского класса OMPStorageData
 	OMPStorageData ToOMPStorageData();//объект класса OMPStorageData, задаваемый конструктором по-умолчанию
-	Nucleus *Nuclide;
+	Nucleus *Nuclide=0;
 	void EvalKoning();
 	void EvalPotential();
 	void Read(string &Buffer);
@@ -838,6 +862,8 @@ class TLMaterial:public TObject
 	string MaterialFormula;
 	double Density;
 	double MolarMass=0;
+	string Projectile="n";
+	double ProjectileEnergy=14.1;
 	double GetMolarMass();
 	bool Calculated=false;
 	vector<Nucleus*> Nuclides;
@@ -846,6 +872,8 @@ class TLMaterial:public TObject
 	vector<double> MassShares;//здесь записаны вклады (т.е. "ненормированные доли")
 	TLMaterial():TObject(){ };
 	TLMaterial(string _MaterialFormula);
+	void SetProjectile(string _Projectile);
+	void SetProjectileEnergy(double _Energy);
 	void SetDensity(double _Density);
 	double GetDensity();
 	double GetMoleFraction(Nucleus *Nucl);

@@ -792,6 +792,7 @@ void OMPStorage::Read(string &Buffer)
 	s>>Rv>>Av>>v1>>v2>>v3>>w1>>w2;
 	s>>Rd>>Ad>>d1>>d2>>d3;
 	s>>Rso>>Aso>>vso1>>vso2>>wso1>>wso2;
+	if(Nuclide)
 	EvalPotential();
 	ReadFlag=true;
 }
@@ -805,18 +806,6 @@ OpticalModelParameters::OpticalModelParameters()
 	PotentialKoning.HRPotentialType="Koning";
 }
 
-string GetPotential(ifstream &ifs)
-{
-	string result;
-	for(unsigned int i=0;i<4;i++)
-	{
-		string tmp;
-		getline(ifs,tmp);
-		result+=tmp;
-		result+="\n";
-	}
-	return result;
-}
 
 double OpticalModelParameters::GetRv()
 {

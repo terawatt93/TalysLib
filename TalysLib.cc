@@ -12,6 +12,7 @@
 #include <TKey.h>
 #include "source/SpinParity.cc" //contains SpinParity class methods
 #include "source/OMP.cc" //contains OpticalModelParameters class methods
+#include "source/OMPManager.cc" //contains OMPManager class methods
 #include "source/Deformations.cc" //contains LevelDeformation and Deformation classes methods
 #include "source/GammaTransitions.cc" //contains GammaTransition class methods
 #include "source/LevelProperties.cc" //contains Level class methods
@@ -126,6 +127,17 @@ void TLMaterial::SetDensity(double _Density)
 {
 	Density=_Density;
 }
+
+void TLMaterial::SetProjectile(string _Projectile)
+{
+	Projectile=_Projectile;
+}
+
+void TLMaterial::SetProjectileEnergy(double _Energy)
+{
+	ProjectileEnergy=_Energy;
+}
+
 double TLMaterial::GetDensity()
 {
 	return Density;
@@ -212,7 +224,9 @@ void TLMaterial::AddElement(string Element, int Q)
 	{
 		Nucleus *N=new Nucleus(to_string(A_values[j])+Element);
 		N->fMaterial=this;
-		N->GenerateProducts();
+		//N->Projectile=Projectile;
+		N->ProjectileEnergy=ProjectileEnergy;
+		N->GenerateProducts(Projectile);
 		Nuclides.push_back(N);
 		Quantities.push_back(Q);
 		Shares.push_back(Q*Abundances[j]);

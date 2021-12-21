@@ -17,6 +17,20 @@ const string Atomic_symbols[]={"H","He","Li","Be","B","C","N","O","F","Ne","Na",
 
 const char AngularMomentum[]={'s','p','d','f','g','h','i'};
 
+
+string GetPotential(ifstream &ifs)//функция, считывающая блок с оптическим потенциалом
+{
+	string result;
+	for(unsigned int i=0;i<4;i++)
+	{
+		string tmp;
+		getline(ifs,tmp);
+		result+=tmp;
+		result+="\n";
+	}
+	return result;
+}
+
 void EscapeNextNLines(ifstream &ifs,unsigned int N)
 {
 	string line;
