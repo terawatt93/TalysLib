@@ -21,4 +21,5 @@
 #pragma link C++ class Deformation+;
 #pragma link C++ class TLMaterial+;
 #pragma link C++ class TalysLibManager+;
+#pragma link C++ class OMPManager+;
 #endif
