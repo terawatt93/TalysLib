@@ -137,7 +137,7 @@ string GammaTransition::GetLine(string option)
 			}
 			if(tmp_opt=="LEV")
 			{
-				result+=to_string(TalysE_i)+"("+TalysJP_i.GetLine()+"->"+TalysJP_f.GetLine()+")"+to_string(TalysE_f)+" ";
+				result+=string(TString::Format("%.1f",TalysE_i))+"("+TalysJP_i.GetLine()+"->"+TalysJP_f.GetLine()+")"+string(TString::Format("%.1f",TalysE_f))+" ";
 			}
 		}
 		return result;
@@ -419,3 +419,45 @@ int GammaTransition::GetIntegrityFactor()
 	return factor;
 	
 }
+<<<<<<< Updated upstream
+=======
+double GammaTransition::GetTalysYield()
+{
+	if(GetIntegrityFactor()==4)
+	{
+		GammaTransition *MostIntense=fLevel->fNucleus->fMotherNucleus->fMaterial->GetMostIntenseGammaTransition();
+		if(!MostIntense)
+		{
+			return 0;
+		}
+		vector<GammaTransition*> MostIntenseGammas=fLevel->fNucleus->fMotherNucleus->fMaterial->FindGammaTransitions(MostIntense->Energy);
+		double NormFactor=0;
+		for(unsigned int i=0;i<MostIntenseGammas.size();i++)
+		{
+			NormFactor+=MostIntenseGammas[i]->TalysCrossSection*MostIntenseGammas[i]->fLevel->fNucleus->fMotherNucleus->fMaterial->GetMoleFraction(MostIntenseGammas[i]->fLevel->fNucleus->fMotherNucleus);
+		}
+		return TalysCrossSection*fLevel->fNucleus->fMotherNucleus->fMaterial->GetMoleFraction(fLevel->fNucleus->fMotherNucleus)/NormFactor;
+		//vector<GammaTransition*> Gammas=fLevel->fNucleus->fMotherNucleus->fMaterial->Get
+	}
+	return 0;
+}
+TGraph* GammaTransition::GetENDFAngularDistribution()
+{
+	if(GetIntegrityFactor()==3)
+	{
+		if(AdistENDF.GetN()==0)
+		{
+			if(fLevel->fNucleus->fMotherNucleus->Projectile=="n")
+			{
+				fLevel->fNucleus->fMotherNucleus->ReadENDF();
+				AdistENDF=fLevel->fNucleus->fMotherNucleus->ENDF.GetGammaAngularDistribution(Energy,fLevel->fNucleus->fMotherNucleus->ProjectileEnergy);
+			}
+		}
+	}
+	if(AdistENDF.GetN()==0)
+	{
+		return 0;
+	}
+	return &AdistENDF;
+}
+>>>>>>> Stashed changes

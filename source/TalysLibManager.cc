@@ -18,3 +18,18 @@ void TalysLibManager::Purge()
 {
 	system("rm -rf /dev/shm/CalculationResults*");
 }
+void TalysLibManager::DeleteExpDataForAuthor(string Author)
+{
+	ExcludeAuthors.push_back(Author);
+}
+bool TalysLibManager::IsInExcludeAuthors(string Author)
+{
+	for(unsigned int i=0;i<ExcludeAuthors.size();i++)
+	{
+		if(ExcludeAuthors[i].find(Author)!=string::npos)
+		{
+			return true;
+		}
+	}
+	return false;
+}

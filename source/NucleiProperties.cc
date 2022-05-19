@@ -321,6 +321,7 @@ Nucleus::Nucleus(string Name,string Reaction)
 	AssignPointers();
 	
 }
+
 void Nucleus::SetProjectileEnergy(double E)
 {
 	ProjectileEnergy=E;
@@ -910,6 +911,18 @@ TGraph* Nucleus::GetElasticAngularDistribution(string type,string option)
 		{
 			return &ElasticDirectTalys;
 		}
+<<<<<<< Updated upstream
+=======
+		if(type=="ENDF")
+		{
+			ReadENDF();
+			ElasticENDF=ENDF.GetAngularDistribution(Projectile,0,ProjectileEnergy);
+			ElasticENDF.SetName("ENDFElastic");
+			ElasticENDF.SetTitle("ENDF elastic;#theta,deg;#frac{d#sigma}{d#Omega},mb/str");
+			return &ElasticENDF;
+		}
+		
+>>>>>>> Stashed changes
 	}
 	else
 	{
@@ -1056,7 +1069,7 @@ void Nucleus::MergeLevels(float tolerancy)
 	}
 }
 
-void Nucleus::GenerateEnergyGrig(float min, float step, float max)
+void Nucleus::GenerateEnergyGrid(float min, float step, float max)
 {
 	EnergyGrid.resize(0);
 	float CurrE=min;
@@ -1071,17 +1084,13 @@ void Nucleus::MergeEnergyGridData(vector<Nucleus*> NucleiInEnergyGrid)
 {
 	for(unsigned int i=0;i<NucleiInEnergyGrid.size();i++)
 	{
-		/*for(unsigned int j=0;j<NucleiInEnergyGrid[i]->Products.size();j++)
+		for(unsigned int j=0;j<NucleiInEnergyGrid[i]->Products.size();j++)
 		{
-			
 			for(unsigned int k=0;k<NucleiInEnergyGrid[i]->Products[j].Levels.size();k++)
 			{
-				//if(Products[j].Levels[k].Energy<ProjectileEnergy)
-				{
-					Products[j].Levels[k].AddPoint(&(NucleiInEnergyGrid[i]->Products[j].Levels[k]));
-				}
+				Products[j].Levels[k].AddPoint(&(NucleiInEnergyGrid[i]->Products[j].Levels[k]));
 			}
-		}*/
+		}
 		AddPoint(NucleiInEnergyGrid[i]);
 	}
 	for(unsigned int i=0;i<EnergyGrid.size();i++)
@@ -1650,6 +1659,68 @@ void Nucleus::AssignDeformationsToLevels()
 		}
 	}
 }
+<<<<<<< Updated upstream
+=======
+
+TGraph *Nucleus::GetCrossSectionGraph(string type)
+{
+	if(type=="Total")
+	{
+		return &TotTalysV;
+	}
+	if(type=="Elastic")
+	{
+		return &ElasticTotTalysV;
+	}
+	if(type=="Shape elastic")
+	{
+		return &ElasticDirectTalysV;
+	}
+	if(type=="Compound elastic")
+	{
+		return &ElasticCompoundTalysV;
+	}
+	if(type=="Inelastic")
+	{
+		return &InelasticTotTalysV;
+	}
+	if(type=="Direct inelastic")
+	{
+		return &InelasticDirectTalysV;
+	}
+	if(type=="Compound inelastic")
+	{
+		return &InelasticCompoundTalysV;
+	}
+	if((type=="ENDF total")||(type=="ENDF elastic")||(type=="ENDF nonelastic"))
+	{
+		if(fMotherNucleus)
+		{
+			return fMotherNucleus->GetCrossSectionGraph(type);
+		}
+	}
+	if(type=="ENDF total")
+	{
+		ENDF.Read(Projectile,Name);
+		ENDFTotalCS=ENDF.GetCrossSections("",-1);
+		return &ENDFTotalCS;
+	}
+	if(type=="ENDF nonelastic")
+	{
+		ENDF.Read(Projectile,Name);
+		ENDFTotalCS=ENDF.GetCrossSections("",-2);
+		return &ENDFTotalCS;
+	}
+	if((type=="ENDF elastic")||(type=="ENDF"))
+	{
+		ENDF.Read(Projectile,Name);
+		ENDFTotalCS=ENDF.GetCrossSections(Projectile,0);
+		return &ENDFTotalCS;
+	}
+	return 0;
+}
+
+>>>>>>> Stashed changes
 void Nucleus::SetOMPOption(string Particle, int _OMPoption)
 {
 	if(Particle=="n")
@@ -1913,6 +1984,25 @@ void Nucleus::ReadFromRootFile(TFile *f,string _Name)
 	s>>Name;
 	
 }
+
+GammaTransition* Nucleus::GetMostIntenseGammaTransition()
+{
+	vector<GammaTransition*> Transitions=GetGammaTransitions();
+	GammaTransition* t=0;
+	for(unsigned int i=0;i<Transitions.size();i++)
+	{
+		if(i==0)
+		{
+			t=Transitions[i];
+		}
+		if(t->TalysCrossSection<Transitions[i]->TalysCrossSection)
+		{
+			t=Transitions[i];
+		}
+	}
+	return t;
+}
+
 void Nucleus::ReadFromRootFile(string FileName,string _Name)
 {
 	TFile f(FileName.c_str());
@@ -2078,4 +2168,211 @@ void Nucleus::SaveToXLSX(string filename)
 	}
 	
 
+}
+
+vector<TGraphErrors*> Nucleus::GetEXFORAngularDistributions(double Emin,double Emax)
+{
+	vector<TGraphErrors*> result;
+	if(IsProduct())
+	{
+		return fMotherNucleus->GetEXFORAngularDistributions(Emin,Emax);
+	}
+	EXFORManager m;
+	ParseReaction(Projectile+","+Projectile,Projectile,Projectile);
+	EXFORAngularDistributions=m.GetEXFORAngularDistributions(Projectile,Z,A,Projectile,0);
+	int MarkerStyle=20;
+	for(unsigned int i=0;i<EXFORAngularDistributions.size();i++)
+	{
+		if(!TalysLibManager::Instance().IsInExcludeAuthors(EXFORAngularDistributions[i].Author))
+		{
+			if(((EXFORAngularDistributions[i].ProjectileEnergy>Emin)&&(EXFORAngularDistributions[i].ProjectileEnergy<Emax))||((Emin==0)&&(Emax==0)))
+			{
+				TGraphErrors *gr=EXFORAngularDistributions[i].GetTGraph();
+				
+				int MarkerColor=i%9+1;
+				if(MarkerColor==9)
+				{
+					MarkerStyle++;
+				}
+				if(gr)
+				{
+					gr->SetMarkerStyle(MarkerStyle);
+					gr->SetMarkerColor(MarkerColor);
+					result.push_back(gr);
+				}
+			}
+		}
+	}
+	return result;
+}
+vector<TGraphErrors*> Nucleus::GetEXFORCrossSections(string Type,double Emin,double Emax)
+{
+	if(IsProduct())
+	{
+		return fMotherNucleus->GetEXFORCrossSections(Type,Emin,Emax);
+	}
+	vector<TGraphErrors*> result;
+	if(!IsProduct())
+	{
+		EXFORManager m;
+		int LevelIndex=0;
+		vector<EXFORTable> *table;
+		if((Type=="Total")||(Type=="Tot"))
+		{
+			LevelIndex=-1;
+			EXFORCrossSectionsTotal=m.GetEXFORCrossSections(Projectile,Z,A,Projectile,LevelIndex);
+			table=&EXFORCrossSectionsTotal;
+		}
+		if((Type=="Nonelastic")||(Type=="Non"))
+		{
+			LevelIndex=-2;
+			EXFORCrossSectionsNonelastic=m.GetEXFORCrossSections(Projectile,Z,A,Projectile,LevelIndex);
+			table=&EXFORCrossSectionsNonelastic;
+		}
+		if((Type=="Elastic")||(Type=="El"))
+		{
+			LevelIndex=0;
+			EXFORCrossSectionsElastic=m.GetEXFORCrossSections(Projectile,Z,A,Projectile,LevelIndex);
+			table=&EXFORCrossSectionsElastic;
+		}
+		if((Type=="Inelastic")||(Type=="Inl"))
+		{
+			LevelIndex=-3;
+			EXFORCrossSectionsInelastic=m.GetEXFORCrossSections(Projectile,Z,A,Projectile,LevelIndex);
+			table=&EXFORCrossSectionsInelastic;
+		}
+		int MarkerStyle=20;
+		for(unsigned int i=0;i<table->size();i++)
+		{
+			if(!TalysLibManager::Instance().IsInExcludeAuthors(table->at(i).Author))
+			{
+				if(((table->at(i).ProjectileEnergy>Emin)&&(table->at(i).ProjectileEnergy<Emax))||((Emin==0)&&(Emax==0)))
+				{
+					TGraphErrors *gr=table->at(i).GetTGraph();
+					int MarkerColor=i%9+1;
+					if(MarkerColor==9)
+					{
+						MarkerStyle++;
+					}
+					if(gr)
+					{
+						gr->SetMarkerStyle(MarkerStyle);
+						gr->SetMarkerColor(MarkerColor);
+						result.push_back(gr);
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+TMultiGraph* Nucleus::GetEXFORTMultiGraphForAngularDistributions(double Emin,double Emax)
+{
+	TMultiGraph* mgr=new TMultiGraph();
+	vector<TGraphErrors*> Graphs=GetEXFORAngularDistributions(Emin,Emax);
+	for(unsigned int i=0;i<Graphs.size();i++)
+	{
+		mgr->Add(Graphs[i],"p");
+	}
+	return mgr;
+}
+TMultiGraph* Nucleus::GetEXFORTMultiGraphForCrossSections(string Type,double Emin,double Emax)
+{
+	TMultiGraph* mgr=new TMultiGraph();
+	vector<TGraphErrors*> Graphs=GetEXFORCrossSections(Type,Emin,Emax);
+	for(unsigned int i=0;i<Graphs.size();i++)
+	{
+		mgr->Add(Graphs[i],"p");
+	}
+	return mgr;
+}
+int Nucleus::GetIntegrityFactor()
+{
+	int result=0;
+	if(fMotherNucleus)
+	{
+		result++;
+		if(fMaterial)
+		{
+			result++;
+		}
+	}
+	if(fMaterial)
+	{
+		result++;
+	}
+	return result;
+}
+bool Nucleus::IsProduct()
+{
+	if(fMotherNucleus)
+	{
+		return true;
+	}
+	return false;
+}
+vector<Level*> Nucleus::GetLevelsWithAvalibleData(string DType,string SType)
+{
+	vector<Level*> Result;
+	if(!IsProduct())
+	{
+		for(unsigned int i=0;i<Products.size();i++)
+		{
+			vector<Level*> tmp=Products[i].GetLevelsWithAvalibleData(DType,SType);
+			for(unsigned int j=0;j<tmp.size();j++)
+			{
+				Result.push_back(tmp[j]);
+			}
+		}
+		return Result;
+	}
+	for(unsigned int i=0;i<Levels.size();i++)
+	{
+		if(DType=="ADist")
+		{
+			if(SType=="ENDF")
+			{
+				if(Levels[i].GetAngularDistribution("ENDF")->GetN()>0)
+				{
+					Result.push_back(&Levels[i]);
+				}
+			}
+			else if(SType=="EXFOR")
+			{
+				double WindowWidth=TalysLibManager::Instance().EnergyWindowWidthForEXFORAdist;
+				if(Levels[i].GetEXFORAngularDistributions(ProjectileEnergy-WindowWidth,ProjectileEnergy+WindowWidth).size()>0)
+				{
+					Result.push_back(&Levels[i]);
+				}
+			}
+		}
+		if(DType=="CS")
+		{
+			if(SType=="ENDF")
+			{
+				if(Levels[i].GetCSGraph("ENDF")->GetN()>0)
+				{
+					Result.push_back(&Levels[i]);
+				}
+			}
+			else if(SType=="EXFOR")
+			{
+				double WindowWidth=TalysLibManager::Instance().EnergyWindowWidthForEXFORAdist;
+				double MinEnergy=ProjectileEnergy-WindowWidth;
+				double MaxEnergy=ProjectileEnergy+WindowWidth;
+				if(EnergyGrid.size()>0)
+				{
+					MinEnergy=EnergyGrid[0];
+					MaxEnergy=EnergyGrid[EnergyGrid.size()-1];
+				}
+				//if(Levels[i].GetEXFORCrossSections(MinEnergy,MaxEnergy).size()>0)
+				if(Levels[i].GetEXFORCrossSections(0,0).size()>0)
+				{
+					Result.push_back(&Levels[i]);
+				}
+			}
+		}
+		
+	}
+	return Result;
 }
