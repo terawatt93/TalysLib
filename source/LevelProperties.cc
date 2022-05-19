@@ -18,6 +18,23 @@
 #pragma once
 
 //Методы класса Level
+int Level::GetIntegrityFactor()
+{
+	int factor=0;
+	if(fNucleus)//1
+	{
+		factor++;
+		if(fNucleus->fMotherNucleus)//2
+		{
+			factor++;
+			if(fNucleus->fMotherNucleus->fMaterial)//3
+			{
+				factor++;
+			}
+		}
+	}
+	return factor;
+}
 double& LevelData::AdditionalInformation(string Key)
 {
 	return AI(Key);
@@ -241,6 +258,14 @@ Level::Level(LevelData ld)
 }
 TGraph* Level::GetAngularDistribution(string type,string option)//если график уже построен, выдается сохраненный, если нет, или option=="new", строится заново
 {
+	if(fNucleus->fMotherNucleus)
+	{
+		if((Number==0)&&(fNucleus->fMotherNucleus->Name==fNucleus->Name))
+		{
+			return fNucleus->fMotherNucleus->GetElasticAngularDistribution(type,option);
+		}
+	}
+	
 	if((!PlottedADist)||(option=="new"))
 	{
 		bool ToLab=false;
@@ -297,6 +322,27 @@ TGraph* Level::GetAngularDistribution(string type,string option)//если гр�
 	{
 		return &AdistDirectTalys;
 	}
+<<<<<<< Updated upstream
+=======
+	if(type=="ENDF")
+	{
+		if(AdistENDF.GetN()==0)
+		{
+			if(fNucleus)
+			{
+				if(!fNucleus->fMotherNucleus)
+				{
+					return 0;
+				}
+				string Projectile,Outgoing;
+				ParseReaction(fNucleus->Reaction,Projectile,Outgoing);
+				fNucleus->fMotherNucleus->ReadENDF();
+				AdistENDF=fNucleus->fMotherNucleus->ENDF.GetAngularDistribution(Outgoing,Number,fNucleus->fMotherNucleus->ProjectileEnergy);
+			}
+		}
+		return &AdistENDF;
+	}
+>>>>>>> Stashed changes
 	return 0;
 	
 }
@@ -416,10 +462,19 @@ void Level::SetDeformation(char LevT, int BandN, int BandL, int MagN, int NPhon,
 
 void Level::AddPoint(double x_value,Level *level)
 {
+	//cout<<"AddPoint: "<<x_value<<"\n";
 	if(!level)
-	return ;
+	{
+		//cout<<"AddPoint: "<<x_value<<"\n";
+		return ;
+	}
+	
 	if(Number!=level->Number)
-	return ;
+	{
+		//cout<<"AddPoint: "<<x_value<<" "<<level->Number<<"\n";
+		return ;
+	}
+	
 	for(unsigned int i=0;i<Gammas.size();i++)
 	{
 		for(unsigned int j=0;j<level->Gammas.size();j++)
@@ -428,26 +483,41 @@ void Level::AddPoint(double x_value,Level *level)
 		}
 	}
 	//int N=CSGraph.GetN();
+	//cout<<"AddPoint: "<<level->fNucleus->fMotherNucleus->ProjectileEnergy<<"\n";
 	CSValues.push_back(level->TalysCS);
 	CSCompoundValues.push_back(level->TalysCSCompound);
 	CSDirectValues.push_back(level->TalysCSDirect);
 	X_Values.push_back(x_value);
 	
-	ADTotValues.push_back(level->ADTot); ADDirectValues.push_back(level->ADDirect); ADCompoundValues.push_back(level->ADCompound);
-	Angle=level->Angle;
-	
+	for(unsigned int i=0;i<level->Angle.size();i++)
+	{
+		int N2=AdistTotalTalys2D.GetN();
+		AdistTotalTalys2D.SetPoint(N2,x_value,level->Angle[i],level->ADTot[i]);
+		AdistCompoundTalys2D.SetPoint(N2,x_value,level->Angle[i],level->ADCompound[i]);
+		AdistDirectTalys2D.SetPoint(N2,x_value,level->Angle[i],level->ADDirect[i]);
+	}
+
 	IsGraphGenerated=false;
-	/*CSGraph.SetPoint(N,x_value,level->TalysCS); 
-	CSCompoundGraph.SetPoint(N,x_value,level->TalysCSCompound);
-	CSDirectGraph.SetPoint(N,x_value,level->TalysCSDirect);*/
+	CSGraph.SetPoint(CSGraph.GetN(),x_value,level->TalysCS); 
+	CSCompoundGraph.SetPoint(CSGraph.GetN(),x_value,level->TalysCSCompound);
+	CSDirectGraph.SetPoint(CSGraph.GetN(),x_value,level->TalysCSDirect);
 }
 
 void Level::AddPoint(Level *level)
 {
+	//cout<<"AddPoint1:\n";
 	if(!level)
-	return ;
+	{
+	//	cout<<"AddPoint2:\n";
+		return ;
+	}
+	
 	if(Number!=level->Number)
-	return ;
+	{
+	//	cout<<"AddPoint3:"<<level->Number<<"\n";
+		return ;
+	}
+	
 	for(unsigned int i=0;i<Gammas.size();i++)
 	{
 		for(unsigned int j=0;j<level->Gammas.size();j++)
@@ -455,18 +525,31 @@ void Level::AddPoint(Level *level)
 			Gammas[i].AddPoint(&(level->Gammas[j]));
 		}
 	}
-	//int N=CSGraph.GetN();
+	//cout<<"AddPoint4:"<<level->Number<<"\n";
+	int N=CSGraph.GetN();
 	CSValues.push_back(level->TalysCS);
 	CSCompoundValues.push_back(level->TalysCSCompound);
 	CSDirectValues.push_back(level->TalysCSDirect);
-	
+	//cout<<"AddPoint5:"<<level->ADTot.size()<<" "<<level->Angle.size()<<"\n";
 	ADTotValues.push_back(level->ADTot); ADDirectValues.push_back(level->ADDirect); ADCompoundValues.push_back(level->ADCompound);
 	Angle=level->Angle;
+	double ProjEnergy=0;
+	if(level->GetIntegrityFactor()>1)
+	{
+		//IsGraphGenerated=false;
+		ProjEnergy=level->fNucleus->fMotherNucleus->ProjectileEnergy;
+		CSGraph.SetPoint(N,ProjEnergy,level->TalysCS); 
+		CSCompoundGraph.SetPoint(N,ProjEnergy,level->TalysCSCompound);
+		CSDirectGraph.SetPoint(N,ProjEnergy,level->TalysCSDirect);
+		for(unsigned int i=0;i<level->Angle.size();i++)
+		{
+			int N2=AdistTotalTalys2D.GetN();
+			AdistTotalTalys2D.SetPoint(N2,ProjEnergy,level->Angle[i],level->ADTot[i]);
+			AdistCompoundTalys2D.SetPoint(N2,ProjEnergy,level->Angle[i],level->ADCompound[i]);
+			AdistDirectTalys2D.SetPoint(N2,ProjEnergy,level->Angle[i],level->ADDirect[i]);
+		}
+	}
 	
-	IsGraphGenerated=false;
-	/*CSGraph.SetPoint(N,x_value,level->TalysCS); 
-	CSCompoundGraph.SetPoint(N,x_value,level->TalysCSCompound);
-	CSDirectGraph.SetPoint(N,x_value,level->TalysCSDirect);*/
 }
 
 
@@ -476,6 +559,10 @@ TGraph* Level::GetCSGraph(string type)
 	
 	if(type=="Total")
 	{
+		if((Energy==0)&&(fNucleus->IsProduct()))
+		{
+			return fNucleus->fMotherNucleus->GetCrossSectionGraph("Elastic");
+		}
 		result=&CSGraph;
 	}
 	if(type=="Compound")
@@ -486,6 +573,27 @@ TGraph* Level::GetCSGraph(string type)
 	{
 		result=&CSDirectGraph;
 	}
+<<<<<<< Updated upstream
+=======
+	if(type=="ENDF")
+	{
+		if(CSENDFGraph.GetN()==0)
+		{
+			if(fNucleus)
+			{
+				if(!fNucleus->fMotherNucleus)
+				{
+					return 0;
+				}
+				string Projectile,OutgoingParticle;
+				ParseReaction(fNucleus->Reaction,Projectile,OutgoingParticle);
+				fNucleus->fMotherNucleus->ReadENDF();
+				CSENDFGraph=fNucleus->fMotherNucleus->ENDF.GetCrossSections(OutgoingParticle,Number);
+				result=&CSENDFGraph;
+			}
+		}
+	}
+>>>>>>> Stashed changes
 	return result;
 }
 TGraph2D* Level::GetAngularDistribution2D(string type,string option)//если график уже построен, выдается сохраненный, если нет, или option=="new", строится заново
@@ -520,10 +628,16 @@ TGraph2D* Level::GetAngularDistribution2D(string type,string option)//если �
 			{
 				for(unsigned int j=0;j<AngleLabValues[i].size();j++)
 				{
-					AdistTotalTalys2D.SetPoint(PointIterator,x->at(i),AngleLabValues[i][j],ADTotValues[i][j]);
-					AdistCompoundTalys2D.SetPoint(PointIterator,x->at(i),AngleLabValues[i][j],ADDirectValues[i][j]);
-					AdistDirectTalys2D.SetPoint(PointIterator,x->at(i),AngleLabValues[i][j],ADCompoundValues[i][j]);
-					PointIterator++;
+					if(AngleLabValues.size()>i)
+					{
+						if(AngleLabValues[i].size()>j)
+						{
+							AdistTotalTalys2D.SetPoint(PointIterator,x->at(i),AngleLabValues[i][j],ADTotValues[i][j]);
+							AdistCompoundTalys2D.SetPoint(PointIterator,x->at(i),AngleLabValues[i][j],ADDirectValues[i][j]);
+							AdistDirectTalys2D.SetPoint(PointIterator,x->at(i),AngleLabValues[i][j],ADCompoundValues[i][j]);
+							PointIterator++;
+						}
+					}
 				}
 			}
 		}
@@ -533,10 +647,16 @@ TGraph2D* Level::GetAngularDistribution2D(string type,string option)//если �
 			{
 				for(unsigned int j=0;j<Angle.size();j++)
 				{
-					AdistTotalTalys2D.SetPoint(PointIterator,x->at(i),Angle[j],ADTotValues[i][j]);
-					AdistCompoundTalys2D.SetPoint(PointIterator,x->at(i),Angle[j],ADDirectValues[i][j]);
-					AdistDirectTalys2D.SetPoint(PointIterator,x->at(i),Angle[j],ADCompoundValues[i][j]);
-					PointIterator++;
+					if(AngleLabValues.size()>i)
+					{
+						if(AngleLabValues[i].size()>j)
+						{
+							AdistTotalTalys2D.SetPoint(PointIterator,x->at(i),Angle[j],ADTotValues[i][j]);
+							AdistCompoundTalys2D.SetPoint(PointIterator,x->at(i),Angle[j],ADDirectValues[i][j]);
+							AdistDirectTalys2D.SetPoint(PointIterator,x->at(i),Angle[j],ADCompoundValues[i][j]);
+							PointIterator++;
+						}
+					}
 				}
 			}
 		}
@@ -597,6 +717,138 @@ TGraph* Level::GetAngularDistributionAtEnergy(float PrEnergy,string type,string 
 			fNucleus->fMotherNucleus->MainNucleusFlag=0;
 			fNucleus->fMotherNucleus->GenerateProducts(fNucleus->fMotherNucleus->Projectile);
 			return GetAngularDistributionAtEnergy(PrEnergy,type,option);
+		}
+	}
+	return 0;
+}
+vector<TGraphErrors*> Level::GetEXFORAngularDistributions(double Emin,double Emax)
+{
+	vector<TGraphErrors*> result;
+	if(Number>40)//потом разобраться с MT!
+	{
+		return result;
+	}
+	if(GetIntegrityFactor()>1)
+	{
+		EXFORManager m;
+		string Projectile;
+		int Z=fNucleus->fMotherNucleus->Z;
+		int A=fNucleus->fMotherNucleus->A;
+		string OutgoingParticle;
+		ParseReaction(fNucleus->Reaction,Projectile,OutgoingParticle);
+		EXFORAngularDistributions=m.GetEXFORAngularDistributions(Projectile,Z,A,OutgoingParticle,Number);
+		int MarkerStyle=20;
+		int MarkerColor=1;
+		for(unsigned int i=0;i<EXFORAngularDistributions.size();i++)
+		{
+			if(!TalysLibManager::Instance().IsInExcludeAuthors(EXFORAngularDistributions[i].Author))
+			{
+				if(((EXFORAngularDistributions[i].ProjectileEnergy>Emin)&&(EXFORAngularDistributions[i].ProjectileEnergy<Emax))||((Emin==0)&&(Emax==0)))
+				{
+					TGraphErrors *gr=EXFORAngularDistributions[i].GetTGraph();
+					
+					MarkerColor++;
+					if(MarkerColor==5)
+					{
+						MarkerColor++;
+					}
+					if(MarkerColor==9)
+					{
+						MarkerStyle++;
+						MarkerColor=1;
+					}
+					if(gr)
+					{
+						gr->SetMarkerStyle(MarkerStyle);
+						gr->SetMarkerColor(MarkerColor);
+						result.push_back(gr);
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+vector<TGraphErrors*> Level::GetEXFORCrossSections(double Emin,double Emax)
+{
+	vector<TGraphErrors*> result;
+	if(Number>40)
+	{
+		return result;
+	}
+	if(GetIntegrityFactor()>1)
+	{
+		EXFORManager m;
+		int Z=fNucleus->fMotherNucleus->Z;
+		int A=fNucleus->fMotherNucleus->A;
+		string OutgoingParticle;
+		string Projectile;
+		ParseReaction(fNucleus->Reaction,Projectile,OutgoingParticle);
+		EXFORCrossSections=m.GetEXFORCrossSections(Projectile,Z,A,OutgoingParticle,Number);
+		int MarkerStyle=20;
+		int MarkerColor=1;
+		for(unsigned int i=0;i<EXFORCrossSections.size();i++)
+		{
+			if(!TalysLibManager::Instance().IsInExcludeAuthors(EXFORCrossSections[i].Author))
+			{
+				if(((EXFORCrossSections[i].Emax>Emin)&&(EXFORCrossSections[i].Emin<Emax))||((Emin==0)&&(Emax==0)))
+				{
+					TGraphErrors *gr=EXFORCrossSections[i].GetTGraph();
+					MarkerColor++;
+					if(MarkerColor==5)
+					{
+						MarkerColor++;
+					}
+					if(MarkerColor==9)
+					{
+						MarkerStyle++;
+						MarkerColor=1;
+					}
+					if(gr)
+					{
+						gr->SetMarkerStyle(MarkerStyle);
+						gr->SetMarkerColor(MarkerColor);
+						result.push_back(gr);
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+TMultiGraph* Level::GetEXFORTMultiGraphForAngularDistributions(double Emin,double Emax)
+{
+	TMultiGraph* mgr=new TMultiGraph();
+	vector<TGraphErrors*> Graphs=GetEXFORAngularDistributions(Emin,Emax);
+	for(unsigned int i=0;i<Graphs.size();i++)
+	{
+		mgr->Add(Graphs[i],"p");
+	}
+	return mgr;
+}
+TMultiGraph* Level::GetEXFORTMultiGraphForCrossSections(double Emin,double Emax)
+{
+	TMultiGraph* mgr=new TMultiGraph();
+	vector<TGraphErrors*> Graphs=GetEXFORCrossSections(Emin,Emax);
+	for(unsigned int i=0;i<Graphs.size();i++)
+	{
+		mgr->Add(Graphs[i],"p");
+	}
+	return mgr;
+}
+int Level::GetMT()
+{
+	if(GetIntegrityFactor()>1)
+	{
+		if(fNucleus->IsProduct())
+		{
+			string Projectile,Outgoing;
+			ParseReaction(fNucleus->Reaction,Projectile,Outgoing);
+			if(Number<49)
+			{
+				return GetAdditionIndex(Projectile,Outgoing,Number);
+			}
+			return -6;
 		}
 	}
 	return 0;

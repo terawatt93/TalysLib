@@ -1,4 +1,5 @@
 #!/bin/bash
+sudo apt install -y libzip-dev
 talyslibdir=`pwd`
 cd ..
 wget https://tendl.web.psi.ch/tendl_2019/talys/talys.tar

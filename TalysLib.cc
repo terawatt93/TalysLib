@@ -5,7 +5,6 @@
 #include <cstring>
 #include <algorithm>
 #include <cctype>
-#include "Parser.cpp"
 #include <TLine.h>
 #include <TText.h>
 #include <TList.h>
@@ -22,6 +21,12 @@
 #include "source/TalysFitter.cc" 
 #include "source/TalysFitterMT.cc" 
 #include "source/AdditionalInformation.cc"
+<<<<<<< Updated upstream
+=======
+#include "source/TLElement.cc"
+#include "ENDFReader/ENDFLib.cpp"
+#include "ENDFReader/EXFOR.cpp"
+>>>>>>> Stashed changes
 
 GammaTransition* GetBestTransitionFromVector(float Energy, float Tolerancy,vector<Nucleus> &Nuclei)
 {
@@ -35,6 +40,49 @@ GammaTransition* GetBestTransitionFromVector(float Energy, float Tolerancy,vecto
 			cout<<"Nuclei[i]:"<<Nuclei[i].Name<<":"<<Nuclei[i].Products[j].Name<<" "<<Nuclei[i].Products[j].Levels.size()<<"\n";
 		}
 		GammaTransition *gm_tmp=Nuclei[i].GetBestTransition(Energy,Tolerancy);
+		if(gm_tmp)
+		{
+			cout<<"GammaTransition E:"<<Energy<<" gm_tmp_energy:"<<gm_tmp->Energy<<" "<<gm_tmp->fLevel->fNucleus->Name<<"\n";
+			Transitions.push_back(gm_tmp);
+		}
+	}
+	if(Transitions.size()>0)
+	{
+		BestTransition=Transitions[0];
+	}
+	else
+	{
+		return 0;
+	}
+	for(unsigned int i=0;i<Transitions.size();i++)
+	{
+		if(BestTransition&&Transitions[i])
+		{
+			double BestCS=BestTransition->TalysCrossSection;
+			double BestAbundance=BestTransition->fLevel->fNucleus->fMotherNucleus->Abundance;
+			double CurrentCS=Transitions[i]->TalysCrossSection;
+			double CurrentAbundance=Transitions[i]->fLevel->fNucleus->fMotherNucleus->Abundance;
+			//cout<<Energy<<" BestCS:"<<BestCS<<" BestAbundance:"<<BestAbundance<<" CurrentCS:"<<CurrentCS<<" CurrentAbundance:"<<CurrentAbundance<<"\n";
+			if(BestCS*BestAbundance<CurrentCS*CurrentAbundance)
+			{
+				BestTransition=Transitions[i];
+			}
+		}
+	}
+	return BestTransition;
+}
+GammaTransition* GetBestTransitionFromVector(float Energy, float Tolerancy,vector<Nucleus*> Nuclei)
+{
+	vector<GammaTransition*> Transitions;
+	GammaTransition* BestTransition=0;
+	cout<<"GetBestTransitionFromVector started: "<<Energy<<"\n";
+	for(unsigned int i=0;i<Nuclei.size();i++)
+	{
+		for(unsigned int j=0;j<Nuclei[i]->Products.size();j++)
+		{
+			cout<<"Nuclei[i]:"<<Nuclei[i]->Name<<":"<<Nuclei[i]->Products[j].Name<<" "<<Nuclei[i]->Products[j].Levels.size()<<"\n";
+		}
+		GammaTransition *gm_tmp=Nuclei[i]->GetBestTransition(Energy,Tolerancy);
 		if(gm_tmp)
 		{
 			cout<<"GammaTransition E:"<<Energy<<" gm_tmp_energy:"<<gm_tmp->Energy<<" "<<gm_tmp->fLevel->fNucleus->Name<<"\n";
@@ -160,6 +208,9 @@ TLMaterial::TLMaterial(string _MaterialFormula)
 		MolarMass+=GetAverageMass(Elements[i])*Q[i];
 		AddElement(Elements[i],Q[i]);
 	}
+	
+	ElementsVector=Elements;
+	QVector=Q;
 	
 	if(EnableMultiThreading)
 	{
@@ -378,3 +429,64 @@ vector<GammaTransition*> TLMaterial::GetGammaTransitionsE(double EnergyThreshold
 	}
 	return result;
 }
+<<<<<<< Updated upstream
+=======
+TH1F *TLMaterial::GenerateGammaSpectrum(string DetectorType,TF1 *ResolutionFunction)
+{
+	for(unsigned int i=0;i<Nuclides.size();i++)
+	{
+		TH1F* h=(Nuclides[i]->GenerateGammaSpectrum(DetectorType,ResolutionFunction));
+		if(h)
+		{
+			TH1F hist_tmp=*h;
+			hist_tmp.Scale(GetMoleFraction(Nuclides[i]));
+			if(GammaSpectrum.Integral()==0)
+			{
+				GammaSpectrum=hist_tmp;
+			}
+			else
+			{
+				GammaSpectrum.Add(&hist_tmp);
+			}
+		}
+	}
+	return &GammaSpectrum;
+}
+vector<GammaTransition*> TLMaterial::FindGammaTransitions(double Energy,double CrossSectionThreshold,double Tolerancy,bool UseAbundancy)
+{
+	vector<GammaTransition*> GammasTMP=GetGammaTransitions(CrossSectionThreshold,UseAbundancy);
+	vector<GammaTransition*> result;
+	for(unsigned int i=0;i<GammasTMP.size();i++)
+	{
+		if(abs(GammasTMP[i]->Energy-Energy)<Tolerancy)
+		{
+			result.push_back(GammasTMP[i]);
+		}
+	}
+	return result;
+}
+GammaTransition* TLMaterial::GetMostIntenseGammaTransition()
+{
+	GammaTransition* t=0;
+	for(unsigned int i=0;i<Nuclides.size();i++)
+	{
+		if(!t)
+		{
+			t=Nuclides[i]->GetMostIntenseGammaTransition();
+		}
+		if(t)
+		{
+			GammaTransition* t2=Nuclides[i]->GetMostIntenseGammaTransition();
+			if(t2)
+			{
+				if(t2->TalysCrossSection*GetMoleFraction(Nuclides[i])>t->TalysCrossSection*GetMoleFraction(t->fLevel->fNucleus->fMotherNucleus))
+				{
+					t=t2;
+				}
+			}
+			
+		}
+	}
+	return t;
+}
+>>>>>>> Stashed changes

@@ -108,7 +108,21 @@ int FindInVector(int element,vector<int> v)
 	}
 	return -1;
 }
+<<<<<<< Updated upstream
 
+=======
+void ParseReaction(string reaction, string &Projectile, string &OutgoingParticle)
+{
+	TString ts(reaction.c_str());
+	ts.ReplaceAll("(","");
+	ts.ReplaceAll("'","");
+	ts.ReplaceAll(")","");
+	ts.ReplaceAll(","," ");
+	ts.ReplaceAll("_"," ");
+	stringstream s(ts.Data());
+	s>>Projectile>>OutgoingParticle;
+}
+>>>>>>> Stashed changes
 string NLJToString(int n, int L, float J)
 {
 	string result;
@@ -270,7 +284,7 @@ void GetAZ(string nucleus, int &Z, int &A)
 	string name;
 	if(nucleus.size()==0)
 	{
-		cout<<"This is GetAZ(string nucleus, int &Z, int &A): Fatal error: nucleus is not defined!\n";
+		cout<<"This is GetAZ(string nucleus, int &Z, int &A): Fatal error: nucleus Z="<<Z<<" A="<<A<<" is not defined!\n";
 		return ;
 	}
 	
@@ -866,4 +880,67 @@ string GetFileName(string line)
 	}
 	s>>name;
 	return InvertString(name);
+}
+float EvalKineticEnergy(float ma,float mA,float mb,float mB,float Ta,float angle,float Q)//reference: http://nuclphys.sinp.msu.ru/reactions/cinem.htm
+{
+	angle=angle/180*3.1416;
+	float v1=(mb+mB)*((mB-ma)*Ta+mB*Q)/(ma*mb*Ta);
+	  
+	int sign=0;
+	if(v1>=0)
+	{
+		sign=1;
+	}
+	else
+	{
+		sign=-1;
+		float thetaMAX=acos(sqrt(-v1));
+			
+		if(thetaMAX<angle)
+		{
+			cout<<"angle "<<angle/3.1416*180<<"deg is not valid, maximal angle is "<<thetaMAX/3.1416*180<<"deg\n";
+			return -1;
+		}
+	
+	}
+
+	double res = ma*mb*Ta/pow(mb+mB,2)*pow(cos(angle)+sign*sqrt(pow(cos(angle),2)+v1),2);
+
+	return res;
+}
+float EvalKineticEnergy(string a,string A,string b,string B,float Ta,float angle)//reference: http://nuclphys.sinp.msu.ru/reactions/cinem.htm
+{
+	double ma,mA,mb,mB,Q;
+	ma=GetNuclearMass(a);
+	mA=GetNuclearMass(A);
+	mb=GetNuclearMass(b);
+	mB=GetNuclearMass(B);
+	Q=ma+mA-mb-mB;
+	//cout<<"ma: "<<ma<<" mA: "<<mA<<" mb: "<<mb<<" mB: "<<mB<<" Q: "<<Q<<"\n";
+	return EvalKineticEnergy(ma,mA,mb,mB,Ta,angle,Q);
+}
+float EvalKineticEnergy(string a,string A,string b,string B,float Ta,float angle,double Q)//reference: http://nuclphys.sinp.msu.ru/reactions/cinem.htm
+{
+	double ma,mA,mb,mB;
+	ma=GetNuclearMass(a);
+	mA=GetNuclearMass(A);
+	mb=GetNuclearMass(b);
+	mB=GetNuclearMass(B);
+	//cout<<"ma: "<<ma<<" mA: "<<mA<<" mb: "<<mb<<" mB: "<<mB<<" Q: "<<Q<<"\n";
+	return EvalKineticEnergy(ma,mA,mb,mB,Ta,angle,Q);
+}
+int GetColor(int nCol)
+{
+	if((nCol>4)&&(nCol<9))
+	{
+		nCol+=1;
+	}else if((nCol>9)&&(nCol<19))
+	{
+		nCol+=2;
+	}
+	else if((nCol>18))
+	{
+		nCol+=3;
+	}
+	return nCol;
 }

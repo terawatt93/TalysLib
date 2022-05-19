@@ -21,6 +21,12 @@
 #include <TROOT.h>  
 #include <TVirtualFitter.h>
 #include "libxlsxwriter/include/xlsxwriter.h"
+<<<<<<< Updated upstream
+=======
+#include "ENDFReader/ENDFLib.hh"
+#include "ENDFReader/EXFOR.hh"
+
+>>>>>>> Stashed changes
 /*#include <Minuit2/FunctionMinimum.h>
 #include <Minuit2/MnMinimize.h>
 #include <Minuit2/MnMigrad.h>
@@ -86,6 +92,10 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	bool IsEnableWarning();
 	bool GenerateAllGraphs=true;
 	int MaxNumberOfThreads=16;
+	double EnergyWindowWidthForEXFORAdist=1;
+	vector<string> ExcludeAuthors;
+	bool IsInExcludeAuthors(string Author);
+	void DeleteExpDataForAuthor(string Author);
 	void Purge();
 	private:
 	TalysLibManager() { }  // конструктор недоступен
@@ -432,6 +442,7 @@ class GammaTransition:public GammaTransitionData
 	double GetIntensity();
 	double GetRelativeIntensity();
 	void GenerateGraphs();
+	double GetTalysYield();
 	int GetIntegrityFactor();//показывает уровень "целостности"-наличия указателей на уровень (1), ядро (2),родительское ядро(3), материал(4) 
 	TGraph *GetCSGraph();
 	ClassDef(GammaTransition, 1);
@@ -526,7 +537,8 @@ class Level:public LevelData
 	TGraph2D AdistTotalTalys2D, AdistCompoundTalys2D, AdistDirectTalys2D;//угловые распределения
 	TGraph CSGraph, CSCompoundGraph, CSDirectGraph;
 	int Number;
-	
+	vector <EXFORTable> EXFORAngularDistributions;
+	vector <EXFORTable> EXFORCrossSections;
 	list<TGraph> GeneratedGraphsList;
 	
 	//float Energy, EnergyErr,TalysCS,TalysJP;
@@ -556,11 +568,18 @@ class Level:public LevelData
 	TGraph* GetAngularDistributionAtEnergy(float Energy,string type="Total",string option="");
 	TMultiGraph* GetTMultiGraphForAngularDistributions(string graphics="all");
 	TGraph *GetCSGraph(string type="Total");
+	
 	LevelData ToLevelData();
 	void SetTGraphNameAndTitle(string ValName);
 	void AddPoint(double x_value,Level *level);
 	void AddPoint(Level *level);
 	void GenerateGraphs();
+	vector<TGraphErrors*> GetEXFORAngularDistributions(double Emin=0,double Emax=0);
+	vector<TGraphErrors*> GetEXFORCrossSections(double Emin=0,double Emax=0);
+	TMultiGraph* GetEXFORTMultiGraphForAngularDistributions(double Emin=0,double Emax=0);
+	TMultiGraph* GetEXFORTMultiGraphForCrossSections(double Emin=0,double Emax=0);
+	int GetIntegrityFactor();//показывает уровень "целостности"-наличия указателей на уровень (1), ядро (2),родительское ядро(3), материал(4) 
+	int GetMT();
 	ClassDef(Level, 2);
 };
 
@@ -621,6 +640,12 @@ class Nucleus:public NucleusData
 	vector<Level*> LevelsFromENSDF;
 	vector<string> TalysOptions;
 	
+	vector <EXFORTable> EXFORAngularDistributions;
+	vector <EXFORTable> EXFORCrossSectionsTotal;
+	vector <EXFORTable> EXFORCrossSectionsElastic;
+	vector <EXFORTable> EXFORCrossSectionsInelastic;
+	vector <EXFORTable> EXFORCrossSectionsNonelastic;
+	
 	list<TGraph> GeneratedGraphsList;
 	
 	float MinEnergy=0,MaxEnergy=0;
@@ -639,11 +664,22 @@ class Nucleus:public NucleusData
 	TGraph* GetElasticAngularDistribution(string type="Total",string option="");//если график упругого уже построен, выдается сохраненный, если нет, или option=="new", строится заново
 	TGraph* GetElasticAngularDistributionAtEnergy(float Energy, string type="Total",string option="");
 	TGraph2D* GetElasticAngularDistribution2D(string type="Total",string option="");
+<<<<<<< Updated upstream
+=======
+	TGraph *GetCrossSectionGraph(string type="Total");
+	
+	vector<TGraphErrors*> GetEXFORAngularDistributions(double Emin=0,double Emax=0);
+	vector<TGraphErrors*> GetEXFORCrossSections(string Type,double Emin=0,double Emax=0);
+	TMultiGraph* GetEXFORTMultiGraphForAngularDistributions(double Emin=0,double Emax=0);
+	TMultiGraph* GetEXFORTMultiGraphForCrossSections(string Type,double Emin=0,double Emax=0);
+	
+	TH1F GammaSpectrum;
+>>>>>>> Stashed changes
 	void SetOMPOption(string Particle="n",int _OMPoption=1);
 	void MergeLevels(float tolerancy);
 	void MergeEnergyGridData(vector<Nucleus*> NucleiInEnergyGrid);//функция выполняет копирование данных из вектора NucleiInEnergyGrid для построения энергетической сетки
 	void SortingLevels();
-	void GenerateEnergyGrig(float min, float step, float max);
+	void GenerateEnergyGrid(float min, float step, float max);
 	Nucleus* FindProductsByReaction(string reaction);
 	Nucleus* FindProductByName(string _Name);
 	Nucleus* fMotherNucleus;
@@ -707,16 +743,26 @@ class Nucleus:public NucleusData
 	void ReadFromRootFile(TFile *f,string Name="");
 	void ReadFromRootFile(string FileName="",string Name="");
 	void SaveToXLSX(string filename);
+<<<<<<< Updated upstream
+=======
+	GammaTransition* GetMostIntenseGammaTransition();
+	ENDFFile ENDF;
+	void ReadENDF();
+	bool IsProduct();
+>>>>>>> Stashed changes
 	static void Recompile()
 	{
 		system((" cd "+string(getenv("TALYSLIBDIR"))+"; make clean; make").c_str());
 	}
 	Nucleus& Copy();
 	~Nucleus();
+	vector<Level*> GetLevelsWithAvalibleData(string DType="ADist",string SType="ENDF");//DType="ADist" или "CS" SType: ENDF или EXFOR
 	ClassDef(Nucleus, 1);
 	private:
 	using TObject::GetName;
 	using TObject::Copy;
+	int GetIntegrityFactor();
+	
 	
 };
 
@@ -848,6 +894,7 @@ class TalysCalculation:public TObject
 };
 
 GammaTransition* GetBestTransitionFromVector(float Energy, float Tolerancy,vector<Nucleus> &Nuclei);
+GammaTransition* GetBestTransitionFromVector(float Energy, float Tolerancy,vector<Nucleus*> Nuclei);
 void ReadNucleiFromRootFile(vector<Nucleus> &Nuclei,TFile *f);
 int CheckGammaTransitionIntegrality(GammaTransition* gt);
 
@@ -856,6 +903,8 @@ class TLMaterial:public TObject
 	public:
 	bool EnableMultiThreading=true;
 	int NThreads=7;
+	vector<string> ElementsVector;
+	vector<int> QVector;
 	bool GeneratedLineList=false;
 	vector<GammaTransition*> Gammas;
 	vector<GammaTransition> Bkg;
@@ -886,6 +935,13 @@ class TLMaterial:public TObject
 	void PrintGammas(double CrossSectionThreshold=0,bool UseAbundancy=true);
 	vector<GammaTransition*> GetGammaTransitions(double CrossSectionThreshold=0,bool UseAbundancy=true);
 	vector<GammaTransition*> GetGammaTransitionsE(double EnergyThreshold=0,double CrossSectionThreshold=0,bool UseAbundancy=true);
+<<<<<<< Updated upstream
+=======
+	vector<GammaTransition*> FindGammaTransitions(double Energy,double CrossSectionThreshold=0,double Tolerancy=1,bool UseAbundancy=true);
+	TH1F GammaSpectrum;
+	TH1F* GenerateGammaSpectrum(string DetectorType="HPGe",TF1 *ResolutionFunction=0);
+	GammaTransition* GetMostIntenseGammaTransition();
+>>>>>>> Stashed changes
 	~TLMaterial()
 	{
 		for(unsigned int i=0;i<Nuclides.size();i++)
