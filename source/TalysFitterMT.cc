@@ -37,21 +37,15 @@ double EvalChi2(TalysFitterMT *TFM,Nucleus* Nucl)
 		if(FillFitValues)
 		{
 			TFM->FitValues.SetPoint(i,x,FuncValue);
-			/*int NP=TFM->FitValues.GetN();
-			if(NP==0)
-			{
-				TFM->FitValues.SetPoint(0,x,FuncValue);
-			}
-			else 
-			{
-				double xF,yF;
-				TFM->FitValues.GetPoint(NP-1,xF,yF);
-				if(xF<x)
-				TFM->FitValues.SetPoint(NP,x,FuncValue);
-			}*/
 		}
-	//	cout<<"i:"<<i<<" x:"<<x<<" y:"<<y<<" f="<<FuncValue<<"\n";
-		result+=pow(y-FuncValue,2)/(pow(x_err,2)+pow(y_err,2));
+		if((x_err>0)||(y_err>0))
+		{
+			result+=pow(y-FuncValue,2)/(pow(x_err,2)+pow(y_err,2));
+		}
+		else
+		{
+			result+=pow(y-FuncValue,2);
+		}
 	}
 	//cout<<"result:"<<result<<"\n";
 	return result;
@@ -63,19 +57,30 @@ void EvalDiffInThread(TalysFitterMT *TFM, int VarNumber, double &result)
 	Nucleus Nucl=TFM->Nuclide;
 	Nucl.SetThreadNumber(TFM->InitThreadNumber+VarNumber);
 	cout<<"THREAD:"<<TFM->InitThreadNumber+VarNumber<<"\n";
-	Nucl.OMPN.SetDefaultOMP(TFM->Nuclide.OMPoptionN);
-	Nucl.OMPP.SetDefaultOMP(TFM->Nuclide.OMPoptionP);
+	Nucl.OMPN->SetDefaultOMP(TFM->Nuclide.OMPoptionN);
+	Nucl.OMPP->SetDefaultOMP(TFM->Nuclide.OMPoptionP);
 	vector<double> Par_tmp=TFM->Parameters;
-	double Epsilon=TFM->EpsilonValues[VarNumber];
+	//double Epsilon=TFM->EpsilonValues[VarNumber];
+	//test
+	//double Epsilon=0.02;
+	double Epsilon=0.0454545/100;
 	Par_tmp[VarNumber]=TFM->Parameters[VarNumber]+Epsilon;
 	TFM->ParAssignmentFunction(TFM,&Nucl,Par_tmp);
 	Nucl.GenerateProducts();
 	double Chi2Plus=EvalChi2(TFM,&Nucl);
+	
+	/*Nucl=TFM->Nuclide;
+	Nucl.SetThreadNumber(TFM->InitThreadNumber+VarNumber);
+	cout<<"THREAD:"<<TFM->InitThreadNumber+VarNumber<<"\n";
+	Nucl.OMPN->SetDefaultOMP(TFM->Nuclide.OMPoptionN);
+	Nucl.OMPP->SetDefaultOMP(TFM->Nuclide.OMPoptionP);*/
+	
 	Par_tmp[VarNumber]=TFM->Parameters[VarNumber]-Epsilon;
 	TFM->ParAssignmentFunction(TFM,&Nucl,Par_tmp);
 	Nucl.GenerateProducts();
 	double Chi2Minus=EvalChi2(TFM,&Nucl);
 	result=(Chi2Plus-Chi2Minus)/(2*Epsilon);
+	
 }
 
 
@@ -224,6 +229,21 @@ void TalysFitterMT::AddToGraphForMultiFit(TGraphErrors *gr, double Mv)
 		GraphForMultiFit.SetPointError(NMPoints,x_err,y_err);
 	}
 }
+
+void TalysFitterMT::AddToGraphForMultiFit(TGraph *gr, double Mv)
+{
+	for(int i=0;i<gr->GetN();i++)
+	{
+		double x,y,x_err,y_err;
+		gr->GetPoint(i,x,y);
+		x_err=0;
+		y_err=0;
+		int NMPoints=GraphForMultiFit.GetN();
+		GraphForMultiFit.SetPoint(NMPoints,x+Mv,y);
+		GraphForMultiFit.SetPointError(NMPoints,x_err,y_err);
+	}
+}
+
 void TalysFitterMT::DrawFitProgress()
 {
 	if(gPad==0)
@@ -363,6 +383,10 @@ void TalysFitterMT::GenerateGraphForMultiFit(vector<TObject*> &PointersToGraphs,
 		else if(PointersToGraphs[i]->InheritsFrom("TGraphErrors"))
 		{
 			AddToGraphForMultiFit((TGraphErrors*)PointersToGraphs[i],Offsets[i]);
+		}
+		else if(PointersToGraphs[i]->InheritsFrom("TGraph"))
+		{
+			AddToGraphForMultiFit((TGraph*)PointersToGraphs[i],Offsets[i]);
 		}
 	}
 	GraphForMultiFit.Sort();

@@ -322,8 +322,6 @@ TGraph* Level::GetAngularDistribution(string type,string option)//если гр�
 	{
 		return &AdistDirectTalys;
 	}
-<<<<<<< Updated upstream
-=======
 	if(type=="ENDF")
 	{
 		if(AdistENDF.GetN()==0)
@@ -342,7 +340,6 @@ TGraph* Level::GetAngularDistribution(string type,string option)//если гр�
 		}
 		return &AdistENDF;
 	}
->>>>>>> Stashed changes
 	return 0;
 	
 }
@@ -573,8 +570,6 @@ TGraph* Level::GetCSGraph(string type)
 	{
 		result=&CSDirectGraph;
 	}
-<<<<<<< Updated upstream
-=======
 	if(type=="ENDF")
 	{
 		if(CSENDFGraph.GetN()==0)
@@ -593,7 +588,6 @@ TGraph* Level::GetCSGraph(string type)
 			}
 		}
 	}
->>>>>>> Stashed changes
 	return result;
 }
 TGraph2D* Level::GetAngularDistribution2D(string type,string option)//если график уже построен, выдается сохраненный, если нет, или option=="new", строится заново
@@ -690,6 +684,7 @@ TGraph2D* Level::GetAngularDistribution2D(string type,string option)//если �
 	{
 		return &AdistDirectTalys2D;
 	}
+	
 	return 0;
 	
 }

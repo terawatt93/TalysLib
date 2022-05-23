@@ -1,6 +1,6 @@
 #include "../TalysLib.hh"
 #include "../Parser.cpp"
-OMPManager* OMPManager::pointer_to_this = 0;
+/*OMPManager* OMPManager::pointer_to_this = 0;
 OMPManager* OMPManager::Instance()
 {
 	if(!pointer_to_this)
@@ -8,18 +8,72 @@ OMPManager* OMPManager::Instance()
 		pointer_to_this=new OMPManager();
 	}
 	return pointer_to_this;
-}
+}*/
 
+TLElement* OMPManager::GetTLElement(int Z)
+{
+	for(unsigned int i=0;i<ElementsInCalculation.size();i++)
+	{
+		if(ElementsInCalculation[i].Z==Z)
+		{
+			return &ElementsInCalculation[i];
+		}
+	}
+	TLElement el;
+	el.Z=Z;
+	el.ReadOMP(Z);
+	el.fOMPManager=this;
+	ElementsInCalculation.push_back(el);
+	return &ElementsInCalculation[ElementsInCalculation.size()-1];
+}
+void OMPManager::AddElement(int Z)
+{
+	GetTLElement(Z);
+}
+void OMPManager::SetOMP(OpticalModelParameters OMP)
+{
+	//сначала ищем TLElement
+	TLElement *el=GetTLElement(OMP.Z);
+	vector<OpticalModelParameters> *OMPVector=0;
+	if(OMP.Projectile=="n")
+	{
+		OMPVector=&(el->OpticalPotentialsN);
+	}
+	if(OMP.Projectile=="p")
+	{
+		OMPVector=&(el->OpticalPotentialsP);
+	}
+	if(!OMPVector)
+	{
+		cout<<"This is OMPManager::SetOMP(...): Invalid projectile in OpticalModelParameters argument! The projectile is \""<<OMP.Projectile<<"\". Returned\n";
+		return;
+	}
+	bool found=false;
+	for(unsigned int i=0;i<OMPVector->size();i++)
+	{
+		if((OMPVector->at(i).Z==OMP.Z)&&(OMPVector->at(i).A==OMP.A))
+		{
+			found=true;
+			OMPVector->at(i)=OMP;
+			return;
+		}
+	}
+	if(!found)
+	{
+		OMPVector->push_back(OMP);
+	}
+}
 OpticalModelParameters* OMPManager::GetOpticalPotential(int Z, int A, string Projectile)
 {
 	vector<OpticalModelParameters> *v;
+	TLElement *el=GetTLElement(Z);
 	if((Projectile=="n")||(Projectile=="neutron"))
 	{
-		v=&OpticalPotentialsN;
+		v=&(el->OpticalPotentialsN);
 	}
 	if((Projectile=="p")||(Projectile=="proton"))
 	{
-		v=&OpticalPotentialsP;
+		v=&(el->OpticalPotentialsP);
 	}
 	for(unsigned int i=0;i<v->size();i++)
 	{
@@ -28,147 +82,29 @@ OpticalModelParameters* OMPManager::GetOpticalPotential(int Z, int A, string Pro
 			return &(v->at(i));
 		}
 	}
-	return NULL;
+	OpticalModelParameters OMP;
+	OMP.SetZA(Z,A);
+	OMP.SetProjectile(Projectile);
+	OMP.PotentialKoning.EvalKoning();
+	
+	v->push_back(OMP);
+	return &(v->at(v->size()-1));
 }
 
-void OMPManager::ReadFromBase(Nucleus *Nucl)
+void OMPManager::WriteOMP(string path,int UseKoningP,int UseKoningN)
 {
-	//сначала проверим, нет ли оптического потенциала среди уже считанных
-	bool ExsistedForP=false, ExsistedForN=false;
-	if(GetOpticalPotential(Nucl->Z,Nucl->A,"n"))
+	Addition="";
+	for(unsigned int i=0;i<ElementsInCalculation.size();i++)
 	{
-		ExsistedForN=true;
-	}
-	if(GetOpticalPotential(Nucl->Z,Nucl->A,"p"))
-	{
-		ExsistedForP=true;
-	}
-	if(ExsistedForN&&ExsistedForP)
-	{
-		return;
-	}
-	if(!ExsistedForP)
-	{
-		string OMPFileName=GetPathToTalysData()+"/structure/optical/";
-		OMPFileName+="proton/p-"+GetNucleusName(Nucl->Z)+".omp";
-		ifstream ifs(OMPFileName);
-		if(!ifs.good())
-		{
-			if(TalysLibManager::Instance().IsEnableWarning())
-			cout<<"Warning: predefined OMP for "<<GetNucleusName(Nucl->Z)<<" and projectile p does not exsists! Koning parametrisation will be used.\n";
-			ifs.close();
-		}
-		else
-		{
-			string line;
-			while(getline(ifs,line))
-			{
-				stringstream s(line);
-				int A=0, Z=0, nOMP=0;
-				s>>Z>>A>>nOMP;
-				
-				OpticalModelParameters OMP;
-				OMP.Z=Z; OMP.A=A; OMP.N=A-Z;
-				Z_valuesP.push_back(Z);				
-				string Buffer=GetPotential(ifs);
-				stringstream sstr(Buffer);
-				
-				int type;
-				sstr>>type;
-				if(type==1)
-				{
-					OMP.Potential.Read(Buffer);
-				}
-				else if(type==2)
-				{
-					OMP.PotentialDisp.Read(Buffer);
-				}
-				if(nOMP==2)
-				{
-					Buffer=GetPotential(ifs);
-					stringstream Str2(Buffer);
-					Str2>>type;
-					if(type==1)
-					{
-						OMP.Potential.Read(Buffer);
-					}
-					if(type==2)
-					{
-						OMP.PotentialDisp.Read(Buffer);
-					}
-				}
-				OpticalPotentialsP.push_back(OMP);	
-			}
-		}
-	}
-	if(!ExsistedForN)
-	{
-		string OMPFileName=GetPathToTalysData()+"/structure/optical/";
-		OMPFileName+="neutron/n-"+GetNucleusName(Nucl->Z)+".omp";
-		ifstream ifs(OMPFileName);
-		if(!ifs.good())
-		{
-			if(TalysLibManager::Instance().IsEnableWarning())
-			cout<<"Warning: predefined OMP for "<<GetNucleusName(Nucl->Z)<<" and projectile n does not exsists! Koning parametrisation will be used.\n";
-			ifs.close();
-		}
-		else
-		{
-			string line;
-			while(getline(ifs,line))
-			{
-				stringstream s(line);
-				int A=0, Z=0, nOMP=0;
-				s>>Z>>A>>nOMP;
-				Z_valuesN.push_back(Z);
-				OpticalModelParameters OMP;
-				OMP.Z=Z; OMP.A=A; OMP.N=A-Z;
-								
-				string Buffer=GetPotential(ifs);
-				stringstream sstr(Buffer);
-				
-				int type;
-				sstr>>type;
-				if(type==1)
-				{
-					OMP.Potential.Read(Buffer);
-				}
-				else if(type==2)
-				{
-					OMP.PotentialDisp.Read(Buffer);
-				}
-				if(nOMP==2)
-				{
-					Buffer=GetPotential(ifs);
-					stringstream Str2(Buffer);
-					Str2>>type;
-					if(type==1)
-					{
-						OMP.Potential.Read(Buffer);
-					}
-					if(type==2)
-					{
-						OMP.PotentialDisp.Read(Buffer);
-					}
-				}
-				OpticalPotentialsN.push_back(OMP);	
-			}
-		}
+		ElementsInCalculation[i].fOMPManager=this;
+		ElementsInCalculation[i].WriteOMP(path,UseKoningP,UseKoningN);
 	}
 }
-void OMPManager::SaveOMP(string PathToCalculationDir, string Projectile)
+string OMPManager::GetAdditionToInputFile()
 {
-	vector<OpticalModelParameters> *v;
-	vector<int> *Z_values;
-	if((Projectile=="n")||(Projectile=="neutron"))
+	if((Addition.size()==0)&&(TalysLibManager::Instance().IsEnableWarning()))
 	{
-		v=&OpticalPotentialsN;
-		Z_values=&Z_valuesN;
+		cout<<"This is OMPManager::GetAdditionToInputFile(): Addition is empty. Execute WriteOMP procedure first!\n";
 	}
-	if((Projectile=="p")||(Projectile=="proton"))
-	{
-		v=&OpticalPotentialsP;
-		Z_values=&Z_valuesP;
-	}
-	
+	return Addition;
 }

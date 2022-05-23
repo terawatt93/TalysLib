@@ -419,8 +419,6 @@ int GammaTransition::GetIntegrityFactor()
 	return factor;
 	
 }
-<<<<<<< Updated upstream
-=======
 double GammaTransition::GetTalysYield()
 {
 	if(GetIntegrityFactor()==4)
@@ -460,4 +458,3 @@ TGraph* GammaTransition::GetENDFAngularDistribution()
 	}
 	return &AdistENDF;
 }
->>>>>>> Stashed changes
