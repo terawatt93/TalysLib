@@ -132,6 +132,7 @@ void TalysCalculation::ExecuteCalculation(void (*VarChangeFunction)(Nucleus *Nuc
 		Nucl.Projectile=Proj;
 		Nucl.TalysOptions=TalysOptions;
 		Nucl.ProjectileEnergy=ProjectileEnergy;
+		//Nucl.GenerateProducts(Proj);
 		Nucl.fTalysCalculation=this;
 		for(unsigned int i=0;i<VarValues.size();i++)
 		{

@@ -718,11 +718,15 @@ double OMPStorage::Getwso2()
 
 void OMPStorage::EvalKoning()
 {
-	if(!Nuclide)
+	/*if(!Nuclide)
 	{
 		cout<<"Cannot evaluate Koning parametrisation! Pointer to Nucleus is invalid!\n";
 	}
-	N=Nuclide->A-Nuclide->Z; Z=Nuclide->Z; A=Nuclide->A;
+	else
+	{
+		N=Nuclide->A-Nuclide->Z; Z=Nuclide->Z; A=Nuclide->A;
+	}
+	*/
 	if(Projectile=="n")
 	{
 		v1=59.30-21.0*(N-Z)/A-0.024*A;
@@ -771,7 +775,10 @@ void OMPStorage::EvalKoning()
 		Rso=1.1854 - 0.647*pow(A,-1.0/3);
 		Vc=1.73*Z*pow(A,-1.0/3)/Rc;
 	}
-	EvalPotential();
+	if(Nuclide)
+	{
+		EvalPotential();
+	}
 }
 
 void OMPStorage::EvalPotential()
@@ -802,11 +809,44 @@ OpticalModelParameters::OpticalModelParameters()
 	Potential.HRPotentialType="PredefSTD";
 	PotentialDisp.Type=2;
 	PotentialDisp.HRPotentialType="PredefDISP";
-	PotentialKoning.Type=3;
+	//PotentialKoning.Type=3;
+	PotentialKoning.Type=1;//чтобы Talys думал, что используется "обычный" потенциал
 	PotentialKoning.HRPotentialType="Koning";
 }
 
-
+OMPStorage* OpticalModelParameters::GetUsedOMPStorage(string Option)
+{
+	if(DefaultOMP!=0)
+	{
+		return DefaultOMP;
+	}
+	else
+	{
+		if(Option=="Default")
+		{
+			if(Potential.v1>0)
+			{
+				return &Potential;
+			}
+			else
+			{
+				return &PotentialKoning;
+			}
+		}
+		else if(Option=="Koning")
+		{
+			return &PotentialKoning;
+		}
+	}
+	return 0;
+}
+void OpticalModelParameters::SetProjectile(string _Projectile)
+{
+	Projectile=_Projectile;
+	Potential.Projectile=Projectile;
+	PotentialDisp.Projectile=Projectile;
+	PotentialKoning.Projectile=Projectile;
+}
 double OpticalModelParameters::GetRv()
 {
 	if(DefaultOMP!=0)
@@ -834,6 +874,15 @@ double OpticalModelParameters::GetRd()
 	cout<<"OpticalModelParameters::GetRd() error: DefaultOMP does not set! -1 returned\n";
 	return -1;
 }
+
+void OpticalModelParameters::SetZA(int _Z, int _A)
+{
+	Z=_Z; A=_A; N=_A-_Z; 
+	Potential.Z=Z; Potential.A=A; Potential.N=N;
+	PotentialDisp.Z=Z; PotentialDisp.A=A; PotentialDisp.N=N;
+	PotentialKoning.Z=Z; PotentialKoning.A=A; PotentialKoning.N=N;
+}
+
 double OpticalModelParameters::GetAd()
 {
 	if(DefaultOMP!=0)

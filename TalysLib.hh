@@ -1,8 +1,10 @@
+#pragma once
 #include <sstream>
 #include <iostream>
 #include <TObject.h>
 #include <TRandom.h>
 #include <TH1F.h>
+#include <TH2F.h>
 #include <TF1.h>
 #include <TFile.h>
 #include <TGraph.h>
@@ -21,12 +23,9 @@
 #include <TROOT.h>  
 #include <TVirtualFitter.h>
 #include "libxlsxwriter/include/xlsxwriter.h"
-<<<<<<< Updated upstream
-=======
 #include "ENDFReader/ENDFLib.hh"
 #include "ENDFReader/EXFOR.hh"
 
->>>>>>> Stashed changes
 /*#include <Minuit2/FunctionMinimum.h>
 #include <Minuit2/MnMinimize.h>
 #include <Minuit2/MnMigrad.h>
@@ -34,7 +33,7 @@
 #include <Minuit2/FCNGradientBase.h>*/
 
 
-#pragma once
+
 using namespace std;
 
 #define OLD_VERSION 1
@@ -82,7 +81,7 @@ class TalysCalculation;
 class OpticalModelParameters;
 class Radionuclide;
 class TLMaterial;
-
+class OMPManager;
 class TalysLibManager//потом перенсти в отдельный файл!
 {
 	public:
@@ -106,25 +105,29 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	ClassDef(TalysLibManager, 2);
 };
 
-class OMPManager//:public TObject
+class TLElement//класс, соответствующий хим. элементу. Включает в себя список ядер и список оптических потенциалов
+{//введен из-за особенностей работы с ОП в Talys
+	public:
+	vector<Nucleus*> Nuclei;//здесь хранятся указатели на ядра данного элемента
+	vector<OpticalModelParameters> OpticalPotentialsP, OpticalPotentialsN;//потенциалы для протонов и нейтронов
+	int Z;
+	void ReadOMP(int _Z=0);
+	string GenerateFileContent(string Projectile="n",int UseKoning=0);
+	void WriteOMP(string path,int UseKoningN=0,int UseKoningP=0);
+	OMPManager *fOMPManager=0;
+};
+
+class OMPManager//один объект для одного сеанса расчетов-> создается для одного начального ядра
 {
 	public:
-	static OMPManager* Instance();
-	static OMPManager *pointer_to_this;
-	vector<OpticalModelParameters> OpticalPotentialsP, OpticalPotentialsN;
-	vector<int> Z_valuesP;
-	vector<int> Z_valuesN;
-	OpticalModelParameters *GetOpticalPotential(int Z, int A, string Projectile);
-	void ReadFromBase(Nucleus *Nucl);
-	void GetOpticalModelParameters(Nucleus *Nucl);
-	void SetOpticalModelParameters(Nucleus *Nucl);
-	void SaveOMP(string PathToCalculationDir,string Projectile);
-	private:
-	OMPManager() { }  // конструктор недоступен
-	~OMPManager() { } // и деструктор
-	// необходимо также запретить копирование
-	OMPManager(OMPManager const&); // реализация не нужна
-	OMPManager& operator= (OMPManager const&);  // и тут
+	vector<TLElement> ElementsInCalculation;
+	string Addition;
+	void SetOMP(OpticalModelParameters OMP);
+	void AddElement(int Z);
+	OpticalModelParameters* GetOpticalPotential(int Z, int A, string Projectile);
+	TLElement* GetTLElement(int Z);
+	string GetAdditionToInputFile();
+	void WriteOMP(string path,int UseKoningN=0,int UseKoningP=0);//UseKoning=0-использовать потенциал по умолчанию; 1-использовать Кенинга, если нет локальной ОМ; 2-использовать только Кенинга; 3-использовать файл из Talys
 	public:
 	ClassDef(OMPManager, 1);
 };
@@ -266,6 +269,7 @@ class OMPStorage:public OMPStorageData
 	double Getvso2();
 	double Getwso1();
 	double Getwso2();
+	OpticalModelParameters *fOpticalModelParameters;
 	ClassDef(OMPStorage, 1);
 	private:
 	using TObject::Draw;
@@ -277,7 +281,7 @@ class OpticalModelParametersData:public TObject
 	public:
 	OpticalModelParametersData():TObject() {  }
 	OMPStorageData PotentialData, PotentialDispData, PotentialKoningData;
-	int nOMP;
+	int nOMP=0;
 	bool NormalisationMode=true;
 	bool Read=false;
 	bool JLM_flag=false;
@@ -287,7 +291,7 @@ class OpticalModelParametersData:public TObject
 	bool Dispersive=false;
 	string Projectile;
 	vector<string> ContentOfFile;
-	int A,Z,N;
+	int A=0,Z=0,N=0;
 	ClassDef(OpticalModelParametersData, 1);
 };
 
@@ -302,11 +306,14 @@ class OpticalModelParameters:public OpticalModelParametersData//:public TObject
 	OMPStorage *DefaultOMP=0;
 	OMPStorage Potential, PotentialDisp, PotentialKoning;
 	
+	OMPStorage* GetUsedOMPStorage(string Option="Default");
+	
 	void ReadPotentials(string Line);
 	void SaveEnergyDependence(bool State);
+	void SetZA(int _Z, int _A);
+	void SetProjectile(string _Projectile);
 	unsigned int PointToPasteChangedOMP=0;
 	Nucleus *Nuclide;
-	
 	void SetDefaultOMP(int option);
 	void SetVv(double value);
 	void SetWv(double value);
@@ -374,7 +381,7 @@ class SpinParity:public TObject
 	//SpinParity();
 	SpinParity(float J_in=0);
 	SpinParity(string str);
-	string GetLine();
+	string GetLine(string option="");
 	TString GetTLatex();
 	string GetStringAsGammaMultipolarity();
 	static vector<SpinParity> QSum(SpinParity &JP1,SpinParity &JP2);
@@ -408,9 +415,11 @@ class GammaTransition:public GammaTransitionData
 {
 	public:
 	//float Energy,EnergyErr,Intensity,CrossSection,E_in,Tolerancy,Rel_Cs,TalysCrossSection, TalysE_i,TalysE_f, TalysJP_i,TalysJP_f,TalysMultipolarity;
-	TGraph CSGraph;
+	TGraph CSGraph, AdistENDF;
 	bool IsCSGraphGenerated=false;
 	int InitLevelNumber, FinalLevelNumber;
+	TH1F DetectorResponse;
+	TH1F *GetDetectorResponse();
 	Level* fLevel;
 	Level* fFinalLevel;
 	GammaTransition()
@@ -445,6 +454,7 @@ class GammaTransition:public GammaTransitionData
 	double GetTalysYield();
 	int GetIntegrityFactor();//показывает уровень "целостности"-наличия указателей на уровень (1), ядро (2),родительское ядро(3), материал(4) 
 	TGraph *GetCSGraph();
+	TGraph *GetENDFAngularDistribution();
 	ClassDef(GammaTransition, 1);
 };
 
@@ -533,9 +543,9 @@ class Level:public LevelData
 	bool IsGraphGenerated=false;
 	bool PlottedADist=false;
 	bool PlottedADist2D=false;
-	TGraph AdistTotalTalys, AdistCompoundTalys, AdistDirectTalys;//угловые распределения
+	TGraph AdistTotalTalys, AdistCompoundTalys, AdistDirectTalys,AdistENDF;//угловые распределения
 	TGraph2D AdistTotalTalys2D, AdistCompoundTalys2D, AdistDirectTalys2D;//угловые распределения
-	TGraph CSGraph, CSCompoundGraph, CSDirectGraph;
+	TGraph CSGraph, CSCompoundGraph, CSDirectGraph, CSENDFGraph;
 	int Number;
 	vector <EXFORTable> EXFORAngularDistributions;
 	vector <EXFORTable> EXFORCrossSections;
@@ -652,20 +662,19 @@ class Nucleus:public NucleusData
 	
 	string PathToCalculationDir;
 	string OutgoingParticle;
-	OpticalModelParameters OMPN;
-	OpticalModelParameters OMPP;
+	OMPManager OMPManager_;
+	OpticalModelParameters *OMPN;
+	OpticalModelParameters *OMPP;
 	Deformation Def;
 	void SetThreadNumber(int _ThreadNumber=0);
-	TGraph ElacticTotTalys, ElasticDirectTalys,ElasticCompoundTalys;//угловые распределения
+	TGraph ElacticTotTalys, ElasticDirectTalys,ElasticCompoundTalys,ElasticENDF;//угловые распределения
 	TGraph2D ElacticTotTalys2D, ElasticDirectTalys2D,ElasticCompoundTalys2D;//угловые распределения
-	TGraph InelasticTotTalysV, InelasticDirectTalysV,InelasticCompoundTalysV, ElasticTotTalysV, ElasticDirectTalysV,ElasticCompoundTalysV, TotTalysV;//сечения
+	TGraph InelasticTotTalysV, InelasticDirectTalysV,InelasticCompoundTalysV, ElasticTotTalysV, ElasticDirectTalysV,ElasticCompoundTalysV, TotTalysV,ENDFTotalCS,ENDFElasticCS,ENDFNonelasticCS;//сечения
 	TGraph BNECS_gamma, BNECS_neutron, BNECS_proton, BNECS_deuteron, BNECS_triton, BNECS_3He, BNECS_alpha, TEISGraphTot, TEISGraphCont, TEISGraphDiscr;
 	void ReadElastic();
 	TGraph* GetElasticAngularDistribution(string type="Total",string option="");//если график упругого уже построен, выдается сохраненный, если нет, или option=="new", строится заново
 	TGraph* GetElasticAngularDistributionAtEnergy(float Energy, string type="Total",string option="");
 	TGraph2D* GetElasticAngularDistribution2D(string type="Total",string option="");
-<<<<<<< Updated upstream
-=======
 	TGraph *GetCrossSectionGraph(string type="Total");
 	
 	vector<TGraphErrors*> GetEXFORAngularDistributions(double Emin=0,double Emax=0);
@@ -674,7 +683,6 @@ class Nucleus:public NucleusData
 	TMultiGraph* GetEXFORTMultiGraphForCrossSections(string Type,double Emin=0,double Emax=0);
 	
 	TH1F GammaSpectrum;
->>>>>>> Stashed changes
 	void SetOMPOption(string Particle="n",int _OMPoption=1);
 	void MergeLevels(float tolerancy);
 	void MergeEnergyGridData(vector<Nucleus*> NucleiInEnergyGrid);//функция выполняет копирование данных из вектора NucleiInEnergyGrid для построения энергетической сетки
@@ -690,10 +698,11 @@ class Nucleus:public NucleusData
 		TalysCalculated=false;
 		fMotherNucleus=0;
 		fMaterial=0;
+		Z=0; A=0;
 	}
 	void GetFromNucleusData(NucleusData ND);
 	Nucleus(string Name,string Reaction="");
-	Nucleus(NucleusData ND);
+	Nucleus(NucleusData ND,Nucleus *PointerToMotherNucleus=0);
 	//const char *GetName()  const;
 	void ReadENSDFFile(string filename="",string Nuclide="");
 	void ReadLevelsFromTalysDatabase(string type="final");
@@ -734,7 +743,7 @@ class Nucleus:public NucleusData
 	TString NucleusNameInTLatexFormat(string option="short");
 	float GetMass();
 	NucleusData ToNucleusData();
-	void GenerateGammaSpectrum(TH1F *Spectrum, TF1* ResolutionFunction, int NEntries=100000);
+	TH1F* GenerateGammaSpectrum(string DetectorType="HPGe",TF1 *ResolutionFunction=0);
 	void SetTGraphNameAndTitle(string ValName);
 	void AddPoint(double x_value, Nucleus* Nucl);
 	void AddPoint(Nucleus* Nucl);
@@ -743,13 +752,10 @@ class Nucleus:public NucleusData
 	void ReadFromRootFile(TFile *f,string Name="");
 	void ReadFromRootFile(string FileName="",string Name="");
 	void SaveToXLSX(string filename);
-<<<<<<< Updated upstream
-=======
 	GammaTransition* GetMostIntenseGammaTransition();
 	ENDFFile ENDF;
 	void ReadENDF();
 	bool IsProduct();
->>>>>>> Stashed changes
 	static void Recompile()
 	{
 		system((" cd "+string(getenv("TALYSLIBDIR"))+"; make clean; make").c_str());
@@ -759,7 +765,7 @@ class Nucleus:public NucleusData
 	vector<Level*> GetLevelsWithAvalibleData(string DType="ADist",string SType="ENDF");//DType="ADist" или "CS" SType: ENDF или EXFOR
 	ClassDef(Nucleus, 1);
 	private:
-	using TObject::GetName;
+	//using TObject::GetName;
 	using TObject::Copy;
 	int GetIntegrityFactor();
 	
@@ -827,7 +833,7 @@ class TalysFitterMT
 	Nucleus InitNuclide;
 	Nucleus BestNuclide;
 	double lambda=1;
-	TGraph Chi2Values;
+	TGraph Chi2Values;//графики хи-квадрат (?)
 	TGraph FitValues;
 	TGraph InitValues;
 	vector<TGraph> ParValuesGraphs;
@@ -835,11 +841,11 @@ class TalysFitterMT
 	void (*ParAssignmentFunctionForPar)(TalysFitterMT *PointetToTF,Nucleus *PointerToNucleus, double ParValue, int Index);
 	double (*GetEvaluationResultForNucl)(TalysFitterMT *PointetToTF,double x_value,Nucleus *PointerToNucleus);
 	void SaveToRootFile(TFile *f);
-	TVirtualFitter *Fitter;
+	TVirtualFitter *Fitter;//CERN ROOT Abstract Base Class for Fitting.
 	void InitTVirtualFitter(string type);
 	void Minimize(int NCalls=1000, double tolerance=0.01);
 	void DrawFitProgress();
-	double BestChi2=1e250;
+	double BestChi2=1e250;//самое наименьшее хи-квадрат/ndf, достигнутое в фите подааных данных (?)
 	void GetCurrentGraphNumberAndOffset(double x, int &GraphIterator, double &Offset);
 	void SetParameter(unsigned int n, double value, string name, double epsilon, double low, double high);
 	void SetParameter(unsigned int n, double value, string name, double epsilon, double range);
@@ -856,6 +862,7 @@ class TalysFitterMT
 	vector<double> Offsets;
 	TGraphErrors GraphForMultiFit;
 	void AddToGraphForMultiFit(TGraphErrors *gr, double Mv);
+	void AddToGraphForMultiFit(TGraph *gr, double Mv);
 	void GenerateGraphForMultiFit(vector<TObject*> &PointersToGraphs,vector<double> &_Offsets);
 	TPaveText GenerateTPaveTextForFitResult(double x1=0.7,double y1=0.6,double x2=0.95,double y2=0.95,string Option="bl NDC");
 };
@@ -935,13 +942,10 @@ class TLMaterial:public TObject
 	void PrintGammas(double CrossSectionThreshold=0,bool UseAbundancy=true);
 	vector<GammaTransition*> GetGammaTransitions(double CrossSectionThreshold=0,bool UseAbundancy=true);
 	vector<GammaTransition*> GetGammaTransitionsE(double EnergyThreshold=0,double CrossSectionThreshold=0,bool UseAbundancy=true);
-<<<<<<< Updated upstream
-=======
 	vector<GammaTransition*> FindGammaTransitions(double Energy,double CrossSectionThreshold=0,double Tolerancy=1,bool UseAbundancy=true);
 	TH1F GammaSpectrum;
 	TH1F* GenerateGammaSpectrum(string DetectorType="HPGe",TF1 *ResolutionFunction=0);
 	GammaTransition* GetMostIntenseGammaTransition();
->>>>>>> Stashed changes
 	~TLMaterial()
 	{
 		for(unsigned int i=0;i<Nuclides.size();i++)

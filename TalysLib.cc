@@ -21,12 +21,9 @@
 #include "source/TalysFitter.cc" 
 #include "source/TalysFitterMT.cc" 
 #include "source/AdditionalInformation.cc"
-<<<<<<< Updated upstream
-=======
 #include "source/TLElement.cc"
 #include "ENDFReader/ENDFLib.cpp"
 #include "ENDFReader/EXFOR.cpp"
->>>>>>> Stashed changes
 
 GammaTransition* GetBestTransitionFromVector(float Energy, float Tolerancy,vector<Nucleus> &Nuclei)
 {
@@ -429,8 +426,6 @@ vector<GammaTransition*> TLMaterial::GetGammaTransitionsE(double EnergyThreshold
 	}
 	return result;
 }
-<<<<<<< Updated upstream
-=======
 TH1F *TLMaterial::GenerateGammaSpectrum(string DetectorType,TF1 *ResolutionFunction)
 {
 	for(unsigned int i=0;i<Nuclides.size();i++)
@@ -489,4 +484,3 @@ GammaTransition* TLMaterial::GetMostIntenseGammaTransition()
 	}
 	return t;
 }
->>>>>>> Stashed changes

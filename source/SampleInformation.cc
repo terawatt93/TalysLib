@@ -320,6 +320,7 @@ void SampleInformation::GetPosition(double &PositionX, double &PositionY, double
 }
 void SampleInformation::ReadFromRootFile(string FileName,string Name)
 {
+	cout<<"SampleInformation::ReadFromRootFile(string FileName): has started!\n";
 	TFile *f=new TFile(FileName.c_str());
 	if(!f)
 	{

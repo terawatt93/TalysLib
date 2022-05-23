@@ -35,13 +35,33 @@ SpinParity::SpinParity(string str)
 	}
 	J=abs(atof(str.substr(0,str.size()-1).c_str()));
 }
-string SpinParity::GetLine()
+string SpinParity::GetLine(string option)
 {
-	string s;
-	stringstream ss;
-	ss<<*this;
-	ss>>s;
-	return s;
+	string result;
+	if(option=="Frac")
+	{
+		if((int)J==J)
+		{
+			result=to_string((int)J);
+		}
+		else
+		{
+			result=to_string((int)(J*2))+"/2";
+		}
+	}
+	else
+	{
+		result=string(TString::Format("%.1f",J));
+	}
+	if(Parity>0)
+	{
+		result+="+";
+	}
+	else
+	{
+		result+="-";
+	}
+	return result;
 }
 TString SpinParity::GetTLatex()
 {

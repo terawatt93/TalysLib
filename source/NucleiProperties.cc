@@ -20,6 +20,34 @@
 #include <algorithm>
 #pragma once
 
+TH1F GenerateSpectrumFromDB(TH2F &h,double Energy)//реализация линейной интерполяции
+{
+	TH1F Spectrum("Spectrum","Spectrum",h.GetYaxis()->GetNbins(),h.GetYaxis()->GetXmin(),h.GetYaxis()->GetXmax());
+	string Name(h.GetName());
+	bool Response=false;
+	if(Name.find("Response")!=string::npos)
+	{
+		Response=true;
+	}
+	if((Energy>h.GetXaxis()->GetXmin())&&(Energy<h.GetXaxis()->GetXmax()))
+	{
+		for(int i=0;i<h.GetYaxis()->GetNbins();i++)
+		{
+			if(Response)
+			{
+				if(Energy-Spectrum.GetBinCenter(i+1)+10>0)
+				Spectrum.SetBinContent(i+1,h.Interpolate(Energy,Energy-Spectrum.GetBinCenter(i+1)+10));
+			}
+			else
+			{
+				Spectrum.SetBinContent(i+1,h.Interpolate(Energy,Spectrum.GetBinCenter(i+1)));
+			}
+		}
+	}
+	
+	return Spectrum;
+}
+
 double ConvertAngleToLab(double angle, double ma, double Ta, double mA, double mb, double mB, double Tb)
 {
 	double P_mv_b=mb/(mb+mB)*sqrt(2*ma*Ta);
@@ -35,10 +63,18 @@ void Nucleus::GetFromNucleusData(NucleusData ND)
 	Name=ND.Name; Reaction=ND.Reaction;
 	A=ND.A; Z=ND.Z;
 	Abundance=ND.Abundance;
-	OMPN=OpticalModelParameters(ND.OMPNData);
-	OMPP=OpticalModelParameters(ND.OMPPData);
-	OMPN.Nuclide=this;
-	OMPP.Nuclide=this;
+	OMPManager* PointerToOMPManager;
+	if(!fMotherNucleus)
+	{
+		PointerToOMPManager=&OMPManager_;
+	}
+	else
+	{
+		PointerToOMPManager=&(fMotherNucleus->OMPManager_);
+	}
+	
+	PointerToOMPManager->SetOMP(OpticalModelParameters(ND.OMPNData));
+	PointerToOMPManager->SetOMP(OpticalModelParameters(ND.OMPNData));
 	OMPoptionN=ND.OMPoptionN; OMPoptionP=ND.OMPoptionN;
 	TOTGamProd=ND.TOTGamProd; TOTNProd=ND.TOTNProd; TOTPProd=ND.TOTPProd; TOTDProd=ND.TOTDProd; TOTAProd=ND.TOTAProd;
 	TotElastic=ND.TotElastic; CompoundElastic=ND.CompoundElastic; DirectElastic=ND.DirectElastic; TotInelastic=ND.TotInelastic;
@@ -84,9 +120,10 @@ void Nucleus::GetFromNucleusData(NucleusData ND)
 }
 
 //Методы класса Nucleus
-Nucleus::Nucleus(NucleusData ND)
+Nucleus::Nucleus(NucleusData ND,Nucleus *PointerToMotherNucleus)
 {
 	TH1::AddDirectory(kFALSE);
+	fMotherNucleus=PointerToMotherNucleus;
 	GetFromNucleusData(ND);
 	fMaterial=0;
 }
@@ -215,6 +252,14 @@ vector<Level*> Nucleus::GetLevelsWithCorrespondingTransitions(float Energy, floa
 vector<GammaTransition*> Nucleus::GetGammaTransition(float Energy, float tolerancy,float intensity)
 {
 	vector<GammaTransition*> result;
+	for(unsigned int i=0;i<Products.size();i++)
+	{
+		vector<GammaTransition*> gt=Products[i].GetGammaTransition(Energy,tolerancy,intensity);
+		for(unsigned int j=0;j<gt.size();j++)
+		{
+			result.push_back(gt[j]);
+		}
+	}
 	for(unsigned int i=0;i<Levels.size();i++)
 	{
 		vector<GammaTransition*> r_tmp=Levels[i].GetTransition(Energy,tolerancy,intensity);
@@ -276,10 +321,11 @@ Nucleus::Nucleus(string Name,string Reaction)
 		
 		Def.SetZA(Z,A);
 		Def.ReadDeformation();
-		OMPN.Nuclide=this;
+		/*OMPN.Nuclide=this;
 		OMPP.Nuclide=this;
 		OMPN.ReadOMP("n");
-		OMPP.ReadOMP("p");
+		OMPP.ReadOMP("p");*/
+		OMPManager_.AddElement(Z);
 		AssignPointers();
 		TString R_tmp(Reaction.c_str());//получим из реакции вторичную частицу
 		R_tmp.ReplaceAll(","," ");
@@ -351,23 +397,17 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 	{
 		ofs<<TalysOptions[i]<<"\n";
 	}
-	if(WriteOMPOrUseKoningP>-1)
+	if(!fMotherNucleus)
 	{
-		if((OMPP.Potential.ReadFlag)||(WriteOMPOrUseKoningP>0))
-		{
-			ofs<<"optmodfileP "<<Z<<" "<<GetNucleusName(Z)<<"P.omp\n";
-			OMPP.SaveOMP(PathToCalculationDir+Name+"/"+GetNucleusName(Z)+"P.omp",WriteOMPOrUseKoningP);
-		}
-		
+		OMPManager_.WriteOMP(PathToCalculationDir+Name+"/",WriteOMPOrUseKoningP,WriteOMPOrUseKoningN);
+		ofs<<OMPManager_.GetAdditionToInputFile();
 	}
-	if(WriteOMPOrUseKoningN>-1)
+	else
 	{
-		if((OMPN.Potential.ReadFlag)||(WriteOMPOrUseKoningN>0))
-		{
-			ofs<<"optmodfileN "<<Z<<" "<<GetNucleusName(Z)<<"N.omp\n";
-			OMPN.SaveOMP(PathToCalculationDir+Name+"/"+GetNucleusName(Z)+"N.omp",WriteOMPOrUseKoningN);
-		}
+		fMotherNucleus->OMPManager_.WriteOMP(PathToCalculationDir+Name+"/",WriteOMPOrUseKoningP,WriteOMPOrUseKoningN);
+		ofs<<fMotherNucleus->OMPManager_.GetAdditionToInputFile();
 	}
+	
 	if(WriteDeformation)
 	{
 		ofs<<"deformfile "<<Z<<" "<<GetNucleusName(Z)<<".def\n";
@@ -911,8 +951,6 @@ TGraph* Nucleus::GetElasticAngularDistribution(string type,string option)
 		{
 			return &ElasticDirectTalys;
 		}
-<<<<<<< Updated upstream
-=======
 		if(type=="ENDF")
 		{
 			ReadENDF();
@@ -922,7 +960,6 @@ TGraph* Nucleus::GetElasticAngularDistribution(string type,string option)
 			return &ElasticENDF;
 		}
 		
->>>>>>> Stashed changes
 	}
 	else
 	{
@@ -1178,7 +1215,7 @@ void Nucleus::GenerateProducts(string _Projectile)
 		SetTGraphNameAndTitle("Energy");
 		return;
 	}
-	ExecuteCalculationInTalys(Projectile);
+	
 	int ProjZ,ProjA;
 	
 	GetAZ(Projectile,ProjZ,ProjA);
@@ -1195,6 +1232,8 @@ void Nucleus::GenerateProducts(string _Projectile)
 	name=to_string(A+ProjA-2)+GetNucleusName(Z+ProjZ-1);
 	Products.push_back(Nucleus(name,"("+Projectile+",d)"));
 	
+	ExecuteCalculationInTalys(Projectile);
+	
 	for(unsigned int i=0;i<Products.size();i++)
 	{
 		Products[i].fMotherNucleus=this;
@@ -1204,10 +1243,11 @@ void Nucleus::GenerateProducts(string _Projectile)
 	for(unsigned int i=0;i<Products.size();i++)
 	{
 		Products[i].ReadTalysCalculationResult();
-		Products[i].AssignPointers();
+	//	Products[i].AssignPointers();
 	}
+	AssignPointers();
 	ReadElastic();
-	
+	AssignPointers();
 }
 string Nucleus::PrintLevels()
 {
@@ -1333,33 +1373,79 @@ TString Nucleus::NucleusNameInTLatexFormat(string option)
 	}
 	return "";
 }
-void Nucleus::GenerateGammaSpectrum(TH1F *Spectrum, TF1* ResolutionFunction, int NEntries)//Доделать!
+TH1F* Nucleus::GenerateGammaSpectrum(string DetectorType,TF1 *ResolutionFunction)
 {
-	vector<GammaTransition*> t;
-	if(Products.size()>0)
+	string DBFileName=string(getenv("TALYSLIBDIR"))+"/ResponseDataBase/ResponseDB.root";
+	TFile f(DBFileName.c_str());
+	
+	if(DetectorType=="HPGe")
 	{
-		for(unsigned int i=0;i<Products.size();i++)
-		{
-			vector<GammaTransition*> t2=GetGammaTransitions();
-			t.insert(t.end(), t2.begin(), t2.end());
-		}
+		DetectorType="HpGe";//спасибо Димитру за костыль
+	}
+	TH2F Response, Other;
+	if(f.Get((DetectorType+"_Response").c_str()))
+	{
+		Response=*((TH2F*)f.Get((DetectorType+"_Response").c_str()));
+		Other=*((TH2F*)f.Get((DetectorType+"_Other").c_str()));
 	}
 	else
 	{
-		t=GetGammaTransitions();
+		cout<<"This is Nucleus::GenerateGammaSpectrum(): cannot extract histogram "<<DetectorType+"_Response"<<" from database file "<<DBFileName<<" NULL returned\n";
+		return 0;
 	}
-	
-/*	int iterator=0;
-	TH1F h("h","h",10000,0,10000);*/
-	
-/*	for(unsigned int i=0;i<h.GetNbinsX();i++)
+	f.Close();
+	vector<GammaTransition*> Gammas=GetGammaTransitions();
+	for(unsigned int i=0;i<Gammas.size();i++)
 	{
-		for(unsigned int j=0;j<t.size();j++)
+		TH1F Resp1=GenerateSpectrumFromDB(Response,Gammas[i]->Energy);
+		TH1F Oth1=GenerateSpectrumFromDB(Other,Gammas[i]->Energy);
+		
+		//Нормируем на фотопик
+		int PhotopeakBin=Resp1.GetXaxis()->FindBin(Gammas[i]->Energy);
+		double Integral=Resp1.Integral(PhotopeakBin-4,PhotopeakBin+4);
+		if(Integral<=0)
 		{
-			double sigma=ResolutionFunction->Eval(t[j]->Energy);
-			h.SetBinContent(h.GetBinContent(i)+);
+			Integral=1;
 		}
-	}*/
+		double Norm=Gammas[i]->TalysCrossSection/Integral;
+		Resp1.Add(&Oth1);
+		Resp1.Scale(Norm);
+		if(i==0)
+		{
+			GammaSpectrum=Resp1;
+		}
+		else
+		{
+			GammaSpectrum.Add(&Resp1);
+		}
+		Gammas[i]->DetectorResponse=Resp1;
+	}
+	if(ResolutionFunction)
+	{
+		TH1F TMP;
+		TMP=GammaSpectrum;
+		GammaSpectrum.Reset();
+		
+		for(int i=0;i<TMP.GetXaxis()->GetNbins();i++)
+		{
+			double sigma=ResolutionFunction->Eval(TMP.GetXaxis()->GetBinCenter(i+1));
+			double Mean=TMP.GetXaxis()->GetBinCenter(i+1);
+			double BinContent=TMP.GetBinContent(i+1);
+			if(BinContent>0)
+			{
+				int LessBin=TMP.GetXaxis()->FindBin(Mean-5*sigma);
+				int MaxBin=TMP.GetXaxis()->FindBin(Mean+5*sigma);
+				for(int j=LessBin;j<MaxBin;j++)
+				{
+					double BinCenter=TMP.GetXaxis()->GetBinCenter(j);
+					double value=BinContent*exp(-0.5*pow((Mean-BinCenter)/sigma,2))/(sigma*sqrt(2*3.1416));
+					GammaSpectrum.SetBinContent(j,GammaSpectrum.GetBinContent(j)+value);
+				}
+			}
+
+		}
+	}
+	return &GammaSpectrum;
 }
 
 void Nucleus::DrawLevelScheme(double MinTalysCS)
@@ -1501,10 +1587,22 @@ void Nucleus::AssignPointers()
 		Products[i].fMotherNucleus=this;
 		Products[i].fTalysCalculation=fTalysCalculation;
 	}
-	OMPN.AssignPointers(this);
-	OMPP.AssignPointers(this); 
-	OMPN.SetDefaultOMP(OMPoptionN);
-	OMPP.SetDefaultOMP(OMPoptionP);
+	if(fMotherNucleus)
+	{
+		OMPN=fMotherNucleus->OMPManager_.GetOpticalPotential(Z,A,"n");
+		OMPP=fMotherNucleus->OMPManager_.GetOpticalPotential(Z,A,"n");
+	}
+	else
+	{
+		OMPN=OMPManager_.GetOpticalPotential(Z,A,"n");
+		OMPP=OMPManager_.GetOpticalPotential(Z,A,"n");
+	}
+	OMPN->Nuclide=this;
+	OMPP->Nuclide=this;
+	OMPN->AssignPointers(this);
+	OMPP->AssignPointers(this); 
+	OMPN->SetDefaultOMP(OMPoptionN);
+	OMPP->SetDefaultOMP(OMPoptionP);
 	AssignDeformationsToLevels();
 }
 void Nucleus::AssignSimilarLevels(float Tolerancy)
@@ -1640,8 +1738,8 @@ NucleusData Nucleus::ToNucleusData()
 		result.ProductsData.push_back(Products[i].ToNucleusData());
 	}
 	result.DefData=Def.ToDeformationData();
-	result.OMPNData=OMPN.ToOpticalModelParametersData();
-	result.OMPPData=OMPN.ToOpticalModelParametersData();
+	result.OMPNData=OMPN->ToOpticalModelParametersData();
+	result.OMPPData=OMPN->ToOpticalModelParametersData();
 	return result;
 }
 
@@ -1659,8 +1757,6 @@ void Nucleus::AssignDeformationsToLevels()
 		}
 	}
 }
-<<<<<<< Updated upstream
-=======
 
 TGraph *Nucleus::GetCrossSectionGraph(string type)
 {
@@ -1720,20 +1816,19 @@ TGraph *Nucleus::GetCrossSectionGraph(string type)
 	return 0;
 }
 
->>>>>>> Stashed changes
 void Nucleus::SetOMPOption(string Particle, int _OMPoption)
 {
 	if(Particle=="n")
 	{
 		OMPoptionN=_OMPoption;
-		OMPN.SetDefaultOMP(OMPoptionN);
+		OMPN->SetDefaultOMP(OMPoptionN);
 		WriteOMPOrUseKoningN=OMPoptionN;
 		
 	}
 	if(Particle=="p")
 	{
 		OMPoptionP=_OMPoption;
-		OMPP.SetDefaultOMP(OMPoptionP);
+		OMPP->SetDefaultOMP(OMPoptionP);
 		WriteOMPOrUseKoningP=OMPoptionP;
 	}
 }
@@ -1941,13 +2036,17 @@ Nucleus::~Nucleus()
 	{
 		system(string("rm -rf "+PathToCalculationDir).c_str());
 	}
+	else
+	{
+		system(string("rm -rf "+PathToCalculationDir+Name).c_str());
+	}
 }	
 Nucleus& Nucleus::Copy()
 {
 	Nucleus& result=*this;
 	result.AssignPointers();
-	result.OMPN.SetDefaultOMP(WriteOMPOrUseKoningN);
-	result.OMPP.SetDefaultOMP(WriteOMPOrUseKoningN);
+	result.OMPN->SetDefaultOMP(WriteOMPOrUseKoningN);
+	result.OMPP->SetDefaultOMP(WriteOMPOrUseKoningN);
 	return result;
 }
 void Nucleus::SaveToRootFile(TFile *f,string Addition)
@@ -2055,6 +2154,15 @@ void PrintOMPToXLSX(TXlsxwriter &xlsx,OpticalModelParameters *OMP)
 	xlsx<<"Koning"<<OMP->PotentialKoning.v1<<OMP->PotentialKoning.v2<<OMP->PotentialKoning.v3<<OMP->PotentialKoning.v4<<OMP->PotentialKoning.w1<<OMP->PotentialKoning.w2<<OMP->PotentialKoning.d1<<OMP->PotentialKoning.d2<<OMP->PotentialKoning.d3<<OMP->PotentialKoning.vso1<<OMP->PotentialKoning.vso2<<OMP->PotentialKoning.wso1<<OMP->PotentialKoning.wso2<<"\n";
 	xlsx<<"\n";
 }
+
+void Nucleus::ReadENDF()
+{
+	if(Projectile.size()>0)
+	{
+		ENDF.Read(Projectile,Name);
+	}
+}
+
 void Nucleus::SaveToXLSX(string filename)
 {
 	TXlsxwriter xlsx;
@@ -2127,22 +2235,22 @@ void Nucleus::SaveToXLSX(string filename)
 	}
 	xlsx.GoToWorksheet("OMP(N)");
 	xlsx<<"Target"<<Name<<"\n";
-	PrintOMPToXLSX(xlsx,&OMPN);
+	PrintOMPToXLSX(xlsx,OMPN);
 	xlsx<<"Products"<<"\n";
 	for(unsigned int i=0;i<Products.size();i++)
 	{
 		xlsx<<Products[i].Name<<"\n";
-		PrintOMPToXLSX(xlsx,&(Products[i].OMPN));
+		PrintOMPToXLSX(xlsx,Products[i].OMPN);
 		xlsx<<"\n";
 	}
 	xlsx.GoToWorksheet("OMP(P)");
 	xlsx<<"Target"<<Name<<"\n";
-	PrintOMPToXLSX(xlsx,&OMPP);
+	PrintOMPToXLSX(xlsx,OMPP);
 	xlsx<<"Products"<<"\n";
 	for(unsigned int i=0;i<Products.size();i++)
 	{
 		xlsx<<Products[i].Name<<"\n";
-		PrintOMPToXLSX(xlsx,&(Products[i].OMPP));
+		PrintOMPToXLSX(xlsx,Products[i].OMPP);
 	}
 	xlsx.GoToWorksheet("ParticleProduction");
 	xlsx<<" "<<"1"<<"Total"<<"\n";
@@ -2166,8 +2274,6 @@ void Nucleus::SaveToXLSX(string filename)
 		xlsx<<"Direct"<<Products[i].DirectInelastic<<"\n";
 		xlsx<<"Compound"<<Products[i].CompoundInelastic<<"\n";
 	}
-	
-
 }
 
 vector<TGraphErrors*> Nucleus::GetEXFORAngularDistributions(double Emin,double Emax)

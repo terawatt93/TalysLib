@@ -108,9 +108,6 @@ int FindInVector(int element,vector<int> v)
 	}
 	return -1;
 }
-<<<<<<< Updated upstream
-
-=======
 void ParseReaction(string reaction, string &Projectile, string &OutgoingParticle)
 {
 	TString ts(reaction.c_str());
@@ -122,7 +119,6 @@ void ParseReaction(string reaction, string &Projectile, string &OutgoingParticle
 	stringstream s(ts.Data());
 	s>>Projectile>>OutgoingParticle;
 }
->>>>>>> Stashed changes
 string NLJToString(int n, int L, float J)
 {
 	string result;
