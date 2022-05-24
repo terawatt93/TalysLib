@@ -14,3 +14,4 @@ doc/manualRus.aux
 *.so
 *.cxx
 *.pcm
+ResponseDataBase/ResponseDB.root
