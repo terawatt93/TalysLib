@@ -457,6 +457,20 @@ void Level::SetDeformation(char LevT, int BandN, int BandL, int MagN, int NPhon,
 	}
 }
 
+vector<float> Level::GetDeformationBeta()
+{//Level->LevelDeformation->Beta
+	vector<float> result;
+	if(deformation!=0)
+	{
+		return deformation->Beta;
+	}
+	else
+	{
+		cout<<"Level::GetDeformationBeta() error: level deformation is not defined. Return empty vector! \n";
+		return result;
+	}
+}
+
 void Level::AddPoint(double x_value,Level *level)
 {
 	//cout<<"AddPoint: "<<x_value<<"\n";
