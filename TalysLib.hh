@@ -518,6 +518,7 @@ class Deformation:public DeformationData
 	unsigned int PointToPastChangedDeformation=0;
 	void SetZA(int _Z,int _A);
 	void SetTypeOfCollectivity( char _Type='S');
+	char GetTypeOfCollectivity();
 	void ReadDeformation();
 	void WriteDeformation(string filename);
 	void SetDeformation(Level *l,char LevT, int BandN=-1, int BandL=-1, int MagN=-1,int NPhon=-1, vector<float> *Def=0);
