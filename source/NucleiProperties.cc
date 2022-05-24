@@ -2030,6 +2030,40 @@ void Nucleus::SetLevelDeformation(double LevelEnergy,char LevT, int BandN, int B
 	Def.SetDeformation(l,LevT,BandN,BandL,MagN,NPhon,DefVec);
 	#endif
 }
+vector<float> Nucleus::GetLevelDeformationBeta(int LevelNumber)
+{
+	Level *l=FindLevelByNumber(LevelNumber);
+	#if OLD_VERSION!=1
+	if(l)
+	{
+		return l->GetDeformation();
+	}
+	else
+	{
+		if(TalysLibManager::Instance().IsEnableWarning())
+		cout<<"Warning in Nucleus::GetLevelDeformation(...): level with number "<<LevelNumber<<" not found!\n";
+	}
+	#else
+	return Def.GetDeformationBeta(l);
+	#endif
+}
+vector<float> Nucleus::GetLevelDeformationBeta(double LevelEnergy)
+{
+	Level *l=FindLevelByEnergy(LevelEnergy);
+	#if OLD_VERSION!=1
+	if(l)
+	{
+		return l->GetDeformation();
+	}
+	else
+	{
+		if(TalysLibManager::Instance().IsEnableWarning())
+		cout<<"Warning in Nucleus::GetLevelDeformation(...): level with number "<<LevelNumber<<" not found!\n";
+	}
+	#else
+	return Def.GetDeformationBeta(l);
+	#endif
+}
 Nucleus::~Nucleus()
 {
 	if((FastFlag)&&(FastCalculated))
@@ -2070,13 +2104,14 @@ void Nucleus::ReadFromRootFile(TFile *f,string _Name)
 		cout<<"This is Nucleus::ReadFromRootFile() error: pointer to file is invalid! returned\n";
 		return;
 	}
+	cout<<"Nucleus::ReadFromRootFile(): getting NucleusData object with name: "<<_Name<<"\n";
 	NucleusData *ND=(NucleusData*)f->Get(_Name.c_str());
 	if(!ND)
 	{
 		cout<<"This is Nucleus::ReadFromRootFile() error: Nucleus object with name "<<Name<<"Does not exsists! returned\n";
 		return ;
 	}
-	GetFromNucleusData(*ND);
+	GetFromNucleusData(*ND);//считать данные из поданного объекта NucleusData в тобъект того же типа, принадлежащий ядру
 	TString ts(Name.c_str());
 	ts.ReplaceAll("_"," ");
 	stringstream s(ts.Data());
@@ -2104,6 +2139,7 @@ GammaTransition* Nucleus::GetMostIntenseGammaTransition()
 
 void Nucleus::ReadFromRootFile(string FileName,string _Name)
 {
+	cout<<"This is Nucleus::ReadFromRootFile(string FileName,string _Name) has started!\n";
 	TFile f(FileName.c_str());
 	ReadFromRootFile(&f,_Name);
 }
