@@ -143,6 +143,10 @@ void Deformation::SetTypeOfCollectivity( char _Type)
 {
 	TypeOfCollectivity=_Type;
 }
+char Deformation::GetTypeOfCollectivity()
+{
+	return TypeOfCollectivity;
+}
 void Deformation::ReadDeformation()
 {
 	string Filename=GetPathToTalysData()+"/structure/deformation/"+GetNucleusName(Z)+".def";
