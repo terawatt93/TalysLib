@@ -389,8 +389,12 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 		}
 		FastCalculated=true;
 	}
-	mkdir((PathToCalculationDir+Name).c_str(),S_IRWXU);
-	string filename=PathToCalculationDir+Name+"/input";
+	while(IsDirectoryAlreadyExsisted(PathToCalculationDir+Name+to_string(ID)))
+	{
+		ID++;
+	}
+	mkdir((PathToCalculationDir+Name+to_string(ID)).c_str(),S_IRWXU);
+	string filename=PathToCalculationDir+Name+to_string(ID)+"/input";
 	ofstream ofs(filename.c_str());
 	ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\noutexcitation y\n channels y\n";
 	for(unsigned int i=0;i<TalysOptions.size();i++)
@@ -399,22 +403,22 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 	}
 	if(!fMotherNucleus)
 	{
-		OMPManager_.WriteOMP(PathToCalculationDir+Name+"/",WriteOMPOrUseKoningP,WriteOMPOrUseKoningN);
+		OMPManager_.WriteOMP(PathToCalculationDir+Name+to_string(ID)+"/",WriteOMPOrUseKoningP,WriteOMPOrUseKoningN);
 		ofs<<OMPManager_.GetAdditionToInputFile();
 	}
 	else
 	{
-		fMotherNucleus->OMPManager_.WriteOMP(PathToCalculationDir+Name+"/",WriteOMPOrUseKoningP,WriteOMPOrUseKoningN);
+		fMotherNucleus->OMPManager_.WriteOMP(PathToCalculationDir+Name+to_string(ID)+"/",WriteOMPOrUseKoningP,WriteOMPOrUseKoningN);
 		ofs<<fMotherNucleus->OMPManager_.GetAdditionToInputFile();
 	}
 	
 	if(WriteDeformation)
 	{
 		ofs<<"deformfile "<<Z<<" "<<GetNucleusName(Z)<<".def\n";
-		Def.WriteDeformation(PathToCalculationDir+Name+"/"+GetNucleusName(Z)+".def");
+		Def.WriteDeformation(PathToCalculationDir+Name+to_string(ID)+"/"+GetNucleusName(Z)+".def");
 	}
 	ofs.close();
-	system(string("cd "+PathToCalculationDir+Name+"/; talys <input >output").c_str());
+	system(string("cd "+PathToCalculationDir+Name+to_string(ID)+"/; talys <input >output").c_str());
 }
 
 void Nucleus::SortingLevels()
@@ -542,11 +546,11 @@ void Nucleus::ReadTalysCalculationResult()
 	PlottedADist=false;
 	if(fMotherNucleus)
 	{
-		filename=fMotherNucleus->PathToCalculationDir+fMotherNucleus->Name+"/output";
+		filename=fMotherNucleus->PathToCalculationDir+fMotherNucleus->Name+to_string(ID)+"/output";
 	}
 	else
 	{
-		filename=PathToCalculationDir+Name+"/output";
+		filename=PathToCalculationDir+Name+to_string(ID)+"/output";
 	}
 	ifstream ifs(filename.c_str());
 	string line;
@@ -735,11 +739,11 @@ void Nucleus::ReadElastic()
 	string filename;
 	if(fMotherNucleus)
 	{
-		filename=PathToCalculationDir+fMotherNucleus->Name+"/output";
+		filename=PathToCalculationDir+fMotherNucleus->Name+to_string(ID)+"/output";
 	}
 	else
 	{
-		filename=PathToCalculationDir+Name+"/output";
+		filename=PathToCalculationDir+Name+to_string(ID)+"/output";
 	}
 	
 	ifstream ifs(filename.c_str());
@@ -1590,12 +1594,12 @@ void Nucleus::AssignPointers()
 	if(fMotherNucleus)
 	{
 		OMPN=fMotherNucleus->OMPManager_.GetOpticalPotential(Z,A,"n");
-		OMPP=fMotherNucleus->OMPManager_.GetOpticalPotential(Z,A,"n");
+		OMPP=fMotherNucleus->OMPManager_.GetOpticalPotential(Z,A,"p");
 	}
 	else
 	{
 		OMPN=OMPManager_.GetOpticalPotential(Z,A,"n");
-		OMPP=OMPManager_.GetOpticalPotential(Z,A,"n");
+		OMPP=OMPManager_.GetOpticalPotential(Z,A,"p");
 	}
 	OMPN->Nuclide=this;
 	OMPP->Nuclide=this;
@@ -1739,7 +1743,7 @@ NucleusData Nucleus::ToNucleusData()
 	}
 	result.DefData=Def.ToDeformationData();
 	result.OMPNData=OMPN->ToOpticalModelParametersData();
-	result.OMPPData=OMPN->ToOpticalModelParametersData();
+	result.OMPPData=OMPP->ToOpticalModelParametersData();
 	return result;
 }
 
@@ -2030,40 +2034,6 @@ void Nucleus::SetLevelDeformation(double LevelEnergy,char LevT, int BandN, int B
 	Def.SetDeformation(l,LevT,BandN,BandL,MagN,NPhon,DefVec);
 	#endif
 }
-vector<float> Nucleus::GetLevelDeformationBeta(int LevelNumber)
-{
-	Level *l=FindLevelByNumber(LevelNumber);
-	#if OLD_VERSION!=1
-	if(l)
-	{
-		return l->GetDeformation();
-	}
-	else
-	{
-		if(TalysLibManager::Instance().IsEnableWarning())
-		cout<<"Warning in Nucleus::GetLevelDeformation(...): level with number "<<LevelNumber<<" not found!\n";
-	}
-	#else
-	return Def.GetDeformationBeta(l);
-	#endif
-}
-vector<float> Nucleus::GetLevelDeformationBeta(double LevelEnergy)
-{
-	Level *l=FindLevelByEnergy(LevelEnergy);
-	#if OLD_VERSION!=1
-	if(l)
-	{
-		return l->GetDeformation();
-	}
-	else
-	{
-		if(TalysLibManager::Instance().IsEnableWarning())
-		cout<<"Warning in Nucleus::GetLevelDeformation(...): level with number "<<LevelNumber<<" not found!\n";
-	}
-	#else
-	return Def.GetDeformationBeta(l);
-	#endif
-}
 Nucleus::~Nucleus()
 {
 	if((FastFlag)&&(FastCalculated))
@@ -2072,7 +2042,7 @@ Nucleus::~Nucleus()
 	}
 	else
 	{
-		system(string("rm -rf "+PathToCalculationDir+Name).c_str());
+		system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
 	}
 }	
 Nucleus& Nucleus::Copy()
@@ -2104,14 +2074,13 @@ void Nucleus::ReadFromRootFile(TFile *f,string _Name)
 		cout<<"This is Nucleus::ReadFromRootFile() error: pointer to file is invalid! returned\n";
 		return;
 	}
-	cout<<"Nucleus::ReadFromRootFile(): getting NucleusData object with name: "<<_Name<<"\n";
 	NucleusData *ND=(NucleusData*)f->Get(_Name.c_str());
 	if(!ND)
 	{
 		cout<<"This is Nucleus::ReadFromRootFile() error: Nucleus object with name "<<Name<<"Does not exsists! returned\n";
 		return ;
 	}
-	GetFromNucleusData(*ND);//считать данные из поданного объекта NucleusData в тобъект того же типа, принадлежащий ядру
+	GetFromNucleusData(*ND);
 	TString ts(Name.c_str());
 	ts.ReplaceAll("_"," ");
 	stringstream s(ts.Data());
@@ -2139,7 +2108,6 @@ GammaTransition* Nucleus::GetMostIntenseGammaTransition()
 
 void Nucleus::ReadFromRootFile(string FileName,string _Name)
 {
-	cout<<"This is Nucleus::ReadFromRootFile(string FileName,string _Name) has started!\n";
 	TFile f(FileName.c_str());
 	ReadFromRootFile(&f,_Name);
 }

@@ -336,6 +336,7 @@ TGraph* Level::GetAngularDistribution(string type,string option)//если гр�
 				ParseReaction(fNucleus->Reaction,Projectile,Outgoing);
 				fNucleus->fMotherNucleus->ReadENDF();
 				AdistENDF=fNucleus->fMotherNucleus->ENDF.GetAngularDistribution(Outgoing,Number,fNucleus->fMotherNucleus->ProjectileEnergy);
+				AdistENDF.SetLineColor(6);
 			}
 		}
 		return &AdistENDF;
@@ -348,41 +349,30 @@ TMultiGraph* Level::GetTMultiGraphForAngularDistributions(string graphics)
 	TMultiGraph* AllAngularDistributions=new TMultiGraph();
 	GetAngularDistribution();//AdistTotalTalys, AdistCompoundTalys, AdistDirectTalys
 	TGraph* elastic;
-	if(fNucleus->fMotherNucleus)
-	{
-		elastic=fNucleus->fMotherNucleus->GetElasticAngularDistribution("Total");
-	}
-	else if(fNucleus)
-	{
-		elastic=fNucleus->GetElasticAngularDistribution("Total");
-	}
 	if(graphics=="all")
 	{
-		AllAngularDistributions->Add(&AdistTotalTalys);
-		AllAngularDistributions->Add(&AdistCompoundTalys);
-		AllAngularDistributions->Add(&AdistDirectTalys);
-		/*if(elastic)
-		{
-			AllAngularDistributions->Add(elastic);
-		}*/
+		AllAngularDistributions->Add(GetAngularDistribution("Total"));
+		AllAngularDistributions->Add(GetAngularDistribution("Direct"));
+		AllAngularDistributions->Add(GetAngularDistribution("Compound"));
+		AllAngularDistributions->Add(GetAngularDistribution("ENDF"));
 	}
 	else
 	{
 		if((int)graphics.find("Total")>-1)
 		{
-			AllAngularDistributions->Add(&AdistTotalTalys);
+			AllAngularDistributions->Add(GetAngularDistribution("Total"));
 		}
 		if((int)graphics.find("Compound")>-1)
 		{
-			AllAngularDistributions->Add(&AdistCompoundTalys);
+			AllAngularDistributions->Add(GetAngularDistribution("Compound"));
 		}
 		if((int)graphics.find("Direct")>-1)
 		{
-			AllAngularDistributions->Add(&AdistDirectTalys);
+			AllAngularDistributions->Add(GetAngularDistribution("Direct"));
 		}
-		if((int)graphics.find("Elastic")>-1)
+		if((int)graphics.find("ENDF")>-1)
 		{
-			AllAngularDistributions->Add(elastic);
+			AllAngularDistributions->Add(GetAngularDistribution("ENDF"));
 		}
 	}
 	return AllAngularDistributions;
@@ -454,20 +444,6 @@ void Level::SetDeformation(char LevT, int BandN, int BandL, int MagN, int NPhon,
 		deformation=&(fNucleus->Def.LevelDeformations[fNucleus->Def.LevelDeformations.size()]);
 		//fNucleus->Def.AssignPointers();
 		fNucleus->Def.Sort();
-	}
-}
-
-vector<float> Level::GetDeformationBeta()
-{//Level->LevelDeformation->Beta
-	vector<float> result;
-	if(deformation!=0)
-	{
-		return deformation->Beta;
-	}
-	else
-	{
-		cout<<"Level::GetDeformationBeta() error: level deformation is not defined. Return empty vector! \n";
-		return result;
 	}
 }
 
@@ -680,6 +656,7 @@ TGraph2D* Level::GetAngularDistribution2D(string type,string option)//если �
 		
 		AdistCompoundTalys2D.SetLineColor(2);
 		AdistDirectTalys2D.SetLineColor(4);
+		AdistENDF.SetLineColor(6);
 		
 		AdistTotalTalys2D.SetTitle(TotTitle);
 		AdistCompoundTalys2D.SetTitle(CompTitle);
