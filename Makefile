@@ -1,6 +1,6 @@
 CXX = `root-config --cxx`
 CXXFLAGS = `root-config --cflags` -fPIC -g -Wall
-ROOTLIBS = `root-config --glibs`
+ROOTLIBS = `root-config --glibs` -lMathMore
 SHARED = -shared
 SRCS = TalysLibDict.cxx TalysLib.cc
 HDRS = TalysLinkDef.h TalysLib.hh
@@ -17,7 +17,7 @@ TalysLibDict.cxx: $(HDRS) TalysLinkDef.h
 $(PROGRAM): $(SRCS)
 	@echo "Building $(PROGRAM) ..."
 	@rm -f $(PROGRAM)
-	@$(CXX) $(CXXFLAGS) $(SHARED) -o $@ $^ $(ROOTLIBS)
+	@$(CXX) $(CXXFLAGS) $(SHARED) -o $@ $^ $(ROOTLIBS) /usr/lib/x86_64-linux-gnu/libzip.so
 	@echo "done"
 #options:
 clean:; @rm -rf core *.so *.rootmap *.cxx *.pcm
