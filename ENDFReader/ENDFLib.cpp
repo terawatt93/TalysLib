@@ -397,11 +397,21 @@ TGraph* ENDFAngularDistribution::GetAngularDistribution(string _Type,int NPoints
 	}
 	if(_Type=="Deg")
 	{
-		ADistGraph=TGraph(DegVector.size(),&DegVector[0],&Y[0]);
+		//ADistGraph=TGraph(DegVector.size(),&DegVector[0],&Y[0]);
+		for(unsigned int i=0;i<DegVector.size();i++)
+		{
+			if(Y[i]>0)
+			ADistGraph.SetPoint(ADistGraph.GetN(),DegVector[i],Y[i]);
+		}
+		
 	}
 	else if(_Type=="Cos")
 	{
-		ADistGraph=TGraph(CosVector.size(),&CosVector[0],&Y[0]);
+		for(unsigned int i=0;i<CosVector.size();i++)
+		{
+			if(Y[i]>0)
+			ADistGraph.SetPoint(ADistGraph.GetN(),CosVector[i],Y[i]);
+		}
 	}
 	return &ADistGraph;
 }

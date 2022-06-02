@@ -1,0 +1,26 @@
+1 General information
+2 Resonance parameter data
+3 Reaction cross sections
+4 Angular distributions for emitted particles
+5 Energy distributions for emitted particles
+6 Energy-angle distributions for emitted particles
+7 Thermal neutron scattering law data
+8 Radioactivity and fission-product yield data
+9 Multiplicities for radioactive nuclide production
+10 Cross sections for radioactive nuclide production
+12 Multiplicities for photon production
+13 Cross sections for photon production
+14 Angular distributions for photon production
+15 Energy distributions for photon production
+23 Photo- or electro-atomic interaction cross sections
+26 Electro-atomic angle and energy distribution
+27 Atomic form factors or scattering functions for photo-atomic interactions
+28 Atomic relaxation data
+30 Data covariances obtained from parameter covariances and sensitivities
+31 Data covariances for nu(bar)
+32 Data covariances for resonance parameters
+33 Data covariances for reaction cross sections
+34 Data covariances for angular distributions
+35 Data covariances for energy distributions
+39 Data covariances for radionuclide production yields
+40 Data covariances for radionuclide production cross sections

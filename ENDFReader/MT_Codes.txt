@@ -1,0 +1,574 @@
+1	(n,total)	Neutron	total	cross	sections.	(See	sum	rules	for	cross	sections	in	Section	0.5.1	Table	14).									
+2	(z,z0)	Elastic	scattering	cross	section	for	incident	particles.																	
+3	(z,nonelas.)	Nonelastic	neutron	cross	section.	(See	sum	rules	for	cross	sections	in	Section	0.5.1	Table	14).									
+4	(z,n)	Production	of	one	neutron	in	the	exit	channel.	Sum	of	the	MT=50-91.												
+5	(z,anything)	Sum	of	all	reactions	not	given	explicitly	in	another	MT	number.	This	is	a	partial	reaction	to	be	added	to	obtain	MT=1.		
+10	(z,contin.)	Total	continuum	reaction;	includes	all	continuum	reactions	and	excludes	all	discrete	reactions.												
+11	(z,2nd)	Production	of	two	neutrons	and	a	deuteron,	plus	a	residual														
+16	(z,2n)	Production	of	two	neutrons	and	a	resid-ual1.	Sum	of	MT=875-891,	if	they	are	present.										
+17	(z,3n)	Production	of	three	neutrons	and	a	residual.																	
+18	(z,fission)	Particle-induced	fission	(sum	of	MT	19,	20,	21	and	38,	if	present).												
+19	(n,f)	First-chance	neutron-induced	fission	2																				
+20	(n,nf)	Second-chance	neutron-induced	fission2.																					
+21	(n,2nf)	Third-chance	neutron-induced	fission2.																					
+22	(z,na)	Production	of	a	neutron	and	an	alpha	particle,	plus	a	residual.													
+23	(n,n3a)	Production	of	a	neutron	and	three	alpha	particles,	plus	a	residual1.													
+24	(z,2na)	Production	of	two	neutrons	and	an	alpha	particle,	plus	a	residual1.													
+25	(z,3na)	Production	of	three	neutrons	and	an	alpha	particle,	plus	a	residual1.													
+27	(n,abs)	Absorption;	sum	of	MT=18	and	MT=102	through	MT=117																
+28	(z,np)	Production	of	a	neutron	and	a	proton,	plus	a	residual.														
+29	(z,n2a)	Production	of	a	neutron	and	two	alpha	particles,	plus	a	residual.													
+30	(z,2n2a)	Production	of	two	neutrons	and	two	alpha	particles,	plus	a	residual.													
+32	(z,nd)	Production	of	a	neutron	and	a	deuteron,	plus	a	residual.														
+33	(z,nt)	Production	of	a	neutron	and	a	triton,	plus	a	residual.														
+34	(z,n3He)	Production	of	a	neutron	and	a	3He	particle,	plus	a	residual.													
+35	(z,nd2a)	Production	of	a	neutron,	a	deuteron,	and	2	alpha	particles,	plus	a	residual.											
+36	(z,nt2a)	Production	of	a	neutron,	a	triton,	and	2	alpha	particles,	plus	a	residual.											
+37	(z,4n)	Production	of	4	neutrons,	plus	a	residual.																	
+38	(n,3nf)	Fourth-chance	fission	cross	section.																				
+41	(z,2np)	Production	of	2	neutrons	and	a	proton,	plus	a	residual.														
+42	(z,3np)	Production	of	3	neutrons	and	a	proton,	plus	a	residual.	(Unassigned)													
+44	(z,n2p)	Production	of	a	neutron	and	2	protons,	plus	a	residual.														
+45	(z,npa)	Production	of	a	neutron,	a	proton,	and	an	alpha	particle,	plus	a	residual.											
+50	(y,n0)	Production	of	a	neutron,	leaving	the	residual	nucleus	in	the	ground	state.												
+51	(z,n1)	Production	of	a	neutron,	with	residual	in	the	1st	excited	state.													
+52	(z,n2)	Production	of	a	neutron,	with	residual	in	the	2nd	excited	state.													
+53	(z,n3)	Production	of	a	neutron,	with	residual	in	the	3nd	excited	state.													
+54	(z,n4)	Production	of	a	neutron,	with	residual	in	the	4nd	excited	state.													
+55	(z,n5)	Production	of	a	neutron,	with	residual	in	the	5nd	excited	state.													
+56	(z,n6)	Production	of	a	neutron,	with	residual	in	the	6nd	excited	state.													
+57	(z,n7)	Production	of	a	neutron,	with	residual	in	the	7nd	excited	state.													
+58	(z,n8)	Production	of	a	neutron,	with	residual	in	the	8nd	excited	state.													
+59	(z,n9)	Production	of	a	neutron,	with	residual	in	the	9nd	excited	state.													
+60	(z,n10)	Production	of	a	neutron,	with	residual	in	the	10nd	excited	state.													
+61	(z,n11)	Production	of	a	neutron,	with	residual	in	the	11nd	excited	state.													
+62	(z,n12)	Production	of	a	neutron,	with	residual	in	the	12nd	excited	state.													
+63	(z,n13)	Production	of	a	neutron,	with	residual	in	the	13nd	excited	state.													
+64	(z,n14)	Production	of	a	neutron,	with	residual	in	the	14nd	excited	state.													
+65	(z,n15)	Production	of	a	neutron,	with	residual	in	the	15nd	excited	state.													
+66	(z,n16)	Production	of	a	neutron,	with	residual	in	the	16nd	excited	state.													
+67	(z,n17)	Production	of	a	neutron,	with	residual	in	the	17nd	excited	state.													
+68	(z,n18)	Production	of	a	neutron,	with	residual	in	the	18nd	excited	state.													
+69	(z,n19)	Production	of	a	neutron,	with	residual	in	the	19nd	excited	state.													
+70	(z,n20)	Production	of	a	neutron,	with	residual	in	the	20nd	excited	state.													
+71	(z,n21)	Production	of	a	neutron,	with	residual	in	the	21nd	excited	state.													
+72	(z,n22)	Production	of	a	neutron,	with	residual	in	the	22nd	excited	state.													
+73	(z,n23)	Production	of	a	neutron,	with	residual	in	the	23nd	excited	state.													
+74	(z,n24)	Production	of	a	neutron,	with	residual	in	the	24nd	excited	state.													
+75	(z,n25)	Production	of	a	neutron,	with	residual	in	the	25nd	excited	state.													
+76	(z,n26)	Production	of	a	neutron,	with	residual	in	the	26nd	excited	state.													
+77	(z,n27)	Production	of	a	neutron,	with	residual	in	the	27nd	excited	state.													
+78	(z,n28)	Production	of	a	neutron,	with	residual	in	the	28nd	excited	state.													
+79	(z,n29)	Production	of	a	neutron,	with	residual	in	the	29nd	excited	state.													
+80	(z,n30)	Production	of	a	neutron,	with	residual	in	the	30nd	excited	state.													
+81	(z,n31)	Production	of	a	neutron,	with	residual	in	the	31nd	excited	state.													
+82	(z,n32)	Production	of	a	neutron,	with	residual	in	the	32nd	excited	state.													
+83	(z,n33)	Production	of	a	neutron,	with	residual	in	the	33nd	excited	state.													
+84	(z,n34)	Production	of	a	neutron,	with	residual	in	the	34nd	excited	state.													
+85	(z,n35)	Production	of	a	neutron,	with	residual	in	the	35nd	excited	state.													
+86	(z,n36)	Production	of	a	neutron,	with	residual	in	the	36nd	excited	state.													
+87	(z,n37)	Production	of	a	neutron,	with	residual	in	the	37nd	excited	state.													
+88	(z,n38)	Production	of	a	neutron,	with	residual	in	the	38nd	excited	state.													
+89	(z,n39)	Production	of	a	neutron,	with	residual	in	the	39nd	excited	state.													
+90	(z,n40)	Production	of	a	neutron,	with	residual	in	the	40th	excited	state.													
+91	(z,nc)	Production	of	a	neutron	in	the	continuum	not	included	in	the	above	discrete	representation.										
+101	(n,disap)	Neutron	disappearance;	equal	to	sum	of	MT=102-117.																	
+102	(z,Y)	Radiative	capture.																						
+103	(z,p)	Production	of	a	proton,	plus	a	residual.	Sum	of	MT=600-649,	if	they	are	present.										
+104	(z,d)	Production	of	a	deuteron,	plus	a	residual.	Sum	of	MT=650-699,	if	they	are	present.										
+105	(z,t)	Production	of	a	triton,	plus	a	residual.	Sum	of	MT=700-749,	if	they	are	present.										
+106	(z,3He)	Production	of	a	3He	particle	plus	a	residual.	Sum	of	MT=750-799,	if	they	are	present.									
+107	(z,a)	Production	of	an	alpha	particle,	plus	a	residual.	Sum	of	MT=800-849,	if	they	are	present.									
+108	(z,2a)	Production	of	2	alpha	particles,	plus	a	residual.																
+109	(z,3a)	Production	of	3	alpha	particles,	plus	a	residual.																
+111	(z,2p)	Production	of	2	protons,	plus	a	residual.																	
+112	(z,pa)	Production	a	proton	and	an	alpha	particle,	plus	a	residual.														
+113	(z,t2a)	Production	of	a	triton	and	2	alpha	particles,	plus	a	residual.													
+114	(z,d2a)	Production	of	a	deuteron	and	2	alpha	particles,	plus	a	residual.													
+115	(z,pd)	Production	of	proton	and	a	deuteron,	plus	a	residual.															
+116	(z,pt)	Production	of	proton	and	a	triton,	plus	a	residual.															
+117	(z,da)	Production	of	deuteron	and	an	alpha	particle,	plus	a	residual.														
+151	(n,RES)	Resonance	parameters	that	can	be	used	to	calculate	cross	sections	at	different	temperatures	in	the	resolved	and	unresolved	energy	regions.				
+201	(z,Xn)	Total	neutron	production.																					
+202	(z,XY)	Total	gamma	production.																					
+203	(z,Xp)	Total	proton	production.																					
+204	(z,Xd)	Total	deuteron	production.																					
+205	(z,Xt)	Total	triton	production.																					
+206	(z,X3He)	Total	3He	production.																					
+207	(z,Xa)	Total	alpha	particle	production.																				
+208	(z,X#pi^+)	Total	#pi+	production.																					
+209	(z,X#pi^0)	Total	#pi^0	production.																					
+210	(z,X#pi^-)	Total	#pi^-	production.																					
+211	(z,X#mu^+)	Total#mu^+	production.																						
+212	(z,Xk^-)	Total	k^-	production.																					
+213	(z,Xk+)	Total	k^+	production.																					
+214	(z,Xk^{0}_{long})	Total	k^{0}_{long}	production.																					
+215	(z,Xk^{0}_{short})	Total	k^{0}_{short}	production.																					
+216	(z,Xk^-)	Total	k^-	production.																					
+217	(z,Xp^-)	Total	anti-proton	production.																					
+218	(z,X#bar{n})	Total	anti-neutron	production.																					
+251	(n,...)	#bar{#mu},	average	cosine	of	the	scattering	angle	(laboratory	system)	for	elastic	scattering	of	neutrons.										
+252	(n,...)	#ksi,	average	logarithmic	energy	decrement	for	elastic	scattering	of	neutrons.														
+253	(n,...)	#gamma,	average	of	the	square	of	the	logarithmic	energy	decrement	divided	by	twice	the	average	logarithmic	energy	decrement,	for	elastic	scattering	of	neutrons.	
+301	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	300	plus	the	reaction	MT	number,	e.g.,	MT=302	is	the	elastic	scattering	kerma.
+302	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	301	plus	the	reaction	MT	number,	e.g.,	MT=303	is	the	elastic	scattering	kerma.
+303	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	302	plus	the	reaction	MT	number,	e.g.,	MT=304	is	the	elastic	scattering	kerma.
+304	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	303	plus	the	reaction	MT	number,	e.g.,	MT=305	is	the	elastic	scattering	kerma.
+305	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	304	plus	the	reaction	MT	number,	e.g.,	MT=306	is	the	elastic	scattering	kerma.
+306	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	305	plus	the	reaction	MT	number,	e.g.,	MT=307	is	the	elastic	scattering	kerma.
+307	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	306	plus	the	reaction	MT	number,	e.g.,	MT=308	is	the	elastic	scattering	kerma.
+308	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	307	plus	the	reaction	MT	number,	e.g.,	MT=309	is	the	elastic	scattering	kerma.
+309	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	308	plus	the	reaction	MT	number,	e.g.,	MT=310	is	the	elastic	scattering	kerma.
+310	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	309	plus	the	reaction	MT	number,	e.g.,	MT=311	is	the	elastic	scattering	kerma.
+311	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	310	plus	the	reaction	MT	number,	e.g.,	MT=312	is	the	elastic	scattering	kerma.
+312	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	311	plus	the	reaction	MT	number,	e.g.,	MT=313	is	the	elastic	scattering	kerma.
+313	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	312	plus	the	reaction	MT	number,	e.g.,	MT=314	is	the	elastic	scattering	kerma.
+314	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	313	plus	the	reaction	MT	number,	e.g.,	MT=315	is	the	elastic	scattering	kerma.
+315	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	314	plus	the	reaction	MT	number,	e.g.,	MT=316	is	the	elastic	scattering	kerma.
+316	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	315	plus	the	reaction	MT	number,	e.g.,	MT=317	is	the	elastic	scattering	kerma.
+317	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	316	plus	the	reaction	MT	number,	e.g.,	MT=318	is	the	elastic	scattering	kerma.
+318	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	317	plus	the	reaction	MT	number,	e.g.,	MT=319	is	the	elastic	scattering	kerma.
+319	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	318	plus	the	reaction	MT	number,	e.g.,	MT=320	is	the	elastic	scattering	kerma.
+320	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	319	plus	the	reaction	MT	number,	e.g.,	MT=321	is	the	elastic	scattering	kerma.
+321	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	320	plus	the	reaction	MT	number,	e.g.,	MT=322	is	the	elastic	scattering	kerma.
+322	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	321	plus	the	reaction	MT	number,	e.g.,	MT=323	is	the	elastic	scattering	kerma.
+323	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	322	plus	the	reaction	MT	number,	e.g.,	MT=324	is	the	elastic	scattering	kerma.
+324	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	323	plus	the	reaction	MT	number,	e.g.,	MT=325	is	the	elastic	scattering	kerma.
+325	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	324	plus	the	reaction	MT	number,	e.g.,	MT=326	is	the	elastic	scattering	kerma.
+326	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	325	plus	the	reaction	MT	number,	e.g.,	MT=327	is	the	elastic	scattering	kerma.
+327	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	326	plus	the	reaction	MT	number,	e.g.,	MT=328	is	the	elastic	scattering	kerma.
+328	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	327	plus	the	reaction	MT	number,	e.g.,	MT=329	is	the	elastic	scattering	kerma.
+329	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	328	plus	the	reaction	MT	number,	e.g.,	MT=330	is	the	elastic	scattering	kerma.
+330	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	329	plus	the	reaction	MT	number,	e.g.,	MT=331	is	the	elastic	scattering	kerma.
+331	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	330	plus	the	reaction	MT	number,	e.g.,	MT=332	is	the	elastic	scattering	kerma.
+332	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	331	plus	the	reaction	MT	number,	e.g.,	MT=333	is	the	elastic	scattering	kerma.
+333	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	332	plus	the	reaction	MT	number,	e.g.,	MT=334	is	the	elastic	scattering	kerma.
+334	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	333	plus	the	reaction	MT	number,	e.g.,	MT=335	is	the	elastic	scattering	kerma.
+335	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	334	plus	the	reaction	MT	number,	e.g.,	MT=336	is	the	elastic	scattering	kerma.
+336	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	335	plus	the	reaction	MT	number,	e.g.,	MT=337	is	the	elastic	scattering	kerma.
+337	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	336	plus	the	reaction	MT	number,	e.g.,	MT=338	is	the	elastic	scattering	kerma.
+338	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	337	plus	the	reaction	MT	number,	e.g.,	MT=339	is	the	elastic	scattering	kerma.
+339	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	338	plus	the	reaction	MT	number,	e.g.,	MT=340	is	the	elastic	scattering	kerma.
+340	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	339	plus	the	reaction	MT	number,	e.g.,	MT=341	is	the	elastic	scattering	kerma.
+341	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	340	plus	the	reaction	MT	number,	e.g.,	MT=342	is	the	elastic	scattering	kerma.
+342	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	341	plus	the	reaction	MT	number,	e.g.,	MT=343	is	the	elastic	scattering	kerma.
+343	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	342	plus	the	reaction	MT	number,	e.g.,	MT=344	is	the	elastic	scattering	kerma.
+344	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	343	plus	the	reaction	MT	number,	e.g.,	MT=345	is	the	elastic	scattering	kerma.
+345	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	344	plus	the	reaction	MT	number,	e.g.,	MT=346	is	the	elastic	scattering	kerma.
+346	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	345	plus	the	reaction	MT	number,	e.g.,	MT=347	is	the	elastic	scattering	kerma.
+347	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	346	plus	the	reaction	MT	number,	e.g.,	MT=348	is	the	elastic	scattering	kerma.
+348	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	347	plus	the	reaction	MT	number,	e.g.,	MT=349	is	the	elastic	scattering	kerma.
+349	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	348	plus	the	reaction	MT	number,	e.g.,	MT=350	is	the	elastic	scattering	kerma.
+350	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	349	plus	the	reaction	MT	number,	e.g.,	MT=351	is	the	elastic	scattering	kerma.
+351	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	350	plus	the	reaction	MT	number,	e.g.,	MT=352	is	the	elastic	scattering	kerma.
+352	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	351	plus	the	reaction	MT	number,	e.g.,	MT=353	is	the	elastic	scattering	kerma.
+353	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	352	plus	the	reaction	MT	number,	e.g.,	MT=354	is	the	elastic	scattering	kerma.
+354	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	353	plus	the	reaction	MT	number,	e.g.,	MT=355	is	the	elastic	scattering	kerma.
+355	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	354	plus	the	reaction	MT	number,	e.g.,	MT=356	is	the	elastic	scattering	kerma.
+356	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	355	plus	the	reaction	MT	number,	e.g.,	MT=357	is	the	elastic	scattering	kerma.
+357	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	356	plus	the	reaction	MT	number,	e.g.,	MT=358	is	the	elastic	scattering	kerma.
+358	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	357	plus	the	reaction	MT	number,	e.g.,	MT=359	is	the	elastic	scattering	kerma.
+359	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	358	plus	the	reaction	MT	number,	e.g.,	MT=360	is	the	elastic	scattering	kerma.
+360	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	359	plus	the	reaction	MT	number,	e.g.,	MT=361	is	the	elastic	scattering	kerma.
+361	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	360	plus	the	reaction	MT	number,	e.g.,	MT=362	is	the	elastic	scattering	kerma.
+362	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	361	plus	the	reaction	MT	number,	e.g.,	MT=363	is	the	elastic	scattering	kerma.
+363	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	362	plus	the	reaction	MT	number,	e.g.,	MT=364	is	the	elastic	scattering	kerma.
+364	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	363	plus	the	reaction	MT	number,	e.g.,	MT=365	is	the	elastic	scattering	kerma.
+365	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	364	plus	the	reaction	MT	number,	e.g.,	MT=366	is	the	elastic	scattering	kerma.
+366	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	365	plus	the	reaction	MT	number,	e.g.,	MT=367	is	the	elastic	scattering	kerma.
+367	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	366	plus	the	reaction	MT	number,	e.g.,	MT=368	is	the	elastic	scattering	kerma.
+368	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	367	plus	the	reaction	MT	number,	e.g.,	MT=369	is	the	elastic	scattering	kerma.
+369	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	368	plus	the	reaction	MT	number,	e.g.,	MT=370	is	the	elastic	scattering	kerma.
+370	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	369	plus	the	reaction	MT	number,	e.g.,	MT=371	is	the	elastic	scattering	kerma.
+371	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	370	plus	the	reaction	MT	number,	e.g.,	MT=372	is	the	elastic	scattering	kerma.
+372	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	371	plus	the	reaction	MT	number,	e.g.,	MT=373	is	the	elastic	scattering	kerma.
+373	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	372	plus	the	reaction	MT	number,	e.g.,	MT=374	is	the	elastic	scattering	kerma.
+374	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	373	plus	the	reaction	MT	number,	e.g.,	MT=375	is	the	elastic	scattering	kerma.
+375	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	374	plus	the	reaction	MT	number,	e.g.,	MT=376	is	the	elastic	scattering	kerma.
+376	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	375	plus	the	reaction	MT	number,	e.g.,	MT=377	is	the	elastic	scattering	kerma.
+377	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	376	plus	the	reaction	MT	number,	e.g.,	MT=378	is	the	elastic	scattering	kerma.
+378	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	377	plus	the	reaction	MT	number,	e.g.,	MT=379	is	the	elastic	scattering	kerma.
+379	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	378	plus	the	reaction	MT	number,	e.g.,	MT=380	is	the	elastic	scattering	kerma.
+380	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	379	plus	the	reaction	MT	number,	e.g.,	MT=381	is	the	elastic	scattering	kerma.
+381	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	380	plus	the	reaction	MT	number,	e.g.,	MT=382	is	the	elastic	scattering	kerma.
+382	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	381	plus	the	reaction	MT	number,	e.g.,	MT=383	is	the	elastic	scattering	kerma.
+383	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	382	plus	the	reaction	MT	number,	e.g.,	MT=384	is	the	elastic	scattering	kerma.
+384	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	383	plus	the	reaction	MT	number,	e.g.,	MT=385	is	the	elastic	scattering	kerma.
+385	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	384	plus	the	reaction	MT	number,	e.g.,	MT=386	is	the	elastic	scattering	kerma.
+386	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	385	plus	the	reaction	MT	number,	e.g.,	MT=387	is	the	elastic	scattering	kerma.
+387	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	386	plus	the	reaction	MT	number,	e.g.,	MT=388	is	the	elastic	scattering	kerma.
+388	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	387	plus	the	reaction	MT	number,	e.g.,	MT=389	is	the	elastic	scattering	kerma.
+389	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	388	plus	the	reaction	MT	number,	e.g.,	MT=390	is	the	elastic	scattering	kerma.
+390	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	389	plus	the	reaction	MT	number,	e.g.,	MT=391	is	the	elastic	scattering	kerma.
+391	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	390	plus	the	reaction	MT	number,	e.g.,	MT=392	is	the	elastic	scattering	kerma.
+392	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	391	plus	the	reaction	MT	number,	e.g.,	MT=393	is	the	elastic	scattering	kerma.
+393	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	392	plus	the	reaction	MT	number,	e.g.,	MT=394	is	the	elastic	scattering	kerma.
+394	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	393	plus	the	reaction	MT	number,	e.g.,	MT=395	is	the	elastic	scattering	kerma.
+395	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	394	plus	the	reaction	MT	number,	e.g.,	MT=396	is	the	elastic	scattering	kerma.
+396	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	395	plus	the	reaction	MT	number,	e.g.,	MT=397	is	the	elastic	scattering	kerma.
+397	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	396	plus	the	reaction	MT	number,	e.g.,	MT=398	is	the	elastic	scattering	kerma.
+398	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	397	plus	the	reaction	MT	number,	e.g.,	MT=399	is	the	elastic	scattering	kerma.
+399	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	398	plus	the	reaction	MT	number,	e.g.,	MT=400	is	the	elastic	scattering	kerma.
+400	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	399	plus	the	reaction	MT	number,	e.g.,	MT=401	is	the	elastic	scattering	kerma.
+401	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	400	plus	the	reaction	MT	number,	e.g.,	MT=402	is	the	elastic	scattering	kerma.
+402	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	401	plus	the	reaction	MT	number,	e.g.,	MT=403	is	the	elastic	scattering	kerma.
+403	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	402	plus	the	reaction	MT	number,	e.g.,	MT=404	is	the	elastic	scattering	kerma.
+404	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	403	plus	the	reaction	MT	number,	e.g.,	MT=405	is	the	elastic	scattering	kerma.
+405	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	404	plus	the	reaction	MT	number,	e.g.,	MT=406	is	the	elastic	scattering	kerma.
+406	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	405	plus	the	reaction	MT	number,	e.g.,	MT=407	is	the	elastic	scattering	kerma.
+407	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	406	plus	the	reaction	MT	number,	e.g.,	MT=408	is	the	elastic	scattering	kerma.
+408	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	407	plus	the	reaction	MT	number,	e.g.,	MT=409	is	the	elastic	scattering	kerma.
+409	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	408	plus	the	reaction	MT	number,	e.g.,	MT=410	is	the	elastic	scattering	kerma.
+410	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	409	plus	the	reaction	MT	number,	e.g.,	MT=411	is	the	elastic	scattering	kerma.
+411	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	410	plus	the	reaction	MT	number,	e.g.,	MT=412	is	the	elastic	scattering	kerma.
+412	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	411	plus	the	reaction	MT	number,	e.g.,	MT=413	is	the	elastic	scattering	kerma.
+413	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	412	plus	the	reaction	MT	number,	e.g.,	MT=414	is	the	elastic	scattering	kerma.
+414	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	413	plus	the	reaction	MT	number,	e.g.,	MT=415	is	the	elastic	scattering	kerma.
+415	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	414	plus	the	reaction	MT	number,	e.g.,	MT=416	is	the	elastic	scattering	kerma.
+416	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	415	plus	the	reaction	MT	number,	e.g.,	MT=417	is	the	elastic	scattering	kerma.
+417	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	416	plus	the	reaction	MT	number,	e.g.,	MT=418	is	the	elastic	scattering	kerma.
+418	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	417	plus	the	reaction	MT	number,	e.g.,	MT=419	is	the	elastic	scattering	kerma.
+419	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	418	plus	the	reaction	MT	number,	e.g.,	MT=420	is	the	elastic	scattering	kerma.
+420	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	419	plus	the	reaction	MT	number,	e.g.,	MT=421	is	the	elastic	scattering	kerma.
+421	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	420	plus	the	reaction	MT	number,	e.g.,	MT=422	is	the	elastic	scattering	kerma.
+422	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	421	plus	the	reaction	MT	number,	e.g.,	MT=423	is	the	elastic	scattering	kerma.
+423	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	422	plus	the	reaction	MT	number,	e.g.,	MT=424	is	the	elastic	scattering	kerma.
+424	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	423	plus	the	reaction	MT	number,	e.g.,	MT=425	is	the	elastic	scattering	kerma.
+425	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	424	plus	the	reaction	MT	number,	e.g.,	MT=426	is	the	elastic	scattering	kerma.
+426	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	425	plus	the	reaction	MT	number,	e.g.,	MT=427	is	the	elastic	scattering	kerma.
+427	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	426	plus	the	reaction	MT	number,	e.g.,	MT=428	is	the	elastic	scattering	kerma.
+428	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	427	plus	the	reaction	MT	number,	e.g.,	MT=429	is	the	elastic	scattering	kerma.
+429	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	428	plus	the	reaction	MT	number,	e.g.,	MT=430	is	the	elastic	scattering	kerma.
+430	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	429	plus	the	reaction	MT	number,	e.g.,	MT=431	is	the	elastic	scattering	kerma.
+431	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	430	plus	the	reaction	MT	number,	e.g.,	MT=432	is	the	elastic	scattering	kerma.
+432	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	431	plus	the	reaction	MT	number,	e.g.,	MT=433	is	the	elastic	scattering	kerma.
+433	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	432	plus	the	reaction	MT	number,	e.g.,	MT=434	is	the	elastic	scattering	kerma.
+434	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	433	plus	the	reaction	MT	number,	e.g.,	MT=435	is	the	elastic	scattering	kerma.
+435	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	434	plus	the	reaction	MT	number,	e.g.,	MT=436	is	the	elastic	scattering	kerma.
+436	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	435	plus	the	reaction	MT	number,	e.g.,	MT=437	is	the	elastic	scattering	kerma.
+437	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	436	plus	the	reaction	MT	number,	e.g.,	MT=438	is	the	elastic	scattering	kerma.
+438	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	437	plus	the	reaction	MT	number,	e.g.,	MT=439	is	the	elastic	scattering	kerma.
+439	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	438	plus	the	reaction	MT	number,	e.g.,	MT=440	is	the	elastic	scattering	kerma.
+440	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	439	plus	the	reaction	MT	number,	e.g.,	MT=441	is	the	elastic	scattering	kerma.
+441	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	440	plus	the	reaction	MT	number,	e.g.,	MT=442	is	the	elastic	scattering	kerma.
+442	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	441	plus	the	reaction	MT	number,	e.g.,	MT=443	is	the	elastic	scattering	kerma.
+443	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	442	plus	the	reaction	MT	number,	e.g.,	MT=444	is	the	elastic	scattering	kerma.
+444	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	443	plus	the	reaction	MT	number,	e.g.,	MT=445	is	the	elastic	scattering	kerma.
+445	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	444	plus	the	reaction	MT	number,	e.g.,	MT=446	is	the	elastic	scattering	kerma.
+446	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	445	plus	the	reaction	MT	number,	e.g.,	MT=447	is	the	elastic	scattering	kerma.
+447	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	446	plus	the	reaction	MT	number,	e.g.,	MT=448	is	the	elastic	scattering	kerma.
+448	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	447	plus	the	reaction	MT	number,	e.g.,	MT=449	is	the	elastic	scattering	kerma.
+449	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	448	plus	the	reaction	MT	number,	e.g.,	MT=450	is	the	elastic	scattering	kerma.
+450	(z,...)	Energy	release	parameters,	,	for	total	and	partial	cross	sections;	MT=	449	plus	the	reaction	MT	number,	e.g.,	MT=451	is	the	elastic	scattering	kerma.
+451	(z,...)	Heading	or	title	information;	given	in	File	1	only.															
+452	(z,...)	VT,	average	total	(prompt	plus	delayed)	number	of	neutrons	released	per	fission	event.											
+454	(z,...)	Independent	fission	product	yield	data.																			
+455	(z,...)	#bar{#nu_d},	average	number	of	delayed	neutrons	released	per	fission	event.														
+456	(z,...)	#bar{#nu_p},	average	number	of	prompt	neutrons	released	per	fission	event.														
+457	(z,...)	Radioactive	decay	data.																					
+458	(n,...)	Energy	release	in	fission	for	incident	neutrons.																	
+459	(z,...)	Cumulative	fission	product	yield	data.																			
+500	*	Total	charged-particle	stopping	power.																				
+501	*	Total	photon	interaction.																					
+502	*	Photon	coherent	scattering.																					
+504	*	Photon	incoherent	scattering.																					
+505	*	Imaginary	scattering	factor.																					
+506	*	Real	scattering	factor.																					
+515	*	Pair	production,	electron	field.																				
+516	*	Pair	production;	sum	of	MT=515,	517																		
+517	*	Pair	production,	nuclear	field.																				
+522	*	Photoelectric	absorption.																						
+523	*	Photo-excitation	cross	section.																					
+526	*	Electro-atomic	scattering.																						
+527	*	Electro-atomic	bremsstrahlung.																						
+528	*	Electro-atomic	excitation	cross	section.																				
+533	*	Atomic	relaxation	data.																					
+534	K	(1s1/2)	subshell	photoelectric	or	electro-atomic	cross	section.																	
+535	L1	(2s1/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+536	L2	(2p1/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+537	L3	(2p3/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+538	M1	(3s1/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+539	M2	(3p1/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+540	M3	(3p3/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+541	M4	(3d3/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+542	M5	(3d5/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+543	N1	(4s1/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+544	N2	(4p1/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+545	N3	(4p3/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+546	N4	(4dp3/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+547	N5	(4d5/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+548	N6	(4f5/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+549	N7	(4f7/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+550	O1	(5s1/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+551	O2	(5p1/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+552	O3	(5p3/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+553	O4	(5d3/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+554	O5	(5d5/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+555	O6	(5f5/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+556	O7	(5f7/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+557	O8	(5g7/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+558	O9	(5g9/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+559	P1	(6s1/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+560	P2	(6p1/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+561	P3	(6p3/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+562	P4	(6d3/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+563	P5	(6d5/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+564	P6	(6f5/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+565	P7	(6f7/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+566	P8	(6g7/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+567	P9	(6g9/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+568	P10	(6h9/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+569	P11	(6h11/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+570	Q1	(7s1/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+571	Q2	(7p1/2)	subshell	photoelectric	or	elctro-atomic	cross	section.																	
+572	Q3	(7p3/2)	subshell	photoelectric	or	elctro-atomic	cross	section																	
+600	(z,p0)	Production	of	a	proton	leaving	the	residual	nucleus	in	the	ground	state.												
+601	(z,p1)	Production	of	a	proton,	with	residual	in	the	1	excited	state.													
+602	(z,p2)	Production	of	a	proton,	with	residual	in	the	2	excited	state.													
+603	(z,p3)	Production	of	a	proton,	with	residual	in	the	3	excited	state.													
+604	(z,p4)	Production	of	a	proton,	with	residual	in	the	4	excited	state.													
+605	(z,p5)	Production	of	a	proton,	with	residual	in	the	5	excited	state.													
+606	(z,p6)	Production	of	a	proton,	with	residual	in	the	6	excited	state.													
+607	(z,p7)	Production	of	a	proton,	with	residual	in	the	7	excited	state.													
+608	(z,p8)	Production	of	a	proton,	with	residual	in	the	8	excited	state.													
+609	(z,p9)	Production	of	a	proton,	with	residual	in	the	9	excited	state.													
+610	(z,p10)	Production	of	a	proton,	with	residual	in	the	10	excited	state.													
+611	(z,p11)	Production	of	a	proton,	with	residual	in	the	11	excited	state.													
+612	(z,p12)	Production	of	a	proton,	with	residual	in	the	12	excited	state.													
+613	(z,p13)	Production	of	a	proton,	with	residual	in	the	13	excited	state.													
+614	(z,p14)	Production	of	a	proton,	with	residual	in	the	14	excited	state.													
+615	(z,p15)	Production	of	a	proton,	with	residual	in	the	15	excited	state.													
+616	(z,p16)	Production	of	a	proton,	with	residual	in	the	16	excited	state.													
+617	(z,p17)	Production	of	a	proton,	with	residual	in	the	17	excited	state.													
+618	(z,p18)	Production	of	a	proton,	with	residual	in	the	18	excited	state.													
+619	(z,p19)	Production	of	a	proton,	with	residual	in	the	19	excited	state.													
+620	(z,p20)	Production	of	a	proton,	with	residual	in	the	20	excited	state.													
+621	(z,p21)	Production	of	a	proton,	with	residual	in	the	21	excited	state.													
+622	(z,p22)	Production	of	a	proton,	with	residual	in	the	22	excited	state.													
+623	(z,p23)	Production	of	a	proton,	with	residual	in	the	23	excited	state.													
+624	(z,p24)	Production	of	a	proton,	with	residual	in	the	24	excited	state.													
+625	(z,p25)	Production	of	a	proton,	with	residual	in	the	25	excited	state.													
+626	(z,p26)	Production	of	a	proton,	with	residual	in	the	26	excited	state.													
+627	(z,p27)	Production	of	a	proton,	with	residual	in	the	27	excited	state.													
+628	(z,p28)	Production	of	a	proton,	with	residual	in	the	28	excited	state.													
+629	(z,p29)	Production	of	a	proton,	with	residual	in	the	29	excited	state.													
+630	(z,p30)	Production	of	a	proton,	with	residual	in	the	30	excited	state.													
+631	(z,p31)	Production	of	a	proton,	with	residual	in	the	31	excited	state.													
+632	(z,p32)	Production	of	a	proton,	with	residual	in	the	32	excited	state.													
+633	(z,p33)	Production	of	a	proton,	with	residual	in	the	33	excited	state.													
+634	(z,p34)	Production	of	a	proton,	with	residual	in	the	34	excited	state.													
+635	(z,p35)	Production	of	a	proton,	with	residual	in	the	35	excited	state.													
+636	(z,p36)	Production	of	a	proton,	with	residual	in	the	36	excited	state.													
+637	(z,p37)	Production	of	a	proton,	with	residual	in	the	37	excited	state.													
+638	(z,p38)	Production	of	a	proton,	with	residual	in	the	38	excited	state.													
+639	(z,p39)	Production	of	a	proton,	with	residual	in	the	39	excited	state.													
+640	(z,p40)	Production	of	a	proton,	with	residual	in	the	40	excited	state.													
+641	(z,p41)	Production	of	a	proton,	with	residual	in	the	41	excited	state.													
+642	(z,p42)	Production	of	a	proton,	with	residual	in	the	42	excited	state.													
+643	(z,p43)	Production	of	a	proton,	with	residual	in	the	43	excited	state.													
+644	(z,p44)	Production	of	a	proton,	with	residual	in	the	44	excited	state.													
+645	(z,p45)	Production	of	a	proton,	with	residual	in	the	45	excited	state.													
+646	(z,p46)	Production	of	a	proton,	with	residual	in	the	46	excited	state.													
+647	(z,p47)	Production	of	a	proton,	with	residual	in	the	47	excited	state.													
+648	(z,p48)	Production	of	a	proton,	with	residual	in	the	48	excited	state.													
+649	(z,pc)	Production	of	a	proton	in	the	continuum	not	included	in	the	above	discrete	representation.										
+650	(z,d0)	Production	of	a	deuteron	leaving	the	residual	nucleus	in	the	ground	state.												
+651	(z,d1)	Production	of	a	deuteron,	with	the	residual	in	the	1st	excited	state.												
+652	(z,d2)	Production	of	a	deuteron,	with	the	residual	in	the	2nd	excited	state.												
+653	(z,d3)	Production	of	a	deuteron,	with	the	residual	in	the	3rd	excited	state.												
+654	(z,d4)	Production	of	a	deuteron,	with	the	residual	in	the	4th	excited	state.												
+655	(z,d5)	Production	of	a	deuteron,	with	the	residual	in	the	5th	excited	state.												
+656	(z,d6)	Production	of	a	deuteron,	with	the	residual	in	the	6th	excited	state.												
+657	(z,d7)	Production	of	a	deuteron,	with	the	residual	in	the	7th	excited	state.												
+658	(z,d8)	Production	of	a	deuteron,	with	the	residual	in	the	8th	excited	state.												
+659	(z,d9)	Production	of	a	deuteron,	with	the	residual	in	the	9th	excited	state.												
+660	(z,d10)	Production	of	a	deuteron,	with	the	residual	in	the	10th	excited	state.												
+661	(z,d11)	Production	of	a	deuteron,	with	the	residual	in	the	11th	excited	state.												
+662	(z,d12)	Production	of	a	deuteron,	with	the	residual	in	the	12th	excited	state.												
+663	(z,d13)	Production	of	a	deuteron,	with	the	residual	in	the	13th	excited	state.												
+664	(z,d14)	Production	of	a	deuteron,	with	the	residual	in	the	14th	excited	state.												
+665	(z,d15)	Production	of	a	deuteron,	with	the	residual	in	the	15th	excited	state.												
+666	(z,d16)	Production	of	a	deuteron,	with	the	residual	in	the	16th	excited	state.												
+667	(z,d17)	Production	of	a	deuteron,	with	the	residual	in	the	17th	excited	state.												
+668	(z,d18)	Production	of	a	deuteron,	with	the	residual	in	the	18th	excited	state.												
+669	(z,d19)	Production	of	a	deuteron,	with	the	residual	in	the	19th	excited	state.												
+670	(z,d20)	Production	of	a	deuteron,	with	the	residual	in	the	20th	excited	state.												
+671	(z,d21)	Production	of	a	deuteron,	with	the	residual	in	the	21st	excited	state.												
+672	(z,d22)	Production	of	a	deuteron,	with	the	residual	in	the	22nd	excited	state.												
+673	(z,d23)	Production	of	a	deuteron,	with	the	residual	in	the	23rd	excited	state.												
+674	(z,d24)	Production	of	a	deuteron,	with	the	residual	in	the	24th	excited	state.												
+675	(z,d25)	Production	of	a	deuteron,	with	the	residual	in	the	25th	excited	state.												
+676	(z,d26)	Production	of	a	deuteron,	with	the	residual	in	the	26th	excited	state.												
+677	(z,d27)	Production	of	a	deuteron,	with	the	residual	in	the	27th	excited	state.												
+678	(z,d28)	Production	of	a	deuteron,	with	the	residual	in	the	28th	excited	state.												
+679	(z,d29)	Production	of	a	deuteron,	with	the	residual	in	the	29th	excited	state.												
+680	(z,d30)	Production	of	a	deuteron,	with	the	residual	in	the	30th	excited	state.												
+681	(z,d31)	Production	of	a	deuteron,	with	the	residual	in	the	31st	excited	state.												
+682	(z,d32)	Production	of	a	deuteron,	with	the	residual	in	the	32nd	excited	state.												
+683	(z,d33)	Production	of	a	deuteron,	with	the	residual	in	the	33rd	excited	state.												
+684	(z,d34)	Production	of	a	deuteron,	with	the	residual	in	the	34th	excited	state.												
+685	(z,d35)	Production	of	a	deuteron,	with	the	residual	in	the	35th	excited	state.												
+686	(z,d36)	Production	of	a	deuteron,	with	the	residual	in	the	36th	excited	state.												
+687	(z,d37)	Production	of	a	deuteron,	with	the	residual	in	the	37th	excited	state.												
+688	(z,d38)	Production	of	a	deuteron,	with	the	residual	in	the	38th	excited	state.												
+689	(z,d39)	Production	of	a	deuteron,	with	the	residual	in	the	39th	excited	state.												
+690	(z,d40)	Production	of	a	deuteron,	with	the	residual	in	the	40th	excited	state.												
+691	(z,d41)	Production	of	a	deuteron,	with	the	residual	in	the	41st	excited	state.												
+692	(z,d42)	Production	of	a	deuteron,	with	the	residual	in	the	42nd	excited	state.												
+693	(z,d43)	Production	of	a	deuteron,	with	the	residual	in	the	43rd	excited	state.												
+694	(z,d44)	Production	of	a	deuteron,	with	the	residual	in	the	44th	excited	state.												
+695	(z,d45)	Production	of	a	deuteron,	with	the	residual	in	the	45th	excited	state.												
+696	(z,d46)	Production	of	a	deuteron,	with	the	residual	in	the	46th	excited	state.												
+697	(z,d47)	Production	of	a	deuteron,	with	the	residual	in	the	47th	excited	state.												
+698	(z,d48)	Production	of	a	deuteron,	with	the	residual	in	the	48th	excited	state.												
+699	(z,dc)	Production	of	a	deuteron	in	the	continuum	not	included	in	the	above	discrete	representation.										
+700	(z,t0)	Production	of	a	triton	leaving	the	residual	nucleus	in	the	ground	state.												
+701	(z,t1)	Production	of	a	triton,	with	residual	in	the	1st	excited	state.													
+702	(z,t2)	Production	of	a	triton,	with	residual	in	the	2nd	excited	state.													
+703	(z,t3)	Production	of	a	triton,	with	residual	in	the	3rd	excited	state.													
+704	(z,t4)	Production	of	a	triton,	with	residual	in	the	4th	excited	state.													
+705	(z,t5)	Production	of	a	triton,	with	residual	in	the	5th	excited	state.													
+706	(z,t6)	Production	of	a	triton,	with	residual	in	the	6th	excited	state.													
+707	(z,t7)	Production	of	a	triton,	with	residual	in	the	7th	excited	state.													
+708	(z,t8)	Production	of	a	triton,	with	residual	in	the	8th	excited	state.													
+709	(z,t9)	Production	of	a	triton,	with	residual	in	the	9th	excited	state.													
+710	(z,t10)	Production	of	a	triton,	with	residual	in	the	10th	excited	state.													
+711	(z,t11)	Production	of	a	triton,	with	residual	in	the	11th	excited	state.													
+712	(z,t12)	Production	of	a	triton,	with	residual	in	the	12th	excited	state.													
+713	(z,t13)	Production	of	a	triton,	with	residual	in	the	13th	excited	state.													
+714	(z,t14)	Production	of	a	triton,	with	residual	in	the	14th	excited	state.													
+715	(z,t15)	Production	of	a	triton,	with	residual	in	the	15th	excited	state.													
+716	(z,t16)	Production	of	a	triton,	with	residual	in	the	16th	excited	state.													
+717	(z,t17)	Production	of	a	triton,	with	residual	in	the	17th	excited	state.													
+718	(z,t18)	Production	of	a	triton,	with	residual	in	the	18th	excited	state.													
+719	(z,t19)	Production	of	a	triton,	with	residual	in	the	19th	excited	state.													
+720	(z,t20)	Production	of	a	triton,	with	residual	in	the	20th	excited	state.													
+721	(z,t21)	Production	of	a	triton,	with	residual	in	the	21st	excited	state.													
+722	(z,t22)	Production	of	a	triton,	with	residual	in	the	22nd	excited	state.													
+723	(z,t23)	Production	of	a	triton,	with	residual	in	the	23rd	excited	state.													
+724	(z,t24)	Production	of	a	triton,	with	residual	in	the	24th	excited	state.													
+725	(z,t25)	Production	of	a	triton,	with	residual	in	the	25th	excited	state.													
+726	(z,t26)	Production	of	a	triton,	with	residual	in	the	26th	excited	state.													
+727	(z,t27)	Production	of	a	triton,	with	residual	in	the	27th	excited	state.													
+728	(z,t28)	Production	of	a	triton,	with	residual	in	the	28th	excited	state.													
+729	(z,t29)	Production	of	a	triton,	with	residual	in	the	29th	excited	state.													
+730	(z,t30)	Production	of	a	triton,	with	residual	in	the	30th	excited	state.													
+731	(z,t31)	Production	of	a	triton,	with	residual	in	the	31st	excited	state.													
+732	(z,t32)	Production	of	a	triton,	with	residual	in	the	32nd	excited	state.													
+733	(z,t33)	Production	of	a	triton,	with	residual	in	the	33rd	excited	state.													
+734	(z,t34)	Production	of	a	triton,	with	residual	in	the	34th	excited	state.													
+735	(z,t35)	Production	of	a	triton,	with	residual	in	the	35th	excited	state.													
+736	(z,t36)	Production	of	a	triton,	with	residual	in	the	36th	excited	state.													
+737	(z,t37)	Production	of	a	triton,	with	residual	in	the	37th	excited	state.													
+738	(z,t38)	Production	of	a	triton,	with	residual	in	the	38th	excited	state.													
+739	(z,t39)	Production	of	a	triton,	with	residual	in	the	39th	excited	state.													
+740	(z,t40)	Production	of	a	triton,	with	residual	in	the	40th	excited	state.													
+741	(z,t41)	Production	of	a	triton,	with	residual	in	the	41st	excited	state.													
+742	(z,t42)	Production	of	a	triton,	with	residual	in	the	42nd	excited	state.													
+743	(z,t43)	Production	of	a	triton,	with	residual	in	the	43rd	excited	state.													
+744	(z,t44)	Production	of	a	triton,	with	residual	in	the	44th	excited	state.													
+745	(z,t45)	Production	of	a	triton,	with	residual	in	the	45th	excited	state.													
+746	(z,t46)	Production	of	a	triton,	with	residual	in	the	46th	excited	state.													
+747	(z,t47)	Production	of	a	triton,	with	residual	in	the	47th	excited	state.													
+748	(z,t2)	Production	of	a	triton,	with	residual	in	the	48th	excited	state.													
+749	(z,tc)	Production	of	a	triton	in	the	continuum	not	included	in	the	above	discrete	representation.										
+750	(z,3He0)	Production	of	a	3He	particle	leaving	the	residual	nucleus	in	the	ground	state.											
+751	(z,3He1)	Production	of	a	3He,	with	residual	in	the	1st	excited	state.													
+752	(z,3He2)	Production	of	a	3He,	with	residual	in	the	2nd	excited	state.													
+753	(z,3He3)	Production	of	a	3He,	with	residual	in	the	3rd	excited	state.													
+754	(z,3He4)	Production	of	a	3He,	with	residual	in	the	4th	excited	state.													
+755	(z,3He5)	Production	of	a	3He,	with	residual	in	the	5th	excited	state.													
+756	(z,3He6)	Production	of	a	3He,	with	residual	in	the	6th	excited	state.													
+757	(z,3He7)	Production	of	a	3He,	with	residual	in	the	7th	excited	state.													
+758	(z,3He8)	Production	of	a	3He,	with	residual	in	the	8th	excited	state.													
+759	(z,3He9)	Production	of	a	3He,	with	residual	in	the	9th	excited	state.													
+760	(z,3He10)	Production	of	a	3He,	with	residual	in	the	10th	excited	state.													
+761	(z,3He11)	Production	of	a	3He,	with	residual	in	the	11th	excited	state.													
+762	(z,3He12)	Production	of	a	3He,	with	residual	in	the	12th	excited	state.													
+763	(z,3He13)	Production	of	a	3He,	with	residual	in	the	13th	excited	state.													
+764	(z,3He14)	Production	of	a	3He,	with	residual	in	the	14th	excited	state.													
+765	(z,3He15)	Production	of	a	3He,	with	residual	in	the	15th	excited	state.													
+766	(z,3He16)	Production	of	a	3He,	with	residual	in	the	16th	excited	state.													
+767	(z,3He17)	Production	of	a	3He,	with	residual	in	the	17th	excited	state.													
+768	(z,3He18)	Production	of	a	3He,	with	residual	in	the	18th	excited	state.													
+769	(z,3He19)	Production	of	a	3He,	with	residual	in	the	19th	excited	state.													
+770	(z,3He20)	Production	of	a	3He,	with	residual	in	the	20th	excited	state.													
+771	(z,3He21)	Production	of	a	3He,	with	residual	in	the	21st	excited	state.													
+772	(z,3He22)	Production	of	a	3He,	with	residual	in	the	22nd	excited	state.													
+773	(z,3He23)	Production	of	a	3He,	with	residual	in	the	23rd	excited	state.													
+774	(z,3He24)	Production	of	a	3He,	with	residual	in	the	24th	excited	state.													
+775	(z,3He25)	Production	of	a	3He,	with	residual	in	the	25th	excited	state.													
+776	(z,3He26)	Production	of	a	3He,	with	residual	in	the	26th	excited	state.													
+777	(z,3He27)	Production	of	a	3He,	with	residual	in	the	27th	excited	state.													
+778	(z,3He28)	Production	of	a	3He,	with	residual	in	the	28th	excited	state.													
+779	(z,3He29)	Production	of	a	3He,	with	residual	in	the	29th	excited	state.													
+780	(z,3He30)	Production	of	a	3He,	with	residual	in	the	30th	excited	state.													
+781	(z,3He31)	Production	of	a	3He,	with	residual	in	the	31st	excited	state.													
+782	(z,3He32)	Production	of	a	3He,	with	residual	in	the	32nd	excited	state.													
+783	(z,3He33)	Production	of	a	3He,	with	residual	in	the	33rd	excited	state.													
+784	(z,3He34)	Production	of	a	3He,	with	residual	in	the	34th	excited	state.													
+785	(z,3He35)	Production	of	a	3He,	with	residual	in	the	35th	excited	state.													
+786	(z,3He36)	Production	of	a	3He,	with	residual	in	the	36th	excited	state.													
+787	(z,3He37)	Production	of	a	3He,	with	residual	in	the	37th	excited	state.													
+788	(z,3He38)	Production	of	a	3He,	with	residual	in	the	38th	excited	state.													
+789	(z,3He39)	Production	of	a	3He,	with	residual	in	the	39th	excited	state.													
+790	(z,3He40)	Production	of	a	3He,	with	residual	in	the	40th	excited	state.													
+791	(z,3He41)	Production	of	a	3He,	with	residual	in	the	41st	excited	state.													
+792	(z,3He42)	Production	of	a	3He,	with	residual	in	the	42nd	excited	state.													
+793	(z,3He43)	Production	of	a	3He,	with	residual	in	the	43rd	excited	state.													
+794	(z,3He44)	Production	of	a	3He,	with	residual	in	the	44th	excited	state.													
+795	(z,3He45)	Production	of	a	3He,	with	residual	in	the	45th	excited	state.													
+796	(z,3He46)	Production	of	a	3He,	with	residual	in	the	46th	excited	state.													
+797	(z,3He47)	Production	of	a	3He,	with	residual	in	the	47th	excited	state.													
+798	(z,3He0)	Production	of	a	3He,	with	residual	in	the	48th	excited	state.													
+799	(n,3Hec)	Production	of	a	3He	in	the	continuum	not	included	in	the	above	discrete	representation.										
+800	(z,a0)	Production	of	an	alpha	particle	leaving	the	residual	nucleus	in	the	ground	state.											
+801	(z,a1)	Production	of	an	alpha	particle,	with	residual	in	the	1st	excited	state.												
+802	(z,a2)	Production	of	an	alpha	particle,	with	residual	in	the	2nd	excited	state.												
+803	(z,a3)	Production	of	an	alpha	particle,	with	residual	in	the	3rd	excited	state.												
+804	(z,a4)	Production	of	an	alpha	particle,	with	residual	in	the	4th	excited	state.												
+805	(z,a5)	Production	of	an	alpha	particle,	with	residual	in	the	5th	excited	state.												
+806	(z,a6)	Production	of	an	alpha	particle,	with	residual	in	the	6th	excited	state.												
+807	(z,a7)	Production	of	an	alpha	particle,	with	residual	in	the	7th	excited	state.												
+808	(z,a8)	Production	of	an	alpha	particle,	with	residual	in	the	8th	excited	state.												
+809	(z,a9)	Production	of	an	alpha	particle,	with	residual	in	the	9th	excited	state.												
+810	(z,a10)	Production	of	an	alpha	particle,	with	residual	in	the	10th	excited	state.												
+811	(z,a11)	Production	of	an	alpha	particle,	with	residual	in	the	11th	excited	state.												
+812	(z,a12)	Production	of	an	alpha	particle,	with	residual	in	the	12th	excited	state.												
+813	(z,a13)	Production	of	an	alpha	particle,	with	residual	in	the	13th	excited	state.												
+814	(z,a14)	Production	of	an	alpha	particle,	with	residual	in	the	14th	excited	state.												
+815	(z,a15)	Production	of	an	alpha	particle,	with	residual	in	the	15th	excited	state.												
+816	(z,a16)	Production	of	an	alpha	particle,	with	residual	in	the	16th	excited	state.												
+817	(z,a17)	Production	of	an	alpha	particle,	with	residual	in	the	17th	excited	state.												
+818	(z,a18)	Production	of	an	alpha	particle,	with	residual	in	the	18th	excited	state.												
+819	(z,a19)	Production	of	an	alpha	particle,	with	residual	in	the	19th	excited	state.												
+820	(z,a20)	Production	of	an	alpha	particle,	with	residual	in	the	20th	excited	state.												
+821	(z,a21)	Production	of	an	alpha	particle,	with	residual	in	the	21st	excited	state.												
+822	(z,a22)	Production	of	an	alpha	particle,	with	residual	in	the	22nd	excited	state.												
+823	(z,a23)	Production	of	an	alpha	particle,	with	residual	in	the	23rd	excited	state.												
+824	(z,a24)	Production	of	an	alpha	particle,	with	residual	in	the	24th	excited	state.												
+825	(z,a25)	Production	of	an	alpha	particle,	with	residual	in	the	25th	excited	state.												
+826	(z,a26)	Production	of	an	alpha	particle,	with	residual	in	the	26th	excited	state.												
+827	(z,a27)	Production	of	an	alpha	particle,	with	residual	in	the	27th	excited	state.												
+828	(z,a28)	Production	of	an	alpha	particle,	with	residual	in	the	28th	excited	state.												
+829	(z,a29)	Production	of	an	alpha	particle,	with	residual	in	the	29th	excited	state.												
+830	(z,a30)	Production	of	an	alpha	particle,	with	residual	in	the	30th	excited	state.												
+831	(z,a31)	Production	of	an	alpha	particle,	with	residual	in	the	31st	excited	state.												
+832	(z,a32)	Production	of	an	alpha	particle,	with	residual	in	the	32nd	excited	state.												
+833	(z,a33)	Production	of	an	alpha	particle,	with	residual	in	the	33rd	excited	state.												
+834	(z,a34)	Production	of	an	alpha	particle,	with	residual	in	the	34th	excited	state.												
+835	(z,a35)	Production	of	an	alpha	particle,	with	residual	in	the	35th	excited	state.												
+836	(z,a36)	Production	of	an	alpha	particle,	with	residual	in	the	36th	excited	state.												
+837	(z,a37)	Production	of	an	alpha	particle,	with	residual	in	the	37th	excited	state.												
+838	(z,a38)	Production	of	an	alpha	particle,	with	residual	in	the	38th	excited	state.												
+839	(z,a39)	Production	of	an	alpha	particle,	with	residual	in	the	39th	excited	state.												
+840	(z,a40)	Production	of	an	alpha	particle,	with	residual	in	the	40th	excited	state.												
+841	(z,a41)	Production	of	an	alpha	particle,	with	residual	in	the	41st	excited	state.												
+842	(z,a42)	Production	of	an	alpha	particle,	with	residual	in	the	42nd	excited	state.												
+843	(z,a43)	Production	of	an	alpha	particle,	with	residual	in	the	43rd	excited	state.												
+844	(z,a44)	Production	of	an	alpha	particle,	with	residual	in	the	44th	excited	state.												
+845	(z,a45)	Production	of	an	alpha	particle,	with	residual	in	the	45th	excited	state.												
+846	(z,a46)	Production	of	an	alpha	particle,	with	residual	in	the	46th	excited	state.												
+847	(z,a47)	Production	of	an	alpha	particle,	with	residual	in	the	47th	excited	state.												
+848	(z,a0)	Production	of	an	alpha	particle,	with	residual	in	the	48th	excited	state.												
+849	(z,ac)	Production	of	an	alpha	particle	in	the	continuum	not	included	in	the	above	discrete	representation.									
