@@ -2,10 +2,10 @@
 sudo apt install -y libzip-dev
 talyslibdir=`pwd`
 cd ..
-wget https://tendl.web.psi.ch/tendl_2019/talys/talys.tar
+wget https://tendl.web.psi.ch/tendl_2019/talys/talys.tar #download archive with talys
 tar -xzf talys.tar
 cd talys
-unalias -a
+unalias -a #The unalias utility shall remove the definition for each alias name specified. See Alias Substitution . The aliases shall be removed from the current shell execution environment; see Shell Execution Environment
 #
 # This script takes care of the TALYS installation.
 # All you have to do is adapt the next variables to your own situation,
