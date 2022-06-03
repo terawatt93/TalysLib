@@ -143,10 +143,6 @@ void Deformation::SetTypeOfCollectivity( char _Type)
 {
 	TypeOfCollectivity=_Type;
 }
-char Deformation::GetTypeOfCollectivity()
-{
-	return TypeOfCollectivity;
-}
 void Deformation::ReadDeformation()
 {
 	string Filename=GetPathToTalysData()+"/structure/deformation/"+GetNucleusName(Z)+".def";
@@ -275,21 +271,6 @@ void Deformation::SetDeformation(Level *l,char LevT, int BandN, int BandL, int M
 	ld->fLevel=l;
 	l->deformation=ld;
 	Sort();
-}
-vector<float> Deformation::GetDeformationBeta(Level *l)
-{
-	vector<float> result;
-	if(l==0)
-	{
-		cout<<"Deformation::GetDeformationBeta(...) error: level is not defined. Return empty beta2 vector!\n";
-		return result;
-	}
-	if(l->deformation==0)
-	{
-		cout<<"Deformation::GetDeformationBeta(...) error: level deformation is not defined. Return empty vector! \n";
-		return result;
-	}
-	return l->deformation->Beta;
 }
 void Deformation::AssignPointers()
 {
