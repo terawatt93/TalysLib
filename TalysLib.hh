@@ -518,9 +518,11 @@ class Deformation:public DeformationData
 	unsigned int PointToPastChangedDeformation=0;
 	void SetZA(int _Z,int _A);
 	void SetTypeOfCollectivity( char _Type='S');
+	char GetTypeOfCollectivity();
 	void ReadDeformation();
 	void WriteDeformation(string filename);
 	void SetDeformation(Level *l,char LevT, int BandN=-1, int BandL=-1, int MagN=-1,int NPhon=-1, vector<float> *Def=0);
+	vector<float> GetDeformationBeta(Level *l);
 	void SetDefaultDeformationType(char _Type='D');
 	//void RestoreDeformation();
 	void Sort();
@@ -567,6 +569,7 @@ class Level:public LevelData
 	void SetEnergy(float Energy); void SetEnergyErr(float EnergyErr); void SetTalysCS(float TalysCS); void SetTalysSpinParity(SpinParity TalysJP);
 	void SetOrigin(string Origin); void AddJPValue(SpinParity JPValue); void AddSimilarLevel(Level* SimilarLevel); 
 	void SetDeformation(char LevT, int BandN=-1, int BandL=-1,  int MagN=-1, int NPhon=-1,vector<float> *Def=0);//генерирует объект deformation и добавляет его в ядерную деформацию.
+	vector<float> GetDeformationBeta();//функция возвращает вектор значений коэф. деформации beta_2, заданных для данного уровня
 	//порядок и назначение аргументов соответствуют .def файлу (ECIS_report.pdf, стр.3)
 	//методы для получения параметров уровня
 	float GetEnergy(); float GetEnergyErr(); float GetTalysCS(); SpinParity GetTalysSpinParity();
@@ -737,6 +740,8 @@ class Nucleus:public NucleusData
 	void AssignDeformationsToLevels();
 	void SetLevelDeformation(int LevelNumber,char LevT, int BandN=-1, int BandL=-1, int MagN=-1, int NPhon=-1,  vector<float> *DefVec=0);
 	void SetLevelDeformation(double LevelEnergy,char LevT, int BandN=-1, int BandL=-1, int MagN=-1, int NPhon=-1, vector<float> *DefVec=0);
+	vector<float> GetLevelDeformationBeta(int LevelNumber);
+	vector<float> GetLevelDeformationBeta(double LevelEnergy);
 	string PrintLevels();
 	string PrintReactions();
 	string ReactionToTalysNotation(char DataSelection=kExcitationCS);
@@ -834,7 +839,7 @@ class TalysFitterMT
 	Nucleus InitNuclide;
 	Nucleus BestNuclide;
 	double lambda=1;
-	TGraph Chi2Values;
+	TGraph Chi2Values;//графики хи-квадрат (?)
 	TGraph FitValues;
 	TGraph InitValues;
 	vector<TGraph> ParValuesGraphs;
@@ -842,11 +847,11 @@ class TalysFitterMT
 	void (*ParAssignmentFunctionForPar)(TalysFitterMT *PointetToTF,Nucleus *PointerToNucleus, double ParValue, int Index);
 	double (*GetEvaluationResultForNucl)(TalysFitterMT *PointetToTF,double x_value,Nucleus *PointerToNucleus);
 	void SaveToRootFile(TFile *f);
-	TVirtualFitter *Fitter;
+	TVirtualFitter *Fitter;//CERN ROOT Abstract Base Class for Fitting.
 	void InitTVirtualFitter(string type);
 	void Minimize(int NCalls=1000, double tolerance=0.01);
 	void DrawFitProgress();
-	double BestChi2=1e250;
+	double BestChi2=1e250;//самое наименьшее хи-квадрат/ndf, достигнутое в фите подааных данных (?)
 	void GetCurrentGraphNumberAndOffset(double x, int &GraphIterator, double &Offset);
 	void SetParameter(unsigned int n, double value, string name, double epsilon, double low, double high);
 	void SetParameter(unsigned int n, double value, string name, double epsilon, double range);
