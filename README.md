@@ -14,13 +14,13 @@ Installation instruction:
     2) In case it hasn't been defined, define a new variable TALYSDIR in .bashrc file:
         2.1) Add next line in .bashrc file: export TALYSDIR =/path/to_talys/talys 
     3) Go to TalysLib directory
-    4) Launch Install\_Without_TALYS.sh script 
+    '4) Launch Install_Without_TALYS.sh script'
 
 New lines in ~/.bashrc file added for TalysLib should look like this:
     
-    export LD\_LIBRARY\_PATH=$LD\_LIBRARY_PATH:/home/user\_name/some\_directory/TalysLib
-    export CPATH=$CPATH:/home/user\_name/some\_directory/TalysLib
-    export TALYSLIBDIR=/home/user\_name/some\_directory/TalysLib
+    'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/user_name/some_directory/TalysLib'
+    'export CPATH=$CPATH:/home/user_name/some_directory/TalysLib'
+    'export TALYSLIBDIR=/home/user_name/some_directory/TalysLib'
 
 Для этой библиотеки требуется ROOT6 (https://root.cern/, скомпилированный с флагом mathmore) и TALYS 1.8 или 1.9 (https://tendl.web.psi.ch/tendl_2019/talys.html)
 
@@ -36,11 +36,11 @@ New lines in ~/.bashrc file added for TalysLib should look like this:
     2) В случае, если она ещё не определена, определите новую переменную окружения TALYSDIR в .bashrc файле:
         2.1) Добавьте следующую строку в свой .bashrc файл: export TALYSDIR =/path/to_talys/talys 
     3) Перейдите в директорию TalysLib
-    4) Запустите скрипт Install\_Without_TALYS.sh
+    '4) Запустите скрипт Install_Without_TALYS.sh'
 
 Новые записи в ~/.bashrc для TalysLib должны выглядеть примерно так:
     
-    export LD\_LIBRARY\_PATH=$LD\_LIBRARY_PATH:/home/user\_name/some\_directory/TalysLib
-    export CPATH=$CPATH:/home/user\_name/some\_directory/TalysLib
-    export TALYSLIBDIR=/home/user\_name/some\_directory/TalysLib
+    'export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/user_name/some_directory/TalysLib'
+    'export CPATH=$CPATH:/home/user_name/some_directory/TalysLib'
+    'export TALYSLIBDIR=/home/user_name/some_directory/TalysLib'
 
