@@ -9,7 +9,9 @@ cd ..
 #
 # 2. Download and unpack archive with TALYS
 wget https://tendl.web.psi.ch/tendl_2019/talys/talys.tar 
+echo 'The TALYS archive has been downloaded.'
 tar -xzf talys.tar
+echo 'The TALYS archive has been uncompressed.'
 cd talys
 unalias -a # Note: The unalias utility shall remove the definition 
 #           for each alias name specified
