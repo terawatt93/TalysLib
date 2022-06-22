@@ -1226,14 +1226,43 @@ void Nucleus::GenerateProducts(string _Projectile)
 	//реакции: (x,n),(x,p),(x,2n),(x,a),(x,d),захват
 	
 	string name=to_string(A+ProjA-1)+GetNucleusName(Z+ProjZ);
-	Products.push_back(Nucleus(name,"("+Projectile+",n')"));
+	if(Projectile=="n")
+	{
+		Products.push_back(Nucleus(name,"("+Projectile+",n')"));
+	}
+	else
+	{
+		Products.push_back(Nucleus(name,"("+Projectile+",n)"));
+	}
 	name=to_string(A+ProjA-1)+GetNucleusName(Z+ProjZ-1);
-	Products.push_back(Nucleus(name,"("+Projectile+",p)"));
+	if(Projectile=="p")
+	{
+		Products.push_back(Nucleus(name,"("+Projectile+",p')"));
+	}
+	else
+	{
+		Products.push_back(Nucleus(name,"("+Projectile+",p)"));
+	}
 	name=to_string(A+ProjA-2)+GetNucleusName(Z+ProjZ);
 	Products.push_back(Nucleus(name,"("+Projectile+",2n)"));
 	name=to_string(A+ProjA-4)+GetNucleusName(Z+ProjZ-2);
-	Products.push_back(Nucleus(name,"("+Projectile+",a)"));
+	if(Projectile=="a")
+	{
+		Products.push_back(Nucleus(name,"("+Projectile+",a')"));
+	}
+	else
+	{
+		Products.push_back(Nucleus(name,"("+Projectile+",a)"));
+	}
 	name=to_string(A+ProjA-2)+GetNucleusName(Z+ProjZ-1);
+	if(Projectile=="d")
+	{
+		Products.push_back(Nucleus(name,"("+Projectile+",d')"));
+	}
+	else
+	{
+		Products.push_back(Nucleus(name,"("+Projectile+",d)"));
+	}
 	Products.push_back(Nucleus(name,"("+Projectile+",d)"));
 	
 	ExecuteCalculationInTalys(Projectile);
@@ -1719,11 +1748,11 @@ void Nucleus::ErasePointers()
 		Products[i].ErasePointers();
 	}
 }
-Nucleus* Nucleus::FindProductsByReaction(string reaction)
+Nucleus* Nucleus::FindProductByReaction(string reaction)
 {
 	for(unsigned int i=0;i<Products.size();i++)
 	{
-		if(Products[i].Reaction==reaction)
+		if(Products[i].Reaction.find(reaction)!=string::npos)
 		{
 			return &Products[i];
 		}

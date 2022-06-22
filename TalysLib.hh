@@ -692,7 +692,7 @@ class Nucleus:public NucleusData
 	void MergeEnergyGridData(vector<Nucleus*> NucleiInEnergyGrid);//функция выполняет копирование данных из вектора NucleiInEnergyGrid для построения энергетической сетки
 	void SortingLevels();
 	void GenerateEnergyGrid(float min, float step, float max);
-	Nucleus* FindProductsByReaction(string reaction);
+	Nucleus* FindProductByReaction(string reaction);
 	Nucleus* FindProductByName(string _Name);
 	Nucleus* fMotherNucleus;
 	TLMaterial *fMaterial;
