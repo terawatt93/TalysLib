@@ -2,8 +2,10 @@
 #######################################################
 # This script takes care of the TalysLib installation.
 #######################################################
-# 1. Install libzip package from apt package manager
+#
+# 1. Install libzip and gfortran package from apt package manager
 sudo apt install -y libzip-dev
+sudo apt install -y gfortran
 talyslibdir=`pwd` # Define the TalysLib directory
 cd ..
 #
