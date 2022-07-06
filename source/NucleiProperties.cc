@@ -408,6 +408,10 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 	}
 	else
 	{
+		if(Reaction=="(n,p)")
+		{
+			WriteOMPOrUseKoningP=-1;//исправляет segfault в Talys из-за ОП для продукта реакции n,p
+		}
 		fMotherNucleus->OMPManager_.WriteOMP(PathToCalculationDir+Name+to_string(ID)+"/",WriteOMPOrUseKoningP,WriteOMPOrUseKoningN);
 		ofs<<fMotherNucleus->OMPManager_.GetAdditionToInputFile();
 	}
@@ -539,10 +543,46 @@ Nucleus* Nucleus::FindProductByName(string _Name)
 	}
 	return 0;
 }
+
+void CopyFileContentToBuffer(ifstream &t,string &buff)
+{
+	t.seekg(0, std::ios::end);
+	size_t SizeOfStr = t.tellg();
+	buff=string(SizeOfStr,' ');
+	t.seekg(0);
+	t.read(&buff[0], SizeOfStr); 
+}
+
+void Nucleus::ReadTalysOutput()
+{
+	string filename;
+	if(fMotherNucleus)
+	{
+		filename=fMotherNucleus->PathToCalculationDir+fMotherNucleus->Name+to_string(ID)+"/output";
+		
+		if(!OutputWasRead)
+		{
+			ifstream ifs(filename);
+			CopyFileContentToBuffer(ifs,fMotherNucleus->RawOutput);
+			fMotherNucleus->OutputWasRead=true;
+		}
+	}
+	else
+	{
+		filename=PathToCalculationDir+Name+to_string(ID)+"/output";
+		if(!OutputWasRead)
+		{
+			ifstream ifs(filename);
+			CopyFileContentToBuffer(ifs,RawOutput);
+			OutputWasRead=true;
+		}
+	}
+}
+
 void Nucleus::ReadTalysCalculationResult()
 {
 	
-	string filename;
+	/*string filename;//чтение из файла
 	PlottedADist=false;
 	if(fMotherNucleus)
 	{
@@ -552,7 +592,19 @@ void Nucleus::ReadTalysCalculationResult()
 	{
 		filename=PathToCalculationDir+Name+to_string(ID)+"/output";
 	}
-	ifstream ifs(filename.c_str());
+	ifstream ifs(filename.c_str());*/
+	 //кусок, выполняющий чтение из буфера, ранее прочитанного в GenerateProducts
+	stringstream ifs;
+	if(fMotherNucleus)
+	{
+		ifs<<fMotherNucleus->RawOutput;
+		//cout<<"******\n"<<fMotherNucleus->RawOutput<<"\n";
+	}
+	else
+	{
+		ifs<<RawOutput;
+	}
+	//конец 
 	string line;
 	bool read_flag=false;
 	
@@ -604,8 +656,8 @@ void Nucleus::ReadTalysCalculationResult()
 			}
 			TalysLevel->AddLineFromTalys(Egamma,CrossSection,Ei,Ef,SpinParity(JPi),SpinParity(JPf),Numi,Numf);
 			TalysLevel->fNucleus=this;
-			/*cout<<"Egamma:"<<Egamma<<"; Level:"<<TalysLevel->Energy<<"; "<<Levels[Levels.size()-1].Energy;
-			if(Egamma>TalysLevel->Energy)
+			//cout<<"Egamma:"<<Egamma<<"; Level:"<<TalysLevel->Energy<<"; "<<Levels[Levels.size()-1].Energy;
+			/*if(Egamma>TalysLevel->Energy)
 			{
 				cout<<"!!!!!!!!!";
 			}
@@ -613,24 +665,37 @@ void Nucleus::ReadTalysCalculationResult()
 		}
 		if((((int)line.find("Total"))>0)&&read_flag)
 		{
-			ifs.close();
+			//ifs.close();//закоментировано для работы с буфером
 			read_flag=false;
 			//return ;
+			
 		}
 	}
+	stringstream ifs2;
+	
+	if(fMotherNucleus)
+	{
+		ifs2<<fMotherNucleus->RawOutput;
+		//cout<<"******\n"<<fMotherNucleus->RawOutput<<"\n";
+	}
+	else
+	{
+		ifs2<<RawOutput;
+	}
+
 	//чтобы получить список уровней, сначала нужно прочитать список гамма, позже переделаю для более эффективной работы
 	bool ExcitationFlag=false;
 	bool ADistFlag=false;
-	ifs.open(filename.c_str());
+	//ifs.open(filename.c_str());//закоментировано для работы с буфером
 	string TalysExcitationMark=ReactionToTalysNotation(kExcitationCS);
 	string TalysADistMark=ReactionToTalysNotation(kAngularDistribution);
+	//cout<<"TalysExcitationMark:"<<Reaction<<" "<<TalysExcitationMark<<"\n";
 	Level* UsedLevel=0;
 	int CurrentLevelNumber=0;
 	if(TalysExcitationMark!="NDEF")
 	{
-		while(getline(ifs,line))
+		while(getline(ifs2,line))
 		{
-			
 			if(((int)line.find(TalysExcitationMark))>-1)
 			{
 				ExcitationFlag=true;
@@ -693,6 +758,7 @@ void Nucleus::ReadTalysCalculationResult()
 				}
 				stringstream s(line);
 				string tmp;
+				
 				if((line.size()>22)&&(UsedLevel)&&CurrentLevelNumber>0)
 				{
 					float Angle=0, Total=0, Compound=0, Direct=0;
@@ -727,12 +793,12 @@ void Nucleus::ReadTalysCalculationResult()
 			}
 			if(line.find("EXCITATION FUNCTIONS")!=string::npos)
 			{
-				ifs.close();
+				//ifs.close();//закоментировано для работы с буфером
 				return;
 			}
 		}
 	}
-	ifs.close();
+	//ifs.close();//закоментировано для работы с буфером
 }
 void Nucleus::ReadElastic()
 {
@@ -1166,6 +1232,7 @@ void Nucleus::GenerateProducts(string _Projectile)
 	{
 		return;
 	}
+	OutputWasRead=false;
 	vector<Nucleus*> NucleiInEnergyGrid;
 	if((EnergyGrid.size()>0)&&(MainNucleusFlag==0))
 	{
@@ -1266,7 +1333,7 @@ void Nucleus::GenerateProducts(string _Projectile)
 	Products.push_back(Nucleus(name,"("+Projectile+",d)"));
 	
 	ExecuteCalculationInTalys(Projectile);
-	
+	ReadTalysOutput();
 	for(unsigned int i=0;i<Products.size();i++)
 	{
 		Products[i].fMotherNucleus=this;

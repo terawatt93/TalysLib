@@ -94,8 +94,10 @@ OpticalModelParameters* OMPManager::GetOpticalPotential(int Z, int A, string Pro
 void OMPManager::WriteOMP(string path,int UseKoningP,int UseKoningN)
 {
 	Addition="";
+	//cout<<"WriteOMP:\n";
 	for(unsigned int i=0;i<ElementsInCalculation.size();i++)
 	{
+		//cout<<"WriteOMP: "<<i<<"\n";
 		ElementsInCalculation[i].fOMPManager=this;
 		ElementsInCalculation[i].WriteOMP(path,UseKoningP,UseKoningN);
 	}

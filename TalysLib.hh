@@ -648,7 +648,7 @@ class Nucleus:public NucleusData
 	int MainNucleusFlag=0;
 	int ID=0;
 	unsigned int EnergyGridIndex=0;
-	
+	int NumberOfCalculations=0;
 	vector<Level> Levels;
 	vector<Level*> LevelsFromTalys;
 	vector<Level*> LevelsFromENSDF;
@@ -774,7 +774,9 @@ class Nucleus:public NucleusData
 	//using TObject::GetName;
 	using TObject::Copy;
 	int GetIntegrityFactor();
-	
+	string RawOutput;//содержит всю информацию из файла output
+	bool OutputWasRead=false;
+	void ReadTalysOutput();//считывает информацию из файла output в RawOutputContent
 	
 };
 
@@ -807,6 +809,7 @@ class TalysFitter
 	bool ParTrackingFlag=false;
 	bool ParChanged=false;
 	bool GeneratedTF1=false;
+
 	double x_val;
 	TalysFitter(string NuclName);
 	Nucleus Nuclide;

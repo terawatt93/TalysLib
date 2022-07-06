@@ -146,27 +146,34 @@ string TLElement::GenerateFileContent(string Projectile,int UseKoning)
 void TLElement::WriteOMP(string path,int UseKoningP,int UseKoningN)
 {
 	string FileContent=GenerateFileContent("n",UseKoningN);
-	if(FileContent.size()>0)
+	if(UseKoningN>-1)
 	{
-		ofstream ofs(path+to_string(Z)+"N.loc");
-		ofs<<FileContent;
-		if(fOMPManager)
+		if(FileContent.size()>0)
 		{
-			fOMPManager->Addition+="optmodfileN "+to_string(Z)+" "+to_string(Z)+"N.loc\n";
+			ofstream ofs(path+to_string(Z)+"N.loc");
+			ofs<<FileContent;
+			if(fOMPManager)
+			{
+				fOMPManager->Addition+="optmodfileN "+to_string(Z)+" "+to_string(Z)+"N.loc\n";
+			}
+			ofs.close();
 		}
-		ofs.close();
 	}
-	FileContent=GenerateFileContent("p",UseKoningP);
-	if(FileContent.size()>0)
+	if(UseKoningP>-1)
 	{
-		ofstream ofs(path+to_string(Z)+"P.loc");
-		ofs<<FileContent;
-		if(fOMPManager)
+		FileContent=GenerateFileContent("p",UseKoningP);
+		if(FileContent.size()>0)
 		{
-			fOMPManager->Addition+="optmodfileP "+to_string(Z)+" "+to_string(Z)+"P.loc\n";
+			ofstream ofs(path+to_string(Z)+"P.loc");
+			ofs<<FileContent;
+			if(fOMPManager)
+			{
+				fOMPManager->Addition+="optmodfileP "+to_string(Z)+" "+to_string(Z)+"P.loc\n";
+			}
+			
+			ofs.close();
 		}
-		
-		ofs.close();
 	}
+	
 	
 }
