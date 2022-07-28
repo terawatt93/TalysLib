@@ -305,7 +305,8 @@ const char* NucleusData::GetName()  const
 {
 	return Name.c_str();
 }
-Nucleus::Nucleus(string Name,string Reaction)
+
+void Nucleus::Create(string Name,string Reaction)
 {
 	fMaterial=0;
 	TH1::AddDirectory(kFALSE);
@@ -366,6 +367,11 @@ Nucleus::Nucleus(string Name,string Reaction)
 	}
 	AssignPointers();
 	
+}
+
+Nucleus::Nucleus(string Name,string Reaction)
+{
+	Create(Name,Reaction);
 }
 
 void Nucleus::SetProjectileEnergy(double E)

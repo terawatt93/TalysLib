@@ -198,6 +198,10 @@ void OMPStorage::Setwso2(double value)
 {
 	wso2=value;
 }
+void OMPStorage::SetVc(double value)
+{
+	Vc=value;
+}
 
 double OMPStorage::GetVv()
 {
@@ -223,6 +227,11 @@ double OMPStorage::GetWso()
 {
 	double E=Nuclide->ProjectileEnergy;
 	return wso1*pow(E-Ef,2)/(pow(E-Ef,2)+pow(wso2,2));
+}
+
+double OMPStorage::GetVc()
+{
+	return Vc;
 }
 
 OMPStorage::OMPStorage(OMPStorageData d)
@@ -590,6 +599,18 @@ void OpticalModelParameters::Setwso2(double value)
 	}
 }
 
+void OpticalModelParameters::SetVc(double value)
+{
+	if(DefaultOMP!=0)
+	{
+		DefaultOMP->SetVc(value);
+	}
+	else
+	{
+		cout<<"OpticalModelParameters::SetVc() error: DefaultOMP does not set!\n";
+	}
+}
+
 double OpticalModelParameters::GetVv()
 {
 	if(DefaultOMP!=0)
@@ -635,6 +656,17 @@ double OpticalModelParameters::GetWso()
 	cout<<"OpticalModelParameters::GetWso() error: DefaultOMP does not set! -1 returned\n";
 	return -1;
 }
+
+double OpticalModelParameters::GetVc()
+{
+	if(DefaultOMP!=0)
+	{
+		return DefaultOMP->GetVc();
+	}
+	cout<<"OpticalModelParameters::GetWso() error: DefaultOMP does not set! -1 returned\n";
+	return -1;
+}
+
 double OMPStorage::GetRv()
 {
 	return Rv;

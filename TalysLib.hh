@@ -244,6 +244,7 @@ class OMPStorage:public OMPStorageData
 	void Setvso2(double value);
 	void Setwso1(double value);
 	void Setwso2(double value);
+	void SetVc(double value);
 	double GetVv();
 	double GetWv();
 	double GetWd();
@@ -269,6 +270,7 @@ class OMPStorage:public OMPStorageData
 	double Getvso2();
 	double Getwso1();
 	double Getwso2();
+	double GetVc();
 	OpticalModelParameters *fOpticalModelParameters;
 	ClassDef(OMPStorage, 1);
 	private:
@@ -340,6 +342,7 @@ class OpticalModelParameters:public OpticalModelParametersData//:public TObject
 	void Setvso2(double value);
 	void Setwso1(double value);
 	void Setwso2(double value);
+	void SetVc(double value);
 	bool ReadOMP(string _Projectile="n");
 	void SaveOMP(string filename,int UseKoning=0);//UseKoning=0-не использовать потенциал Кенинга; 1-использовать Кенинга, если нет локальной ОМ; 2-использовать только Кенинга
 	//void RestoreOMP();
@@ -368,6 +371,7 @@ class OpticalModelParameters:public OpticalModelParametersData//:public TObject
 	double Getvso2();
 	double Getwso1();
 	double Getwso2();
+	double GetVc();
 	void AssignPointers(Nucleus *N=0);
 	ClassDef(OpticalModelParameters, 1);
 };
@@ -706,6 +710,7 @@ class Nucleus:public NucleusData
 	}
 	void GetFromNucleusData(NucleusData ND);
 	Nucleus(string Name,string Reaction="");
+	void Create(string Name,string Reaction);//вынес в отдельный метод создание ядра, чтобы не вызывать присваивание
 	Nucleus(NucleusData ND,Nucleus *PointerToMotherNucleus=0);
 	//const char *GetName()  const;
 	void ReadENSDFFile(string filename="",string Nuclide="");

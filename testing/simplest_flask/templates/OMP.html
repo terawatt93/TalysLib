@@ -1,0 +1,78 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Language" content="ru">
+<title>Параметры оптической модели</title>
+<link rel="SHORTCUT ICON" href="/static/favicon.ico">
+<link rel="stylesheet" href="/static/main.css">
+<meta name="wot-verification" content="e27f5472d2b528316695">
+</head>
+
+<script src="https://polyfill.io/v3/polyfill.min.js?features=es6"></script><script id="MathJax-script" async src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+
+<body>
+<!--
+<div align="center"><a href="http://nuclphys.sinp.msu.ru/School2021/"><img src="http://nuclphys.sinp.msu.ru/School2021/images/banner.png" width="940" height="163" alt="" border="0"></a></div>
+-->
+
+<hr>
+<table align="center" style="border: 0px; margin: auto; width: 900px;">
+  <tbody>
+    <tr>
+      <td style="height: 70px; width: 850px; vertical-align: middle;"><div class="head">Параметры оптической модели для ядра {{nucleus}}</div></td>
+    </tr>
+  </tbody>
+</table>
+
+<form method="POST">
+	<table>
+	<tr>
+		<td>
+		<table border="1">
+		   <caption>Параметры ОП для нейтрона</caption>
+		   <tr>
+			<th>Параметр</th>
+			<th>Величина</th>
+		   </tr>
+		   <tr><td>$$v_1$$</td><td><div><label><input type="number" name="v1n" value="{{v1n}}" step="any"> </label></div></td></tr>
+		   <tr><td>$$v_2$$</td><td><div><label><input type="number" name="v2n" value="{{v2n}}" step="any"></label></div></td></tr>
+		   <tr><td>$$v_3$$</td><td><div><label><input type="number" name="v3n" value="{{v3n}}" step="any"></label></div></td></tr>
+		   <tr><td>$$w_1$$</td><td><div><label><input type="number" name="w1n" value="{{w1n}}" step="any"></label></div></td></tr>
+		   <tr><td>$$w_2$$</td><td><div><label><input type="number" name="w2n" value="{{w2n}}" step="any"></label></div></td></tr>
+		   <tr><td>$$d_1$$</td><td><div><label><input type="number" name="d1n" value="{{d1n}}" step="any"></label></div></td></tr>
+		   <tr><td>$$d_2$$</td><td><div><label><input type="number" name="d2n" value="{{d2n}}" step="any"></label></div></td></tr>
+		   <tr><td>$$d_3$$</td><td><div><label><input type="number" name="d3n" value="{{d3n}}" step="any"></label></div></td></tr>
+		   <tr><td>$$v_{so1}$$</td><td><div><label><input type="number" name="vso1n" value="{{vso1n}}" step="any"></label></div></td></tr>
+		   <tr><td>$$v_{so2}$$</td><td><div><label><input type="number" name="vso2n" value="{{vso2n}}" step="any"></label></div></td></tr>
+		   <tr><td>$$w_{so1}$$</td><td><div><label><input type="number" name="wso1n" value="{{wso1n}}" step="any"></label></div></td></tr>
+		   <tr><td>$$w_{so2}$$</td><td><div><label><input type="number" name="wso2n" value="{{wso2n}}" step="any"></label></div></td></tr>
+		</table>
+		</td>
+		<td>
+		<table border="1">
+		   <caption>Параметры ОП для протона</caption>
+		   <tr>
+			<th>Параметр</th>
+			<th>Величина</th>
+		   </tr>
+		   <tr><td>$$v_1$$</td><td><div><label><input type="number" name="v1p" value="{{v1p}}" step="any"></label></div></td></tr>
+		   <tr><td>$$v_2$$</td><td><div><label><input type="number" name="v2p" value="{{v2p}}" step="any"></label></div></td></tr>
+		   <tr><td>$$v_3$$</td><td><div><label><input type="number" name="v3p" value="{{v3p}}" step="any"></label></div></td></tr>
+		   <tr><td>$$w_1$$</td><td><div><label><input type="number" name="w1p" value="{{w1p}}" step="any"></label></div></td></tr>
+		   <tr><td>$$w_2$$</td><td><div><label><input type="number" name="w2p" value="{{w2p}}" step="any"></label></div></td></tr>
+		   <tr><td>$$d_1$$</td><td><div><label><input type="number" name="d1p" value="{{d1p}}" step="any"></label></div></td></tr>
+		   <tr><td>$$d_2$$</td><td><div><label><input type="number" name="d2p" value="{{d2p}}" step="any"></label></div></td></tr>
+		   <tr><td>$$d_3$$</td><td><div><label><input type="number" name="d3p" value="{{d3p}}" step="any"></label></div></td></tr>
+		   <tr><td>$$v_{so1}$$</td><td><div><label><input type="number" name="vso1p" value="{{vso1p}}" step="any"></label></div></td></tr>
+		   <tr><td>$$v_{so2}$$</td><td><div><label><input type="number" name="vso2p" value="{{vso2p}}" step="any"></label></div></td></tr>
+		   <tr><td>$$w_{so1}$$</td><td><div><label><input type="number" name="wso1p" value="{{wso1p}}" step="any"></label></div></td></tr>
+		   <tr><td>$$w_{so2}$$</td><td><div><label><input type="number" name="wso2p" value="{{wso2p}}" step="any"></label></div></td></tr>
+		</table>
+		</td>
+	</tr>
+	</table>
+	<input type="submit" name="submitOMP" value="Принять">
+</form>
+
+</body>
+</html>

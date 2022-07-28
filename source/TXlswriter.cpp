@@ -5,6 +5,7 @@
 #include <vector>
 #include "../libxlsxwriter/include/xlsxwriter.h"
 #include "TSystem.h"
+#pragma once
 
 R__LOAD_LIBRARY(../libxlsxwriter/lib/libxlsxwriter.so)
 

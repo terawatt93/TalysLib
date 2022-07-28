@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta http-equiv="Content-Language" content="ru">
+<title>Ядерная физика в интернете</title>
+<link rel="SHORTCUT ICON" href="/static/favicon.ico">
+<link rel="stylesheet" href="/static/main.css">
+<meta name="wot-verification" content="e27f5472d2b528316695">
+</head>
+
+<body>
+<!--
+<div align="center"><a href="http://nuclphys.sinp.msu.ru/School2021/"><img src="http://nuclphys.sinp.msu.ru/School2021/images/banner.png" width="940" height="163" alt="" border="0"></a></div>
+-->
+
+<hr>
+<table align="center" style="border: 0px; margin: auto; width: 900px;">
+  <tbody>
+    <tr>
+      <td style="height: 70px; width: 850px; vertical-align: middle;"><div class="head">TalysLib web интерфейс (v.0.01)</div>
+        <div class="subhead"><br />
+          Веб-интерфейс к библиотеке <a class="linkhead" href="https://github.com/terawatt93/TalysLib"> TalysLib </a>, позволяющей выполнять расчеты различных яденых реакций с помощью программы </a> <a class="linkhead" href="https://tendl.web.psi.ch/tendl_2019/talys.html"> Talys </a>, а также выполнять сравнение полученных результатов с оцененными данными из </a> <a class="linkhead" href="https://www-nds.iaea.org/exfor/endf.htm"> ENDF </a><br />
+           </div></td>
+      <td width="65" height="120"><table border="4" cellpadding="0" cellspacing="0" width="55">
+          <tbody>
+            <tr>
+              <td><img border="0" src="/static/nope.jpg" width="55" height="58" alt=""></td>
+            </tr>
+          </tbody>
+        </table></td>
+    </tr>
+  </tbody>
+</table>
+<!--
+	<center><a href="https://events.sinp.msu.ru/event/9/" target="_blank"><img src="https://mobilecraft.moy.su/img/2022.png" height="60" border="0"></a></center>
+	-->
+
+<table>
+ 
+	<form method="POST">
+                <tr><td><div><label>Ядро (например, 56Fe):</td><td> <input type="text" name="nucleus"></label></div></td></tr>
+               <tr><td><div><label>Налетающая частица (например, p): </td><td><input type="text" name="projectile"></label></div></td></tr>
+               <tr><td><div><label>Энергия частицы в МэВ:</td><td> <input type="number" name="prEnergy" min="0" step="any"> </label></div></td></tr>
+               <tr><td><input type="submit" name="submitPar" value="Принять"></td><td><input type="submit" name="OMP" value="Задать параметры ОП"></td></tr>
+           </form>
+  
+</table>
+
+<p>Сайт в разработке. Замечания и предложения по улучшению работы
+  просьба писать на github <a href="https://github.com/terawatt93/TalysLib/discussions/10">по ссылке</a>.
+ <a href="/test">Тест!</a>. 
+</p>
+</html>

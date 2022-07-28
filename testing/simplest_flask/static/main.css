@@ -1,0 +1,88 @@
+body {
+
+  font-family: Times, serif;
+  /* Семейство шрифтов */
+  font-size: normal;
+  /* Размер основного шрифта в пунктах  */
+  background-color: #077177;
+  /* Цвет фона веб-страницы */
+  color: #ffffdd;
+  /* Цвет основного текста */
+}
+h2 {
+  font-size: x-large;
+  margin-left: 0px;
+  font-weight: 600;
+}
+p {
+  text-align: justify;
+  /* Выравнивание по ширине */
+  margin-left: 0px;
+  /* Отступ слева в пикселах */
+  margin-right: 5px;
+  /* Отступ справа в пикселах */
+  border-left: 0px solid #999;
+  /* Параметры линии слева */
+  border-bottom: 0px solid #999;
+  /* Параметры линии снизу */
+  padding-left: 0px;
+  /* Отступ от линии слева до текста  */
+  padding-bottom: 4px;
+  /* Отступ от линии снизу до текста  */
+}
+a:link {
+  color: #FFFF00;
+  /* Цвет ссылок */
+  text-decoration: none;
+}
+a:visited {
+  color: #FFFF00;
+  /*    color: #00FFFF;
+    /* Цвет посещенных ссылок */
+}
+a:active {
+  color: #f00;
+  /* Цвет активной ссылки */
+}
+a:hover {
+  color: #00FF00
+}
+.bold {
+  font-weight: 700;
+}
+.big {
+  font-size: x-large;
+  font-weight: 200;
+  text-align: left; 
+}
+.school {
+  font-size: x-large;
+  text-align: center; 
+}
+.head {
+  color: #ffffdd;
+  /* Цвет заголовка */
+  font-size: 32pt;
+  /* Размер шрифта в пунктах */
+  font-family: Helvetica, sans-serif;
+  /* Семейство шрифтов */
+  font-weight: 700;
+  /* Нормальное начертание текста  */
+  text-align: center;
+  vertical-align: bottom;
+}
+.subhead {
+  color: #ffffdd;
+  /* Цвет заголовка */
+  font-size: 11pt;
+  /* Размер шрифта в пунктах */
+  font-family: Helvetica, sans-serif;
+  /* Семейство шрифтов */
+  font-weight: 200;
+  /* Нормальное начертание текста  */
+  text-align: center;
+}
+a.linkhead {
+  color: #ffffdd;
+  text-decoration: underline;
+}
