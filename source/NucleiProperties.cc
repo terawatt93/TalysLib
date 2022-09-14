@@ -512,14 +512,28 @@ Level* Nucleus::FindLevelFromTalys(float Energy,SpinParity JP)
 
 Level* Nucleus::FindLevelByEnergy(float Energy,float tolerancy)
 {
+	Level* result=0;
 	for(unsigned int i=0;i<Levels.size();i++)
 	{
-		if(abs(Levels[i].GetEnergy()-Energy)<1)
+		if(abs(Levels[i].GetEnergy()-Energy)<tolerancy)
 		{
-			return &Levels[i];
+			if(result)
+			{
+				if(abs(result->Energy-Energy)>abs(Levels[i].GetEnergy()-Energy))
+				{
+					result=&Levels[i];
+				}
+			}
+			else
+			{
+				result=&Levels[i];
+			}
 		}
+		if(Levels[i].GetEnergy()>Energy+tolerancy)
+		break;
 	}
-	return 0;
+	
+	return result;
 }
 
 Level* Nucleus::FindLevelByNumber(int number)
