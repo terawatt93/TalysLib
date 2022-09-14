@@ -587,18 +587,6 @@ void Nucleus::ReadTalysOutput()
 
 void Nucleus::ReadTalysCalculationResult()
 {
-	
-	/*string filename;//чтение из файла
-	PlottedADist=false;
-	if(fMotherNucleus)
-	{
-		filename=fMotherNucleus->PathToCalculationDir+fMotherNucleus->Name+to_string(ID)+"/output";
-	}
-	else
-	{
-		filename=PathToCalculationDir+Name+to_string(ID)+"/output";
-	}
-	ifstream ifs(filename.c_str());*/
 	 //кусок, выполняющий чтение из буфера, ранее прочитанного в GenerateProducts
 	stringstream ifs;
 	if(fMotherNucleus)
@@ -791,12 +779,6 @@ void Nucleus::ReadTalysCalculationResult()
 					}
 				}
 			}
-			if((line.find(ReactionToTalysNotation(kTotalInelasticCS))!=string::npos)&&(line.size()>50))//line.size()>50 нужен, чтобы не возникало путаницы с (n,gn), который обозначается абсолютно также
-			{
-				line=line.substr(22,line.size()-22);
-				stringstream s(line);
-				s>>DirectInelastic>>CompoundInelastic>>TotInelastic;
-			}
 			if(line.find("EXCITATION FUNCTIONS")!=string::npos)
 			{
 				//ifs.close();//закоментировано для работы с буфером
@@ -809,16 +791,17 @@ void Nucleus::ReadTalysCalculationResult()
 void Nucleus::ReadElastic()
 {
 	string filename;
+	 //кусок, выполняющий чтение из буфера, ранее прочитанного в GenerateProducts
+	stringstream ifs;
 	if(fMotherNucleus)
 	{
-		filename=PathToCalculationDir+fMotherNucleus->Name+to_string(ID)+"/output";
+		ifs<<fMotherNucleus->RawOutput;
+		//cout<<"******\n"<<fMotherNucleus->RawOutput<<"\n";
 	}
 	else
 	{
-		filename=PathToCalculationDir+Name+to_string(ID)+"/output";
+		ifs<<RawOutput;
 	}
-	
-	ifstream ifs(filename.c_str());
 	bool ElasticFlag=false;
 	string ElasticMark="Elastic scattering angular distribution";
 	int BNECS_iterator=0;
@@ -968,17 +951,20 @@ void Nucleus::ReadElastic()
 			string tmp;
 		//	cout<<line<<"\n";
 			s>>tmp>>TEISTot>>TEISDiscr>>TEISCont;
-			ifs.close();
 			return;
 		}
-		
+		if((line.find("Total     Inelastic")!=string::npos)&&(line.size()>50))//line.size()>50 нужен, чтобы не возникало путаницы с (n,gn), который обозначается абсолютно также
+		{
+			line=line.substr(22,line.size()-22);
+			stringstream s(line);
+			s>>DirectInelastic>>CompoundInelastic>>TotInelastic;
+		}
 		/*if(line.find("EXCITATION FUNCTIONS")!=string::npos)
 		{
 			ifs.close();
 			return;
 		}*/
 	}
-	ifs.close();
 }
 TGraph* Nucleus::GetElasticAngularDistribution(string type,string option)
 {
@@ -1195,33 +1181,17 @@ void Nucleus::GenerateEnergyGrid(float min, float step, float max)
 
 void Nucleus::MergeEnergyGridData(vector<Nucleus*> NucleiInEnergyGrid)
 {
+	//по умолчанию для "главного" ядра задается максимальная на сетке энергия налетающей частицы
+	//функция вызывается уже после расчета в Talys (видимо, надо сделать ее private)
+	
 	for(unsigned int i=0;i<NucleiInEnergyGrid.size();i++)
 	{
-		for(unsigned int j=0;j<NucleiInEnergyGrid[i]->Products.size();j++)
-		{
-			for(unsigned int k=0;k<NucleiInEnergyGrid[i]->Products[j].Levels.size();k++)
-			{
-				Products[j].Levels[k].AddPoint(&(NucleiInEnergyGrid[i]->Products[j].Levels[k]));
-			}
-		}
-		AddPoint(NucleiInEnergyGrid[i]);
-	}
-	for(unsigned int i=0;i<EnergyGrid.size();i++)
-	{
-		ElTotValues.push_back(NucleiInEnergyGrid[i]->ElTot); ElCompoundValues.push_back(NucleiInEnergyGrid[i]->ElCompound); ElDirectValues.push_back(NucleiInEnergyGrid[i]->ElDirect);
-		if(NucleiInEnergyGrid[i]->MainNucleusFlag!=2)
+		AddPoint(NucleiInEnergyGrid[i]->ProjectileEnergy,NucleiInEnergyGrid[i]);
+		if(NucleiInEnergyGrid[i]->MainNucleusFlag!=2)//нужно, чтобы не удалить "главное" ядро
 		{
 			delete NucleiInEnergyGrid[i];
 		}
 	}
-	
-	/*for(unsigned int j=0;j<Products.size();j++)
-	{
-		for(unsigned int k=0;k<Products[j].Levels.size();k++)
-		{
-			Products[j].Levels[k].AddPoint(&(Products[j].Levels[k]));
-		}
-	}*/
 }
 
 void EvalEdepData(Nucleus* Data, string Proj)
@@ -1229,11 +1199,57 @@ void EvalEdepData(Nucleus* Data, string Proj)
 	Data->GenerateProducts(Proj);
 }
 
+void ExclusiveCSData::ExtractDataFromBuffer(string Buffer)
+{
+	int begin=Buffer.find("Emitted particles     cross section reaction");
+	int end=Buffer.find("Absorption cross section");
+	vector<string> result;
+	if((begin>0)&&(end>0))
+	{
+		string PartForParsing=Buffer.substr(begin,end-begin);
+		stringstream s(PartForParsing);
+		string line;
+		int iterator=0;
+		while(getline(s,line))
+		{
+			if((iterator>1)&&(line.size()>42))
+			{
+				stringstream s2(line);
+				int nn=0,np=0,nd=0,nt=0,nh=0,na=0;
+				s2>>nn>>np>>nd>>nt>>nh>>na;
+				int ZProd=np+nd+nt+nh*2+na*2;
+				int AProd=nn+np+2*nd+3*nt+3*nh+4*na;
+				int APrj=0,ZPrj=0;
+				
+				TString reaction(line.substr(42,8).c_str());
+				reaction.ReplaceAll(" ","");
+				if(reaction.Length()>3)
+				{
+					string Proj,Out;
+					ParseReaction(reaction.Data(),Proj,Out);
+					GetAZ(Proj,ZPrj,APrj);
+					DeltaZ.push_back(ZPrj-ZProd);
+					DeltaA.push_back(APrj-AProd);
+					ReactionList.push_back(reaction.Data());
+				}
+				
+			}
+			iterator++;
+		}
+	}
+}
+
 void Nucleus::GenerateProducts(string _Projectile)
 {
 	Products.resize(0);
 	Projectile=_Projectile;
 	ProjectileMass=GetNuclearMass(Projectile); 
+	
+	ExecuteCalculationInTalys(Projectile);
+	ReadTalysOutput();
+	ExclusiveCSData ECSD;
+	ECSD.ExtractDataFromBuffer(RawOutput);
+	
 	if(Name.find("BKG")!=string::npos)
 	{
 		return;
@@ -1280,66 +1296,13 @@ void Nucleus::GenerateProducts(string _Projectile)
 				Threads[i].join();
 			}
 		}
-		
-	}
-	if(NucleiInEnergyGrid.size()>0)
+	}	
+	for(unsigned int i=0;i<ECSD.ReactionList.size();i++)
 	{
-		MergeEnergyGridData(NucleiInEnergyGrid);
-		if(TalysLibManager::Instance().GenerateAllGraphs)
-		{
-			GenerateGraphs();
-		}
-		SetTGraphNameAndTitle("Energy");
-		return;
+		string name=to_string(A+ECSD.DeltaA[i])+GetNucleusName(Z+ECSD.DeltaZ[i]);
+		Products.push_back(Nucleus(name,ECSD.ReactionList[i]));
 	}
 	
-	int ProjZ,ProjA;
-	
-	GetAZ(Projectile,ProjZ,ProjA);
-	//реакции: (x,n),(x,p),(x,2n),(x,a),(x,d),захват
-	
-	string name=to_string(A+ProjA-1)+GetNucleusName(Z+ProjZ);
-	if(Projectile=="n")
-	{
-		Products.push_back(Nucleus(name,"("+Projectile+",n')"));
-	}
-	else
-	{
-		Products.push_back(Nucleus(name,"("+Projectile+",n)"));
-	}
-	name=to_string(A+ProjA-1)+GetNucleusName(Z+ProjZ-1);
-	if(Projectile=="p")
-	{
-		Products.push_back(Nucleus(name,"("+Projectile+",p')"));
-	}
-	else
-	{
-		Products.push_back(Nucleus(name,"("+Projectile+",p)"));
-	}
-	name=to_string(A+ProjA-2)+GetNucleusName(Z+ProjZ);
-	Products.push_back(Nucleus(name,"("+Projectile+",2n)"));
-	name=to_string(A+ProjA-4)+GetNucleusName(Z+ProjZ-2);
-	if(Projectile=="a")
-	{
-		Products.push_back(Nucleus(name,"("+Projectile+",a')"));
-	}
-	else
-	{
-		Products.push_back(Nucleus(name,"("+Projectile+",a)"));
-	}
-	name=to_string(A+ProjA-2)+GetNucleusName(Z+ProjZ-1);
-	if(Projectile=="d")
-	{
-		Products.push_back(Nucleus(name,"("+Projectile+",d')"));
-	}
-	else
-	{
-		Products.push_back(Nucleus(name,"("+Projectile+",d)"));
-	}
-	Products.push_back(Nucleus(name,"("+Projectile+",d)"));
-	
-	ExecuteCalculationInTalys(Projectile);
-	ReadTalysOutput();
 	for(unsigned int i=0;i<Products.size();i++)
 	{
 		Products[i].fMotherNucleus=this;
@@ -1350,6 +1313,16 @@ void Nucleus::GenerateProducts(string _Projectile)
 	{
 		Products[i].ReadTalysCalculationResult();
 	//	Products[i].AssignPointers();
+	}
+	
+	if(NucleiInEnergyGrid.size()>0)
+	{
+		MergeEnergyGridData(NucleiInEnergyGrid);
+		SetTGraphNameAndTitle("Energy");
+		/*if(TalysLibManager::Instance().GenerateAllGraphs)
+		{
+			GenerateGraphs();
+		}*/
 	}
 	AssignPointers();
 	ReadElastic();
@@ -1377,44 +1350,9 @@ string Nucleus::PrintReactions()
 }
 string Nucleus::ReactionToTalysNotation(char DataSelection)
 {
-	if(Reaction==("(n,n')"))
-	{
-		if(DataSelection==kExcitationCS)
-		return "Inelastic cross sections";
-		if(DataSelection==kAngularDistribution)
-		return "Inelastic angular distributions";
-		if(DataSelection==kTotalInelasticCS)
-		return "Total     Inelastic";
-		
-	}
-	if(Reaction==("(n,p)"))
-	{
-		if(DataSelection==kExcitationCS)
-		return "(n,p)   cross sections";
-		if(DataSelection==kAngularDistribution)
-		return "(n,p) angular distributions";
-		if(DataSelection==kTotalInelasticCS)
-		return "Total       (n,p)";
-	}
-	if(Reaction==("(n,d)"))
-	{
-		if(DataSelection==kExcitationCS)
-		return "(n,d)   cross sections";
-		if(DataSelection==kAngularDistribution)
-		return "(n,d) angular distributions";
-		if(DataSelection==kTotalInelasticCS)
-		return "Total       (n,d)";
-	}
-	if(Reaction==("(n,a)"))
-	{
-		if(DataSelection==kExcitationCS)
-		return "(n,a)   cross sections";
-		if(DataSelection==kAngularDistribution)
-		return "(n,a) angular distributions";
-		if(DataSelection==kTotalInelasticCS)
-		return "Total       (n,a)";
-	}
-		if(Reaction==("(p,p')"))
+	string Prj,Prod;
+	ParseReaction(Reaction,Prj,Prod);
+	if(TString(Prj)==TString(Prod).ReplaceAll("'",""))//неупругое рассеяние
 	{
 		if(DataSelection==kExcitationCS)
 		return "Inelastic cross sections";
@@ -1423,32 +1361,14 @@ string Nucleus::ReactionToTalysNotation(char DataSelection)
 		if(DataSelection==kTotalInelasticCS)
 		return "Total     Inelastic";
 	}
-	if(Reaction==("(p,n)"))
+	else
 	{
 		if(DataSelection==kExcitationCS)
-		return "(p,n)   cross sections";
+		return TString("*   cross sections").ReplaceAll("*",Reaction).Data();
 		if(DataSelection==kAngularDistribution)
-		return "(p,n) angular distributions";
+		return TString("* angular distributions").ReplaceAll("*",Reaction).Data();
 		if(DataSelection==kTotalInelasticCS)
-		return "Total       (p,n)";
-	}
-	if(Reaction==("(p,d)"))
-	{
-		if(DataSelection==kExcitationCS)
-		return "(p,d)   cross sections";
-		if(DataSelection==kAngularDistribution)
-		return "(p,d) angular distributions";
-		if(DataSelection==kTotalInelasticCS)
-		return "Total       (p,d)";
-	}
-	if(Reaction==("(p,a)"))
-	{
-		if(DataSelection==kExcitationCS)
-		return "(p,a)   cross sections";
-		if(DataSelection==kAngularDistribution)
-		return "(p,a) angular distributions";
-		if(DataSelection==kTotalInelasticCS)
-		return "Total       (p,a)";
+		return TString("Total       *").ReplaceAll("*",Reaction).Data();
 	}
 	return "NDEF";
 }
@@ -1456,6 +1376,8 @@ TString Nucleus::ReactionInTLatexFormat(string option)
 {
 	TString ReactionS(Reaction.c_str());
 	ReactionS.ReplaceAll("a","#alpha");
+	if(!fMotherNucleus)
+	return "";
 	if(option=="full")
 	{
 		return TString::Format("^{%d}%s%s^{%d}%s",fMotherNucleus->A,GetNucleusName(fMotherNucleus->Z).c_str(),ReactionS.Data(),A,GetNucleusName(Z).c_str());
@@ -1984,6 +1906,7 @@ void Nucleus::SetTGraphNameAndTitle(string ValName)
 	TEISGraphDiscr.SetTitle(TString::Format("TEIS #sigma_{discr}(%s);%s;#sigma,mb",ValName.c_str(),ValName.c_str()));
 	for(unsigned int i=0;i<Levels.size();i++)
 	{
+		if(fMotherNucleus)
 		Levels[i].SetTGraphNameAndTitle(ValName);
 	}
 	for(unsigned int i=0;i<Products.size();i++)

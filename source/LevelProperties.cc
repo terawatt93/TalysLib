@@ -382,18 +382,28 @@ void Level::SetTGraphNameAndTitle(string ValName)
 {
 	if(ValName=="Energy")
 	{
-		ValName="E";
+		ValName="E, MeV";
 	}
 	if(ValName=="Beta")
 	{
 		ValName="B";
 	}
+	
+	TString Reac=fNucleus->ReactionInTLatexFormat();
 	CSGraph.SetName(TString::Format("LVExTot_%s_%d",ValName.c_str(),Number));
 	CSCompoundGraph.SetName(TString::Format("LVExComp_%s_%d",ValName.c_str(),Number));
 	CSDirectGraph.SetName(TString::Format("LVExDir_%s_%d",ValName.c_str(),Number));
-	CSGraph.SetTitle(TString::Format("#sigma_{ex}(%s) total,E_{level}=%.1f;%s;#sigma,mb",ValName.c_str(),Energy,ValName.c_str()));
-	CSCompoundGraph.SetTitle(TString::Format("#sigma_{ex}(%s) compound,E_{level}=%.1f;%s;#sigma,mb",ValName.c_str(),Energy,ValName.c_str()));
-	CSDirectGraph.SetTitle(TString::Format("#sigma_{ex}(%s) direct,E_{level}=%.1f;%s;#sigma,mb",ValName.c_str(),Energy,ValName.c_str()));
+	CSGraph.SetTitle(TString::Format("#sigma_{ex}(%s) total,E_{level}=%.1f, %s;%s;#sigma,mb",ValName.c_str(),Energy,Reac.Data(),ValName.c_str()));
+	CSCompoundGraph.SetTitle(TString::Format("#sigma_{ex}(%s) compound,E_{level}=%.1f, %s;%s;#sigma,mb",ValName.c_str(),Energy,Reac.Data(),ValName.c_str()));
+	CSDirectGraph.SetTitle(TString::Format("#sigma_{ex}(%s) direct,E_{level}=%.1f, %s;%s;#sigma,mb",ValName.c_str(),Energy,Reac.Data(),ValName.c_str()));
+	
+	AdistTotalTalys2D.SetName(TString::Format("LVExTotAngle_%s_%d",ValName.c_str(),Number));
+	AdistCompoundTalys2D.SetName(TString::Format("LVExCompAngle_%s_%d",ValName.c_str(),Number));
+	AdistDirectTalys2D.SetName(TString::Format("LVExDirAngle_%s_%d",ValName.c_str(),Number));
+	AdistTotalTalys2D.SetTitle(TString::Format("#frac{d #sigma_{ex}(%s)}{d #Omega} total,E_{level}=%.1f, %s;%s;Angle, deg;#frac{d #sigma_{ex}}{d #Omega},mb/str",ValName.c_str(),Energy,Reac.Data(),ValName.c_str()));
+	AdistCompoundTalys2D.SetTitle(TString::Format("#frac{d #sigma_{ex}(%s)}{d #Omega} compound,E_{level}=%.1f, %s;%s;Angle, deg;#frac{d #sigma_{ex}}{d #Omega},mb/str",ValName.c_str(),Energy,Reac.Data(),ValName.c_str()));
+	AdistDirectTalys2D.SetTitle(TString::Format("#frac{d #sigma_{ex}(%s)}{d #Omega} direct,E_{level}=%.1f, %s;%s;Angle, deg;#frac{d #sigma_{ex}}{d #Omega},mb/str",ValName.c_str(),Energy,Reac.Data(),ValName.c_str()));
+	
 	for(unsigned int i=0;i<Gammas.size();i++)
 	{
 		Gammas[i].SetTGraphNameAndTitle(ValName);

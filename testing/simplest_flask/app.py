@@ -81,11 +81,13 @@ def form_example():
 			ProjectileL = request.form.get('projectile')
 			PrEnergyL = request.form.get('prEnergy')
 			#максимально тупо, потом переделать
-			NuclName=NuclNameL
-			Projectile=ProjectileL
-			PrEnergy=PrEnergyL
-			Nucleus=ROOT.Nucleus(NuclName)
-			Nucleus.SetProjectileEnergy(float(PrEnergy))
+			if (len(NuclNameL)>0) and (len(ProjectileL)>0) and (len(PrEnergyL)>0):
+				NuclName=NuclNameL
+				Projectile=ProjectileL
+				PrEnergy=PrEnergyL
+				Nucleus=ROOT.Nucleus(NuclName)
+				Nucleus.SetProjectileEnergy(float(PrEnergy))
+			
 			
 		if 'submitPar' in request.form:
 			Nucleus.GenerateProducts(Projectile)
@@ -153,6 +155,6 @@ def SendOutput():
 
 if __name__ == '__main__':
     # run app in debug mode on port 5000
-    app.run(host="0.0.0.0",debug=True, port=5000)
+    app.run(host="0.0.0.0",debug=False, port=81)
 
 

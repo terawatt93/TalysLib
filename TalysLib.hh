@@ -600,6 +600,46 @@ class Level:public LevelData
 	ClassDef(Level, 2);
 };
 
+class ExclusiveCSData//хранит информацию из блока 6 output файла и используется для создания более полного списка продуктов. Реализация в NucleiProperties.cpp
+{
+	public:
+	vector<int> DeltaZ, DeltaA;
+	vector<string> ReactionList;
+	void ExtractDataFromBuffer(string Buffer);
+};
+
+class TBCSData//Total (binary) cross sections Реализация в NucleiProperties.cpp
+{
+	public:
+	vector<double> Total, Shape_elastic,Reaction, Compound_elastic, Non_elastic, Direct, Pre_equilibrium, Giant_resonance, Compound_non_el, Total_elastic;
+	void Read(stringstream &s, string first_line="");
+	void AddPoint();
+};
+
+class TBCSGraphs//Total (binary) cross sections graphs Реализация в NucleiProperties.cpp
+{
+	public:
+	TGraph Total, Shape_elastic,Reaction, Compound_elastic, Non_elastic, Direct, Pre_equilibrium, Giant_resonance, Compound_non_el, Total_elastic;
+	void GenerateGraphs(vector<double> X_values,TBCSData *Data);
+};
+
+class BNECSData//Binary non-elastic cross sections (non-exclusive) Реализация в NucleiProperties.cpp
+{
+	public:
+	vector<double> gamma, neutron, proton, deuteron, triton, helium3, alpha;
+	void Read(stringstream &s, string first_line="");
+	void AddPoint();
+};
+
+class BNECSGraphs//Binary non-elastic cross sections graphs Реализация в NucleiProperties.cpp
+{
+	public:
+	TGraph gamma, neutron, proton, deuteron, triton, helium3, alpha;;
+	void GenerateGraphs(vector<double> X_values,TBCSData *Data);
+};
+
+//class 
+
 class NucleusData:public TObject
 {
 	public:
@@ -620,9 +660,11 @@ class NucleusData:public TObject
 	vector<float> TOTGamProdValues, TOTNProdValues, TOTPProdValues, TOTDProdValues, TOTAProdValues,TOTTauProdValues;
 	vector<float> TotElasticValues, CompoundElasticValues, DirectElasticValues, TotInelasticValues, CompoundInelasticValues, DirectInelasticValues, TotTalysValues;
 	
-	float BNECS_g, BNECS_n, BNECS_p, BNECS_d, BNECS_t, BNECS_tau, BNECS_a, TEISTot,TEISCont,TEISDiscr;
+	float BNECS_g, BNECS_n, BNECS_p, BNECS_d, BNECS_t, BNECS_tau, BNECS_a, TEISTot,TEISCont,TEISDiscr;//binary non-elastic cross-sections, total exclusive inelastic cross-sections
 	
 	vector<float> BNECS_g_Values, BNECS_n_Values, BNECS_p_Values, BNECS_d_Values, BNECS_t_Values, BNECS_tau_Values, BNECS_a_Values, TEISTot_Values,TEISCont_Values,TEISDiscr_Values;
+	
+	
 	
 	bool TalysGroundStateExsists=false, FastFlag=true, FastCalculated=false;
 	int OMPoptionN=1, OMPoptionP=1;
@@ -639,7 +681,7 @@ class NucleusData:public TObject
 	OpticalModelParametersData OMPPData;
 	DeformationData DefData;
 	
-	ClassDef(NucleusData, 2);
+	ClassDef(NucleusData, 3);
 };
 
 class Nucleus:public NucleusData

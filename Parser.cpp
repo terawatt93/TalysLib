@@ -316,6 +316,14 @@ void GetAZ(string nucleus, int &Z, int &A)
 	{
 		Z=2;A=4; return;
 	}
+	if(nucleus=="g")
+	{
+		Z=0;A=0; return;
+	}
+	if(nucleus=="h")
+	{
+		Z=2;A=3; return;
+	}
 	for(unsigned int i=0;i<nucleus.size();i++)
 	{
 		if((nucleus[i]>='A')&&(nucleus[i]<='z'))
