@@ -223,6 +223,10 @@ bool EXFORTable::Read(string filename)
 			string tmp;
 			s>>tmp>>HeadX>>HeadY;
 		}
+		if(line.find("# X4 code")!=string::npos)
+		{
+			 X4_code=GetEXFORTableField(line);
+		}
 		if((line.find("#")==string::npos)&&(DataBlockIterator==0))
 		{
 			double X=0,Y=0,XErr=0,YErr=0;

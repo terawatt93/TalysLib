@@ -24,7 +24,7 @@ class EXFORTable:public TObject//базовый класс для чтения �
 {
 	public:
 	int Z=0, A=0,MF=0, MT=0,Year=0;
-	std::string Reaction, Author, Projectile, Quantity,X4ID;
+	std::string Reaction, Author, Projectile, Quantity,X4ID, X4_code;
 	double ProjectileEnergy=0, ExcitationEnergy=0, ExcitationEnergy_EXFOR=0, Emin=0, Emax=0;
 	vector<vector<double> > Table;//структура аналогична ENDFBasicTable
 	string HeadX,HeadY;
