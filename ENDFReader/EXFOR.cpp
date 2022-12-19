@@ -207,7 +207,13 @@ bool EXFORTable::Read(string filename)
 		}
 		if(line.find("# E-exc")!=string::npos)
 		{
-			ExcitationEnergy=atof(GetEXFORTableField(line).c_str());
+			TString ts(line.c_str());
+			ts.ReplaceAll("# E-exc       :","");
+			ts.ReplaceAll("MeV (EXFOR:","");
+			ts.ReplaceAll(")","");
+			stringstream sstr(ts.Data());
+			sstr>>ExcitationEnergy>>ExcitationEnergy_EXFOR;
+			//ExcitationEnergy=atof(GetEXFORTableField(line).c_str());
 		}
 		if(line.find("# Data points")!=string::npos)
 		{
