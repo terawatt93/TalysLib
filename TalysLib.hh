@@ -108,13 +108,13 @@ class TalysLibManager//потом перенсти в отдельный фай�
 class TLElement//класс, соответствующий хим. элементу. Включает в себя список ядер и список оптических потенциалов
 {//введен из-за особенностей работы с ОП в Talys
 	public:
-	vector<Nucleus*> Nuclei;//здесь хранятся указатели на ядра данного элемента
+	vector<Nucleus*> Nuclei;//! здесь хранятся указатели на ядра данного элемента
 	vector<OpticalModelParameters> OpticalPotentialsP, OpticalPotentialsN;//потенциалы для протонов и нейтронов
 	int Z;
 	void ReadOMP(int _Z=0);
 	string GenerateFileContent(string Projectile="n",int UseKoning=0);
 	void WriteOMP(string path,int UseKoningN=0,int UseKoningP=0);
-	OMPManager *fOMPManager=0;
+	OMPManager *fOMPManager=0;//!
 };
 
 class OMPManager//один объект для одного сеанса расчетов-> создается для одного начального ядра
@@ -125,7 +125,7 @@ class OMPManager//один объект для одного сеанса рас�
 	void SetOMP(OpticalModelParameters OMP);
 	void AddElement(int Z);
 	OpticalModelParameters* GetOpticalPotential(int Z, int A, string Projectile);
-	TLElement* GetTLElement(int Z);
+	TLElement* GetTLElement(int Z);//! 
 	string GetAdditionToInputFile();
 	void WriteOMP(string path,int UseKoningN=0,int UseKoningP=0);//UseKoning=0-использовать потенциал по умолчанию; 1-использовать Кенинга, если нет локальной ОМ; 2-использовать только Кенинга; 3-использовать файл из Talys
 	public:
@@ -207,7 +207,7 @@ class OMPStorage:public OMPStorageData
 	OMPStorage() {  }; //конструктор по-умолчанию
 	OMPStorage(OMPStorageData d);//конструктор из родительского класса OMPStorageData
 	OMPStorageData ToOMPStorageData();//объект класса OMPStorageData, задаваемый конструктором по-умолчанию
-	Nucleus *Nuclide=0;
+	Nucleus *Nuclide=0;//! 
 	void EvalKoning();
 	void EvalPotential();
 	void Read(string &Buffer);
@@ -271,7 +271,7 @@ class OMPStorage:public OMPStorageData
 	double Getwso1();
 	double Getwso2();
 	double GetVc();
-	OpticalModelParameters *fOpticalModelParameters;
+	OpticalModelParameters *fOpticalModelParameters;//!
 	ClassDef(OMPStorage, 1);
 	private:
 	using TObject::Draw;
@@ -305,7 +305,7 @@ class OpticalModelParameters:public OpticalModelParametersData//:public TObject
 	OpticalModelParameters();//конструктор по-умолчанию
 	OpticalModelParameters(OpticalModelParametersData d);//конструктор из родительского класса OpticalModelParametersData
 	OpticalModelParametersData ToOpticalModelParametersData();//функция по переводу объекта класса OpticalModelParameters в OpticalModelParametersData
-	OMPStorage *DefaultOMP=0;
+	OMPStorage *DefaultOMP=0;//!
 	OMPStorage Potential, PotentialDisp, PotentialKoning;
 	
 	OMPStorage* GetUsedOMPStorage(string Option="Default");
@@ -315,7 +315,7 @@ class OpticalModelParameters:public OpticalModelParametersData//:public TObject
 	void SetZA(int _Z, int _A);
 	void SetProjectile(string _Projectile);
 	unsigned int PointToPasteChangedOMP=0;
-	Nucleus *Nuclide;
+	Nucleus *Nuclide;//!
 	void SetDefaultOMP(int option);
 	void SetVv(double value);
 	void SetWv(double value);
@@ -424,8 +424,8 @@ class GammaTransition:public GammaTransitionData
 	int InitLevelNumber, FinalLevelNumber;
 	TH1F DetectorResponse;
 	TH1F *GetDetectorResponse();
-	Level* fLevel;
-	Level* fFinalLevel;
+	Level* fLevel;//! 
+	Level* fFinalLevel;//! 
 	GammaTransition()
 	{
 		Energy=0; EnergyErr=0; Intensity=0; CrossSection=0; E_in=0; Tolerancy=0; Rel_Cs=0; TalysCrossSection=0;
@@ -497,8 +497,8 @@ class LevelDeformation:public LevelDeformationData
 	void GetFromString(string input);
 	void TurnToBeta(int A);
 	TString GenerateStringForDefFile();
-	Level* fLevel=0;
-	Deformation *fDeformation=0;
+	Level* fLevel=0;//! 
+	Deformation *fDeformation=0;//! 
 	LevelDeformation(LevelDeformationData d);
 	LevelDeformationData ToLevelDeformationData();
 	ClassDef(LevelDeformation, 1);
@@ -538,7 +538,7 @@ class Deformation:public DeformationData
 class Level:public LevelData
 {
 	public:
-	vector<Level*> SimilarLevels;
+	vector<Level*> SimilarLevels;//! 
 	LevelDeformation *deformation=0;
 	Level()
 	{
@@ -568,7 +568,7 @@ class Level:public LevelData
 	const char *GetName()  const;
 	bool CheckEnergy(float E,float Tolerancy,float intensity);
 	vector<GammaTransition*> GetTransition(float E,float Tolerancy,float intensity);
-	Nucleus* fNucleus;
+	Nucleus* fNucleus;//! 
 	//методы для задания параметров уровня
 	void SetEnergy(float Energy); void SetEnergyErr(float EnergyErr); void SetTalysCS(float TalysCS); void SetTalysSpinParity(SpinParity TalysJP);
 	void SetOrigin(string Origin); void AddJPValue(SpinParity JPValue); void AddSimilarLevel(Level* SimilarLevel); 
@@ -712,9 +712,9 @@ class Nucleus:public NucleusData
 	
 	string PathToCalculationDir;
 	string OutgoingParticle;
-	OMPManager OMPManager_;
-	OpticalModelParameters *OMPN;
-	OpticalModelParameters *OMPP;
+	OMPManager OMPManager_;//!
+	OpticalModelParameters *OMPN;//!
+	OpticalModelParameters *OMPP;//!
 	Deformation Def;
 	void SetThreadNumber(int _ThreadNumber=0);
 	TGraph ElacticTotTalys, ElasticDirectTalys,ElasticCompoundTalys,ElasticENDF;//угловые распределения
@@ -740,9 +740,9 @@ class Nucleus:public NucleusData
 	void GenerateEnergyGrid(float min, float step, float max);
 	Nucleus* FindProductByReaction(string reaction);
 	Nucleus* FindProductByName(string _Name);
-	Nucleus* fMotherNucleus;
-	TLMaterial *fMaterial;
-	TalysCalculation* fTalysCalculation=0;
+	Nucleus* fMotherNucleus;//! 
+	TLMaterial *fMaterial;//! 
+	TalysCalculation* fTalysCalculation=0;//! 
 	Nucleus()
 	{
 		TalysCalculated=false;
@@ -842,7 +842,7 @@ class Radionuclide:public Nucleus
 	void AssignPointers();
 	vector<GammaTransition*> GetGammaTransitions(double E_thr=0,double Int_thr=0);
 	Radionuclide* FindProductByName(string _Name);
-	Radionuclide* fMotherNucleus=0;
+	Radionuclide* fMotherNucleus=0;//! 
 	ClassDef(Radionuclide, 1);
 };
 

@@ -59,7 +59,7 @@ class ENDFDescription
 	public:
 	string Content;
 	void AddFromString(string inp);
-	ENDFFile *fFile;
+	ENDFFile *fFile;//!
 };
 
 class ENDFContentEntry
@@ -107,7 +107,7 @@ class ENDFAngularDistribution:public TObject//класс, извлекающий
 	TGraph ADistGraph;
 	TGraph* GetAngularDistribution(string _Type="Deg",int NPoints=180);//типы угловых распределений: Deg-в градусах, Cos-в косинусах
 	//void GetSizes(unsigned int &NColumns,unsigned int &NRows);
-	ENDFTable *fTable=0;
+	ENDFTable *fTable=0;//!
 	ClassDef(ENDFAngularDistribution, 1);
 };
 
@@ -131,7 +131,7 @@ class ENDFTable:public ENDFBasicTable
 	vector<ENDFAngularDistribution> ADist4;//угловое распределение, соответствующее MF=4(для нейтронов)
 	vector<ENDFAngularDistribution> ADist14;//угловое распределение, соответствующее MF=14(для гамма)
 	string GetRawTable();
-	ENDFFile *fFile=0;
+	ENDFFile *fFile=0;//!
 	ClassDef(ENDFTable, 1);
 	//ENDFAngularDistribution *GetAngularDistribution(double Energy);
 };

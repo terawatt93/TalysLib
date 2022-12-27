@@ -23,10 +23,10 @@
 #pragma link C++ class TalysLibManager+;
 #pragma link C++ class OMPManager+;
 #pragma link C++ class TLElement+;
-#pragma link C++ class ENDFFile;
-#pragma link C++ class ENDFDictonary;
-#pragma link C++ class ENDFBasicTable;
-#pragma link C++ class ENDFAngularDistribution;
-#pragma link C++ class ENDFTable;
+#pragma link C++ class ENDFFile+;
+#pragma link C++ class ENDFDictonary+;
+#pragma link C++ class ENDFBasicTable+;
+#pragma link C++ class ENDFAngularDistribution+;
+#pragma link C++ class ENDFTable+;
 #pragma link C++ class EXFORManager;
 #endif
