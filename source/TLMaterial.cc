@@ -43,24 +43,11 @@ double TLMaterial::GetDensity()
 void EvalInThreadForTLMaterial(Nucleus *Nucl,int NThread)
 {
 	Nucl->SetThreadNumber(NThread);
-	Nucl->GenerateProducts();
+	Nucl->SetProjectileEnergy(Nucl->fMaterial->ProjectileEnergy);
+	Nucl->GenerateProducts(Nucl->fMaterial->Projectile);
 }
-
-TLMaterial::TLMaterial(string _MaterialFormula)
+void TLMaterial::Calculate()
 {
-	MaterialFormula=_MaterialFormula;
-	vector<string> Elements;
-	vector<int> Q;
-	GenerateListOfElements(MaterialFormula,Elements,Q);
-	for(unsigned int i=0;i<Elements.size();i++)
-	{
-		MolarMass+=GetAverageMass(Elements[i])*Q[i];
-		AddElement(Elements[i],Q[i]);
-	}
-	
-	ElementsVector=Elements;
-	QVector=Q;
-	
 	if(EnableMultiThreading)
 	{
 		vector<thread> threads;
@@ -77,30 +64,6 @@ TLMaterial::TLMaterial(string _MaterialFormula)
 		{
 			threads[p].join();
 		}
-		
-		
-		/*bool Calculated=false;
-		while(!Calculated)
-		{
-			vector<thread> threads;
-			unsigned int CurrIndex=0;
-			for(unsigned int p=0;p<Nuclides.size();p++)
-			{
-				if(CurrIndex<Nuclides.size())
-				{
-					threads.emplace_back(EvalInThreadForTLMaterial,Nuclides[CurrIndex],p);
-					CurrIndex++;
-				}
-			}
-			for(unsigned int p=0;p<threads.size();p++)
-			{
-				threads[p].join();
-			}
-			if(CurrIndex==Nuclides.size())
-			{
-				return;
-			}
-		}*/
 	}
 	else
 	{
@@ -109,6 +72,22 @@ TLMaterial::TLMaterial(string _MaterialFormula)
 			EvalInThreadForTLMaterial(Nuclides[p],0);
 		}
 	}
+}
+TLMaterial::TLMaterial(string _MaterialFormula)
+{
+	MaterialFormula=_MaterialFormula;
+	vector<string> Elements;
+	vector<int> Q;
+	GenerateListOfElements(MaterialFormula,Elements,Q);
+	for(unsigned int i=0;i<Elements.size();i++)
+	{
+		MolarMass+=GetAverageMass(Elements[i])*Q[i];
+		AddElement(Elements[i],Q[i]);
+	}
+	
+	ElementsVector=Elements;
+	QVector=Q;
+	Calculate();
 
 }
 double TLMaterial::GetMolarMass()

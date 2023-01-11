@@ -972,6 +972,7 @@ class TLMaterial:public TObject
 	vector<GammaTransition*> Gammas;
 	vector<GammaTransition> Bkg;
 	string MaterialFormula;
+	void Calculate();
 	double Density;
 	double MolarMass=0;
 	string Projectile="n";
