@@ -25,6 +25,7 @@
 #include "libxlsxwriter/include/xlsxwriter.h"
 #include "ENDFReader/ENDFLib.hh"
 #include "ENDFReader/EXFOR.hh"
+#include "C4Reader/C4.hh"
 
 /*#include <Minuit2/FunctionMinimum.h>
 #include <Minuit2/MnMinimize.h>
@@ -88,9 +89,15 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	static TalysLibManager& Instance();
 	bool EnableWarning=true;
 	void SetEnableWarning(bool flag);
+	void SetC4Flag(bool flag);
+	bool GetC4Flag();
 	bool IsEnableWarning();
 	bool GenerateAllGraphs=true;
+	bool ReadC4=true;
 	int MaxNumberOfThreads=16;
+	int EXFORSource=1;//1-C4, 0-EXFORTABLES
+	void SetEXFORSource(string Source);
+	int GetEXFORSource();
 	double EnergyWindowWidthForEXFORAdist=1;
 	vector<string> ExcludeAuthors;
 	bool IsInExcludeAuthors(string Author);
@@ -591,12 +598,16 @@ class Level:public LevelData
 	void AddPoint(double x_value,Level *level);
 	void AddPoint(Level *level);
 	void GenerateGraphs();
-	vector<TGraphErrors*> GetEXFORAngularDistributions(double Emin=0,double Emax=0);
-	vector<TGraphErrors*> GetEXFORCrossSections(double Emin=0,double Emax=0);
-	TMultiGraph* GetEXFORTMultiGraphForAngularDistributions(double Emin=0,double Emax=0);
-	TMultiGraph* GetEXFORTMultiGraphForCrossSections(double Emin=0,double Emax=0);
+	vector<TGraphErrors*> GetEXFORAngularDistributions(double Emin=0,double Emax=0, bool GenerateHLink=true);
+	vector<TGraphErrors*> GetEXFORCrossSections(double Emin=0,double Emax=0, bool GenerateHLink=true);
+	TMultiGraph* GetEXFORTMultiGraphForAngularDistributions(double Emin=0,double Emax=0,string Option="");
+	TMultiGraph* GetEXFORTMultiGraphForCrossSections(double Emin=0,double Emax=0,string Option="");
 	int GetIntegrityFactor();//показывает уровень "целостности"-наличия указателей на уровень (1), ядро (2),родительское ядро(3), материал(4) 
 	int GetMT();
+	vector<C4AngularDistribution> C4AngularData;
+	vector<C4EnergyDistribution> C4EnergyData;
+	void AddHyperlinksToTeX(string filename,string href_addition="https://sci-hub.ru/");
+	vector<string> HyperlinksTMP;//! нужен для генерации картинки с тех и гиперссылками	
 	ClassDef(Level, 2);
 };
 
@@ -816,6 +827,8 @@ class Nucleus:public NucleusData
 	Nucleus& Copy();
 	~Nucleus();
 	vector<Level*> GetLevelsWithAvalibleData(string DType="ADist",string SType="ENDF");//DType="ADist" или "CS" SType: ENDF или EXFOR
+	C4Container C4Data;
+	void AssignC4DataToLevels(double Tolerancy=10);
 	ClassDef(Nucleus, 1);
 	private:
 	//using TObject::GetName;
@@ -825,6 +838,8 @@ class Nucleus:public NucleusData
 	bool OutputWasRead=false;
 	void ReadTalysOutput();//считывает информацию из файла output в RawOutputContent
 	
+	sqlite3* C4Base=0;//!
+	TFile* C4ROOTBase=0;//!
 };
 
 class Radionuclide:public Nucleus

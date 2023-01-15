@@ -1253,6 +1253,24 @@ void ExclusiveCSData::ExtractDataFromBuffer(string Buffer)
 	}
 }
 
+string GetPathToC4Base()
+{
+	string filename;
+	if(getenv("C4Base"))
+	{
+		filename=string(getenv("C4Base"));
+	}
+	
+	if(filename.size()>0)
+	{
+		if(filename[filename.size()-1]!='/')
+		{
+			filename+='/';
+		}
+	}
+	return filename;
+}
+
 void Nucleus::GenerateProducts(string _Projectile)
 {
 	Products.resize(0);
@@ -1338,9 +1356,96 @@ void Nucleus::GenerateProducts(string _Projectile)
 			GenerateGraphs();
 		}*/
 	}
+	
 	AssignPointers();
 	ReadElastic();
 	AssignPointers();
+	if(TalysLibManager::Instance().GetC4Flag())
+	{
+		if((!IsProduct())&&(MainNucleusFlag!=1))
+		{
+			string fname=GetPathToC4Base();
+			sqlite3_open((fname+"C4Base.db").c_str(), &C4Base); 
+			C4ROOTBase=new TFile((fname+"Base.root").c_str());
+			for(unsigned int i=0;i<Products.size();i++)
+			{
+				Products[i].C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,Products[i].Reaction,Projectile,Z,A);
+			}
+		}
+		if(MainNucleusFlag!=1)
+		{
+			C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,Reaction,Projectile,Z,A);
+		}
+		if(C4ROOTBase)
+		{
+			C4ROOTBase->Close();
+		}
+		if(C4Base)
+		{
+			sqlite3_close_v2(C4Base);
+		}
+		
+	}
+	AssignC4DataToLevels();
+}
+void Nucleus::AssignC4DataToLevels(double Tolerancy)
+{
+	vector<C4AngularDistribution> ADist=C4Data.GetAngularDistributions();
+	Level *l=0;
+	for(unsigned int i=0;i<ADist.size();i++)
+	{
+		double ADistEnergy=ADist[i].LevelEnergy/1e3;
+		if(!l)
+		{
+			l=FindLevelByEnergy(ADistEnergy,Tolerancy);
+			if(!l)
+			{
+				l=&Levels[1];
+			}
+		}
+		if(abs(l->Energy-ADistEnergy)<Tolerancy)
+		{
+			l->C4AngularData.push_back(ADist[i]);
+		}
+		else
+		{
+			l=FindLevelByEnergy(ADistEnergy,Tolerancy);
+			if(l)
+			{
+				l->C4AngularData.push_back(ADist[i]);
+			}
+		}
+	}
+	
+	vector<C4EnergyDistribution> EDist=C4Data.GetEnergyDistributions();
+	for(unsigned int i=0;i<EDist.size();i++)
+	{
+		double EDistEnergy=EDist[i].LevelEnergy/1e3;
+		if(!l)
+		{
+			l=FindLevelByEnergy(EDistEnergy,Tolerancy);
+			if(!l)
+			{
+				l=&Levels[1];
+			}
+		}
+		if(abs(l->Energy-EDistEnergy)<Tolerancy)
+		{
+			l->C4EnergyData.push_back(EDist[i]);
+		}
+		else
+		{
+			l=FindLevelByEnergy(EDistEnergy,Tolerancy);
+			if(l)
+			{
+				l->C4EnergyData.push_back(EDist[i]);
+			}
+		}
+	}
+	for(unsigned int i=0;i<Products.size();i++)
+	{
+		Products[i].AssignC4DataToLevels(Tolerancy);
+	}
 }
 string Nucleus::PrintLevels()
 {

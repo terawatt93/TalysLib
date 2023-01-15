@@ -17,7 +17,7 @@ TalysLibDict.cxx: $(HDRS) TalysLinkDef.h
 $(PROGRAM): $(SRCS)
 	@echo "Building $(PROGRAM) ..."
 	@rm -f $(PROGRAM)
-	@$(CXX) $(CXXFLAGS) $(SHARED) -o $@ $^ $(ROOTLIBS) /usr/lib/x86_64-linux-gnu/libzip.so
+	@$(CXX) $(CXXFLAGS) $(SHARED) -o $@ $^ $(ROOTLIBS) /usr/lib/x86_64-linux-gnu/libzip.so /usr/lib/x86_64-linux-gnu/libsqlite3.so
 	@echo "done"
 #options:
 clean:; @rm -rf core *.so *.rootmap *.cxx *.pcm

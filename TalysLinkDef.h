@@ -29,4 +29,11 @@
 #pragma link C++ class ENDFAngularDistribution+;
 #pragma link C++ class ENDFTable+;
 #pragma link C++ class EXFORManager;
+
+#pragma link C++ class C4Entry+;
+#pragma link C++ class C4String+;
+#pragma link C++ class C4DataSet+;
+#pragma link C++ class C4EnergyDistribution+;
+#pragma link C++ class C4AngularDistribution+;
+
 #endif

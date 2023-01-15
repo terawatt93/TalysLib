@@ -731,102 +731,146 @@ TGraph* Level::GetAngularDistributionAtEnergy(float PrEnergy,string type,string 
 	}
 	return 0;
 }
-vector<TGraphErrors*> Level::GetEXFORAngularDistributions(double Emin,double Emax)
+vector<TGraphErrors*> Level::GetEXFORAngularDistributions(double Emin,double Emax, bool GenerateHLink)
 {
 	vector<TGraphErrors*> result;
-	if(Number>40)//потом разобраться с MT!
+	cout<<"TalysLibManager::Instance().GetEXFORSource() "<<TalysLibManager::Instance().GetEXFORSource()<<"\n";
+	if(TalysLibManager::Instance().GetEXFORSource()==0)
 	{
-		return result;
-	}
-	if(GetIntegrityFactor()>1)
-	{
-		EXFORManager m;
-		string Projectile;
-		int Z=fNucleus->fMotherNucleus->Z;
-		int A=fNucleus->fMotherNucleus->A;
-		string OutgoingParticle;
-		ParseReaction(fNucleus->Reaction,Projectile,OutgoingParticle);
-		EXFORAngularDistributions=m.GetEXFORAngularDistributions(Projectile,Z,A,OutgoingParticle,Number);
-		int MarkerStyle=20;
-		int MarkerColor=1;
-		for(unsigned int i=0;i<EXFORAngularDistributions.size();i++)
+		if(Number>40)//потом разобраться с MT!
 		{
-			if(!TalysLibManager::Instance().IsInExcludeAuthors(EXFORAngularDistributions[i].Author))
+			return result;
+		}
+		if(GetIntegrityFactor()>1)
+		{
+			EXFORManager m;
+			string Projectile;
+			int Z=fNucleus->fMotherNucleus->Z;
+			int A=fNucleus->fMotherNucleus->A;
+			string OutgoingParticle;
+			ParseReaction(fNucleus->Reaction,Projectile,OutgoingParticle);
+			EXFORAngularDistributions=m.GetEXFORAngularDistributions(Projectile,Z,A,OutgoingParticle,Number);
+			int MarkerStyle=20;
+			int MarkerColor=1;
+			for(unsigned int i=0;i<EXFORAngularDistributions.size();i++)
 			{
-				if(((EXFORAngularDistributions[i].ProjectileEnergy>Emin)&&(EXFORAngularDistributions[i].ProjectileEnergy<Emax))||((Emin==0)&&(Emax==0)))
+				if(!TalysLibManager::Instance().IsInExcludeAuthors(EXFORAngularDistributions[i].Author))
 				{
-					TGraphErrors *gr=EXFORAngularDistributions[i].GetTGraph();
-					
-					MarkerColor++;
-					if(MarkerColor==5)
+					if(((EXFORAngularDistributions[i].ProjectileEnergy>Emin)&&(EXFORAngularDistributions[i].ProjectileEnergy<Emax))||((Emin==0)&&(Emax==0)))
 					{
+						TGraphErrors *gr=EXFORAngularDistributions[i].GetTGraph();
+						
 						MarkerColor++;
-					}
-					if(MarkerColor==9)
-					{
-						MarkerStyle++;
-						MarkerColor=1;
-					}
-					if(gr)
-					{
-						gr->SetMarkerStyle(MarkerStyle);
-						gr->SetMarkerColor(MarkerColor);
-						result.push_back(gr);
+						if(MarkerColor==5)
+						{
+							MarkerColor++;
+						}
+						if(MarkerColor==9)
+						{
+							MarkerStyle++;
+							MarkerColor=1;
+						}
+						if(gr)
+						{
+							gr->SetMarkerStyle(MarkerStyle);
+							gr->SetMarkerColor(MarkerColor);
+							result.push_back(gr);
+						}
 					}
 				}
 			}
 		}
 	}
-	return result;
-}
-vector<TGraphErrors*> Level::GetEXFORCrossSections(double Emin,double Emax)
-{
-	vector<TGraphErrors*> result;
-	if(Number>40)
+	if(TalysLibManager::Instance().GetEXFORSource()==1)
 	{
-		return result;
-	}
-	if(GetIntegrityFactor()>1)
-	{
-		EXFORManager m;
-		int Z=fNucleus->fMotherNucleus->Z;
-		int A=fNucleus->fMotherNucleus->A;
-		string OutgoingParticle;
-		string Projectile;
-		ParseReaction(fNucleus->Reaction,Projectile,OutgoingParticle);
-		EXFORCrossSections=m.GetEXFORCrossSections(Projectile,Z,A,OutgoingParticle,Number);
-		int MarkerStyle=20;
-		int MarkerColor=1;
-		for(unsigned int i=0;i<EXFORCrossSections.size();i++)
+		if(GenerateHLink)
 		{
-			if(!TalysLibManager::Instance().IsInExcludeAuthors(EXFORCrossSections[i].Author))
+			HyperlinksTMP.resize(0);
+		}
+		for(unsigned int i=0;i<C4AngularData.size();i++)
+		{
+			cout<<"C4AngularData[i].ProjectileEnergy/1e6 "<<C4AngularData[i].ProjectileEnergy/1e6<<"\n";
+			if(((C4AngularData[i].ProjectileEnergy/1e6>Emin)&&(C4AngularData[i].ProjectileEnergy/1e6<Emax))||((Emax==0)&&(Emin==0)))
 			{
-				if(((EXFORCrossSections[i].Emax>Emin)&&(EXFORCrossSections[i].Emin<Emax))||((Emin==0)&&(Emax==0)))
+				if(GenerateHLink)
 				{
-					TGraphErrors *gr=EXFORCrossSections[i].GetTGraph();
-					MarkerColor++;
-					if(MarkerColor==5)
-					{
-						MarkerColor++;
-					}
-					if(MarkerColor==9)
-					{
-						MarkerStyle++;
-						MarkerColor=1;
-					}
-					if(gr)
-					{
-						gr->SetMarkerStyle(MarkerStyle);
-						gr->SetMarkerColor(MarkerColor);
-						result.push_back(gr);
-					}
+					HyperlinksTMP.push_back(string(C4AngularData[i].Graph.GetTitle())+";"+C4AngularData[i].DOI);
 				}
+				result.push_back(&C4AngularData[i].Graph);
 			}
 		}
 	}
 	return result;
 }
-TMultiGraph* Level::GetEXFORTMultiGraphForAngularDistributions(double Emin,double Emax)
+vector<TGraphErrors*> Level::GetEXFORCrossSections(double Emin,double Emax, bool GenerateHLink)
+{
+	vector<TGraphErrors*> result;
+	if(TalysLibManager::Instance().GetEXFORSource()==0)
+	{
+		if(Number>40)
+		{
+			return result;
+		}
+		if(GetIntegrityFactor()>1)
+		{
+			EXFORManager m;
+			int Z=fNucleus->fMotherNucleus->Z;
+			int A=fNucleus->fMotherNucleus->A;
+			string OutgoingParticle;
+			string Projectile;
+			ParseReaction(fNucleus->Reaction,Projectile,OutgoingParticle);
+			EXFORCrossSections=m.GetEXFORCrossSections(Projectile,Z,A,OutgoingParticle,Number);
+			int MarkerStyle=20;
+			int MarkerColor=1;
+			for(unsigned int i=0;i<EXFORCrossSections.size();i++)
+			{
+				if(!TalysLibManager::Instance().IsInExcludeAuthors(EXFORCrossSections[i].Author))
+				{
+					if(((EXFORCrossSections[i].Emax>Emin)&&(EXFORCrossSections[i].Emin<Emax))||((Emin==0)&&(Emax==0)))
+					{
+						TGraphErrors *gr=EXFORCrossSections[i].GetTGraph();
+						MarkerColor++;
+						if(MarkerColor==5)
+						{
+							MarkerColor++;
+						}
+						if(MarkerColor==9)
+						{
+							MarkerStyle++;
+							MarkerColor=1;
+						}
+						if(gr)
+						{
+							gr->SetMarkerStyle(MarkerStyle);
+							gr->SetMarkerColor(MarkerColor);
+							result.push_back(gr);
+						}
+					}
+				}
+			}
+		}
+	}
+	if(TalysLibManager::Instance().GetEXFORSource()==1)
+	{
+		if(GenerateHLink)
+		{
+			HyperlinksTMP.resize(0);
+		}
+		for(unsigned int i=0;i<C4EnergyData.size();i++)
+		{
+			//if(((C4EnergyData[i].ProjectileEnergy/1e3>Emin)&&(C4EnergyData[i].ProjectileEnergy/1e3<Emax))||((Emax==0)&&(Emin==0)))
+			{
+				if(GenerateHLink)
+				{
+					HyperlinksTMP.push_back(string(C4AngularData[i].Graph.GetTitle())+";"+C4AngularData[i].DOI);
+				}
+				result.push_back(&C4EnergyData[i].Graph);
+			}
+		}
+	}
+	return result;
+}
+TMultiGraph* Level::GetEXFORTMultiGraphForAngularDistributions(double Emin,double Emax,string Option)
 {
 	TMultiGraph* mgr=new TMultiGraph();
 	vector<TGraphErrors*> Graphs=GetEXFORAngularDistributions(Emin,Emax);
@@ -836,7 +880,7 @@ TMultiGraph* Level::GetEXFORTMultiGraphForAngularDistributions(double Emin,doubl
 	}
 	return mgr;
 }
-TMultiGraph* Level::GetEXFORTMultiGraphForCrossSections(double Emin,double Emax)
+TMultiGraph* Level::GetEXFORTMultiGraphForCrossSections(double Emin,double Emax,string Option)
 {
 	TMultiGraph* mgr=new TMultiGraph();
 	vector<TGraphErrors*> Graphs=GetEXFORCrossSections(Emin,Emax);
@@ -845,6 +889,55 @@ TMultiGraph* Level::GetEXFORTMultiGraphForCrossSections(double Emin,double Emax)
 		mgr->Add(Graphs[i],"p");
 	}
 	return mgr;
+}
+void ExtractHyperlinkAndTitle(string inp, string &title,string &href)
+{
+	int titleLength=inp.find(";");
+	if(titleLength!=-1)
+	{
+		title=inp.substr(0,titleLength);
+		href=inp.substr(titleLength+1);
+	}
+}
+void Level::AddHyperlinksToTeX(string filename,string href_addition)
+{
+	ifstream ifs(filename);
+	vector<string> FileContent;
+	string line;
+	while(getline(ifs,line))
+	{
+		FileContent.push_back(line);
+	}
+	ifs.close();
+	ofstream ofs(filename);
+	ofs<<"\\documentclass[class=minimal,border=0pt]{standalone}\n\\usepackage{hyperref}\n\\hypersetup{\ncolorlinks=true,\nurlcolor=cyan}\n\\usepackage{tikz}\n\\begin{document}\n";
+	for(unsigned int i=0;i<FileContent.size();i++)
+	{
+		if(FileContent[i].find("]{")!=string::npos)
+		{
+			for(unsigned int j=0;j<HyperlinksTMP.size();j++)
+			{
+				string title,href;
+				ExtractHyperlinkAndTitle(HyperlinksTMP[j],title,href);
+				if(href.size()>0)
+				{
+					if(FileContent[i].find(title)!=string::npos)
+					{
+						TString ts(FileContent[i].c_str());
+						if(href.size()>1)
+						{
+							ts.ReplaceAll(title.c_str(),("\\href{"+href_addition+href+"}{"+title+"}").c_str());
+							FileContent[i]=string(ts.Data());
+						}
+						
+					}
+				}
+			}
+			
+		}
+		ofs<<FileContent[i]<<"\n";
+	}
+	ofs<<"\\end{document}";
 }
 int Level::GetMT()
 {

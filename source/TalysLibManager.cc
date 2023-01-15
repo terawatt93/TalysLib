@@ -33,3 +33,26 @@ bool TalysLibManager::IsInExcludeAuthors(string Author)
 	}
 	return false;
 }
+void TalysLibManager::SetC4Flag(bool flag)
+{
+	ReadC4=flag;
+}
+bool TalysLibManager::GetC4Flag()
+{
+	return ReadC4;
+}
+void TalysLibManager::SetEXFORSource(string Source)
+{
+	if(Source=="C4")
+	{
+		EXFORSource=1;
+	}
+	if(Source=="EXFORTABLES")
+	{
+		EXFORSource=0;
+	}
+}
+int TalysLibManager::GetEXFORSource()
+{
+	return EXFORSource;
+}
