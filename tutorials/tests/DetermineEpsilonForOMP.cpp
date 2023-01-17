@@ -70,7 +70,7 @@ void ParAssignmentFunction(Nucleus *Nucl, vector<double> Parameters)//функц
 
 }
 
-double EvalDiff(Nucleus Nuclide,TGraph *GrForFit,vector<double> Parameters,int ParNumber,double Epsilon)
+double EvalDiff(Nucleus Nuclide,TGraph *GrForFit,vector<double> Parameters,int ParNumber,vector<double> Epsilon)
 {
 	Nuclide.SetThreadNumber(ParNumber);
 	Nuclide.OMPN->SetDefaultOMP(2);
@@ -79,8 +79,8 @@ double EvalDiff(Nucleus Nuclide,TGraph *GrForFit,vector<double> Parameters,int P
 	vector<double> ParMinus=Parameters;
 	ParAssignmentFunction(&Nuclide,ParPlus);
 	
-	ParPlus[ParNumber]=Parameters[ParNumber]+Epsilon;
-	ParMinus[ParNumber]=Parameters[ParNumber]-Epsilon;
+	ParPlus[ParNumber]=Parameters[ParNumber]+Epsilon[ParNumber];
+	ParMinus[ParNumber]=Parameters[ParNumber]-Epsilon[ParNumber];
 	ParAssignmentFunction(&Nuclide,ParPlus);
 	Nuclide.GenerateProducts();
 	double Chi2Plus=EvalChi2(GrForFit,&Nuclide);
@@ -88,12 +88,12 @@ double EvalDiff(Nucleus Nuclide,TGraph *GrForFit,vector<double> Parameters,int P
 	Nuclide.GenerateProducts();
 	double Chi2Minus=EvalChi2(GrForFit,&Nuclide);
 	
-	return (Chi2Plus-Chi2Minus)/(2*Epsilon);
+	return (Chi2Plus-Chi2Minus);///(2*Epsilon);
 	
 	//return (Chi2Plus-Chi2Minus)/(2*Epsilon);	
 }
 
-void EvalDiffInThread(Nucleus Nuclide,TGraph *GrForFit,vector<double> Parameters,int ParNumber,double Epsilon,double *result,int ThreadID)
+void EvalDiffInThread(Nucleus Nuclide,TGraph *GrForFit,vector<double> Parameters,int ParNumber,vector<double> Epsilon,double *result,int ThreadID)
 {
 	Nuclide.SetThreadNumber(ParNumber+ThreadID*100);
 	Nuclide.OMPN->SetDefaultOMP(2);
@@ -102,8 +102,8 @@ void EvalDiffInThread(Nucleus Nuclide,TGraph *GrForFit,vector<double> Parameters
 	vector<double> ParMinus=Parameters;
 	ParAssignmentFunction(&Nuclide,ParPlus);
 	
-	ParPlus[ParNumber]=Parameters[ParNumber]+Epsilon;
-	ParMinus[ParNumber]=Parameters[ParNumber]-Epsilon;
+	ParPlus[ParNumber]=Parameters[ParNumber]+Epsilon[ParNumber];
+	ParMinus[ParNumber]=Parameters[ParNumber]-Epsilon[ParNumber];
 	ParAssignmentFunction(&Nuclide,ParPlus);
 	Nuclide.GenerateProducts();
 	double Chi2Plus=EvalChi2(GrForFit,&Nuclide);
@@ -111,7 +111,7 @@ void EvalDiffInThread(Nucleus Nuclide,TGraph *GrForFit,vector<double> Parameters
 	Nuclide.GenerateProducts();
 	double Chi2Minus=EvalChi2(GrForFit,&Nuclide);
 	
-	double DiffValue=(Chi2Plus-Chi2Minus)/(2*Epsilon);
+	double DiffValue=(Chi2Plus-Chi2Minus);///(2*Epsilon);
 	*result=DiffValue;
 }
 
@@ -119,6 +119,7 @@ void DetermineEpsilonForOMP()
 {
 	ROOT::EnableThreadSafety();
 	TH1::AddDirectory(0);
+	TalysLibManager::Instance().SetC4Flag(false);
 	TGraph ElasticInit,InelasticInit;
 	TFile f0("C12-Koning.root");
 	ElasticInit=*((TGraph*)f0.Get("Elastic"));
@@ -145,24 +146,38 @@ void DetermineEpsilonForOMP()
 	}
 	Nucleus Nucl("12C");
 	vector<double> Parameters{Nucl.OMPN->PotentialKoning.v1,Nucl.OMPN->PotentialKoning.v2,Nucl.OMPN->PotentialKoning.w1,Nucl.OMPN->PotentialKoning.w2,Nucl.OMPN->PotentialKoning.d1,Nucl.OMPN->PotentialKoning.d2,Nucl.OMPN->PotentialKoning.vso1,Nucl.OMPN->PotentialKoning.vso2,Nucl.OMPN->PotentialKoning.wso1,Nucl.OMPN->PotentialKoning.wso2};
-	double Epsilon0=1;
-	double Epsilon=1;
+	//double Epsilon0=1;
+	//double Epsilon=1;
 	vector<double> ValidEpsilonValues;
+	vector<double> Epsilon;
+	for(unsigned int j=0;j<Parameters.size();j++)
+	{
+		Epsilon.push_back(abs(Parameters[j])/1000);
+		cout<<"Parameters[j]:"<<Parameters[j]<<"\n";
+	}
 	ValidEpsilonValues.resize(Parameters.size());
 	for(unsigned int i=0;i<1000;i++)
 	{	
-		vector<thread> thr;
+		//vector<thread> thr;
+		cout<<"iteration: "<<i<<"\n";
 		vector<double> DiffValues;
 		DiffValues.resize(Parameters.size());
 		for(unsigned int j=0;j<Parameters.size();j++)
 		{
-			thr.emplace_back(EvalDiffInThread,Nucl,&GraphForFit,Parameters,j,Epsilon,&(DiffValues[j]),j);
+			EvalDiffInThread(Nucl,&GraphForFit,Parameters,j,Epsilon,&(DiffValues[j]),j);
 		}
-		for(unsigned int j=0;j<Parameters.size();j++)
+		/*for(unsigned int j=0;j<Parameters.size();j++)
 		{
 			thr[j].join();
+		}*/
+		//
+		for(unsigned int j=0;j<Parameters.size();j++)
+		{
+			Epsilon[j]=2*Epsilon[j];
+			cout<<"I="<<i<<"\n";
 		}
-		if(i<50)
+			
+		/*if(i<50)
 		{
 			Epsilon=Epsilon0/(i+1);
 		}
@@ -171,15 +186,16 @@ void DetermineEpsilonForOMP()
 			Epsilon=Epsilon0/pow(i+1,2);
 		}
 		
-		for(unsigned int j=0;j<Parameters.size();j++)
+		/*for(unsigned int j=0;j<Parameters.size();j++)
 		{
 			DiffGraphs[j].SetPoint(i,Epsilon,DiffValues[j]);
 			if(DiffValues[j]!=0)
 			{
 				ValidEpsilonValues[j]=Epsilon;
 			}
-		}
+		}*/
 	}
+	cout<<"File write:\n";
 	TFile f("EpsilonValues.root","RECREATE");
 	for(unsigned int j=0;j<Parameters.size();j++)
 	{
@@ -187,8 +203,8 @@ void DetermineEpsilonForOMP()
 	}
 	f.Close();
 	ofstream ofs("EpsilonValues.txt");
-	for(unsigned int j=0;j<Parameters.size();j++)
+	/*for(unsigned int j=0;j<Parameters.size();j++)
 	{
 		ofs<<VarNames[j]<<" "<<ValidEpsilonValues[j]<<"\n";
-	}
+	}*/
 }

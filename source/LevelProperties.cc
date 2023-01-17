@@ -288,6 +288,7 @@ TGraph* Level::GetAngularDistribution(string type,string option)//если гр�
 		}
 		else
 		{
+			cout<<"Angle.size() "<<Angle.size()<<" "<<ADTot.size()<<"\n";
 			AdistTotalTalys=TGraph(Angle.size(), &Angle[0], &ADTot[0]);
 			AdistCompoundTalys=TGraph(Angle.size(), &Angle[0], &ADCompound[0]);
 			AdistDirectTalys=TGraph(Angle.size(), &Angle[0], &ADDirect[0]);

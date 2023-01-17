@@ -1384,9 +1384,9 @@ void Nucleus::GenerateProducts(string _Projectile)
 		{
 			sqlite3_close_v2(C4Base);
 		}
-		
+		AssignC4DataToLevels();
 	}
-	AssignC4DataToLevels();
+	
 }
 void Nucleus::AssignC4DataToLevels(double Tolerancy)
 {
