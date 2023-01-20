@@ -1,4 +1,4 @@
-#include "Parser.cpp"
+#include <Parser.cpp>
 #include <TalysLib.hh>
 #include <TROOT.h>
 #include <TMinuit.h>
@@ -10,15 +10,20 @@ double EvalChi2(TGraph *GrForFit,Nucleus* Nucl)
 	{
 		double x=0,y=0,FuncValue=0;
 		GrForFit->GetPoint(i,x,y);
-		if(x>180)
+		Nucleus *Product=Nucl->FindProductByReaction("(n,n')");
+		if(Product)
 		{
-			FuncValue=Nucl->Products[0].Levels[1].GetAngularDistribution()->Eval(x-180);
+			if(x>180)
+			{
+				FuncValue=Product->Levels[1].GetAngularDistribution()->Eval(x-180);
+			}
+			else
+			{
+				FuncValue=Nucl->GetElasticAngularDistribution()->Eval(x);
+			}
+			result+=pow(y-FuncValue,2);
 		}
-		else
-		{
-			FuncValue=Nucl->GetElasticAngularDistribution()->Eval(x);
-		}
-		result+=pow(y-FuncValue,2);
+		
 	}
 	return result;
 }
@@ -119,7 +124,7 @@ void DetermineEpsilonForOMP()
 {
 	ROOT::EnableThreadSafety();
 	TH1::AddDirectory(0);
-	TalysLibManager::Instance().SetC4Flag(false);
+	TalysLibManager::Instance().ReadC4=false;
 	TGraph ElasticInit,InelasticInit;
 	TFile f0("C12-Koning.root");
 	ElasticInit=*((TGraph*)f0.Get("Elastic"));
@@ -158,18 +163,18 @@ void DetermineEpsilonForOMP()
 	ValidEpsilonValues.resize(Parameters.size());
 	for(unsigned int i=0;i<1000;i++)
 	{	
-		//vector<thread> thr;
+		vector<thread> thr;
 		cout<<"iteration: "<<i<<"\n";
 		vector<double> DiffValues;
 		DiffValues.resize(Parameters.size());
 		for(unsigned int j=0;j<Parameters.size();j++)
 		{
-			EvalDiffInThread(Nucl,&GraphForFit,Parameters,j,Epsilon,&(DiffValues[j]),j);
+			thr.emplace_back(EvalDiffInThread,Nucl,&GraphForFit,Parameters,j,Epsilon,&(DiffValues[j]),j);
 		}
-		/*for(unsigned int j=0;j<Parameters.size();j++)
+		for(unsigned int j=0;j<Parameters.size();j++)
 		{
 			thr[j].join();
-		}*/
+		}
 		//
 		for(unsigned int j=0;j<Parameters.size();j++)
 		{
