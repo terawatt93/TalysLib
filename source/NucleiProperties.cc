@@ -400,7 +400,9 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 		ID++;
 	}
 	mkdir((PathToCalculationDir+Name+to_string(ID)).c_str(),S_IRWXU);
+	
 	string filename=PathToCalculationDir+Name+to_string(ID)+"/input";
+	system(("rm "+PathToCalculationDir+Name+to_string(ID)+"/").c_str());
 	ofstream ofs(filename.c_str());
 	ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\noutexcitation y\n channels y\n";
 	for(unsigned int i=0;i<TalysOptions.size();i++)
@@ -595,6 +597,14 @@ void Nucleus::ReadTalysOutput()
 			ifstream ifs(filename);
 			CopyFileContentToBuffer(ifs,RawOutput);
 			OutputWasRead=true;
+		}
+	}
+	if(RawOutput.size()>70)
+	{
+		//cout<<"*"<<RawOutput.substr(RawOutput.size()-67)<<"*\n";
+		if(RawOutput.substr(RawOutput.size()-67).find("The TALYS team congratulates you with this successful calculation.")!=string::npos)
+		{
+			Success=true;
 		}
 	}
 }

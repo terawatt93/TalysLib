@@ -702,6 +702,7 @@ class Nucleus:public NucleusData
 	bool PlottedADist2D=false;
 	bool kAlwaysNewGraphs=false;
 	bool ConvertToLab=false;
+	bool Success=false;//флаг, подтверждающий успешность вычислений
 	int MainNucleusFlag=0;
 	int ID=0;
 	unsigned int EnergyGridIndex=0;

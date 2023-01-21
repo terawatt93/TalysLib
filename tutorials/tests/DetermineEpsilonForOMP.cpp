@@ -2,7 +2,9 @@
 #include <TalysLib.hh>
 #include <TROOT.h>
 #include <TMinuit.h>
-
+//вариант решения проблем: ставить начальное эпсилон как 1/10000 от величины параметра и увеличивать его в 2 раза с каждой итерацией, пока производная =0.
+//когда будет не равно нулю, методом дихотомии находить минимальную величину, при которой производная не 0.
+//подбор должен быть для каждого параметра отдельно
 double EvalChi2(TGraph *GrForFit,Nucleus* Nucl)
 {
 	double result=0;
@@ -111,12 +113,23 @@ void EvalDiffInThread(Nucleus Nuclide,TGraph *GrForFit,vector<double> Parameters
 	ParMinus[ParNumber]=Parameters[ParNumber]-Epsilon[ParNumber];
 	ParAssignmentFunction(&Nuclide,ParPlus);
 	Nuclide.GenerateProducts();
+	if(!Nuclide.Success)
+	{
+		*result=-1e9;
+		return;
+	}
 	double Chi2Plus=EvalChi2(GrForFit,&Nuclide);
 	ParAssignmentFunction(&Nuclide,ParMinus);
 	Nuclide.GenerateProducts();
+	if(!Nuclide.Success)
+	{
+		*result=-1e9;
+		return;
+	}
 	double Chi2Minus=EvalChi2(GrForFit,&Nuclide);
 	
 	double DiffValue=(Chi2Plus-Chi2Minus);///(2*Epsilon);
+	
 	*result=DiffValue;
 }
 
@@ -157,11 +170,11 @@ void DetermineEpsilonForOMP()
 	vector<double> Epsilon;
 	for(unsigned int j=0;j<Parameters.size();j++)
 	{
-		Epsilon.push_back(abs(Parameters[j])/1000);
-		cout<<"Parameters[j]:"<<Parameters[j]<<"\n";
+		Epsilon.push_back(abs(Parameters[j])/10000);
+		cout<<"Parameters[j]:"<<Parameters[j]<<" "<<abs(Parameters[j])/1000<<"\n";
 	}
 	ValidEpsilonValues.resize(Parameters.size());
-	for(unsigned int i=0;i<1000;i++)
+	for(unsigned int i=0;i<18;i++)
 	{	
 		vector<thread> thr;
 		cout<<"iteration: "<<i<<"\n";
@@ -189,16 +202,12 @@ void DetermineEpsilonForOMP()
 		else
 		{
 			Epsilon=Epsilon0/pow(i+1,2);
-		}
-		
-		/*for(unsigned int j=0;j<Parameters.size();j++)
-		{
-			DiffGraphs[j].SetPoint(i,Epsilon,DiffValues[j]);
-			if(DiffValues[j]!=0)
-			{
-				ValidEpsilonValues[j]=Epsilon;
-			}
 		}*/
+		
+		for(unsigned int j=0;j<Parameters.size();j++)
+		{
+			DiffGraphs[j].SetPoint(i,Epsilon[j],DiffValues[j]);
+		}
 	}
 	cout<<"File write:\n";
 	TFile f("EpsilonValues.root","RECREATE");
