@@ -15,7 +15,7 @@
 #include <map>  
 #include <TROOT.h>
 #include <TMath.h>
-
+#include <sqlite3.h>
 #pragma once
 
 using namespace std;
@@ -152,6 +152,7 @@ class ENDFFile:public TObject
 	vector<ENDFAngularDistribution*> GetGammaAngularDistributions(double GammaEnergy,double Thr=1);//найти угловые распределения для гамма
 	vector<ENDFAngularDistribution*> GetNeutronAngularDistributions(int LevelNum);
 	vector<ENDFAngularDistribution*> GetAngularDistributions(string OutgoingParticle,int LevelNum);
+	bool DownloadFromOnlineENDF(string Projectile,string Nuclide,string _Source="ENDF-B-VIII.0");
 	TGraph2D GetTGraph2DGammaAngularDistributions(double GammaEnergy,double Thr=1,string _Type="Deg",int NPoints=180);
 	TGraph2D GetTGraph2DNeutronAngularDistributions(int LevelNum,string _Type="Deg",int NPoints=180);
 	TGraph GetGammaAngularDistribution(double GammaEnergy,double NeutronEnergy,double Thr=1,string _Type="Deg",int NPoints=180);
@@ -162,6 +163,11 @@ class ENDFFile:public TObject
 	TGraph GetAngularDistribution(string OutgoingParticle,int LevelNum,double NeutronEnergy,string _Type="Deg",int NPoints=180);
 	TGraph GetCrossSections(string OutgoingParticle,int LevelNum);
 	
+	string Source="ENDF-B-VIII.0";
+	string RawOutput;
+	void ReadRaw(string filename);
+	string GetENDFFileName(string Projectile,string Nuclide,string _Source="ENDF-B-VIII.0");
+	sqlite3* ENDFBASE=0;//!
 	bool WasRead=false;
 	private:
 	ENDFTable* LastENDFTable=0;

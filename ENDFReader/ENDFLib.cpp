@@ -776,24 +776,52 @@ ENDFTable* ENDFFile::FindENDFTable(int MF,int MT)
 	return 0;
 }
 
+void ENDFFile::ReadRaw(string filename)
+{
+	if(filename.find(".zip")!=string::npos)
+	{
+		int err = 0;
+		zip *z = zip_open(filename.c_str(), 0, &err);	
+		TString InpFileName(filename.substr(filename.find_last_of("/\\") + 1).c_str());
+		InpFileName.ReplaceAll(".zip",".dat");
+		zip_file *f = zip_fopen(z,InpFileName.Data(), 0);
+		string line;
+		bool ContentsFlag=false;
+		while(GetNextString(z,f,line))
+		{
+			RawOutput+=line+"\n";
+		}
+	}
+	else
+	{
+		ifstream ifs(filename);
+		ifs.seekg(0, std::ios::end);
+		size_t SizeOfStr = ifs.tellg();
+		RawOutput=string(SizeOfStr,' ');
+		ifs.seekg(0);
+		ifs.read(&RawOutput[0], SizeOfStr); 
+	}
+}
+
 void ENDFFile::Read(string filename)
 {
 	if(WasRead)
 	{
 		return;
 	}
-	int err = 0;
+	ReadRaw(filename);
+	/*int err = 0;
 	Filename=filename;
 	zip *z = zip_open(filename.c_str(), 0, &err);	
-    TString InpFileName(filename.substr(filename.find_last_of("/\\") + 1).c_str());
-    InpFileName.ReplaceAll(".zip",".dat");
-   // cout<<"Filename:"<<filename<<"\n";
-    zip_file *f = zip_fopen(z,InpFileName.Data(), 0);
-    string line;
-    bool ContentsFlag=false;
-    while(GetNextString(z,f,line))
-    {
-		
+	TString InpFileName(filename.substr(filename.find_last_of("/\\") + 1).c_str());
+	InpFileName.ReplaceAll(".zip",".dat");
+	// cout<<"Filename:"<<filename<<"\n";
+	zip_file *f = zip_fopen(z,InpFileName.Data(), 0);*/
+	string line;
+	bool ContentsFlag=false;
+	stringstream sstr(RawOutput);
+	while(getline(sstr,line))
+	{
 		int MAT=0,MT=0,MF=0, NSTR=0;
 		GetMAT_MF_MT_NSTR(line,MAT,MF,MT,NSTR);
 		//cout<<MAT<<" "<<MT<<" "<<MF<<" "<<NSTR<<"\n";
@@ -1269,33 +1297,84 @@ string GetLoadedFileName(string Projectile,string Nuclide)
 	return "";
 }
 
-bool DownloadFromOnlineENDF(string Projectile,string Nuclide)
+string ENDFFile::GetENDFFileName(string Projectile,string Nuclide,string _Source)
 {
 	string PathToLinkDB=getenv("TALYSLIBDIR");
-	PathToLinkDB+="/ENDFReader/ENDFFlieLists/"+Projectile+".txt";
+	PathToLinkDB+="/ENDFReader/ENDFFlieLists/ENDFBASE.db";
+	sqlite3_stmt *stmt;
+	sqlite3_open((PathToLinkDB).c_str(), &ENDFBASE); 
+	sqlite3_prepare_v2(ENDFBASE,("SELECT InThisBase from TablesList WHERE BaseName == \""+_Source+"\"").c_str(), -1, &stmt, NULL);
+	string BaseName;
+	sqlite3_step(stmt);
+	const unsigned char* requestRes=sqlite3_column_text(stmt, 0);
+	if(requestRes)
+	{
+		BaseName=string(reinterpret_cast<const char*>(requestRes));
+	}
+	//cout<<"result:"<<result<<" "<<sqlite3_column_count(stmt)<<"\n";
+	if(BaseName.size()==0)
+	{
+		cout<<"This is ENDFFile::GetENDFFileName(string Projectile,string Nuclide,string _Source): cannot find database with name "<<_Source<<". Empty string returned\n";
+		return "";
+	}
+	//теперь ищем в таблице нужный файл
 	int A,Z;
 	GetAZ(Nuclide,Z,A);
-	string Mask=string(TString::Format("%d-%s-%d.zip",Z,GetNucleusName(Z).c_str(),A).Data());
-	ifstream ifs(PathToLinkDB);
-	string line;
-	string Link;
-	string OutputFileName=GetLoadedFileName(Projectile,Nuclide);
-	while(getline(ifs,line))
+	sqlite3_prepare_v2(ENDFBASE, ("SELECT Filename from "+BaseName+" WHERE Projectile == \""+Projectile+"\" AND Z =="+to_string(Z)+" AND A == "+to_string(A)).c_str(), -1, &stmt, NULL);
+	sqlite3_step(stmt);
+	requestRes=sqlite3_column_text(stmt, 0);
+	if(requestRes)
 	{
-		if(line.find(Mask)!=string::npos)
+		return string(reinterpret_cast<const char*>(requestRes));
+	}
+	sqlite3_finalize(stmt);
+	return "";
+}
+
+bool ENDFFile::DownloadFromOnlineENDF(string Projectile,string Nuclide,string _Source)
+{
+	string FName=GetENDFFileName(Projectile,Nuclide,_Source);
+	string Link;
+	if(FName.size()==0)
+	{
+		cout<<"This is ENDFFile::DownloadFromOnlineENDF(string Projectile,string Nuclide,string _Source): File not found\n";
+		return false;
+	}
+	Link="http://159.93.100.133:85/"+FName;
+	string OutputFileName="/dev/shm/";
+	OutputFileName+=FName.substr(FName.find_last_of("/\\") + 1);
+	Filename=OutputFileName;
+	system(("wget --user-agent=\"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36\" -O "+OutputFileName+" "+Link).c_str());
+	return true;
+	/*if(Source=="ENDF")
+	{
+		ifstream ifs(PathToLinkDB);
+		string line;
+		
+		string OutputFileName=GetLoadedFileName(Projectile,Nuclide);
+		while(getline(ifs,line))
 		{
-			//Link="https://www-nds.iaea.org/public/download-endf/ENDF-B-VIII.0/"+line;
-			Link="http://159.93.100.133:85/ENDF-B-VIII.0/"+line;
+			if(line.find(Mask)!=string::npos)
+			{
+				//Link="https://www-nds.iaea.org/public/download-endf/ENDF-B-VIII.0/"+line;
+				Link="http://159.93.100.133:85/ENDF-B-VIII.0/"+line;
+			}
 		}
+	}
+	else if(Source=="TENDL")
+	{
+		Link="http://159.93.100.133:85/TENDL/"+Projectile+"/"+Projectile+"_"+GetNucleusName(Nuclide)+to_string(A)+".tendl";
 	}
 	if(Link.size()==0)
 	{
 		cout<<"Mask "<<Mask<<" not found in "<<PathToLinkDB<<"; False returned\n";
 		return false;
 	}
-	cout<<"OutputFileName:"<<"wget --user-agent=\"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36\" -O "+OutputFileName+" "+Link<<"\n";
+	//cout<<"OutputFileName:"<<"wget --user-agent=\"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36\" -O "+OutputFileName+" "+Link<<"\n";
+	string OutputFileName=GetLoadedFileName(Projectile,Nuclide);
 	system(("wget --user-agent=\"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36\" -O "+OutputFileName+" "+Link).c_str());
 	return true;
+	
 	/*CURL *curl;
     FILE *fp;
     CURLcode res;
@@ -1330,7 +1409,7 @@ void ENDFFile::Read(string _Projectile,string Nuclide)
 	if(PathToENDF.size()==0)
 	{
 		cout<<"This is ENDFFile::Read(string Projectile,string Nuclide): enviroment variable \"ENDFDIR\" does not set. The nessesary file will be downloaded\n";
-		if(DownloadFromOnlineENDF(Projectile,Nuclide))
+		if(DownloadFromOnlineENDF(Projectile,Nuclide,Source))
 		{
 			Read(GetLoadedFileName(Projectile,Nuclide));
 			IsLoaded=true;
@@ -1338,9 +1417,8 @@ void ENDFFile::Read(string _Projectile,string Nuclide)
 		}
 		//return;
 	}
-	PathToENDF+="/"+Projectile+"/";
-	
-	PathToENDF+="*"+Addition;
+	PathToENDF+=GetENDFFileName(Projectile,Nuclide,Source);
+	//PathToENDF+="*"+Addition;
 	vector<string> Filename=ListFiles(PathToENDF);
 	if(Filename.size()!=1)
 	{
