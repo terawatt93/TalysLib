@@ -312,6 +312,7 @@ void Nucleus::Create(string Name,string Reaction)
 	TH1::AddDirectory(kFALSE);
 	this->Name=Name;
 	this->Reaction=Reaction;
+	Element=GetNucleusName(Name);
 	if(Name.find("BKG")==string::npos)
 	{
 		GetAZ(Name,Z,A);
@@ -1039,12 +1040,17 @@ TGraph* Nucleus::GetElasticAngularDistribution(string type,string option)
 		}
 		if(type=="ENDF")
 		{
-			ReadENDF();
+			type="ENDF-B-VIII.0";
+		}
+			//костыль, переделать!
+			Levels[0].EVData.fLevel=&Levels[0];
+			return Levels[0].EVData.GetAngularDistribution(type);
+			/*ReadENDF();
 			ElasticENDF=ENDF.GetAngularDistribution(Projectile,0,ProjectileEnergy);
 			ElasticENDF.SetName("ENDFElastic");
 			ElasticENDF.SetTitle("ENDF elastic;#theta,deg;#frac{d#sigma}{d#Omega},mb/str");
-			return &ElasticENDF;
-		}
+			return &ElasticENDF;*/
+		//}
 		
 	}
 	else
@@ -2278,6 +2284,10 @@ void Nucleus::ReadFromRootFile(TFile *f,string _Name)
 
 ENDFFile *Nucleus::GetPointerToENDFBase(string BaseName)
 {
+	if(fMotherNucleus)
+	{
+		return fMotherNucleus->GetPointerToENDFBase(BaseName);
+	}
 	for(auto i=ENDFBases.begin();i!=ENDFBases.end();i++)
 	{
 		if((*i).Source==BaseName)
@@ -2292,6 +2302,7 @@ ENDFFile *Nucleus::GetPointerToENDFBase(string BaseName)
 		return 0;
 	}
 	f.Source=BaseName;
+	f.fNucleus=this;
 	ENDFBases.push_back(f);
 	return &(ENDFBases.back());
 }

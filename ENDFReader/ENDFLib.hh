@@ -31,10 +31,11 @@ class EvaluatedDataGraph:public TGraph
 {
 	public:
 	string Source="";//нужно для идентификации объекта при сломавшихся указателях
+	string AOption="";//опция для обработки А=0 и А>=0
 	double LevelEnergy=-1;//нужно для идентификации объекта при сломавшихся указателях
 	int LevelNum=-1;//нужно для идентификации объекта при сломавшихся указателях
 	ENDFFile *fFile=0;//!
-	Nucleus *fNucleus=0;//!
+	//Nucleus *fNucleus=0;//!
 	Level *fLevel=0;//!
 	GammaTransition *fGammaTransition=0;//!
 	ClassDef(EvaluatedDataGraph, 1);
@@ -165,8 +166,8 @@ class ENDFFile:public TObject
 	ENDFTable* GetENDFTable(int MF,int MT);//получить указатель на таблицу или создать новую
 	ENDFTable* FindENDFTable(int MF,int MT);//получить указатель на таблицу
 	map<int,ENDFTable> ENDFTables;
-	void Read(string filename);
-	void Read(string _Projectile,string Nuclide);
+	bool Read(string filename);
+	bool Read(string _Projectile,string Nuclide);
 	vector<ENDFAngularDistribution*> GetGammaAngularDistributions(double GammaEnergy,double Thr=1);//найти угловые распределения для гамма
 	vector<ENDFAngularDistribution*> GetNeutronAngularDistributions(int LevelNum);
 	vector<ENDFAngularDistribution*> GetAngularDistributions(string OutgoingParticle,int LevelNum);
@@ -188,6 +189,7 @@ class ENDFFile:public TObject
 	string GetENDFFileName(string Projectile,string Nuclide,string _Source="ENDF-B-VIII.0");
 	string LoadedFileName="";
 	sqlite3* ENDFBASE=0;//!
+	Nucleus *fNucleus=0;//!
 	bool WasRead=false;
 	private:
 	ENDFTable* LastENDFTable=0;

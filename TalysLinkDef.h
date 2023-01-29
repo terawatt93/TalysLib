@@ -1,4 +1,5 @@
 #ifdef __CLING__
+#pragma link C++ class EvaluatedData+;
 #pragma link C++ class EvaluatedDataGraph+;
 #pragma link C++ class AdditionalInformationContainer+;
 #pragma link C++ class TXlsxwriter+;

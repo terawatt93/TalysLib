@@ -542,10 +542,15 @@ class Deformation:public DeformationData
 	ClassDef(Deformation, 1);
 };
 
-class EvaluatedData
+class EvaluatedData:public TObject
 {
+	public:
 	list<EvaluatedDataGraph> EvaluatedAngularDistributions;
-	
+	list<EvaluatedDataGraph> EvaluatedEnergyDistributions;
+	EvaluatedDataGraph* GetAngularDistribution(string Source);
+	EvaluatedDataGraph* GetEnergyDistribution(string Source);
+	Level *fLevel=0;//!
+	ClassDef(EvaluatedData, 1);
 };
 
 class Level:public LevelData
@@ -610,6 +615,7 @@ class Level:public LevelData
 	TMultiGraph* GetEXFORTMultiGraphForCrossSections(double Emin=0,double Emax=0,string Option="");
 	int GetIntegrityFactor();//показывает уровень "целостности"-наличия указателей на уровень (1), ядро (2),родительское ядро(3), материал(4) 
 	int GetMT();
+	EvaluatedData EVData;
 	vector<C4AngularDistribution> C4AngularData;
 	vector<C4EnergyDistribution> C4EnergyData;
 	void AddHyperlinksToTeX(string filename,string href_addition="https://sci-hub.ru/");
@@ -661,7 +667,7 @@ class NucleusData:public TObject
 {
 	public:
 	NucleusData(): TObject() {  }
-	string Name,Reaction,Projectile,addition;
+	string Name,Reaction,Projectile,Element,addition;
 	int A,Z;
 	vector<LevelData> LevelsData;
 	vector<NucleusData> ProductsData;

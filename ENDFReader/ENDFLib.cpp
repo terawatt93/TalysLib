@@ -802,11 +802,11 @@ void ENDFFile::ReadRaw(string filename)
 	}
 }
 
-void ENDFFile::Read(string filename)
+bool ENDFFile::Read(string filename)
 {
 	if(WasRead)
 	{
-		return;
+		return true;
 	}
 	ReadRaw(filename);
 	/*int err = 0;
@@ -859,6 +859,11 @@ void ENDFFile::Read(string filename)
 		}
 		
 	}
+	if(RawOutput.size()>0)
+	{
+		return true;
+	}
+	return false;
 }
 vector<ENDFAngularDistribution*> ENDFFile::GetGammaAngularDistributions(double GammaEnergy,double Thr)
 {
@@ -1366,11 +1371,11 @@ bool ENDFFile::DownloadFromOnlineENDF(string Projectile,string Nuclide,string _S
 	return true;
 }
 
-void ENDFFile::Read(string _Projectile,string Nuclide)
+bool ENDFFile::Read(string _Projectile,string Nuclide)
 {
 	if(WasRead)
 	{
-		return;
+		return true;
 	}
 	Projectile=_Projectile;
 	string PathToENDF;
@@ -1386,21 +1391,24 @@ void ENDFFile::Read(string _Projectile,string Nuclide)
 		cout<<"This is ENDFFile::Read(string Projectile,string Nuclide): enviroment variable \"ENDFDIR\" does not set. The nessesary file will be downloaded\n";
 		if(DownloadFromOnlineENDF(Projectile,Nuclide,Source))
 		{
-			Read(LoadedFileName);
-			IsLoaded=true;
-			return;
+			if(Read(LoadedFileName))
+			{
+				IsLoaded=true;
+				return true;
+			}
+			
 		}
 		//return;
 	}
 	PathToENDF+=GetENDFFileName(Projectile,Nuclide,Source);
 	//PathToENDF+="*"+Addition;
-	vector<string> Filename=ListFiles(PathToENDF);
+	/*vector<string> Filename=ListFiles(PathToENDF);
 	if(Filename.size()!=1)
 	{
 		cout<<"This is ENDFFile::Read(string Projectile,string Nuclide): Problems in ENDF file search. Used mask is \""<<PathToENDF<<"\". Returned\n";
 		return;
-	}
-	Read(Filename[0]);
+	}*/
+	return Read(Filename);
 }
 ENDFFile::~ENDFFile()
 {

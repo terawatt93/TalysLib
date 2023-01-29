@@ -17,6 +17,173 @@
 
 #pragma once
 
+string GetAOption(string Source)
+{
+	if(Source.find("A=0")!=string::npos)
+	{
+		return "A=0";
+	}
+	if(Source.find("A>=0")!=string::npos)
+	{
+		return "A>=0";
+	}
+	return "";
+}
+
+ENDFFile *GetENDFFile(Nucleus *fNucleus,string Source)
+{
+	if(!fNucleus)
+	{
+		cout<<"This is GetENDFFile(Nucleus *fNucleus,string Source): fNucleus pointer is invalid. Null returned\n";
+		return 0;
+	}
+	ENDFFile *f=0;
+	//обработка случая с A=0
+	if(Source.find("A=0")!=string::npos)
+	{
+		TString tmp(Source.c_str());
+		tmp.ReplaceAll("A=0","");
+		tmp.ReplaceAll(" ","");
+		f=fNucleus->GetPointerToENDFBase(tmp.Data());
+		if(!f)
+		{
+			cout<<"This is GetENDFFile(Nucleus *fNucleus,string Source): cannot find base with name"<<tmp<<" Null returned\n";
+			return 0;
+		}
+		if(!f->Read(fNucleus->Projectile,"0"+f->fNucleus->Element))
+		{
+			cout<<"This is GetENDFFile(Nucleus *fNucleus,string Source): cannot find file for "<<fNucleus->Projectile<<"+"<<f->fNucleus->Element<<"-0 Null returned\n";
+			return 0;
+		}
+	}
+	else if(Source.find("A>=0")!=string::npos)
+	{
+		TString tmp(Source.c_str());
+		tmp.ReplaceAll("A>=0","");
+		tmp.ReplaceAll(" ","");
+		f=fNucleus->GetPointerToENDFBase(tmp.Data());
+		if(!f)
+		{
+			cout<<"This is GetENDFFile(Nucleus *fNucleus,string Source): cannot find base with name"<<tmp<<" Null returned\n";
+			return 0;
+		}
+		if(!f->Read(fNucleus->Projectile,f->fNucleus->Name))
+		{
+			cout<<"This is GetENDFFile(Nucleus *fNucleus,string Source): cannot find file for "<<fNucleus->Projectile<<"+"<<f->fNucleus->Name<<". Try with A=0\n";
+			if(!f->Read(fNucleus->Projectile,"0"+f->fNucleus->Element))
+			{
+				cout<<"This is GetENDFFile(Nucleus *fNucleus,string Source): cannot find file for "<<fNucleus->Projectile<<"+"<<f->fNucleus->Element<<"-0 Null returned\n";
+				return 0;
+			}
+		}
+	}
+	if(!f)
+	{
+		f=fNucleus->GetPointerToENDFBase(Source);
+		if(!f)
+		{
+			cout<<"This is GetENDFFile(Nucleus *fNucleus,string Source): cannot find base "<<Source<<". Use A=0 or A>=0 to try with A=0. Null returned\n";
+			return 0;
+		}
+		if(!f->Read(fNucleus->Projectile,f->fNucleus->Name))
+		{
+			cout<<"This is GetENDFFile(Nucleus *fNucleus,string Source): cannot find file for "<<fNucleus->Projectile<<"+"<<f->fNucleus->Name<<". Use A=0 or A>=0 to try with A=0. Null returned\n";
+			return 0;
+		}
+	}
+	return f;
+	
+}
+
+EvaluatedDataGraph* FindInList(string Source, list<EvaluatedDataGraph> &List)
+{
+	string AOption=GetAOption(Source);
+	TString SourceForSearch(Source.c_str());
+	SourceForSearch.ReplaceAll(AOption.c_str(),"");
+	SourceForSearch.ReplaceAll(" ","");
+	for(auto i=List.begin();i!=List.end();i++)
+	{
+		if(((*i).Source==string(SourceForSearch.Data())&&((*i).AOption==AOption)))
+		return &(*i);
+	}
+	return 0;
+}
+
+EvaluatedDataGraph* EvaluatedData::GetAngularDistribution(string Source)
+{
+	EvaluatedDataGraph* result=FindInList(Source,EvaluatedAngularDistributions);
+	if(result)
+	{
+		return result;
+	}
+	if(!fLevel)
+	{
+		cout<<"This is EvaluatedDataGraph::GetAngularDistribution(): pointer to level is not set. Null returned\n";
+		return 0;
+	}
+	if(!fLevel->fNucleus)
+	{
+		cout<<"This is EvaluatedDataGraph::GetAngularDistribution(): pointer to fLevel->fNucleus is not set. Null returned\n";
+		return 0;
+	}
+	ENDFFile *f=GetENDFFile(fLevel->fNucleus,Source);
+	if(!f)
+	{
+		cout<<"This is EvaluatedDataGraph::GetAngularDistribution(): pointer to ENDFFile is invalid. Null returned\n";
+		return 0;
+	}
+	string Projectile,Outgoing;
+	ParseReaction(fLevel->fNucleus->Reaction,Projectile,Outgoing);
+	if(fLevel->fNucleus->Reaction=="")//упругое рассеяние
+	{
+		Outgoing=fLevel->fNucleus->Projectile;
+	}
+	EvaluatedDataGraph g=f->GetAngularDistribution(Outgoing,fLevel->Number,f->fNucleus->ProjectileEnergy);
+	g.fLevel=fLevel;
+	EvaluatedAngularDistributions.push_back(g);
+	return &(EvaluatedAngularDistributions.back());
+}
+EvaluatedDataGraph* EvaluatedData::GetEnergyDistribution(string Source)
+{
+	if(!fLevel)
+	{
+		cout<<"This is EvaluatedDataGraph::GetEnergyDistribution(): pointer to level is not set. Null returned\n";
+		return 0;
+	}
+	EvaluatedDataGraph* result=FindInList(Source,EvaluatedEnergyDistributions);
+	if(result)
+	{
+		return result;
+	}
+	if(!fLevel)
+	{
+		cout<<"This is EvaluatedDataGraph::GetEnergyDistribution(): pointer to level is not set. Null returned\n";
+		return 0;
+	}
+	if(!fLevel->fNucleus)
+	{
+		cout<<"This is EvaluatedDataGraph::GetEnergyDistribution(): pointer to fLevel->fNucleus is not set. Null returned\n";
+		return 0;
+	}
+	ENDFFile *f=GetENDFFile(fLevel->fNucleus,Source);
+	if(!f)
+	{
+		cout<<"This is EvaluatedDataGraph::GetEnergyDistribution(): pointer to ENDFFile is invalid. Null returned\n";
+		return 0;
+	}
+	string Projectile,Outgoing;
+	ParseReaction(fLevel->fNucleus->Reaction,Projectile,Outgoing);
+	if(fLevel->fNucleus->Reaction=="")//упругое рассеяние
+	{
+		Outgoing=fLevel->fNucleus->Projectile;
+	}
+	EvaluatedDataGraph g=f->GetCrossSections(Outgoing,fLevel->Number);
+	g.fLevel=fLevel;
+	EvaluatedEnergyDistributions.push_back(g);
+	return &(EvaluatedEnergyDistributions.back());
+}
+
+
 //Методы класса Level
 int Level::GetIntegrityFactor()
 {
@@ -315,17 +482,24 @@ TGraph* Level::GetAngularDistribution(string type,string option)//если гр�
 	{
 		return &AdistTotalTalys;
 	}
-	if(type=="Compound")
+	else if(type=="Compound")
 	{
 		return &AdistCompoundTalys;
 	}
-	if(type=="Direct")
+	else if(type=="Direct")
 	{
 		return &AdistDirectTalys;
 	}
-	if(type=="ENDF")
+	else if(type=="ENDF")
 	{
-		if(AdistENDF.GetN()==0)
+		type="ENDF-B-VIII.0";
+	}
+	//else//оцененные данные
+	//{
+		EVData.fLevel=this;
+		return EVData.GetAngularDistribution(type);
+	//}
+	/*	if(AdistENDF.GetN()==0)
 		{
 			if(fNucleus)
 			{
@@ -341,7 +515,7 @@ TGraph* Level::GetAngularDistribution(string type,string option)//если гр�
 			}
 		}
 		return &AdistENDF;
-	}
+	}*/
 	return 0;
 	
 }
@@ -585,7 +759,13 @@ TGraph* Level::GetCSGraph(string type)
 	{
 		result=&CSDirectGraph;
 	}
-	if(type=="ENDF")
+	else if(type=="ENDF")
+	{
+		type="ENDF-B-VIII.0";
+	}
+	EVData.fLevel=this;
+	return EVData.GetEnergyDistribution(type);
+	/*if(type=="ENDF")
 	{
 		if(CSENDFGraph.GetN()==0)
 		{
@@ -602,7 +782,7 @@ TGraph* Level::GetCSGraph(string type)
 				result=&CSENDFGraph;
 			}
 		}
-	}
+	}*/
 	return result;
 }
 TGraph2D* Level::GetAngularDistribution2D(string type,string option)//если график уже построен, выдается сохраненный, если нет, или option=="new", строится заново
