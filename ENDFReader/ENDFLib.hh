@@ -1,3 +1,5 @@
+#pragma once
+#include "../TalysLib.hh"
 #include <TH1F.h>
 #include <TGraph.h>
 #include <TGraph2D.h>
@@ -16,12 +18,28 @@
 #include <TROOT.h>
 #include <TMath.h>
 #include <sqlite3.h>
-#pragma once
 
 using namespace std;
 
 class ENDFFile;
 class ENDFTable;
+class Nucleus;
+class Level;
+class GammaTransition;
+
+class EvaluatedDataGraph:public TGraph
+{
+	public:
+	string Source="";//нужно для идентификации объекта при сломавшихся указателях
+	double LevelEnergy=-1;//нужно для идентификации объекта при сломавшихся указателях
+	int LevelNum=-1;//нужно для идентификации объекта при сломавшихся указателях
+	ENDFFile *fFile=0;//!
+	Nucleus *fNucleus=0;//!
+	Level *fLevel=0;//!
+	GammaTransition *fGammaTransition=0;//!
+	ClassDef(EvaluatedDataGraph, 1);
+};
+
 class MTEntry
 {
 	public:
@@ -155,18 +173,20 @@ class ENDFFile:public TObject
 	bool DownloadFromOnlineENDF(string Projectile,string Nuclide,string _Source="ENDF-B-VIII.0");
 	TGraph2D GetTGraph2DGammaAngularDistributions(double GammaEnergy,double Thr=1,string _Type="Deg",int NPoints=180);
 	TGraph2D GetTGraph2DNeutronAngularDistributions(int LevelNum,string _Type="Deg",int NPoints=180);
-	TGraph GetGammaAngularDistribution(double GammaEnergy,double NeutronEnergy,double Thr=1,string _Type="Deg",int NPoints=180);
-	TGraph GetNeutronAngularDistribution(int LevelNum,double NeutronEnergy,string _Type="Deg",int NPoints=180);
-	TGraph GetNeutronCrossSections(int LevelNum);
+	EvaluatedDataGraph GetGammaAngularDistribution(double GammaEnergy,double NeutronEnergy,double Thr=1,string _Type="Deg",int NPoints=180);
+	EvaluatedDataGraph GetNeutronAngularDistribution(int LevelNum,double NeutronEnergy,string _Type="Deg",int NPoints=180);
+	EvaluatedDataGraph GetNeutronCrossSections(int LevelNum);
 	
 	TGraph2D GetTGraph2DAngularDistributions(string OutgoingParticle,int LevelNum,string _Type="Deg",int NPoints=180);
-	TGraph GetAngularDistribution(string OutgoingParticle,int LevelNum,double NeutronEnergy,string _Type="Deg",int NPoints=180);
-	TGraph GetCrossSections(string OutgoingParticle,int LevelNum);
+	EvaluatedDataGraph GetAngularDistribution(string OutgoingParticle,int LevelNum,double NeutronEnergy,string _Type="Deg",int NPoints=180);
+	EvaluatedDataGraph GetCrossSections(string OutgoingParticle,int LevelNum);
 	
 	string Source="ENDF-B-VIII.0";
 	string RawOutput;
 	void ReadRaw(string filename);
+	string GetBaseNameInTable(string Name);
 	string GetENDFFileName(string Projectile,string Nuclide,string _Source="ENDF-B-VIII.0");
+	string LoadedFileName="";
 	sqlite3* ENDFBASE=0;//!
 	bool WasRead=false;
 	private:

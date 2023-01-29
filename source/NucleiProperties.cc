@@ -2276,6 +2276,26 @@ void Nucleus::ReadFromRootFile(TFile *f,string _Name)
 	
 }
 
+ENDFFile *Nucleus::GetPointerToENDFBase(string BaseName)
+{
+	for(auto i=ENDFBases.begin();i!=ENDFBases.end();i++)
+	{
+		if((*i).Source==BaseName)
+		{
+			return &(*i);
+		}
+	}
+	ENDFFile f;
+	string BaseInTable=f.GetBaseNameInTable(BaseName);
+	if(BaseInTable.size()==0)
+	{
+		return 0;
+	}
+	f.Source=BaseName;
+	ENDFBases.push_back(f);
+	return &(ENDFBases.back());
+}
+
 GammaTransition* Nucleus::GetMostIntenseGammaTransition()
 {
 	vector<GammaTransition*> Transitions=GetGammaTransitions();

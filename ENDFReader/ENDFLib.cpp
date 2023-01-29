@@ -786,7 +786,6 @@ void ENDFFile::ReadRaw(string filename)
 		InpFileName.ReplaceAll(".zip",".dat");
 		zip_file *f = zip_fopen(z,InpFileName.Data(), 0);
 		string line;
-		bool ContentsFlag=false;
 		while(GetNextString(z,f,line))
 		{
 			RawOutput+=line+"\n";
@@ -795,11 +794,11 @@ void ENDFFile::ReadRaw(string filename)
 	else
 	{
 		ifstream ifs(filename);
-		ifs.seekg(0, std::ios::end);
-		size_t SizeOfStr = ifs.tellg();
-		RawOutput=string(SizeOfStr,' ');
-		ifs.seekg(0);
-		ifs.read(&RawOutput[0], SizeOfStr); 
+		string line;
+		while(getline(ifs,line))
+		{
+			RawOutput+=line+"\n";
+		}
 	}
 }
 
@@ -1047,10 +1046,10 @@ TGraph2D ENDFFile::GetTGraph2DNeutronAngularDistributions(int LevelNum,string _T
 	return result;
 }
 
-TGraph ENDFFile::GetGammaAngularDistribution(double GammaEnergy,double NeutronEnergy,double Thr,string _Type,int NPoints)
+EvaluatedDataGraph ENDFFile::GetGammaAngularDistribution(double GammaEnergy,double NeutronEnergy,double Thr,string _Type,int NPoints)
 {
 	TGraph2D Gr2D=GetTGraph2DGammaAngularDistributions(GammaEnergy,Thr,_Type,NPoints);
-	TGraph result;
+	EvaluatedDataGraph result;
 	if(Gr2D.GetN()==0)
 	{
 		return result;
@@ -1078,26 +1077,28 @@ TGraph ENDFFile::GetGammaAngularDistribution(double GammaEnergy,double NeutronEn
 		}
 	}
 	result.SetName(TString::Format("ADist_Gamma_En_%.1f_Eg_%.1f",NeutronEnergy/1e6,GammaEnergy));
-	result.SetTitle(TString::Format("#gamma angular distribution (En=%.1fMeV, Eg=%.1fkeV);%s;W",NeutronEnergy/1e6,GammaEnergy,_Type.c_str()));
+	result.SetTitle(TString::Format("#gamma angular distribution %s (En=%.1fMeV, Eg=%.1fkeV);%s;W",Source.c_str(), NeutronEnergy/1e6,GammaEnergy,_Type.c_str()));
 	for(unsigned int i=0;i<X.size();i++)
 	{
 		//cout<<"Interp:"<<X[i]<<" "<<Gr2D.Interpolate(NeutronEnergy,X[i])<<"\n";
 		if(Gr2D.Interpolate(NeutronEnergy,X[i])!=0)
 		result.SetPoint(result.GetN(),X[i],Gr2D.Interpolate(NeutronEnergy,X[i]));
 	}
+	result.fFile=this;
 	return result;
 }
 
-TGraph ENDFFile::GetNeutronCrossSections(int LevelNum)
+EvaluatedDataGraph ENDFFile::GetNeutronCrossSections(int LevelNum)
 {
-	TGraph result;
+	EvaluatedDataGraph result;
+	result.LevelNum=LevelNum;
 	ENDFTable *CSTable=0;
 	if(LevelNum==-1)//Total
 	{
 		CSTable=FindENDFTable(3,1);
 		if(CSTable)
 		{
-			result=*CSTable->GetTGraph();
+			result=*((EvaluatedDataGraph*)CSTable->GetTGraph());
 		}
 	}
 	if(LevelNum==-2)//Nonelastic
@@ -1105,7 +1106,7 @@ TGraph ENDFFile::GetNeutronCrossSections(int LevelNum)
 		CSTable=FindENDFTable(3,3);
 		if(CSTable)
 		{
-			result=*CSTable->GetTGraph();
+			result=*((EvaluatedDataGraph*)CSTable->GetTGraph());
 		}
 	}
 	if(LevelNum==0)
@@ -1113,7 +1114,7 @@ TGraph ENDFFile::GetNeutronCrossSections(int LevelNum)
 		CSTable=FindENDFTable(3,2);
 		if(CSTable)
 		{
-			result=*CSTable->GetTGraph();
+			result=*((EvaluatedDataGraph*)CSTable->GetTGraph());
 		}
 	}
 	if(LevelNum>0)
@@ -1121,16 +1122,18 @@ TGraph ENDFFile::GetNeutronCrossSections(int LevelNum)
 		CSTable=FindENDFTable(3,50+LevelNum);
 		if(CSTable)
 		{
-			result=*CSTable->GetTGraph();
+			result=*((EvaluatedDataGraph*)CSTable->GetTGraph());
 		}
 	}
+	result.fFile=this;
 	return result;
 }
 
-TGraph ENDFFile::GetNeutronAngularDistribution(int LevelNum,double NeutronEnergy,string _Type,int NPoints)
+EvaluatedDataGraph ENDFFile::GetNeutronAngularDistribution(int LevelNum,double NeutronEnergy,string _Type,int NPoints)
 {
 	TGraph2D Gr2D=GetTGraph2DNeutronAngularDistributions(LevelNum,_Type,NPoints);
-	TGraph result;
+	EvaluatedDataGraph result;
+	result.LevelNum=LevelNum;
 	if(Gr2D.GetN()==0)
 	{
 		return result;
@@ -1172,13 +1175,14 @@ TGraph ENDFFile::GetNeutronAngularDistribution(int LevelNum,double NeutronEnergy
 		}
 	}
 	result.SetName(TString::Format("ADist_Neutron_En_%.1f_Lev_%d",NeutronEnergy,LevelNum));
-	result.SetTitle(TString::Format("n angular distribution (En=%.1fMeV, Level=%d);%s;#frac{d#sigma}{d#Omega}, mb",NeutronEnergy,LevelNum,_Type.c_str()));
+	result.SetTitle(TString::Format("n angular distribution %s (En=%.1fMeV, Level=%d);%s;#frac{d#sigma}{d#Omega}, mb",Source.c_str(),NeutronEnergy,LevelNum,_Type.c_str()));
 	for(unsigned int i=0;i<X.size();i++)
 	{
 		//cout<<"Interp:"<<X[i]<<" "<<Norm<<" "<<Gr2D.Interpolate(NeutronEnergy,X[i])<<" "<<NeutronEnergy<<"\n";
 		if(Gr2D.Interpolate(NeutronEnergy,X[i])>0)
 		result.SetPoint(result.GetN(),X[i],Norm*Gr2D.Interpolate(NeutronEnergy,X[i]));
 	}
+	result.fFile=this;
 	return result;
 }
 
@@ -1200,10 +1204,10 @@ TGraph2D ENDFFile::GetTGraph2DAngularDistributions(string OutgoingParticle,int L
 	}
 	return result;
 }
-TGraph ENDFFile::GetAngularDistribution(string OutgoingParticle,int LevelNum,double NeutronEnergy,string _Type,int NPoints)
+EvaluatedDataGraph ENDFFile::GetAngularDistribution(string OutgoingParticle,int LevelNum,double NeutronEnergy,string _Type,int NPoints)
 {
 	TGraph2D Gr2D=GetTGraph2DAngularDistributions(OutgoingParticle,LevelNum,_Type,NPoints);
-	TGraph result;
+	EvaluatedDataGraph result;
 	if(Gr2D.GetN()==0)
 	{
 		return result;
@@ -1236,25 +1240,27 @@ TGraph ENDFFile::GetAngularDistribution(string OutgoingParticle,int LevelNum,dou
 		}
 	}
 	result.SetName(TString::Format("ADist_E_%.1f_Lev_%d",NeutronEnergy,LevelNum));
-	result.SetTitle(TString::Format("%s angular distribution (En=%.1fMeV, Level=%d);%s;#frac{d#sigma}{d#Omega}, mb",OutgoingParticle.c_str(),NeutronEnergy,LevelNum,_Type.c_str()));
+	result.SetTitle(TString::Format("%s %s angular distribution (En=%.1fMeV, Level=%d);%s;#frac{d#sigma}{d#Omega}, mb",Source.c_str(),OutgoingParticle.c_str(),NeutronEnergy,LevelNum,_Type.c_str()));
 	for(unsigned int i=0;i<X.size();i++)
 	{
 		//cout<<"Interp:"<<X[i]<<" "<<Norm<<" "<<Gr2D.Interpolate(NeutronEnergy,X[i])<<" "<<NeutronEnergy<<"\n";
 		if(Gr2D.Interpolate(NeutronEnergy,X[i])>0)
 		result.SetPoint(result.GetN(),X[i],Norm*Gr2D.Interpolate(NeutronEnergy,X[i]));
 	}
+	result.fFile=this;
 	return result;
 }
-TGraph ENDFFile::GetCrossSections(string OutgoingParticle,int LevelNum)
+EvaluatedDataGraph ENDFFile::GetCrossSections(string OutgoingParticle,int LevelNum)
 {
-	TGraph result;
+	EvaluatedDataGraph result;
+	result.LevelNum=LevelNum;
 	ENDFTable *CSTable=0;
 	if(LevelNum==-1)//Total
 	{
 		CSTable=FindENDFTable(3,1);
 		if(CSTable)
 		{
-			result=*CSTable->GetTGraph();
+			result=*((EvaluatedDataGraph*)CSTable->GetTGraph());
 		}
 	}
 	if(LevelNum==-2)//Nonelastic
@@ -1262,7 +1268,7 @@ TGraph ENDFFile::GetCrossSections(string OutgoingParticle,int LevelNum)
 		CSTable=FindENDFTable(3,3);
 		if(CSTable)
 		{
-			result=*CSTable->GetTGraph();
+			result=*((EvaluatedDataGraph*)CSTable->GetTGraph());
 		}
 	}
 	if(LevelNum>=0)
@@ -1270,9 +1276,10 @@ TGraph ENDFFile::GetCrossSections(string OutgoingParticle,int LevelNum)
 		CSTable=FindENDFTable(3,GetAdditionIndex(Projectile,OutgoingParticle,LevelNum));
 		if(CSTable)
 		{
-			result=*CSTable->GetTGraph();
+			result=*((EvaluatedDataGraph*)CSTable->GetTGraph());
 		}
 	}
+	result.fFile=this;
 	return result;
 }
 
@@ -1297,21 +1304,31 @@ string GetLoadedFileName(string Projectile,string Nuclide)
 	return "";
 }
 
-string ENDFFile::GetENDFFileName(string Projectile,string Nuclide,string _Source)
+string ENDFFile::GetBaseNameInTable(string Name)
 {
-	string PathToLinkDB=getenv("TALYSLIBDIR");
-	PathToLinkDB+="/ENDFReader/ENDFFlieLists/ENDFBASE.db";
+	if(!ENDFBASE)
+	{
+		string PathToLinkDB=getenv("TALYSLIBDIR");
+		PathToLinkDB+="/ENDFReader/ENDFFlieLists/ENDFBASE.db";
+		sqlite3_open((PathToLinkDB).c_str(), &ENDFBASE); 
+	}
 	sqlite3_stmt *stmt;
-	sqlite3_open((PathToLinkDB).c_str(), &ENDFBASE); 
-	sqlite3_prepare_v2(ENDFBASE,("SELECT InThisBase from TablesList WHERE BaseName == \""+_Source+"\"").c_str(), -1, &stmt, NULL);
+	
+	sqlite3_prepare_v2(ENDFBASE,("SELECT InThisBase from TablesList WHERE BaseName == \""+Name+"\"").c_str(), -1, &stmt, NULL);
 	string BaseName;
 	sqlite3_step(stmt);
 	const unsigned char* requestRes=sqlite3_column_text(stmt, 0);
 	if(requestRes)
 	{
-		BaseName=string(reinterpret_cast<const char*>(requestRes));
+		return string(reinterpret_cast<const char*>(requestRes));
 	}
-	//cout<<"result:"<<result<<" "<<sqlite3_column_count(stmt)<<"\n";
+	return "";
+}
+
+string ENDFFile::GetENDFFileName(string Projectile,string Nuclide,string _Source)
+{
+	string BaseName=GetBaseNameInTable(_Source);
+	sqlite3_stmt *stmt;
 	if(BaseName.size()==0)
 	{
 		cout<<"This is ENDFFile::GetENDFFileName(string Projectile,string Nuclide,string _Source): cannot find database with name "<<_Source<<". Empty string returned\n";
@@ -1322,7 +1339,7 @@ string ENDFFile::GetENDFFileName(string Projectile,string Nuclide,string _Source
 	GetAZ(Nuclide,Z,A);
 	sqlite3_prepare_v2(ENDFBASE, ("SELECT Filename from "+BaseName+" WHERE Projectile == \""+Projectile+"\" AND Z =="+to_string(Z)+" AND A == "+to_string(A)).c_str(), -1, &stmt, NULL);
 	sqlite3_step(stmt);
-	requestRes=sqlite3_column_text(stmt, 0);
+	const unsigned char* requestRes=sqlite3_column_text(stmt, 0);
 	if(requestRes)
 	{
 		return string(reinterpret_cast<const char*>(requestRes));
@@ -1344,51 +1361,9 @@ bool ENDFFile::DownloadFromOnlineENDF(string Projectile,string Nuclide,string _S
 	string OutputFileName="/dev/shm/";
 	OutputFileName+=FName.substr(FName.find_last_of("/\\") + 1);
 	Filename=OutputFileName;
+	LoadedFileName=OutputFileName;
 	system(("wget --user-agent=\"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36\" -O "+OutputFileName+" "+Link).c_str());
 	return true;
-	/*if(Source=="ENDF")
-	{
-		ifstream ifs(PathToLinkDB);
-		string line;
-		
-		string OutputFileName=GetLoadedFileName(Projectile,Nuclide);
-		while(getline(ifs,line))
-		{
-			if(line.find(Mask)!=string::npos)
-			{
-				//Link="https://www-nds.iaea.org/public/download-endf/ENDF-B-VIII.0/"+line;
-				Link="http://159.93.100.133:85/ENDF-B-VIII.0/"+line;
-			}
-		}
-	}
-	else if(Source=="TENDL")
-	{
-		Link="http://159.93.100.133:85/TENDL/"+Projectile+"/"+Projectile+"_"+GetNucleusName(Nuclide)+to_string(A)+".tendl";
-	}
-	if(Link.size()==0)
-	{
-		cout<<"Mask "<<Mask<<" not found in "<<PathToLinkDB<<"; False returned\n";
-		return false;
-	}
-	//cout<<"OutputFileName:"<<"wget --user-agent=\"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36\" -O "+OutputFileName+" "+Link<<"\n";
-	string OutputFileName=GetLoadedFileName(Projectile,Nuclide);
-	system(("wget --user-agent=\"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36\" -O "+OutputFileName+" "+Link).c_str());
-	return true;
-	
-	/*CURL *curl;
-    FILE *fp;
-    CURLcode res;
-    curl = curl_easy_init();
-    if (curl) 
-    {
-        fp = fopen(OutputFileName,"wb");
-        curl_easy_setopt(curl, CURLOPT_URL, Link.c_str());
-        curl_easy_setopt(curl, CURLOPT_WRITEFUNCTION, write_data);
-        curl_easy_setopt(curl, CURLOPT_WRITEDATA, fp);
-        res = curl_easy_perform(curl);
-        curl_easy_cleanup(curl);
-        fclose(fp);
-    }*/
 }
 
 void ENDFFile::Read(string _Projectile,string Nuclide)
@@ -1411,7 +1386,7 @@ void ENDFFile::Read(string _Projectile,string Nuclide)
 		cout<<"This is ENDFFile::Read(string Projectile,string Nuclide): enviroment variable \"ENDFDIR\" does not set. The nessesary file will be downloaded\n";
 		if(DownloadFromOnlineENDF(Projectile,Nuclide,Source))
 		{
-			Read(GetLoadedFileName(Projectile,Nuclide));
+			Read(LoadedFileName);
 			IsLoaded=true;
 			return;
 		}
@@ -1431,6 +1406,6 @@ ENDFFile::~ENDFFile()
 {
 	if(IsLoaded)
 	{
-		system(("rm "+Filename).c_str());
+		system(("rm "+LoadedFileName).c_str());
 	}
 }

@@ -542,6 +542,12 @@ class Deformation:public DeformationData
 	ClassDef(Deformation, 1);
 };
 
+class EvaluatedData
+{
+	list<EvaluatedDataGraph> EvaluatedAngularDistributions;
+	
+};
+
 class Level:public LevelData
 {
 	public:
@@ -819,6 +825,10 @@ class Nucleus:public NucleusData
 	void SaveToXLSX(string filename);
 	GammaTransition* GetMostIntenseGammaTransition();
 	ENDFFile ENDF;
+	list<ENDFFile> ENDFBases;
+	
+	ENDFFile *GetPointerToENDFBase(string BaseName="");
+	
 	void ReadENDF();
 	bool IsProduct();
 	static void Recompile()
