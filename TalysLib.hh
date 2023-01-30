@@ -94,6 +94,7 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	bool IsEnableWarning();
 	bool GenerateAllGraphs=true;
 	bool ReadC4=true;
+	bool DeleteDirectoryAfterReading=true;
 	int MaxNumberOfThreads=16;
 	int EXFORSource=1;//1-C4, 0-EXFORTABLES
 	void SetEXFORSource(string Source);

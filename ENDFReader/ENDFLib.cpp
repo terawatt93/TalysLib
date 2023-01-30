@@ -1401,14 +1401,7 @@ bool ENDFFile::Read(string _Projectile,string Nuclide)
 		//return;
 	}
 	PathToENDF+=GetENDFFileName(Projectile,Nuclide,Source);
-	//PathToENDF+="*"+Addition;
-	/*vector<string> Filename=ListFiles(PathToENDF);
-	if(Filename.size()!=1)
-	{
-		cout<<"This is ENDFFile::Read(string Projectile,string Nuclide): Problems in ENDF file search. Used mask is \""<<PathToENDF<<"\". Returned\n";
-		return;
-	}*/
-	return Read(Filename);
+	return Read(PathToENDF);
 }
 ENDFFile::~ENDFFile()
 {
