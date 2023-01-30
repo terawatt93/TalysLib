@@ -66,7 +66,7 @@ bool GetNextString(zip *z,zip_file *f, string &result)
 
 void GetMAT_MF_MT_NSTR(string inp, int &MAT, int &MF, int&MT, int &NSTR)
 {
-	if(inp.size()<80)
+	if(inp.size()<75)
 	{
 		return;
 	}
@@ -143,7 +143,7 @@ string ENDFDictonary::GetMTDescription(int MT)
 }
 void ENDFDescription::AddFromString(string inp)
 {
-	if(inp.size()<80)
+	if(inp.size()<75)
 	{
 		return;
 	}
@@ -151,7 +151,7 @@ void ENDFDescription::AddFromString(string inp)
 }
 bool ENDFContentEntry::GetFromString(string inp)
 {
-	if(inp.size()<80)
+	if(inp.size()<75)
 	{
 		return false;
 	}
@@ -174,7 +174,7 @@ bool ENDFContentEntry::GetFromString(string inp)
 }
 void ENDFContent::GetFromString(string inp)
 {
-	if(inp.size()<80)
+	if(inp.size()<75)
 	{
 		return;
 	}
@@ -219,7 +219,7 @@ double* ENDFBasicTable::Get(unsigned int Column, unsigned int Row)
 }
 void ENDFBasicTable::GetFromStringBase(string inp)
 {
-	if(inp.size()<80)
+	if(inp.size()<75)
 	{
 		return;
 	}
@@ -833,7 +833,7 @@ bool ENDFFile::Read(string filename)
 			}
 			if(ContentsFlag)
 			{
-				if(NSTR==99999)
+				if((NSTR==99999)||(MT==0))
 				{
 					ContentsFlag=false;
 				}
@@ -848,7 +848,7 @@ bool ENDFFile::Read(string filename)
 				Description.AddFromString(line);
 			}
 		}
-		else if(NSTR!=99999)//не конец блока
+		else if((NSTR!=99999)||(MT!=0))//не конец блока
 		{
 			ENDFTable* table=GetENDFTable(MF,MT);
 			table->GetFromString(line,&MF,&MT);
