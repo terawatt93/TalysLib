@@ -558,7 +558,7 @@ void ENDFTable::GenerateAngularDistributions4()
 			CurrentRow++;
 		}
 	}
-	if(LTT==2&&LI==0)//Tabulated Probability Distributions (LTT=2, LI=0), найдем пример, тогда и сделаем
+	if(LTT==2&&LI==0)//Tabulated Probability Distributions (LTT=2, LI=0), найдем пример, тогда и сделаем//Упругое на 31P
 	{
 		
 	}

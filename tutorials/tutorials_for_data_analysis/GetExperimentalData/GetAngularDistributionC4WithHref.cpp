@@ -8,7 +8,7 @@ void GetAngularDistributionC4WithHref()
     c.Print("ADIST.pdf[","pdf");
     for(unsigned int i=0;i<4;i++)
     {
-		Level *l=&(C.FindProductByReaction("n,n'")->Levels[i]);
+		Level *l=&(C.FindProductByReaction("(n,n')")->Levels[i]);
 		TMultiGraph* mg=l->GetEXFORTMultiGraphForAngularDistributions(14,14.5);
 		TGraph *g_talys_total=l->GetAngularDistribution("Total");
 		TGraph *g_talys_dir=l->GetAngularDistribution("Direct");
