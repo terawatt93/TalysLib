@@ -968,16 +968,28 @@ vector<TGraphErrors*> Level::GetEXFORAngularDistributions(double Emin,double Ema
 		{
 			HyperlinksTMP.resize(0);
 		}
-		for(unsigned int i=0;i<C4AngularData.size();i++)
+		Level *PointerToLevel=this;
+		if((fNucleus->OutgoingParticle==fNucleus->Projectile)&&(Energy==0))
 		{
-			cout<<"C4AngularData[i].ProjectileEnergy/1e6 "<<C4AngularData[i].ProjectileEnergy/1e6<<"\n";
-			if(((C4AngularData[i].ProjectileEnergy/1e6>Emin)&&(C4AngularData[i].ProjectileEnergy/1e6<Emax))||((Emax==0)&&(Emin==0)))
+			if(GetIntegrityFactor()<2)
+			{
+				cout<<"This is Level::GetEXFORAngularDistributions(): attempt to retrieve data for elastic scattering failed because fMotherNucleus is invalid!\n";
+			}
+			else
+			{
+				PointerToLevel=&(fNucleus->fMotherNucleus->Levels[0]);
+			}
+		}
+		for(unsigned int i=0;i<PointerToLevel->C4AngularData.size();i++)
+		{
+			//cout<<"C4AngularData[i].ProjectileEnergy/1e6 "<<C4AngularData[i].ProjectileEnergy/1e6<<"\n";
+			if(((PointerToLevel->C4AngularData[i].ProjectileEnergy/1e6>Emin)&&(PointerToLevel->C4AngularData[i].ProjectileEnergy/1e6<Emax))||((Emax==0)&&(Emin==0)))
 			{
 				if(GenerateHLink)
 				{
-					HyperlinksTMP.push_back(string(C4AngularData[i].Graph.GetTitle())+";"+C4AngularData[i].DOI);
+					HyperlinksTMP.push_back(string(PointerToLevel->C4AngularData[i].Graph.GetTitle())+";"+PointerToLevel->C4AngularData[i].DOI);
 				}
-				result.push_back(&C4AngularData[i].Graph);
+				result.push_back(&(PointerToLevel->C4AngularData[i].Graph));
 			}
 		}
 	}
@@ -1037,15 +1049,27 @@ vector<TGraphErrors*> Level::GetEXFORCrossSections(double Emin,double Emax, bool
 		{
 			HyperlinksTMP.resize(0);
 		}
-		for(unsigned int i=0;i<C4EnergyData.size();i++)
+		Level *PointerToLevel=this;
+		if((fNucleus->OutgoingParticle==fNucleus->Projectile)&&(Energy==0))
+		{
+			if(GetIntegrityFactor()<2)
+			{
+				cout<<"This is Level::GetEXFORCrossSections(): attempt to retrieve data for elastic scattering failed because fMotherNucleus is invalid!\n";
+			}
+			else
+			{
+				PointerToLevel=&(fNucleus->fMotherNucleus->Levels[0]);
+			}
+		}
+		for(unsigned int i=0;i<PointerToLevel->C4EnergyData.size();i++)
 		{
 			//if(((C4EnergyData[i].ProjectileEnergy/1e3>Emin)&&(C4EnergyData[i].ProjectileEnergy/1e3<Emax))||((Emax==0)&&(Emin==0)))
 			{
 				if(GenerateHLink)
 				{
-					HyperlinksTMP.push_back(string(C4AngularData[i].Graph.GetTitle())+";"+C4AngularData[i].DOI);
+					HyperlinksTMP.push_back(string(PointerToLevel->C4EnergyData[i].Graph.GetTitle())+";"+PointerToLevel->C4EnergyData[i].DOI);
 				}
-				result.push_back(&C4EnergyData[i].Graph);
+				result.push_back(&(PointerToLevel->C4EnergyData[i].Graph));
 			}
 		}
 	}

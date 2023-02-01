@@ -1383,6 +1383,7 @@ void Nucleus::GenerateProducts(string _Projectile)
 	{
 		if((!IsProduct())&&(MainNucleusFlag!=1))
 		{
+			//для неупругих реакций
 			string fname=GetPathToC4Base();
 			sqlite3_open((fname+"C4Base.db").c_str(), &C4Base); 
 			C4ROOTBase=new TFile((fname+"Base.root").c_str());
@@ -1390,6 +1391,9 @@ void Nucleus::GenerateProducts(string _Projectile)
 			{
 				Products[i].C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,Products[i].Reaction,Projectile,Z,A);
 			}
+			//для упругих/полных
+			//упругие:
+			C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,"elastic",Projectile,Z,A);
 		}
 		if(MainNucleusFlag!=1)
 		{
@@ -2505,49 +2509,58 @@ void Nucleus::SaveToXLSX(string filename)
 	}
 }
 
-vector<TGraphErrors*> Nucleus::GetEXFORAngularDistributions(double Emin,double Emax)
+vector<TGraphErrors*> Nucleus::GetEXFORAngularDistributions(double Emin,double Emax, bool GenerateHLink)
 {
 	vector<TGraphErrors*> result;
 	if(IsProduct())
 	{
 		return fMotherNucleus->GetEXFORAngularDistributions(Emin,Emax);
 	}
-	EXFORManager m;
-	ParseReaction(Projectile+","+Projectile,Projectile,Projectile);
-	EXFORAngularDistributions=m.GetEXFORAngularDistributions(Projectile,Z,A,Projectile,0);
-	int MarkerStyle=20;
-	for(unsigned int i=0;i<EXFORAngularDistributions.size();i++)
+	
+	if(TalysLibManager::Instance().GetEXFORSource()==0)
 	{
-		if(!TalysLibManager::Instance().IsInExcludeAuthors(EXFORAngularDistributions[i].Author))
+		EXFORManager m;
+		ParseReaction(Projectile+","+Projectile,Projectile,Projectile);
+		EXFORAngularDistributions=m.GetEXFORAngularDistributions(Projectile,Z,A,Projectile,0);
+		int MarkerStyle=20;
+		for(unsigned int i=0;i<EXFORAngularDistributions.size();i++)
 		{
-			if(((EXFORAngularDistributions[i].ProjectileEnergy>Emin)&&(EXFORAngularDistributions[i].ProjectileEnergy<Emax))||((Emin==0)&&(Emax==0)))
+			if(!TalysLibManager::Instance().IsInExcludeAuthors(EXFORAngularDistributions[i].Author))
 			{
-				TGraphErrors *gr=EXFORAngularDistributions[i].GetTGraph();
-				
-				int MarkerColor=i%9+1;
-				if(MarkerColor==9)
+				if(((EXFORAngularDistributions[i].ProjectileEnergy>Emin)&&(EXFORAngularDistributions[i].ProjectileEnergy<Emax))||((Emin==0)&&(Emax==0)))
 				{
-					MarkerStyle++;
-				}
-				if(gr)
-				{
-					gr->SetMarkerStyle(MarkerStyle);
-					gr->SetMarkerColor(MarkerColor);
-					result.push_back(gr);
+					TGraphErrors *gr=EXFORAngularDistributions[i].GetTGraph();
+					
+					int MarkerColor=i%9+1;
+					if(MarkerColor==9)
+					{
+						MarkerStyle++;
+					}
+					if(gr)
+					{
+						gr->SetMarkerStyle(MarkerStyle);
+						gr->SetMarkerColor(MarkerColor);
+						result.push_back(gr);
+					}
 				}
 			}
 		}
+		
+	}
+	else if(TalysLibManager::Instance().GetEXFORSource()==1)//C4
+	{
+		return Levels[0].GetEXFORAngularDistributions(Emin,Emax,GenerateHLink);
 	}
 	return result;
 }
-vector<TGraphErrors*> Nucleus::GetEXFORCrossSections(string Type,double Emin,double Emax)
+vector<TGraphErrors*> Nucleus::GetEXFORCrossSections(string Type,double Emin,double Emax, bool GenerateHLink)
 {
 	if(IsProduct())
 	{
 		return fMotherNucleus->GetEXFORCrossSections(Type,Emin,Emax);
 	}
 	vector<TGraphErrors*> result;
-	if(!IsProduct())
+	if(TalysLibManager::Instance().GetEXFORSource()==0)
 	{
 		EXFORManager m;
 		int LevelIndex=0;
@@ -2597,6 +2610,13 @@ vector<TGraphErrors*> Nucleus::GetEXFORCrossSections(string Type,double Emin,dou
 					}
 				}
 			}
+		}
+	}
+	else if (TalysLibManager::Instance().GetEXFORSource()==1)
+	{
+		if((Type=="Elastic")||(Type=="El"))
+		{
+			return Levels[0].GetEXFORCrossSections(Emin,Emax,GenerateHLink);
 		}
 	}
 	return result;

@@ -655,11 +655,12 @@ class BNECSData//Binary non-elastic cross sections (non-exclusive) Реализ�
 	void AddPoint();
 };
 
-class BNECSGraphs//Binary non-elastic cross sections graphs Реализация в NucleiProperties.cpp
+class BNECSGraphs:public TObject//Binary non-elastic cross sections graphs Реализация в NucleiProperties.cpp
 {
 	public:
 	TGraph gamma, neutron, proton, deuteron, triton, helium3, alpha;;
 	void GenerateGraphs(vector<double> X_values,TBCSData *Data);
+	ClassDef(BNECSGraphs, 1);
 };
 
 //class 
@@ -708,6 +709,18 @@ class NucleusData:public TObject
 	ClassDef(NucleusData, 3);
 };
 
+/*class ElasticAndNonelasticData:public TObject
+{
+	public:
+	BNECSGraphs BNECS;
+	TGraph ElacticTotTalys, ElasticDirectTalys,ElasticCompoundTalys,ElasticENDF;//угловые распределения
+	TGraph2D ElacticTotTalys2D, ElasticDirectTalys2D,ElasticCompoundTalys2D;//угловые распределения
+	TGraph InelasticTotTalysV, InelasticDirectTalysV,InelasticCompoundTalysV, ElasticTotTalysV, ElasticDirectTalysV,ElasticCompoundTalysV, TotTalysV,ENDFTotalCS,ENDFElasticCS,ENDFNonelasticCS;//сечения
+	vector<C4AngularDistribution> AngularData;
+	vector<C4EnergyDistribution> EnergyData; 
+	ClassDef(ElasticAndNonelasticData, 1);
+};*/
+
 class Nucleus:public NucleusData
 {
 	public:
@@ -752,8 +765,8 @@ class Nucleus:public NucleusData
 	TGraph2D* GetElasticAngularDistribution2D(string type="Total",string option="");
 	TGraph *GetCrossSectionGraph(string type="Total");
 	
-	vector<TGraphErrors*> GetEXFORAngularDistributions(double Emin=0,double Emax=0);
-	vector<TGraphErrors*> GetEXFORCrossSections(string Type,double Emin=0,double Emax=0);
+	vector<TGraphErrors*> GetEXFORAngularDistributions(double Emin=0,double Emax=0, bool GenerateHLink=true);
+	vector<TGraphErrors*> GetEXFORCrossSections(string Type,double Emin=0,double Emax=0,bool GenerateHLink=true);
 	TMultiGraph* GetEXFORTMultiGraphForAngularDistributions(double Emin=0,double Emax=0);
 	TMultiGraph* GetEXFORTMultiGraphForCrossSections(string Type,double Emin=0,double Emax=0);
 	

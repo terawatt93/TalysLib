@@ -470,9 +470,17 @@ int GetParticleID(string PartName)
 }
 int GetC4MT(string reaction,string prj)
 {
-	if(reaction=="")
+	if((reaction=="")||(reaction=="elastic")||(reaction=="2"))
 	{
 		return 2;
+	}
+	if((reaction=="1")||(reaction=="total"))
+	{
+		return 1;
+	}
+	if((reaction=="3")||(reaction=="nonel"))
+	{
+		return 3;
 	}
 	bool InelasticScat=false;
 	if(reaction.find("'")!=string::npos)
@@ -487,7 +495,7 @@ int GetC4MT(string reaction,string prj)
 	stringstream tmp(r.Data());
 	string incomingParticle,OutgoingParticle;
 	tmp>>incomingParticle>>OutgoingParticle;
-	if((!InelasticScat)&&(OutgoingParticle==incomingParticle))
+	if((!InelasticScat)&&(OutgoingParticle==incomingParticle))//случай вроде reaction=(n,n)
 	{
 		return 2;
 	}
