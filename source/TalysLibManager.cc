@@ -1,5 +1,15 @@
 #include "../TalysLib.hh"
 #pragma once
+
+void TalysLibManager::SetAOption(string value)//управляет запросом данных с A=0
+{
+	AOption=value;
+}
+string TalysLibManager::GetAOption()//управляет запросом данных с A=0
+{
+	return AOption;
+}
+
 TalysLibManager& TalysLibManager::Instance()
 {
 	// согласно стандарту, этот код ленивый и потокобезопасный

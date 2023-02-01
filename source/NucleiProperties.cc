@@ -1389,15 +1389,15 @@ void Nucleus::GenerateProducts(string _Projectile)
 			C4ROOTBase=new TFile((fname+"Base.root").c_str());
 			for(unsigned int i=0;i<Products.size();i++)
 			{
-				Products[i].C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,Products[i].Reaction,Projectile,Z,A);
+				Products[i].C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,Products[i].Reaction,Projectile,Z,A,TalysLibManager::Instance().GetAOption());
 			}
 			//для упругих/полных
 			//упругие:
-			C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,"elastic",Projectile,Z,A);
+			C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,"elastic",Projectile,Z,A,TalysLibManager::Instance().GetAOption());
 		}
 		if(MainNucleusFlag!=1)
 		{
-			C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,Reaction,Projectile,Z,A);
+			C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,Reaction,Projectile,Z,A,TalysLibManager::Instance().GetAOption());
 		}
 		if(C4ROOTBase)
 		{

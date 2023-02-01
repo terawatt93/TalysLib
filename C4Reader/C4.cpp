@@ -630,7 +630,7 @@ vector<C4EnergyDistribution>  C4Container::GetEnergyDistributions()
 	return result;
 }
 
-C4Container RequestC4DataSubentVector(sqlite3 *db, TFile *BaseROOT,string reaction,string projectile,int Z, int A)//запрашивает все данные C4, определяя MT из reaction и все возможные MF. Если reaction=="", запрашивается упругое рассеяние
+C4Container RequestC4DataSubentVector(sqlite3 *db, TFile *BaseROOT,string reaction,string projectile,int Z, int A,string Option)//запрашивает все данные C4, определяя MT из reaction и все возможные MF. Если reaction=="", запрашивается упругое рассеяние
 {
 	C4Container result;
 	string filename;
@@ -686,7 +686,19 @@ C4Container RequestC4DataSubentVector(sqlite3 *db, TFile *BaseROOT,string reacti
 	vector<string> TableList=GetListOfTables(db,"C%_"+to_string(MT)+"_"+to_string(PrjIndex));
 	for(unsigned int i=0;i<TableList.size();i++)
 	{
-		TString Command=TString::Format(("SELECT SubEntry, DOI FROM "+TableList[i]+" WHERE Z=%d AND A=%d").c_str(),Z,A);
+		TString Command;
+		if(Option.find("A=0")!=string::npos)
+		{
+			Command=TString::Format(("SELECT SubEntry, DOI FROM "+TableList[i]+" WHERE Z=%d AND A=0").c_str(),Z);
+		}
+		else if(Option.find("A>=0")!=string::npos)
+		{
+			Command=TString::Format(("SELECT SubEntry, DOI FROM "+TableList[i]+" WHERE Z=%d AND ( A=%d OR A=0 )").c_str(),Z,A);
+		}
+		else
+		{
+			Command=TString::Format(("SELECT SubEntry, DOI FROM "+TableList[i]+" WHERE Z=%d AND A=%d").c_str(),Z,A);
+		}
 		sqlite3_prepare_v2(db,Command.Data(), -1, &stmt, NULL);
 		while (1) 
 		{

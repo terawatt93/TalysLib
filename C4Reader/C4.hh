@@ -108,4 +108,4 @@ class C4Container//хранит c4 в упорядоченном виде: по 
 	vector<C4EnergyDistribution>  GetEnergyDistributions();
 };//
 
-C4Container RequestC4DataSubentVector(sqlite3 *db, TFile *BaseROOT,string reaction,string projectile,int Z, int A);//запрашивает все данные C4, определяя MT из reaction и все возможные MF. Если reaction=="", запрашивается упругое рассеяние
+C4Container RequestC4DataSubentVector(sqlite3 *db, TFile *BaseROOT,string reaction,string projectile,int Z, int A,string Option="");//запрашивает все данные C4, определяя MT из reaction и все возможные MF. Если reaction=="", запрашивается упругое рассеяние

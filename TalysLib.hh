@@ -104,6 +104,9 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	bool IsInExcludeAuthors(string Author);
 	void DeleteExpDataForAuthor(string Author);
 	void Purge();
+	string AOption;
+	void SetAOption(string value);//управляет запросом данных с A=0
+	string GetAOption();//управляет запросом данных с A=0
 	private:
 	TalysLibManager() { }  // конструктор недоступен
 	~TalysLibManager() { } // и деструктор
