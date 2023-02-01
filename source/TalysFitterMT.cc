@@ -63,7 +63,7 @@ void EvalDiffInThread(TalysFitterMT *TFM, int VarNumber, double &result)
 	//double Epsilon=TFM->EpsilonValues[VarNumber];
 	//test
 	//double Epsilon=0.02;
-	double Epsilon=0.0454545/100;
+	double Epsilon=TFM->EpsilonValues[VarNumber];//0.0454545/100;
 	Par_tmp[VarNumber]=TFM->Parameters[VarNumber]+Epsilon;
 	TFM->ParAssignmentFunction(TFM,&Nucl,Par_tmp);
 	Nucl.GenerateProducts();

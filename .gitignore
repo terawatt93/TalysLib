@@ -14,3 +14,4 @@ doc/manualRus.aux
 *.cxx
 *.pcm
 ResponseDataBase/ResponseDB.root
+*.pdf
