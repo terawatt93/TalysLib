@@ -992,9 +992,9 @@ vector<TGraphErrors*> Level::GetEXFORAngularDistributions(double Emin,double Ema
 			{
 				if(GenerateHLink)
 				{
-					HyperlinksTMP.push_back(string(PointerToLevel->C4AngularData[i].Graph.GetTitle())+";"+PointerToLevel->C4AngularData[i].DOI);
+					HyperlinksTMP.push_back(string(PointerToLevel->C4AngularData[i].GetTitle())+";"+PointerToLevel->C4AngularData[i].DOI);
 				}
-				result.push_back(&(PointerToLevel->C4AngularData[i].Graph));
+				result.push_back(&(PointerToLevel->C4AngularData[i]));
 			}
 		}
 	}
@@ -1072,9 +1072,9 @@ vector<TGraphErrors*> Level::GetEXFORCrossSections(double Emin,double Emax, bool
 			{
 				if(GenerateHLink)
 				{
-					HyperlinksTMP.push_back(string(PointerToLevel->C4EnergyData[i].Graph.GetTitle())+";"+PointerToLevel->C4EnergyData[i].DOI);
+					HyperlinksTMP.push_back(string(PointerToLevel->C4EnergyData[i].GetTitle())+";"+PointerToLevel->C4EnergyData[i].DOI);
 				}
-				result.push_back(&(PointerToLevel->C4EnergyData[i].Graph));
+				result.push_back(&(PointerToLevel->C4EnergyData[i]));
 			}
 		}
 	}

@@ -64,33 +64,33 @@ class C4Entry:public TObject
 	const char *GetName()  const;
 	ClassDef(C4Entry,1);
 };
-class C4AngularDistribution:public TObject
+class C4AngularDistribution:public TGraphErrors
 {
 	public:
 	C4Entry *fEntry;//!
 	double ProjectileEnergy,LevelEnergy;
-	TGraphErrors Graph;
+	//TGraphErrors Graph;
 	void CopyData();
 	string DataSet, Reaction, ID;//ID-соответствует номеру записи в DataSet
 	int Date=0, MF=0, MT=0, Proj=0, Targ=0, ZTarg=0, ATarg=0;
 	string Entry, Author1, RefCode, Reference, Title, DOI;
 	vector<string> Authors;
-	void Draw(string Option="");
+	//void Draw(string Option="");
 	int Year;
 	ClassDef(C4AngularDistribution,1);
 };
-class C4EnergyDistribution:public TObject
+class C4EnergyDistribution:public TGraphErrors
 {
 	public:
 	C4Entry *fEntry;//!
 	double LevelEnergy;
-	TGraphErrors Graph;
+	//TGraphErrors Graph;
 	void CopyData();
 	string DataSet, Reaction, ID;
 	int Date=0, MF=0, MT=0, Proj=0, Targ=0, ZTarg=0, ATarg=0;
 	string Entry, Author1, RefCode, Reference, Title, DOI;
 	vector<string> Authors;
-	void Draw(string Option="");
+	//void Draw(string Option="");
 	int Year;
 	ClassDef(C4EnergyDistribution,1);
 };

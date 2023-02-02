@@ -359,10 +359,6 @@ void C4EnergyDistribution::CopyData()
 	//cout<<" "<<MT<<" "<<fEntry->DataSet.MT<<"\n";
 }
 
-void C4EnergyDistribution::Draw(string Option)
-{
-	Graph.Draw(Option.c_str());
-}
 
 void C4AngularDistribution::CopyData()
 {
@@ -373,10 +369,10 @@ void C4AngularDistribution::CopyData()
 	Year=fEntry->Year;
 }
 
-void C4AngularDistribution::Draw(string Option)
+/*void C4AngularDistribution::Draw(string Option)
 {
 	Graph.Draw(Option.c_str());
-}
+}*/
 
 vector<C4EnergyDistribution> ExtractEnergyDistributions(C4Entry *Entry)
 {
@@ -399,13 +395,13 @@ vector<C4EnergyDistribution> ExtractEnergyDistributions(C4Entry *Entry)
 				double EnergyErr=*(Entry->DataSet.Table[k].GetField("dEnergy"));
 				double Data=*(Entry->DataSet.Table[k].GetField("Data"));
 				double DataErr=*(Entry->DataSet.Table[k].GetField("dData"));
-				ED.Graph.SetPoint(ED.Graph.GetN(),Energy/1e6,Data*1000);
-				ED.Graph.SetPointError(ED.Graph.GetN()-1,EnergyErr/1e6,DataErr*1000);
+				ED.SetPoint(ED.GetN(),Energy/1e6,Data*1000);
+				ED.SetPointError(ED.GetN()-1,EnergyErr/1e6,DataErr*1000);
 			}
 		}
-		ED.Graph.SetTitle((ED.Author1+" "+to_string(ED.Year)).c_str());
-		ED.Graph.GetXaxis()->SetTitle("E, MeV");
-		ED.Graph.GetYaxis()->SetTitle("#sigma, mb");
+		ED.SetTitle((ED.Author1+" "+to_string(ED.Year)).c_str());
+		ED.GetXaxis()->SetTitle("E, MeV");
+		ED.GetYaxis()->SetTitle("#sigma, mb");
 		result.push_back(ED);
 	}
 	return result;
@@ -437,15 +433,15 @@ vector<C4AngularDistribution> ExtractAngularDistributions(C4Entry *Entry)
 					double AngleErr=*(Entry->DataSet.Table[k].GetField("dCos"));
 					double Data=*(Entry->DataSet.Table[k].GetField("Data"));
 					double DataErr=*(Entry->DataSet.Table[k].GetField("dData"));
-					AD.Graph.SetPoint(AD.Graph.GetN(),acos(Angle)/3.1416*180,Data*1000);
+					AD.SetPoint(AD.GetN(),acos(Angle)/3.1416*180,Data*1000);
 					
 					AngleErr=abs(acos(Angle+AngleErr)-acos(Angle-AngleErr))/3.1416*180;
-					AD.Graph.SetPointError(AD.Graph.GetN()-1,AngleErr,DataErr*1000);
+					AD.SetPointError(AD.GetN()-1,AngleErr,DataErr*1000);
 				}
 			}
-			AD.Graph.SetTitle((AD.Author1+" "+to_string(AD.Year)).c_str());
-			AD.Graph.GetXaxis()->SetTitle("#theta, deg");
-			AD.Graph.GetYaxis()->SetTitle("#frac{d#sigma}{d#Omega}, mb/str");	
+			AD.SetTitle((AD.Author1+" "+to_string(AD.Year)).c_str());
+			AD.GetXaxis()->SetTitle("#theta, deg");
+			AD.GetYaxis()->SetTitle("#frac{d#sigma}{d#Omega}, mb/str");	
 			result.push_back(AD);
 		}
 	}
