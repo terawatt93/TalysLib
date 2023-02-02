@@ -622,7 +622,7 @@ class Level:public LevelData
 	EvaluatedData EVData;
 	vector<C4AngularDistribution> C4AngularData;
 	vector<C4EnergyDistribution> C4EnergyData;
-	void AddHyperlinksToTeX(string filename,string href_addition="https://sci-hub.ru/");
+	void AddHyperlinksToTeX(string &filename,string href_addition="https://sci-hub.ru/");
 	vector<string> HyperlinksTMP;//! нужен для генерации картинки с тех и гиперссылками	
 	ClassDef(Level, 2);
 };

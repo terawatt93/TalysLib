@@ -1109,18 +1109,38 @@ void ExtractHyperlinkAndTitle(string inp, string &title,string &href)
 		href=inp.substr(titleLength+1);
 	}
 }
-void Level::AddHyperlinksToTeX(string filename,string href_addition)
+void Level::AddHyperlinksToTeX(string &filename,string href_addition)
 {
-	ifstream ifs(filename);
 	vector<string> FileContent;
 	string line;
-	while(getline(ifs,line))
+	bool WillWriteToFile=true;
+	if((filename.find("\"")==string::npos)&&(filename.find(".tex")==string::npos))//в качестве аргумента передано содержание .tex файла
 	{
-		FileContent.push_back(line);
+		WillWriteToFile=false;
+		stringstream s(filename);
+		while(getline(s,line))
+		{
+			FileContent.push_back(line);
+		}
 	}
-	ifs.close();
-	ofstream ofs(filename);
-	ofs<<"\\documentclass[class=minimal,border=0pt]{standalone}\n\\usepackage{hyperref}\n\\hypersetup{\ncolorlinks=true,\nurlcolor=cyan}\n\\usepackage{tikz}\n\\begin{document}\n";
+	else//заменяется текст в файле
+	{
+		WillWriteToFile=true;
+		ifstream ifs(filename);
+		while(getline(ifs,line))
+		{
+			FileContent.push_back(line);
+		}
+		ifs.close();
+	}
+	
+	ofstream ofs;
+	if(WillWriteToFile)
+	{
+		ofs.open(filename);
+		ofs<<"\\documentclass[class=minimal,border=0pt]{standalone}\n\\usepackage{hyperref}\n\\hypersetup{\ncolorlinks=true,\nurlcolor=cyan}\n\\usepackage{tikz}\n\\begin{document}\n";
+	}
+	
 	for(unsigned int i=0;i<FileContent.size();i++)
 	{
 		if(FileContent[i].find("]{")!=string::npos)
@@ -1145,9 +1165,27 @@ void Level::AddHyperlinksToTeX(string filename,string href_addition)
 			}
 			
 		}
-		ofs<<FileContent[i]<<"\n";
 	}
-	ofs<<"\\end{document}";
+	if(!WillWriteToFile)
+	{
+		filename="";
+	}
+	for(unsigned int i=0;i<FileContent.size();i++)
+	{
+		if(WillWriteToFile)
+		{
+			ofs<<FileContent[i]<<"\n";
+		}
+		else
+		{
+			filename+=(FileContent[i]+"\n");
+		}
+	}
+	if(WillWriteToFile)
+	{
+		ofs<<"\\end{document}";
+		ofs.close();
+	}
 }
 int Level::GetMT()
 {

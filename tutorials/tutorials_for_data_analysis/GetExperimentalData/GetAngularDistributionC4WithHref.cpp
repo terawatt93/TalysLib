@@ -1,4 +1,5 @@
 #include "TalysLib.hh"
+#include "TTeXDump.h"
 
 void GetAngularDistributionC4WithHref()
 {
@@ -6,6 +7,8 @@ void GetAngularDistributionC4WithHref()
     C.GenerateProducts();
     TCanvas c;
     c.Print("ADIST.pdf[","pdf");
+    ofstream ofs("references.txt");
+    ofs<<"Level#\tData#\tSubEntry\tAuthor\tTitle\tYear\treference\n";
     for(unsigned int i=0;i<4;i++)
     {
 		Level *l=&(C.FindProductByReaction("(n,n')")->Levels[i]);
@@ -22,9 +25,18 @@ void GetAngularDistributionC4WithHref()
 		gPad->BuildLegend();
 		gPad->SetLogy(1);
 		c.Print(TString::Format("%d.tex",i));
-		l->AddHyperlinksToTeX(TString::Format("%d.tex",i).Data());
+		string TexFileName(TString::Format("%d.tex",i).Data());
+		l->AddHyperlinksToTeX(TexFileName);
 		system((string("pdflatex ")+TString::Format("%d.tex",i).Data()).c_str());
 		c.Print("ADIST.pdf","pdf");
+		
+		vector<TGraphErrors*> ExpData=l->GetEXFORAngularDistributions(14,14.5);
+		for(unsigned int j=0;j<ExpData.size();j++)
+		{
+			C4AngularDistribution *adist=(C4AngularDistribution*)ExpData[j];
+			ofs<<i<<"\t"<<j<<"\t"<<adist->fEntry->DataSet.DataSet<<"\t"<<adist->fEntry->Author1<<"\t"<<adist->fEntry->Title<<"\t"<<adist->fEntry->Year<<"\t"<<adist->fEntry->Reference<<"\n";
+		}
+		
 		c.Clear();
 	}
     c.Print("ADIST.pdf]","pdf");
