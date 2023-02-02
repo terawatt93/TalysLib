@@ -51,10 +51,30 @@ double EvalChi2(TalysFitterMT *TFM,Nucleus* Nucl)
 	return result;
 }
 
+double EvalChi2Init(TalysFitterMT *TFM,Nucleus* Nucl)
+{
+	if(Nucl==0)
+	{
+		Nucl=&(TFM->Nuclide);
+	}
+	double result=0;
+	TGraph *Init=&(TFM->InitValues);
+	for(int i=0;i<Init->GetN();i++)
+	{
+		double x,y;
+		Init->GetPoint(i,x,y);
+		double FuncValue=TFM->GetEvaluationResult(x,TFM,Nucl);
+		result+=pow(y-FuncValue,2);
+	}
+	//cout<<"result:"<<result<<"\n";
+	return result;
+}
+
 void EvalDiffInThread(TalysFitterMT *TFM, int VarNumber, double &result)
 {
 	//Nucleus Nucl(TFM->Nuclide.Name);
 	Nucleus Nucl=TFM->Nuclide;
+	Nucl.ProjectileEnergy=TFM->ProjectileEnergy;
 	Nucl.SetThreadNumber(TFM->InitThreadNumber+VarNumber);
 	cout<<"THREAD:"<<TFM->InitThreadNumber+VarNumber<<"\n";
 	Nucl.OMPN->SetDefaultOMP(TFM->Nuclide.OMPoptionN);
@@ -66,7 +86,7 @@ void EvalDiffInThread(TalysFitterMT *TFM, int VarNumber, double &result)
 	double Epsilon=TFM->EpsilonValues[VarNumber];//0.0454545/100;
 	Par_tmp[VarNumber]=TFM->Parameters[VarNumber]+Epsilon;
 	TFM->ParAssignmentFunction(TFM,&Nucl,Par_tmp);
-	Nucl.GenerateProducts();
+	Nucl.GenerateProducts(TFM->Projectile);
 	double Chi2Plus=EvalChi2(TFM,&Nucl);
 	
 	/*Nucl=TFM->Nuclide;
@@ -77,7 +97,7 @@ void EvalDiffInThread(TalysFitterMT *TFM, int VarNumber, double &result)
 	
 	Par_tmp[VarNumber]=TFM->Parameters[VarNumber]-Epsilon;
 	TFM->ParAssignmentFunction(TFM,&Nucl,Par_tmp);
-	Nucl.GenerateProducts();
+	Nucl.GenerateProducts(TFM->Projectile);
 	double Chi2Minus=EvalChi2(TFM,&Nucl);
 	result=(Chi2Plus-Chi2Minus)/(2*Epsilon);
 	
@@ -242,6 +262,98 @@ void TalysFitterMT::AddToGraphForMultiFit(TGraph *gr, double Mv)
 		GraphForMultiFit.SetPoint(NMPoints,x+Mv,y);
 		GraphForMultiFit.SetPointError(NMPoints,x_err,y_err);
 	}
+}
+
+double TalysFitterMT::EvalInitDiff(int parNumber, double Epsilon)
+{
+	vector<double> ParametersTMP=Parameters;
+	ParametersTMP[parNumber]=Parameters[parNumber]-Epsilon;
+	Nucleus Nucl=Nuclide;
+	ParAssignmentFunction(this,&Nucl,ParametersTMP);
+	
+	Nucl.SetThreadNumber(InitThreadNumber+parNumber);
+	Nucl.SetProjectileEnergy(ProjectileEnergy);
+	Nucl.GenerateProducts(Projectile);
+	//double Chi2Minus=EvalChi2Init(this,&Nucl);
+	double Chi2Minus=EvalChi2(this,&Nucl);
+	cout<<"Chi2Minus:"<<Chi2Minus<<"\n";
+	ParametersTMP[parNumber]=Parameters[parNumber]+Epsilon;
+	ParAssignmentFunction(this,&Nucl,ParametersTMP);
+	Nucl.SetProjectileEnergy(ProjectileEnergy);
+	Nucl.GenerateProducts(Projectile);
+	cout<<"Chi2Plus:"<<Chi2Minus<<"\n";
+	//double Chi2Plus=EvalChi2Init(this,&Nucl);
+	double Chi2Plus=EvalChi2(this,&Nucl);
+	return (Chi2Plus-Chi2Minus)/(2*Epsilon);
+}
+
+void TalysFitterMT::EstimateEpsilonValues()//функция, оценивающая величины эпсилон для каждого из параметров
+{
+	vector<thread> threads;
+	InitThreadNumber=1000;
+	//thread t1(thread(&TalysFitterMT::EstimateEpsilonValueForParameterThread,this,0,&EpsilonValues[0]));
+	for(unsigned int i=0;i<Parameters.size();i++)
+	{
+		threads.emplace_back(&TalysFitterMT::EstimateEpsilonValueForParameterThread,this,0,&EpsilonValues[0]);
+	}
+	for(unsigned int i=0;i<threads.size();i++)
+	{
+		threads[i].join();
+	}
+}
+
+void  TalysFitterMT::EstimateEpsilonValueForParameterThread(int parNumber, double *result)
+{
+	double resValue=EstimateEpsilonValueForParameter(parNumber);
+	*result=resValue;
+}
+
+double TalysFitterMT::EstimateEpsilonValueForParameter(int parNumber)
+{
+	if(parNumber>=(int)InitParameters.size())
+	{
+		cout<<"This is TalysFitterMT::EstimateEpsilonValueForParameter("<<parNumber<<"): size of InitParameters is "<<InitParameters.size()<<" that is less than parNumber! NaN returned\n";
+		return NAN;
+	}
+	double Epsilon=abs(InitParameters[parNumber])/1e4;
+	double LeftLimit=Epsilon,RidhtLimit=Epsilon;
+	double Diff=EvalInitDiff(parNumber,Epsilon);
+	//cout<<"Epsilon:"<<Epsilon<<"\n";
+	while(Diff==0)
+	{
+		Diff=EvalInitDiff(parNumber,Epsilon);
+		if(Diff==0)
+		{
+			LeftLimit=Epsilon;
+		}
+		else
+		{
+			RidhtLimit=Epsilon;
+			break;
+		}
+		//cout<<"Epsilon (while:):"<<Epsilon<<"\n";
+		Epsilon=2*Epsilon;
+	}
+	double Middle=(LeftLimit+RidhtLimit)/2;
+	double StopCriterium=abs(RidhtLimit-LeftLimit)/RidhtLimit;
+	
+	while(StopCriterium>0.01)
+	{
+		Diff=EvalInitDiff(parNumber,Middle);
+		if(Diff==0)
+		{
+			LeftLimit=Middle;
+		}
+		else
+		{
+			Epsilon=Middle;
+			RidhtLimit=Middle;
+		}
+		//cout<<"Middle:"<<Middle<<" "<<Diff<<" "<<LeftLimit<<" "<<RidhtLimit<<"\n";
+		StopCriterium=abs(RidhtLimit-LeftLimit)/RidhtLimit;
+		Middle=(LeftLimit+RidhtLimit)/2;
+	}
+	return Epsilon;
 }
 
 void TalysFitterMT::DrawFitProgress()

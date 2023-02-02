@@ -1409,10 +1409,10 @@ void Nucleus::GenerateProducts(string _Projectile)
 		}
 		AssignC4DataToLevels();
 	}
-	if(TalysLibManager::Instance().DeleteDirectoryAfterReading)
+	/*if(TalysLibManager::Instance().DeleteDirectoryAfterReading)
 	{
 		system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
-	}
+	}*/
 }
 void Nucleus::AssignC4DataToLevels(double Tolerancy)
 {

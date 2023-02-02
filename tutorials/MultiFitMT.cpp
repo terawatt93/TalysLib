@@ -173,7 +173,7 @@ double GetEvaluationResult(double x_value,TalysFitterMT *PointetToTF,Nucleus *Po
 	}
 	else if(GraphIterator==1)
 	{
-		TGraph *INL4=PointerToNucleus->Products[1].Levels[1].GetAngularDistribution("Total");
+		TGraph *INL4=PointerToNucleus->FindProductByReaction("(n,n')")->Levels[1].GetAngularDistribution("Total");
 		return INL4->Eval(x_value-CurrentOffset,0,"S");
 	}
 	return 0;
@@ -207,7 +207,7 @@ void MultiFitMT()
 	tf->Nuclide.OMPN->PotentialKoning.d2=0.0;
 	tf->Nuclide.OMPN->PotentialKoning.d3=0.0;
 	///зададим свойства подбираемых параметров:
-	/*tf->SetParameter(0,tf->Nuclide.OMPN->PotentialKoning.v1,"V_{V}",0.1,20,70);
+	tf->SetParameter(0,tf->Nuclide.OMPN->PotentialKoning.v1,"V_{V}",0.1,20,70);
 	tf->SetParameter(1,tf->Nuclide.OMPN->PotentialKoning.w1,"W_{V}",0.1,0,10);
 	tf->SetParameter(2,tf->Nuclide.OMPN->PotentialKoning.d1,"W_{D}",0.1,0,10);
 	tf->SetParameter(3,tf->Nuclide.OMPN->PotentialKoning.vso1,"V_{SO}",0.1,-1,10);
@@ -217,21 +217,21 @@ void MultiFitMT()
 	tf->SetParameter(7,tf->Nuclide.OMPN->PotentialKoning.Rd,"r_{D}",0.001,0.5,2);
 	tf->SetParameter(8,tf->Nuclide.OMPN->PotentialKoning.Ad,"a_{D}",0.001,0.1,2);
 	tf->SetParameter(9,tf->Nuclide.OMPN->PotentialKoning.Rso,"r_{SO}",0.001,0.5,2);
-	tf->SetParameter(10,tf->Nuclide.OMPN->PotentialKoning.Aso,"a_{SO}",0.001,0.1,2);*/
+	tf->SetParameter(10,tf->Nuclide.OMPN->PotentialKoning.Aso,"a_{SO}",0.001,0.1,2);
 	tf->SetParameter(11,-0.62,"#beta_{2}",0.001,-1,1);//это деформация, beta_2
 	
-	tf->SetParameter(0,tf->Nuclide.OMPN->PotentialKoning.v1,"V_{V}",0.0472557,20,70);
-	tf->SetParameter(1,tf->Nuclide.OMPN->PotentialKoning.w1,"W_{V}",0.0454369,0,10);
-	tf->SetParameter(2,tf->Nuclide.OMPN->PotentialKoning.d1,"W_{D}",0.038375,0,10);
-	tf->SetParameter(3,tf->Nuclide.OMPN->PotentialKoning.vso1,"V_{SO}",0.00800141,-1,10);
-	tf->SetParameter(4,tf->Nuclide.OMPN->PotentialKoning.wso1,"W_{SO}",0.0495613,0,10);	
-	tf->SetParameter(5,tf->Nuclide.OMPN->PotentialKoning.Rv,"r_{V}",0.001,0.5,2);
-	tf->SetParameter(6,tf->Nuclide.OMPN->PotentialKoning.Av,"a_{V}",0.001,0.1,2);
-	tf->SetParameter(7,tf->Nuclide.OMPN->PotentialKoning.Rd,"r_{D}",0.001,0.5,2);
-	tf->SetParameter(8,tf->Nuclide.OMPN->PotentialKoning.Ad,"a_{D}",0.001,0.1,2);
-	tf->SetParameter(9,tf->Nuclide.OMPN->PotentialKoning.Rso,"r_{SO}",0.001,0.5,2);
-	tf->SetParameter(10,tf->Nuclide.OMPN->PotentialKoning.Aso,"a_{SO}",0.001,0.1,2);
-	
+	/*tf->SetParameter(0,tf->Nuclide.OMPN->PotentialKoning.v1,"V_{V}",2*0.0383578,20,70);//0
+	tf->SetParameter(1,tf->Nuclide.OMPN->PotentialKoning.w1,"W_{V}",2*0.0446234,0,10);//1
+	tf->SetParameter(2,tf->Nuclide.OMPN->PotentialKoning.d1,"W_{D}",2*0.038375,0,10);//2
+	tf->SetParameter(3,tf->Nuclide.OMPN->PotentialKoning.vso1,"V_{SO}",2*0.00960727,-1,10);//3
+	tf->SetParameter(4,tf->Nuclide.OMPN->PotentialKoning.wso1,"W_{SO}",2*0.00031,0,10);	//4
+	tf->SetParameter(5,tf->Nuclide.OMPN->PotentialKoning.Rv,"r_{V}",10*0.000454251,0.5,2);//5
+	tf->SetParameter(6,tf->Nuclide.OMPN->PotentialKoning.Av,"a_{V}",10*6.76016e-05,0.1,2);//6
+	tf->SetParameter(7,tf->Nuclide.OMPN->PotentialKoning.Rd,"r_{D}",10*0.000387752,0.5,2);//7
+	tf->SetParameter(8,tf->Nuclide.OMPN->PotentialKoning.Ad,"a_{D}",10*0.00021874,0.1,2);//8
+	tf->SetParameter(9,tf->Nuclide.OMPN->PotentialKoning.Rso,"r_{SO}",10*9.02797e-05,0.5,2);//9
+	tf->SetParameter(10,tf->Nuclide.OMPN->PotentialKoning.Aso,"a_{SO}",10*0.00048675,0.1,2);//10
+	tf->SetParameter(11,-0.62,"#beta_{2}",6.2e-05,-1,1);//11*/
 	///
 	tf->ParAssignmentFunction=ParAssignmentFunction;
 	tf->GetEvaluationResult=GetEvaluationResult;
@@ -271,7 +271,7 @@ void MultiFitMT()
 	f.WriteTObject(&(tf->Chi2Values));
 	
 	TGraph *Elastic=tf->Nuclide.GetElasticAngularDistribution("Total","new");
-	TGraph *INL4=tf->Nuclide.Products[0].Levels[1].GetAngularDistribution("Total","new");
+	TGraph *INL4=tf->Nuclide.Products[1].Levels[1].GetAngularDistribution("Total","new");
 	f.WriteTObject(Elastic);
 	f.WriteTObject(INL4);
 	f.WriteTObject(&(tf->GraphForMultiFit));

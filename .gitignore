@@ -16,3 +16,5 @@ doc/manualRus.aux
 ResponseDataBase/ResponseDB.root
 *.pdf
 *.pdf
+testing/exp
+testing/MultiFitMT.cpp

@@ -935,6 +935,8 @@ class TalysFitterMT
 	TalysFitterMT(string NuclName, unsigned int ThreadNumber=0);
 	unsigned int InitThreadNumber=0;
 	Nucleus Nuclide;
+	string Projectile="n";
+	double ProjectileEnergy=14.1;
 	Nucleus InitNuclide;
 	Nucleus BestNuclide;
 	double lambda=1;
@@ -969,6 +971,11 @@ class TalysFitterMT
 	void AddToGraphForMultiFit(TGraphErrors *gr, double Mv);
 	void AddToGraphForMultiFit(TGraph *gr, double Mv);
 	void GenerateGraphForMultiFit(vector<TObject*> &PointersToGraphs,vector<double> &_Offsets);
+	
+	void EstimateEpsilonValues();
+	void EstimateEpsilonValueForParameterThread(int parValue, double *result);
+	double EstimateEpsilonValueForParameter(int parValue);
+	double EvalInitDiff(int parNumber, double Epsilon);
 	TPaveText GenerateTPaveTextForFitResult(double x1=0.7,double y1=0.6,double x2=0.95,double y2=0.95,string Option="bl NDC");
 };
 double EvalChi2(TalysFitterMT *TFM,Nucleus* Nucl);
