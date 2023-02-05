@@ -940,7 +940,7 @@ vector<TGraphErrors*> Level::GetEXFORAngularDistributions(double Emin,double Ema
 			int MarkerColor=1;
 			for(unsigned int i=0;i<EXFORAngularDistributions.size();i++)
 			{
-				if(!TalysLibManager::Instance().IsInExcludeAuthors(EXFORAngularDistributions[i].Author))
+				if(!TalysLibManager::Instance().IsInExcludedAuthors(EXFORAngularDistributions[i].Author))
 				{
 					if(((EXFORAngularDistributions[i].ProjectileEnergy>Emin)&&(EXFORAngularDistributions[i].ProjectileEnergy<Emax))||((Emin==0)&&(Emax==0)))
 					{
@@ -988,7 +988,21 @@ vector<TGraphErrors*> Level::GetEXFORAngularDistributions(double Emin,double Ema
 		for(unsigned int i=0;i<PointerToLevel->C4AngularData.size();i++)
 		{
 			//cout<<"C4AngularData[i].ProjectileEnergy/1e6 "<<C4AngularData[i].ProjectileEnergy/1e6<<"\n";
-			if(((PointerToLevel->C4AngularData[i].ProjectileEnergy/1e6>Emin)&&(PointerToLevel->C4AngularData[i].ProjectileEnergy/1e6<Emax))||((Emax==0)&&(Emin==0)))
+			TalysLibManager *manager=TalysLibManager::GetPointer();
+			bool Add=true;
+			if((manager->ThereAreIncludedSubentries())||(manager->ThereAreIncludedAuthors()))
+			{
+				Add=false;
+				if(manager->IsInIncludedAuthors(PointerToLevel->C4AngularData[i].Author1)||manager->IsInIncludedAuthors(PointerToLevel->C4AngularData[i].DataSet))
+				{
+					Add=true;
+				}
+			}
+			if((manager->IsInExcludedAuthors(PointerToLevel->C4AngularData[i].Author1))||(manager->IsInExcludedSubEntries(PointerToLevel->C4AngularData[i].DataSet)))
+			{
+				Add=false;
+			}
+			if((((PointerToLevel->C4AngularData[i].ProjectileEnergy/1e6>Emin)&&(PointerToLevel->C4AngularData[i].ProjectileEnergy/1e6<Emax))||((Emax==0)&&(Emin==0)))&&Add)
 			{
 				if(GenerateHLink)
 				{
@@ -1022,7 +1036,7 @@ vector<TGraphErrors*> Level::GetEXFORCrossSections(double Emin,double Emax, bool
 			int MarkerColor=1;
 			for(unsigned int i=0;i<EXFORCrossSections.size();i++)
 			{
-				if(!TalysLibManager::Instance().IsInExcludeAuthors(EXFORCrossSections[i].Author))
+				if(!TalysLibManager::Instance().IsInExcludedAuthors(EXFORCrossSections[i].Author))
 				{
 					if(((EXFORCrossSections[i].Emax>Emin)&&(EXFORCrossSections[i].Emin<Emax))||((Emin==0)&&(Emax==0)))
 					{
@@ -1070,11 +1084,28 @@ vector<TGraphErrors*> Level::GetEXFORCrossSections(double Emin,double Emax, bool
 		{
 			//if(((C4EnergyData[i].ProjectileEnergy/1e3>Emin)&&(C4EnergyData[i].ProjectileEnergy/1e3<Emax))||((Emax==0)&&(Emin==0)))
 			{
-				if(GenerateHLink)
+				TalysLibManager *manager=TalysLibManager::GetPointer();
+				bool Add=true;
+				if((manager->ThereAreIncludedSubentries())||(manager->ThereAreIncludedAuthors()))
 				{
-					HyperlinksTMP.push_back(string(PointerToLevel->C4EnergyData[i].GetTitle())+";"+PointerToLevel->C4EnergyData[i].DOI);
+					Add=false;
+					if(manager->IsInIncludedAuthors(PointerToLevel->C4EnergyData[i].Author1)||manager->IsInIncludedSubEntries(PointerToLevel->C4EnergyData[i].DataSet))
+					{
+						Add=true;
+					}
 				}
-				result.push_back(&(PointerToLevel->C4EnergyData[i]));
+				if((manager->IsInExcludedAuthors(PointerToLevel->C4EnergyData[i].Author1))||(manager->IsInExcludedSubEntries(PointerToLevel->C4EnergyData[i].DataSet)))
+				{
+					Add=false;
+				}
+				if(Add)
+				{
+					if(GenerateHLink)
+					{
+						HyperlinksTMP.push_back(string(PointerToLevel->C4EnergyData[i].GetTitle())+";"+PointerToLevel->C4EnergyData[i].DOI);
+					}
+					result.push_back(&(PointerToLevel->C4EnergyData[i]));
+				}
 			}
 		}
 	}

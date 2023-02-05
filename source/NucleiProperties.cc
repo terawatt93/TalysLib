@@ -2525,7 +2525,7 @@ vector<TGraphErrors*> Nucleus::GetEXFORAngularDistributions(double Emin,double E
 		int MarkerStyle=20;
 		for(unsigned int i=0;i<EXFORAngularDistributions.size();i++)
 		{
-			if(!TalysLibManager::Instance().IsInExcludeAuthors(EXFORAngularDistributions[i].Author))
+			if(!TalysLibManager::Instance().IsInExcludedAuthors(EXFORAngularDistributions[i].Author))
 			{
 				if(((EXFORAngularDistributions[i].ProjectileEnergy>Emin)&&(EXFORAngularDistributions[i].ProjectileEnergy<Emax))||((Emin==0)&&(Emax==0)))
 				{
@@ -2592,7 +2592,7 @@ vector<TGraphErrors*> Nucleus::GetEXFORCrossSections(string Type,double Emin,dou
 		int MarkerStyle=20;
 		for(unsigned int i=0;i<table->size();i++)
 		{
-			if(!TalysLibManager::Instance().IsInExcludeAuthors(table->at(i).Author))
+			if(!TalysLibManager::Instance().IsInExcludedAuthors(table->at(i).Author))
 			{
 				if(((table->at(i).ProjectileEnergy>Emin)&&(table->at(i).ProjectileEnergy<Emax))||((Emin==0)&&(Emax==0)))
 				{

@@ -87,6 +87,8 @@ class TalysLibManager//потом перенсти в отдельный фай�
 {
 	public:
 	static TalysLibManager& Instance();
+	static TalysLibManager* GetPointer();
+	//static TalysLibManager* Pointer;//!
 	bool EnableWarning=true;
 	void SetEnableWarning(bool flag);
 	void SetC4Flag(bool flag);
@@ -100,9 +102,27 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	void SetEXFORSource(string Source);
 	int GetEXFORSource();
 	double EnergyWindowWidthForEXFORAdist=1;
-	vector<string> ExcludeAuthors;
-	bool IsInExcludeAuthors(string Author);
-	void DeleteExpDataForAuthor(string Author);
+	vector<string> ExcludeSubEntries;//список SubEntry, которые надо исключить
+	vector<string> ExcludeAuthors;//список авторов, чьи данные не берем
+	
+	bool ThereAreIncludedSubentries();//проверка, что есть "белый" список SubEntry
+	bool ThereAreIncludedAuthors();//проверка, что есть "белый" список авторов
+	
+	vector<string> IncludeSubEntries;//список SubEntry, которые надо использовать
+	vector<string> IncludeAuthors;//список авторов, чьи данные берем
+	
+	bool IsInIncludedAuthors(string Author);//проверка автора на наличие в списке Included
+	void AddAuthorToIncludeList(string Author);//добавить автора в список Included
+	
+	bool IsInIncludedSubEntries(string SubEntry);//проверка SubEntry на наличие в списке Included
+	void AddSubentryToIncludeList(string SubEntry);//добавить SubEntry в список используемых
+	
+	bool IsInExcludedAuthors(string Author);//проверка автора
+	void AddAuthorToExcludeList(string Author);//добавить автора в список исключений
+	
+	bool IsInExcludedSubEntries(string SubEntry);//проверка SubEntry
+	void AddSubentryToExcludeList(string SubEntry);//добавить SubEntry в список исключений
+	
 	void Purge();
 	string AOption;
 	void SetAOption(string value);//управляет запросом данных с A=0

@@ -34,17 +34,21 @@ double EvalChi2(TalysFitterMT *TFM,Nucleus* Nucl)
 		x_err=GraphForMultiFit.GetErrorX(i);
 		y_err=GraphForMultiFit.GetErrorY(i);
 		double FuncValue=TFM->GetEvaluationResult(x,TFM,Nucl);
+		//cout<<"Chi2:x,y,x_err,y_err"<<x<<" "<<y<<" "<<x_err<<" "<<y_err<<"\n";
 		if(FillFitValues)
 		{
 			TFM->FitValues.SetPoint(i,x,FuncValue);
 		}
-		if((x_err>0)||(y_err>0))
+		if((!isnan(x))&&(!isnan(y))&&(!isnan(x_err))&&(!isnan(y_err)))
 		{
-			result+=pow(y-FuncValue,2)/(pow(x_err,2)+pow(y_err,2));
-		}
-		else
-		{
-			result+=pow(y-FuncValue,2);
+			if(((x_err>0)||(y_err>0)))
+			{
+				result+=pow(y-FuncValue,2)/(pow(x_err,2)+pow(y_err,2));
+			}
+			else
+			{
+				result+=pow(y-FuncValue,2);
+			}
 		}
 	}
 	//cout<<"result:"<<result<<"\n";
@@ -245,8 +249,12 @@ void TalysFitterMT::AddToGraphForMultiFit(TGraphErrors *gr, double Mv)
 		x_err=gr->GetErrorX(i);
 		y_err=gr->GetErrorY(i);
 		int NMPoints=GraphForMultiFit.GetN();
-		GraphForMultiFit.SetPoint(NMPoints,x+Mv,y);
-		GraphForMultiFit.SetPointError(NMPoints,x_err,y_err);
+		if((x>=0)&&(y>=0))
+		{
+			//cout<<"x,y,x_err,y_err"<<x+Mv<<" "<<y<<" "<<x_err<<" "<<y_err<<"\n";
+			GraphForMultiFit.SetPoint(NMPoints,x+Mv,y);
+			GraphForMultiFit.SetPointError(NMPoints,x_err,y_err);
+		}
 	}
 }
 
@@ -259,8 +267,12 @@ void TalysFitterMT::AddToGraphForMultiFit(TGraph *gr, double Mv)
 		x_err=0;
 		y_err=0;
 		int NMPoints=GraphForMultiFit.GetN();
-		GraphForMultiFit.SetPoint(NMPoints,x+Mv,y);
-		GraphForMultiFit.SetPointError(NMPoints,x_err,y_err);
+		if((x>=0)&&(y>=0))
+		{
+			GraphForMultiFit.SetPoint(NMPoints,x+Mv,y);
+			GraphForMultiFit.SetPointError(NMPoints,x_err,y_err);
+		}
+		
 	}
 }
 
@@ -276,12 +288,12 @@ double TalysFitterMT::EvalInitDiff(int parNumber, double Epsilon)
 	Nucl.GenerateProducts(Projectile);
 	//double Chi2Minus=EvalChi2Init(this,&Nucl);
 	double Chi2Minus=EvalChi2(this,&Nucl);
-	cout<<"Chi2Minus:"<<Chi2Minus<<"\n";
+	//Chi2Minus:"<<Chi2Minus<<"\n";
 	ParametersTMP[parNumber]=Parameters[parNumber]+Epsilon;
 	ParAssignmentFunction(this,&Nucl,ParametersTMP);
 	Nucl.SetProjectileEnergy(ProjectileEnergy);
 	Nucl.GenerateProducts(Projectile);
-	cout<<"Chi2Plus:"<<Chi2Minus<<"\n";
+	//cout<<"Chi2Plus:"<<Chi2Minus<<"\n";
 	//double Chi2Plus=EvalChi2Init(this,&Nucl);
 	double Chi2Plus=EvalChi2(this,&Nucl);
 	return (Chi2Plus-Chi2Minus)/(2*Epsilon);
@@ -481,7 +493,13 @@ void TalysFitterMT::GenerateGraphForMultiFit(vector<TObject*> &PointersToGraphs,
 		if(PointersToGraphs[i]->InheritsFrom("TMultiGraph"))
 		{
 			TList* GraphList=((TMultiGraph*)PointersToGraphs[i])->GetListOfGraphs();
+			cout<<"i="<<i<<"\n";
+			if(!GraphList)
+			{
+				cout<<"!GraphList\n";
+			}
 			int NumberOfGraphs=GraphList->GetEntries();
+			cout<<"NumberOfGraphs:"<<NumberOfGraphs<<"\n";
 			for(int j=0;j<NumberOfGraphs;j++)
 			{
 				TObject* obj=GraphList->At(j);

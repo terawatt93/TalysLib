@@ -3,7 +3,7 @@
 
 void GetAngularDistributionC4WithHref()
 {
-    Nucleus C("12C");
+    Nucleus C("32S");
     C.GenerateProducts();
     TCanvas c;
     c.Print("ADIST.pdf[","pdf");
@@ -12,7 +12,7 @@ void GetAngularDistributionC4WithHref()
     for(unsigned int i=0;i<4;i++)
     {
 		Level *l=&(C.FindProductByReaction("(n,n')")->Levels[i]);
-		TMultiGraph* mg=l->GetEXFORTMultiGraphForAngularDistributions(14,14.5);
+		TMultiGraph* mg=l->GetEXFORTMultiGraphForAngularDistributions(13,15);
 		TGraph *g_talys_total=l->GetAngularDistribution("Total");
 		TGraph *g_talys_dir=l->GetAngularDistribution("Direct");
 		TGraph *g_talys_com=l->GetAngularDistribution("Compound");
