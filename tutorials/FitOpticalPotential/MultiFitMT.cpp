@@ -161,12 +161,12 @@ void MultiFitMT()
 	c1.Clear();
 	c1.Print("TestMultiFitMT.pdf[","pdf");
 	gPad->SetLogy(1);
-	mgrElastic->Draw("ap");
+	mgrElastic->Draw("a plc pmc");
 	Elastic->SetLineColor(2);
 	Elastic->Draw("l");
 	gPad->BuildLegend();
 	c1.Print("TestMultiFitMT.pdf","pdf");
-	mgrInelastic->Draw("ap");
+	mgrInelastic->Draw("a plc pmc");
 	INL4->SetLineColor(2);
 	INL4->Draw("l");
 	gPad->BuildLegend();
