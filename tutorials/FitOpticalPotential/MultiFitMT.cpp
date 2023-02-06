@@ -174,6 +174,8 @@ void MultiFitMT()
 	
 	tf->GraphForMultiFit.Draw("ap");
 	tf->FitValues.Draw("l");
+	TPaveText p=tf->GenerateTPaveTextForFitResult();
+	p.Draw();
 	c1.Print("TestMultiFitMT.pdf","pdf");
 	
 	c1.Print("TestMultiFitMT.pdf]","pdf");
