@@ -993,7 +993,7 @@ vector<TGraphErrors*> Level::GetEXFORAngularDistributions(double Emin,double Ema
 			if((manager->ThereAreIncludedSubentries())||(manager->ThereAreIncludedAuthors()))
 			{
 				Add=false;
-				if(manager->IsInIncludedAuthors(PointerToLevel->C4AngularData[i].Author1)||manager->IsInIncludedAuthors(PointerToLevel->C4AngularData[i].DataSet))
+				if(manager->IsInIncludedAuthors(PointerToLevel->C4AngularData[i].Author1)||manager->IsInIncludedSubEntries(PointerToLevel->C4AngularData[i].DataSet))
 				{
 					Add=true;
 				}
