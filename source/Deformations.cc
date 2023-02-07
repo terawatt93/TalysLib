@@ -27,6 +27,7 @@ bool CheckFieldContent(string s)
 	}
 	return false;
 }
+
 void LevelDeformation::GetFromString(string input)
 {
 	
@@ -34,21 +35,12 @@ void LevelDeformation::GetFromString(string input)
 	string TypeOfLevelS=input.substr(7,1);
 	string NumberOfBandS=input.substr(8,4);
 	NumberOfBand=-1; NumberOfLevel=-1; LOfBand=-1; NumberOfPhonons=-1; MagneticNumber=-1;
-	//cout<<NumOfLevelS<<"|"<<TypeOfLevelS<<"|"<<NumberOfBandS<<"\n";
-	if(input.size()>25)
+	if(input.size()>12)
 	{
 		string LOfBandS=input.substr(12,4);
 		string NumberOfPhononsS=input.substr(16,4);
 		string MagneticNumberS=input.substr(20,4);
-		stringstream s(input.substr(24,input.size()-24));
-		//cout<<NumOfLevelS<<"|"<<TypeOfLevelS<<"|"<<NumberOfBandS<<"|"<<LOfBandS<<"|"<<NumberOfPhononsS<<"|"<<MagneticNumberS<<"|\n";
-		while(s)
-		{
-			float b=0;
-			s>>b;
-			if(b!=0)
-			Beta.push_back(b);
-		}
+		
 		if(CheckFieldContent(LOfBandS))
 		{
 			LOfBand=atoi(LOfBandS.c_str());
@@ -60,6 +52,22 @@ void LevelDeformation::GetFromString(string input)
 		if(CheckFieldContent(MagneticNumberS))
 		{
 			MagneticNumber=atoi(MagneticNumberS.c_str());
+		}
+	}
+	
+	
+	//cout<<NumOfLevelS<<"|"<<TypeOfLevelS<<"|"<<NumberOfBandS<<"\n";
+	if(input.size()>25)
+	{
+		
+		stringstream s(input.substr(24,input.size()-24));
+		//cout<<NumOfLevelS<<"|"<<TypeOfLevelS<<"|"<<NumberOfBandS<<"|"<<LOfBandS<<"|"<<NumberOfPhononsS<<"|"<<MagneticNumberS<<"|\n";
+		while(s)
+		{
+			float b=0;
+			s>>b;
+			if(b!=0)
+			Beta.push_back(b);
 		}
 		//cout<<"NBand:"<<NumberOfBand<<" L:"<<LOfBand<<" NF:"<<NumberOfPhonons<<" Mag:"<<MagneticNumber<<" Type:"<<TypeOfLevel<<" ";
 		/*for(unsigned int i=0;i<Beta.size();i++)
@@ -190,9 +198,13 @@ void Deformation::WriteDeformation(string filename)
 	{
 		ofs<<ContentOfFile[i]<<"\n";
 	}
-	NLevels=LevelDeformations.size();
+	if(NLevels==0)
+	{
+		NLevels=LevelDeformations.size();
+	}
+	
 	ofs<<GenerateMainDefString(Z,A,NLevels,TypeOfCollectivity,TypeOfDeformation)<<"\n";
-	for(unsigned int i=0;i<LevelDeformations.size();i++)
+	for(int i=0;i<NLevels;i++)
 	{
 		ofs<<LevelDeformations[i].GenerateStringForDefFile()<<"\n";
 	}
@@ -324,4 +336,14 @@ void Deformation::SetDefaultDeformationType(char _Type)
 	{
 		LevelDeformations[i].TypeOfLevel=_Type;
 	}
+}
+void Deformation::SetNLevels(int N)//установить количество уровней с деформацией
+{
+	if(N>LevelDeformations.size()-1)
+	{
+		cout<<"This is Deformation::SetNLevels(int N): N> than number of assigned levels with deformation. This functional hasn't been implemented. Set N="<<LevelDeformations.size()<<"\n";
+		NLevels=LevelDeformations.size();
+		return;
+	}
+	NLevels=N;
 }

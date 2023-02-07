@@ -538,7 +538,7 @@ class DeformationData:public TObject
 {
 	public:
 	DeformationData(): TObject() { }
-	int A,Z,NLevels;
+	int A=0,Z=0,NLevels=0;
 	char TypeOfCollectivity='S',TypeOfDeformation='B';
 	vector<LevelDeformationData> LevelDeformationsData;
 	vector<string> ContentOfFile;
@@ -559,6 +559,7 @@ class Deformation:public DeformationData
 	void SetDeformation(Level *l,char LevT, int BandN=-1, int BandL=-1, int MagN=-1,int NPhon=-1, vector<float> *Def=0);
 	vector<float> GetDeformationBeta(Level *l);
 	void SetDefaultDeformationType(char _Type='D');
+	void SetNLevels(int N);//установить количество уровней с деформацией
 	//void RestoreDeformation();
 	void Sort();
 	DeformationData ToDeformationData();
