@@ -557,8 +557,10 @@ class Deformation:public DeformationData
 	void ReadDeformation();
 	void WriteDeformation(string filename);
 	void SetDeformation(Level *l,char LevT, int BandN=-1, int BandL=-1, int MagN=-1,int NPhon=-1, vector<float> *Def=0);
+	void SetDeformationValue(Level *l,vector<float> *Def=0);
 	vector<float> GetDeformationBeta(Level *l);
 	void SetDefaultDeformationType(char _Type='D');
+	char DefaultDeformation='D';
 	void SetNLevels(int N);//установить количество уровней с деформацией
 	//void RestoreDeformation();
 	void Sort();

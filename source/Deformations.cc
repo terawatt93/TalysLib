@@ -347,3 +347,36 @@ void Deformation::SetNLevels(int N)//установить количество �
 	}
 	NLevels=N;
 }
+void Deformation::SetDeformationValue(Level *l,vector<float> *Def)
+{
+	LevelDeformation *ld=0;
+	if(l==0)
+	{
+		cout<<"Deformation::SetDeformation(...) error: level not defined. return \n";
+		return;
+	}
+	int LevN=l->Number;
+	for(unsigned int i=0;i<LevelDeformations.size();i++)
+	{
+		if(LevelDeformations[i].NumberOfLevel==LevN)
+		{
+			ld=&LevelDeformations[i];
+			break;
+		}
+	}
+	if(ld)
+	{
+		if(Def!=0)
+		{
+			ld->Beta.resize(0);
+			for(unsigned int i=0;i<Def->size(); i++)
+			{
+				ld->Beta.push_back(Def->at(i));
+			}
+		}
+	}
+	else
+	{
+		SetDeformation(l,DefaultDeformation,-1,-1,-1,-1,Def);
+	}
+}
