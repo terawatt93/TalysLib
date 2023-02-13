@@ -629,6 +629,7 @@ class Level:public LevelData
 	TGraph2D* GetAngularDistribution2D(string type="Total",string option="");
 	TGraph* GetAngularDistributionAtEnergy(float Energy,string type="Total",string option="");
 	TMultiGraph* GetTMultiGraphForAngularDistributions(string graphics="all");
+	TMultiGraph* GetTMultiGraphForCrossSections(string graphics="all");
 	TGraph *GetCSGraph(string type="Total");
 	
 	LevelData ToLevelData();

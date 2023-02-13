@@ -530,7 +530,6 @@ TMultiGraph* Level::GetTMultiGraphForAngularDistributions(string graphics)
 {
 	TMultiGraph* AllAngularDistributions=new TMultiGraph();
 	GetAngularDistribution();//AdistTotalTalys, AdistCompoundTalys, AdistDirectTalys
-	TGraph* elastic;
 	if(graphics=="all")
 	{
 		AllAngularDistributions->Add(GetAngularDistribution("Total"));
@@ -558,7 +557,9 @@ TMultiGraph* Level::GetTMultiGraphForAngularDistributions(string graphics)
 		}
 		for(unsigned int i=0;i<Bases.size();i++)
 		{
-			AllAngularDistributions->Add(GetAngularDistribution(Bases[i]));
+			TGraph *g=GetAngularDistribution(Bases[i]);
+			if(g->GetN()>0)
+			AllAngularDistributions->Add(g);
 		}
 		
 		stringstream sstr(graphics);
@@ -593,6 +594,57 @@ TMultiGraph* Level::GetTMultiGraphForAngularDistributions(string graphics)
 		}
 	}*/
 	return AllAngularDistributions;
+}
+
+TMultiGraph* Level::GetTMultiGraphForCrossSections(string graphics)
+{
+	TMultiGraph* AllCrossSections=new TMultiGraph();
+	GetAngularDistribution();//AdistTotalTalys, AdistCompoundTalys, AdistDirectTalys
+	if(graphics=="all")
+	{
+		AllCrossSections->Add(GetCSGraph("Total"));
+		AllCrossSections->Add(GetCSGraph("Direct"));
+		AllCrossSections->Add(GetCSGraph("Compound"));
+		AllCrossSections->Add(GetCSGraph("ENDF"));
+	}
+	else if((graphics.find("all")!=string::npos)&&(graphics.find("eval")!=string::npos))
+	{
+		vector<string> Bases;
+		TalysLibManager *manager=TalysLibManager::GetPointer();
+		if(manager->GetAOption()=="A=0")
+		{
+			Bases=ENDFFile::GetListOfBases(fNucleus->fMotherNucleus->Projectile,fNucleus->fMotherNucleus->Z,0);
+		}
+		else 
+		{
+			Bases=ENDFFile::GetListOfBases(fNucleus->fMotherNucleus->Projectile,fNucleus->fMotherNucleus->Z,fNucleus->fMotherNucleus->A);
+			if(manager->GetAOption()=="A>=0")
+			{
+				vector<string> Bases0=ENDFFile::GetListOfBases(fNucleus->fMotherNucleus->Projectile,fNucleus->fMotherNucleus->Z,0);
+				Bases.insert(Bases.end(), Bases0.begin(), Bases0.end());
+			}
+			
+		}
+		for(unsigned int i=0;i<Bases.size();i++)
+		{
+			TGraph *g=GetCSGraph(Bases[i]);
+			if(g->GetN()>0)
+			AllCrossSections->Add(g);
+		}
+		
+		stringstream sstr(graphics);
+	}
+	else
+	{
+		stringstream s_inp(graphics);
+		while(s_inp)
+		{
+			string option;
+			s_inp>>option;
+			AllCrossSections->Add(GetCSGraph(option));
+		}
+	}
+	return AllCrossSections;
 }
 
 void Level::SetTGraphNameAndTitle(string ValName)

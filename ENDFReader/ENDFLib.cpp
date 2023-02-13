@@ -1284,6 +1284,8 @@ EvaluatedDataGraph ENDFFile::GetCrossSections(string OutgoingParticle,int LevelN
 			result=*((EvaluatedDataGraph*)CSTable->GetTGraph());
 		}
 	}
+	result.SetName(TString::Format("CS_Lev_%d",LevelNum));
+	result.SetTitle(TString::Format("%s %s cross section (Level=%d);#sigma, mb",Source.c_str(),OutgoingParticle.c_str(),LevelNum));
 	result.fFile=this;
 	return result;
 }
