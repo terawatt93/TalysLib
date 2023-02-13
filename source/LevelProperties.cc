@@ -27,6 +27,7 @@ string GetAOption(string Source)
 	{
 		return "A>=0";
 	}
+	//return TalysLibManager::Instance().GetAOption();
 	return "";
 }
 
@@ -38,6 +39,7 @@ ENDFFile *GetENDFFile(Nucleus *fNucleus,string Source)
 		return 0;
 	}
 	ENDFFile *f=0;
+	Source+=TalysLibManager::Instance().GetAOption();
 	//обработка случая с A=0
 	if(Source.find("A=0")!=string::npos)
 	{
@@ -536,7 +538,42 @@ TMultiGraph* Level::GetTMultiGraphForAngularDistributions(string graphics)
 		AllAngularDistributions->Add(GetAngularDistribution("Compound"));
 		AllAngularDistributions->Add(GetAngularDistribution("ENDF"));
 	}
+	else if((graphics.find("all")!=string::npos)&&(graphics.find("eval")!=string::npos))
+	{
+		vector<string> Bases;
+		TalysLibManager *manager=TalysLibManager::GetPointer();
+		if(manager->GetAOption()=="A=0")
+		{
+			Bases=ENDFFile::GetListOfBases(fNucleus->fMotherNucleus->Projectile,fNucleus->fMotherNucleus->Z,0);
+		}
+		else 
+		{
+			Bases=ENDFFile::GetListOfBases(fNucleus->fMotherNucleus->Projectile,fNucleus->fMotherNucleus->Z,fNucleus->fMotherNucleus->A);
+			if(manager->GetAOption()=="A>=0")
+			{
+				vector<string> Bases0=ENDFFile::GetListOfBases(fNucleus->fMotherNucleus->Projectile,fNucleus->fMotherNucleus->Z,0);
+				Bases.insert(Bases.end(), Bases0.begin(), Bases0.end());
+			}
+			
+		}
+		for(unsigned int i=0;i<Bases.size();i++)
+		{
+			AllAngularDistributions->Add(GetAngularDistribution(Bases[i]));
+		}
+		
+		stringstream sstr(graphics);
+	}
 	else
+	{
+		stringstream s_inp(graphics);
+		while(s_inp)
+		{
+			string option;
+			s_inp>>option;
+			AllAngularDistributions->Add(GetAngularDistribution(option));
+		}
+	}
+	/*else
 	{
 		if((int)graphics.find("Total")>-1)
 		{
@@ -554,7 +591,7 @@ TMultiGraph* Level::GetTMultiGraphForAngularDistributions(string graphics)
 		{
 			AllAngularDistributions->Add(GetAngularDistribution("ENDF"));
 		}
-	}
+	}*/
 	return AllAngularDistributions;
 }
 

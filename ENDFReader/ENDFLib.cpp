@@ -1410,3 +1410,37 @@ ENDFFile::~ENDFFile()
 		system(("rm "+LoadedFileName).c_str());
 	}
 }
+vector<string> ENDFFile::GetListOfBases(string Projectile,int Z, int A)
+{
+	vector<string> Bases;
+	vector<string> BaseNames;
+	vector<string> result;
+	sqlite3* BASE=0;//!
+	string PathToLinkDB=getenv("TALYSLIBDIR");
+	PathToLinkDB+="/ENDFReader/ENDFFlieLists/ENDFBASE.db";
+	sqlite3_open((PathToLinkDB).c_str(), &BASE); 
+	sqlite3_stmt *stmt;
+	
+	sqlite3_prepare_v2(BASE,"SELECT * from TablesList", -1, &stmt, NULL);
+	while(SQLITE_ROW==sqlite3_step(stmt))
+	{
+		const unsigned char* requestRes=sqlite3_column_text(stmt, 0);
+		Bases.push_back(reinterpret_cast<const char*>(requestRes));
+		requestRes=sqlite3_column_text(stmt, 1);
+		BaseNames.push_back(reinterpret_cast<const char*>(requestRes));
+	}
+	sqlite3_finalize(stmt);
+	
+	for(unsigned int i=0;i<Bases.size();i++)
+	{
+		sqlite3_prepare_v2(BASE,("SELECT * from "+BaseNames[i]+" WHERE Projectile == \""+Projectile+"\" AND Z=="+to_string(Z)+" AND A=="+to_string(A)+";").c_str(), -1, &stmt, NULL);
+		sqlite3_step(stmt);
+		const unsigned char* requestRes=sqlite3_column_text(stmt, 0);
+		if(requestRes)
+		{
+			result.push_back(Bases[i]);
+		}
+	}
+	sqlite3_finalize(stmt);
+	return result;
+}

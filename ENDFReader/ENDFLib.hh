@@ -191,8 +191,10 @@ class ENDFFile:public TObject
 	sqlite3* ENDFBASE=0;//!
 	Nucleus *fNucleus=0;//!
 	bool WasRead=false;
+	static vector<string> GetListOfBases(string Projectile,int Z, int A);
 	private:
 	ENDFTable* LastENDFTable=0;
+	
 	public:
 	~ENDFFile();
 	ClassDef(ENDFFile, 1);
