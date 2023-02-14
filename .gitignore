@@ -18,3 +18,8 @@ ResponseDataBase/ResponseDB.root
 *.pdf
 testing/exp
 testing/MultiFitMT.cpp
+tutorials/tutorials_for_data_analysis/GetEvaluatedData/0.tex
+tutorials/tutorials_for_data_analysis/GetEvaluatedData/1.tex
+tutorials/tutorials_for_data_analysis/GetEvaluatedData/2.tex
+tutorials/tutorials_for_data_analysis/GetEvaluatedData/3.tex
+tutorials/tutorials_for_data_analysis/GetEvaluatedData/references.txt
