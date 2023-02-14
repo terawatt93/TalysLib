@@ -557,9 +557,14 @@ TMultiGraph* Level::GetTMultiGraphForAngularDistributions(string graphics)
 		}
 		for(unsigned int i=0;i<Bases.size();i++)
 		{
-			TGraph *g=GetAngularDistribution(Bases[i]);
-			if(g->GetN()>0)
-			AllAngularDistributions->Add(g);
+			cout<<"Get From "<<Bases[i]<<"\n";
+			if((Bases[i]!="BROND-2-2")&&(Bases[i]!="JENDL-3.2"))//зависает! будем искать
+			{
+				TGraph *g=GetAngularDistribution(Bases[i]);
+				if(g->GetN()>0)
+				AllAngularDistributions->Add(g);
+			}
+			
 		}
 		
 		stringstream sstr(graphics);

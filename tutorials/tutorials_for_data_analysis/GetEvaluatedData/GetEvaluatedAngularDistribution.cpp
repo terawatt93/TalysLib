@@ -18,7 +18,6 @@ void GetEvaluatedAngularDistribution()
 		mg->Draw("a plc pmc ");
 		gPad->BuildLegend();
 		gPad->SetLogy(1);
-		c.Print(TString::Format("%d.tex",i));
 		c.Print("ADIST.pdf","pdf");
 		c.Clear();
 	}
