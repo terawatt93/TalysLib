@@ -25,11 +25,7 @@
 #pragma link C++ class TalysLibManager+;
 #pragma link C++ class OMPManager+;
 #pragma link C++ class TLElement+;
-#pragma link C++ class ENDFFile+;
-#pragma link C++ class ENDFDictonary+;
-#pragma link C++ class ENDFBasicTable+;
-#pragma link C++ class ENDFAngularDistribution+;
-#pragma link C++ class ENDFTable+;
+
 #pragma link C++ class EXFORManager;
 
 #pragma link C++ class C4Entry+;
@@ -37,5 +33,16 @@
 #pragma link C++ class C4DataSet+;
 #pragma link C++ class C4EnergyDistribution+;
 #pragma link C++ class C4AngularDistribution+;
+#pragma link C++ class C4Container+;
+
+#pragma link C++ class ENDFDescription+;
+#pragma link C++ class ENDFContentEntry+;
+#pragma link C++ class ENDFContent+;
+#pragma link C++ class ENDFFile+;
+#pragma link C++ class ENDFDictonary+;
+#pragma link C++ class ENDFBasicTable+;
+#pragma link C++ class ENDFAngularDistribution+;
+#pragma link C++ class ENDFTable+;
+#pragma link C++ class MTEntry+;
 
 #endif

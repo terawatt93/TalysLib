@@ -18,7 +18,65 @@
 #include <TVector3.h>
 #include "TXlswriter.cpp"
 #include <algorithm>
+
+#include <TSocket.h>
+#include <TMessage.h>
+
 #pragma once
+
+Nucleus GetFromRemote(string name)
+{
+	TalysLibManager* m=TalysLibManager::GetPointer();
+	TSocket *sock = new TSocket(m->RemoteIP.c_str(),m->RemotePort);
+	char str[32];
+	sock->Recv(str, 32);
+	if(!(string(str).size()>0))
+	{
+		cout<<"Server "<<m->RemoteIP.c_str()<<":"<<m->RemotePort<<" does not responses!\n";
+	}
+	TMessage *mess;
+	sock->Send(("create "+name).c_str());
+	sock->Recv(mess);
+	if (mess->What() == kMESS_OBJECT) 
+	{
+		//printf("got object of class: %s\n", mess->GetClass()->GetName());
+		Nucleus *Nucl = (Nucleus*)mess->ReadObject(mess->GetClass());
+		Nucl->AssignPointers();
+		//Nucl->SaveToXLSX("remote.xlsx");
+		delete mess;
+		return *Nucl;
+	}
+	sock->Close();
+}
+void PerformRemoteCalculation(Nucleus *Nucl)
+{
+	TalysLibManager* m=TalysLibManager::GetPointer();
+	TSocket *sock = new TSocket(m->RemoteIP.c_str(),m->RemotePort);
+	char str[32];
+	sock->Recv(str, 32);
+	if(!(string(str).size()>0))
+	{
+		cout<<"Server "<<m->RemoteIP.c_str()<<":"<<m->RemotePort<<" does not responses!\n";
+	}
+	TMessage m2(kMESS_OBJECT);
+	m2.WriteObject(Nucl);
+	sock->Send(m2);
+	
+	TMessage *mess;
+	sock->Recv(mess);
+	if (mess->What() == kMESS_OBJECT) 
+	{
+		//printf("got object of class: %s\n", mess->GetClass()->GetName());
+		Nucleus *Nucl1 = (Nucleus*)mess->ReadObject(mess->GetClass());
+		//Nucl->AssignPointers();
+		//Nucl->SaveToXLSX("remote.xlsx");
+		delete mess;
+		(*Nucl)=*Nucl1;
+		Nucl->AssignPointers();
+	}
+	sock->Close();
+}
+
 
 TH1F GenerateSpectrumFromDB(TH2F &h,double Energy)//реализация линейной интерполяции
 {
@@ -308,64 +366,73 @@ const char* NucleusData::GetName()  const
 
 void Nucleus::Create(string Name,string Reaction)
 {
-	fMaterial=0;
-	TH1::AddDirectory(kFALSE);
-	this->Name=Name;
-	this->Reaction=Reaction;
-	Element=GetNucleusName(Name);
-	if(Name.find("BKG")==string::npos)
+	if(TalysLibManager::Instance().RemoteCalculation)
 	{
-		GetAZ(Name,Z,A);
-		TalysCalculated=false;
-		fMotherNucleus=0;
-		Abundance=GetAbundance(Name);
-		ReadLevelsFromTalysDatabase();
-		
-		Def.SetZA(Z,A);
-		Def.ReadDeformation();
-		/*OMPN.Nuclide=this;
-		OMPP.Nuclide=this;
-		OMPN.ReadOMP("n");
-		OMPP.ReadOMP("p");*/
-		OMPManager_.AddElement(Z);
-		AssignPointers();
-		TString R_tmp(Reaction.c_str());//получим из реакции вторичную частицу
-		R_tmp.ReplaceAll(","," ");
-		R_tmp.ReplaceAll(")"," ");
-		R_tmp.ReplaceAll("("," ");
-		R_tmp.ReplaceAll("'","");
-		stringstream s(R_tmp.Data());
-		string tmp;
-		if(Reaction.size()>1)
-		{
-			s>>Projectile>>OutgoingParticle;
-			OutgoingParticleMass=GetNuclearMass(OutgoingParticle);
-			ProjectileMass=GetNuclearMass(Projectile); 
-		}
-		Mass=GetNuclearMass(Name); 
+		*this=GetFromRemote(Name);
+		cout<<"Got from remote!\n";
 	}
 	else
 	{
-		stringstream s(Name);
-		string tmp;
-		string PathToFile;
-		s>>tmp>>PathToFile;
-		ifstream ifs(PathToFile.c_str());
-		string line;
-		Levels.resize(1);
-		while(getline(ifs,line))
+		fMaterial=0;
+		TH1::AddDirectory(kFALSE);
+		this->Name=Name;
+		this->Reaction=Reaction;
+		Element=GetNucleusName(Name);
+		if(Name.find("BKG")==string::npos)
 		{
-			if(line.find("bkg")!=string::npos)
+			GetAZ(Name,Z,A);
+			TalysCalculated=false;
+			fMotherNucleus=0;
+			Abundance=GetAbundance(Name);
+			ReadLevelsFromTalysDatabase();
+			
+			Def.SetZA(Z,A);
+			Def.ReadDeformation();
+			/*OMPN.Nuclide=this;
+			OMPP.Nuclide=this;
+			OMPN.ReadOMP("n");
+			OMPP.ReadOMP("p");*/
+			OMPManager_.AddElement(Z);
+			AssignPointers();
+			TString R_tmp(Reaction.c_str());//получим из реакции вторичную частицу
+			R_tmp.ReplaceAll(","," ");
+			R_tmp.ReplaceAll(")"," ");
+			R_tmp.ReplaceAll("("," ");
+			R_tmp.ReplaceAll("'","");
+			stringstream s(R_tmp.Data());
+			string tmp;
+			if(Reaction.size()>1)
 			{
-				stringstream g_stream(line);
-				string origin; double E;
-				g_stream>>tmp>>E>>origin;
-				Levels[0].Gammas.emplace_back(E,"");
-				Levels[0].Gammas[Levels[0].Gammas.size()-1].Origin=origin;
+				s>>Projectile>>OutgoingParticle;
+				OutgoingParticleMass=GetNuclearMass(OutgoingParticle);
+				ProjectileMass=GetNuclearMass(Projectile); 
 			}
+			Mass=GetNuclearMass(Name); 
 		}
-		fMotherNucleus=this;
+		else
+		{
+			stringstream s(Name);
+			string tmp;
+			string PathToFile;
+			s>>tmp>>PathToFile;
+			ifstream ifs(PathToFile.c_str());
+			string line;
+			Levels.resize(1);
+			while(getline(ifs,line))
+			{
+				if(line.find("bkg")!=string::npos)
+				{
+					stringstream g_stream(line);
+					string origin; double E;
+					g_stream>>tmp>>E>>origin;
+					Levels[0].Gammas.emplace_back(E,"");
+					Levels[0].Gammas[Levels[0].Gammas.size()-1].Origin=origin;
+				}
+			}
+			fMotherNucleus=this;
+		}
 	}
+	
 	AssignPointers();
 	
 }
@@ -1290,7 +1357,16 @@ string GetPathToC4Base()
 void Nucleus::GenerateProducts(string _Projectile)
 {
 	Products.resize(0);
+	if(!PredefinedProjectile)
 	Projectile=_Projectile;
+	
+	if(TalysLibManager::Instance().RemoteCalculation)
+	{
+		PredefinedProjectile=true;
+		PerformRemoteCalculation(this);
+		return;
+	}
+	
 	//if(RawOutput.size()>0)
 	//system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
 	
@@ -1331,7 +1407,7 @@ void Nucleus::GenerateProducts(string _Projectile)
 		{
 			if(!FastFlag)
 			{
-				NucleiInEnergyGrid[i]->GenerateProducts(_Projectile);
+				NucleiInEnergyGrid[i]->GenerateProducts(Projectile);
 			}
 		}
 		if(FastFlag)
@@ -1776,6 +1852,10 @@ void Nucleus::AssignPointers()
 	OMPP->AssignPointers(this); 
 	OMPN->SetDefaultOMP(OMPoptionN);
 	OMPP->SetDefaultOMP(OMPoptionP);
+	for(auto i=ENDFBases.begin();i!=ENDFBases.end();i++)
+	{
+		(*i).fNucleus=this;
+	}
 	AssignDeformationsToLevels();
 }
 void Nucleus::AssignSimilarLevels(float Tolerancy)

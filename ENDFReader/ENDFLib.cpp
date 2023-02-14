@@ -1253,6 +1253,8 @@ EvaluatedDataGraph ENDFFile::GetAngularDistribution(string OutgoingParticle,int 
 		result.SetPoint(result.GetN(),X[i],Norm*Gr2D.Interpolate(NeutronEnergy,X[i]));
 	}
 	result.fFile=this;
+	result.Source=Source;
+	result.A=A;
 	return result;
 }
 EvaluatedDataGraph ENDFFile::GetCrossSections(string OutgoingParticle,int LevelNum)
@@ -1287,6 +1289,8 @@ EvaluatedDataGraph ENDFFile::GetCrossSections(string OutgoingParticle,int LevelN
 	result.SetName(TString::Format("CS_Lev_%d",LevelNum));
 	result.SetTitle(TString::Format("%s %s cross section (Level=%d);#sigma, mb",Source.c_str(),OutgoingParticle.c_str(),LevelNum));
 	result.fFile=this;
+	result.Source=Source;
+	result.A=A;
 	return result;
 }
 
@@ -1379,6 +1383,7 @@ bool ENDFFile::Read(string _Projectile,string Nuclide)
 	{
 		return true;
 	}
+	GetAZ(Nuclide,Z,A);
 	Projectile=_Projectile;
 	string PathToENDF;
 	if(getenv("ENDFDIR"))

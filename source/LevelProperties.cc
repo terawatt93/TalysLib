@@ -105,8 +105,25 @@ EvaluatedDataGraph* FindInList(string Source, list<EvaluatedDataGraph> &List)
 	SourceForSearch.ReplaceAll(" ","");
 	for(auto i=List.begin();i!=List.end();i++)
 	{
-		if(((*i).Source==string(SourceForSearch.Data())&&((*i).AOption==AOption)))
-		return &(*i);
+		EvaluatedDataGraph* g=&(*i);
+		
+		if(g->Source==string(SourceForSearch.Data()))
+		{
+			if((AOption=="A=0")&&(g->A==0))
+			{
+				return g;
+			}
+			else if((AOption!="A>=0")&&(g->A>0))//Случай, когда A>0
+			{
+				return g;
+			}
+			else
+			{
+				return g;
+			}
+			return &(*i);
+		}
+		
 	}
 	return 0;
 }

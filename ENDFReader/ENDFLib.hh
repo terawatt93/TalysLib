@@ -32,6 +32,7 @@ class EvaluatedDataGraph:public TGraph
 	public:
 	string Source="";//нужно для идентификации объекта при сломавшихся указателях
 	string AOption="";//опция для обработки А=0 и А>=0
+	int A=0;
 	double LevelEnergy=-1;//нужно для идентификации объекта при сломавшихся указателях
 	int LevelNum=-1;//нужно для идентификации объекта при сломавшихся указателях
 	ENDFFile *fFile=0;//!
@@ -41,7 +42,7 @@ class EvaluatedDataGraph:public TGraph
 	ClassDef(EvaluatedDataGraph, 1);
 };
 
-class MTEntry
+class MTEntry:public TObject
 {
 	public:
 	MTEntry() {  }
@@ -50,6 +51,7 @@ class MTEntry
 	string Reaction;
 	string EntryDescription;
 	void GetFromString(string inp);
+	ClassDef(MTEntry, 1);
 };
 
 class ENDFDictonary
@@ -73,28 +75,31 @@ class ENDFDictonary
 };
 
 
-class ENDFDescription
+class ENDFDescription:public TObject
 {
 	public:
 	string Content;
 	void AddFromString(string inp);
 	ENDFFile *fFile;//!
+	ClassDef(ENDFDescription, 2);
 };
 
-class ENDFContentEntry
+class ENDFContentEntry:public TObject
 {
 	public:
 	MTEntry Entry_MT;
 	int NRows,FileNumber;
 	bool GetFromString(string inp);
+	ClassDef(ENDFContentEntry, 1);
 };
 
-class ENDFContent
+class ENDFContent:public TObject
 {
 	public:
 	vector<ENDFContentEntry> Entries;
 	TString GetEntriesInTLatexFormat();
 	void GetFromString(string inp);
+	ClassDef(ENDFContent, 2);
 };
 
 class ENDFBasicTable:public TObject
@@ -161,6 +166,7 @@ class ENDFFile:public TObject
 	string Filename;
 	string Projectile;
 	bool IsLoaded=false;
+	int A,Z;
 	ENDFDescription Description;
 	ENDFContent Content;
 	ENDFTable* GetENDFTable(int MF,int MT);//получить указатель на таблицу или создать новую
@@ -193,10 +199,10 @@ class ENDFFile:public TObject
 	bool WasRead=false;
 	static vector<string> GetListOfBases(string Projectile,int Z, int A);
 	private:
-	ENDFTable* LastENDFTable=0;
+	ENDFTable* LastENDFTable=0;//!
 	
 	public:
 	~ENDFFile();
-	ClassDef(ENDFFile, 1);
+	ClassDef(ENDFFile, 2);
 };
 int GetAdditionIndex(string Projectile,string OutgoingParticle,int LevelNum);

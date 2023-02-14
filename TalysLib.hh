@@ -97,6 +97,9 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	bool GenerateAllGraphs=true;
 	bool ReadC4=true;
 	bool DeleteDirectoryAfterReading=true;
+	bool RemoteCalculation=false;
+	string RemoteIP="127.0.0.1";
+	int RemotePort=9090;
 	int MaxNumberOfThreads=16;
 	int EXFORSource=1;//1-C4, 0-EXFORTABLES
 	void SetEXFORSource(string Source);
@@ -756,6 +759,7 @@ class Nucleus:public NucleusData
 	bool kAlwaysNewGraphs=false;
 	bool ConvertToLab=false;
 	bool Success=false;//флаг, подтверждающий успешность вычислений
+	bool PredefinedProjectile=false;//флаг, определяющий, приписывать ли Projectile аргумент из GenerateProducts;
 	int MainNucleusFlag=0;
 	int ID=0;
 	unsigned int EnergyGridIndex=0;
@@ -887,7 +891,7 @@ class Nucleus:public NucleusData
 	vector<Level*> GetLevelsWithAvalibleData(string DType="ADist",string SType="ENDF");//DType="ADist" или "CS" SType: ENDF или EXFOR
 	C4Container C4Data;
 	void AssignC4DataToLevels(double Tolerancy=10);
-	ClassDef(Nucleus, 1);
+	ClassDef(Nucleus,3);
 	private:
 	//using TObject::GetName;
 	using TObject::Copy;

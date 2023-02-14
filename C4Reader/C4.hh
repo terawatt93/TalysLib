@@ -97,7 +97,7 @@ class C4EnergyDistribution:public TGraphErrors
 vector<C4AngularDistribution> ExtractAngularDistributions(C4Entry *Entry);
 vector<C4EnergyDistribution> ExtractEnergyDistributions(C4Entry *Entry);
 
-class C4Container//хранит c4 в упорядоченном виде: по MF
+class C4Container:public TObject//хранит c4 в упорядоченном виде: по MF
 {
 	public:
 	vector<int> MF_values;
@@ -106,6 +106,7 @@ class C4Container//хранит c4 в упорядоченном виде: по 
 	vector<C4Entry> *GetData(int MF);
 	vector<C4AngularDistribution> GetAngularDistributions();
 	vector<C4EnergyDistribution>  GetEnergyDistributions();
+	ClassDef(C4Container,2);
 };//
 
 C4Container RequestC4DataSubentVector(sqlite3 *db, TFile *BaseROOT,string reaction,string projectile,int Z, int A,string Option="");//запрашивает все данные C4, определяя MT из reaction и все возможные MF. Если reaction=="", запрашивается упругое рассеяние
