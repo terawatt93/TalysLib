@@ -79,6 +79,7 @@ class ENDFDescription:public TObject
 {
 	public:
 	string Content;
+	void GetZA(int &Z,int &A);
 	void AddFromString(string inp);
 	ENDFFile *fFile;//!
 	ClassDef(ENDFDescription, 2);
@@ -166,7 +167,7 @@ class ENDFFile:public TObject
 	string Filename;
 	string Projectile;
 	bool IsLoaded=false;
-	int A,Z;
+	int A=0,Z=0;
 	ENDFDescription Description;
 	ENDFContent Content;
 	ENDFTable* GetENDFTable(int MF,int MT);//получить указатель на таблицу или создать новую
@@ -202,7 +203,11 @@ class ENDFFile:public TObject
 	ENDFTable* LastENDFTable=0;//!
 	
 	public:
+	void GenerateName();
+	void SetName(string _Name);
+	const char *GetName()  const;
+	string Name;
 	~ENDFFile();
-	ClassDef(ENDFFile, 2);
+	ClassDef(ENDFFile, 3);
 };
 int GetAdditionIndex(string Projectile,string OutgoingParticle,int LevelNum);

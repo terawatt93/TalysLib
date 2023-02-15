@@ -149,6 +149,16 @@ void ENDFDescription::AddFromString(string inp)
 	}
 	Content+=(inp.substr(0,66)+"\n");
 }
+
+void ENDFDescription::GetZA(int &Z,int &A)
+{
+	stringstream str(Content);
+	int value=0;
+	str>>value;
+	Z=value/1000;
+	A=value%1000;
+}
+
 bool ENDFContentEntry::GetFromString(string inp)
 {
 	if(inp.size()<75)
@@ -182,6 +192,7 @@ void ENDFContent::GetFromString(string inp)
 	if(entr.GetFromString(inp))
 	Entries.push_back(entr);
 }
+
 TString ENDFContent::GetEntriesInTLatexFormat()
 {
 	TString result;
@@ -525,6 +536,13 @@ void ENDFTable::GetFromString(string inp,int *_MF,int *_MT)
 			GetFromStringBase(inp);
 		}
 	}
+	if((MT==451))
+	{
+		if(Header.GetNRows()<5)
+		{
+			Header.GetFromStringBase(inp);
+		}
+	}
 	
 }
 
@@ -826,6 +844,8 @@ bool ENDFFile::Read(string filename)
 		//cout<<MAT<<" "<<MT<<" "<<MF<<" "<<NSTR<<"\n";
 		if(MT==451)//описание файла и содержание
 		{
+			ENDFTable* table=GetENDFTable(MF,MT);
+			table->GetFromString(line,&MF,&MT);
 			WasRead=true;
 			if(line.find("************************ C O N T E N T S ***********************")!=string::npos)
 			{
@@ -861,6 +881,50 @@ bool ENDFFile::Read(string filename)
 	}
 	if(RawOutput.size()>0)
 	{
+		if(Z==0)
+		{
+			Description.GetZA(Z,A);
+		}
+		if(Projectile=="")
+		{
+			ENDFTable *t=GetENDFTable(1,451);//берем самую первую таблицу в файле (описание-ENDF-6 format manual, стр 4, стр 40)
+			if(t)
+			{
+				vector<double> Row=t->Header.GetRow(2);//берем третью строку
+				if(Row.size()>4)
+				{
+					int NSUB=Row[4];
+					int IPART=NSUB/10;
+					int ZProjectile=IPART/1000;
+					int AProjectile=IPART%1000;
+					if(NSUB<=3)
+					{
+						Projectile="g";
+					}
+					else if((AProjectile==1)&&(ZProjectile==0))
+					{
+						Projectile="n";
+					}
+					else if(ZProjectile==1)
+					{
+						if(AProjectile==1)
+						Projectile="p";
+						if(AProjectile==2)
+						Projectile="d";
+						if(AProjectile==3)
+						Projectile="t";
+					}
+					else if((AProjectile==2)&&(ZProjectile==4))
+					{
+						Projectile="a";
+					}
+					else
+					{
+						Projectile=to_string(AProjectile)+GetNucleusName(Z);
+					}
+				}
+			}
+		}
 		return true;
 	}
 	return false;
@@ -1409,6 +1473,23 @@ bool ENDFFile::Read(string _Projectile,string Nuclide)
 	}
 	PathToENDF+=GetENDFFileName(Projectile,Nuclide,Source);
 	return Read(PathToENDF);
+}
+
+void ENDFFile::SetName(string _Name)
+{
+	Name=_Name;
+}
+const char *ENDFFile::GetName() const
+{
+	return Name.c_str();
+}
+void ENDFFile::GenerateName()
+{
+	TString BaseName(Source.c_str());
+	BaseName.ReplaceAll("-","_");
+	BaseName.ReplaceAll(".","_");
+	BaseName+=TString::Format("_%d_%d",Z,A);
+	Name=Projectile+"_"+BaseName.Data();
 }
 ENDFFile::~ENDFFile()
 {
