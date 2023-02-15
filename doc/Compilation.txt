@@ -1,0 +1,1 @@
+g++ -o test TestSBug.cpp TalysLib.so $(root-config --libs --cflags)
