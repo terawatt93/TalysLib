@@ -34,12 +34,16 @@ void LevelDeformation::GetFromString(string input)
 	string NumOfLevelS=input.substr(0,4);
 	string TypeOfLevelS=input.substr(7,1);
 	string NumberOfBandS=input.substr(8,4);
+	string LOfBandS, NumberOfPhononsS, MagneticNumberS;
 	NumberOfBand=-1; NumberOfLevel=-1; LOfBand=-1; NumberOfPhonons=-1; MagneticNumber=-1;
 	if(input.size()>12)
 	{
-		string LOfBandS=input.substr(12,4);
-		string NumberOfPhononsS=input.substr(16,4);
-		string MagneticNumberS=input.substr(20,4);
+		if(input.size()>15)
+		LOfBandS=input.substr(12,4);
+		if(input.size()>20)
+		NumberOfPhononsS=input.substr(16,4);
+		if(input.size()>24)
+		MagneticNumberS=input.substr(20,4);
 		
 		if(CheckFieldContent(LOfBandS))
 		{
