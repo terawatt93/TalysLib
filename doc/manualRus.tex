@@ -110,7 +110,99 @@ D(x)=
 \section{Структура библиотеки}
 Библиотека состоит из набора классов, описывающих различные физические свойства ядер, <<классов управления>> и классов хранения данных. В данном разделе перечислены и описаны созданные для библиотеки пользовательские классы. 
 \subsection{Класс TalysLibManager}
-<<Управляющий>> класс
+<<Управляющий>> класс. Может добавить в список исключений авторов, экспериментальные данные из работ которых пользователю не будут возвращаться при доступе из методов TalysLib. А также может удалить результаты вычислений Talys из оперативной памяти.
+\subsubsection{static TalysLibManager\textbf{\&} Instance()}
+Ссылка на статический объект TalysLibManager, может вызываться в скриптах для применения методов TalysLibManager.
+\subsubsection{bool EnableWarning=true, GenerateAllGraphs=true}
+
+\subsubsection{int MaxNumberOfThreads=16}
+
+\subsubsection{double EnergyWindowWidthForEXFORAdist=1}
+
+\subsubsection{vector<string> ExcludeAuthors}
+
+\subsubsection{bool IsInExcludeAuthors(string Author)}
+
+\subsubsection{void DeleteExpDataForAuthor(string Author)}
+
+\subsubsection{void Purge()}
+Вызывает системную команду для удаления результатов вычисления Talys, произведённых TalysLib.
+
+system("rm -rf /dev/shm/CalculationResults*");
+
+\subsection{Класс TLElement}
+vector<Nucleus*> Nuclei;//здесь хранятся указатели на ядра данного элемента
+vector<OpticalModelParameters> OpticalPotentialsP, OpticalPotentialsN;//потенциалы для протонов и нейтронов
+int Z;
+void ReadOMP(int _Z=0);
+string GenerateFileContent(string Projectile="n",int UseKoning=0);
+void WriteOMP(string path,int UseKoningN=0,int UseKoningP=0);
+OMPManager *fOMPManager=0;
+
+\subsection{Класс OMPManager}
+vector<TLElement> ElementsInCalculation;
+string Addition;
+void SetOMP(OpticalModelParameters OMP);
+void AddElement(int Z);
+OpticalModelParameters* GetOpticalPotential(int Z, int A, string Projectile);
+TLElement* GetTLElement(int Z);
+string GetAdditionToInputFile();
+void WriteOMP(string path,int UseKoningN=0,int UseKoningP=0);//UseKoning=0-использовать потенциал по умолчанию; 1-использовать Кенинга, если нет локальной ОМ; 2-использовать только Кенинга; 3-использовать файл из Talys
+public:
+ClassDef(OMPManager, 1);
+\subsection{Класс AdditionalInformationContainer}
+map<string,double> AdditionalInformationMap;
+double\textbf{\&} operator() (string Key);
+ClassDef(AdditionalInformationContainer, 1);
+
+\subsection{Класс TXlsxwriter}
+TXlsxwriter():TObject() {gSystem->Load((string(getenv("TALYSLIBDIR"))+"/libxlsxwriter/lib/libxlsxwriter.so").c_str()) ;}
+bool Opened=false;
+lxw_workbook  *workbook;
+vector<lxw_worksheet*> worksheets;
+vector<lxw_format*> formats;
+lxw_format* CurrentFormat=0;
+vector<string> FormatNames;
+lxw_worksheet* CurrentWorksheet;
+unsigned int CurrentWorksheetNumber;
+vector<string> worksheetNames;
+string Filename;
+vector<int> CeilX,CeilY,XBorder;
+void AddFormat(string FormatName, string Format, string IsNum="");
+void SetInitCeil(uint32_t x,uint32_t y);
+void SelectFormat(string FormatName="");
+void Open(string _Filename);
+void GoToWorksheet(string Name);
+void SetXBorder(int x);
+void Close();
+void WriteCeil(uint32_t x,uint32_t y,double value);
+void WriteCeil(uint32_t x,uint32_t y,int value);
+void WriteCeil(uint32_t x,uint32_t y,long unsigned int value);
+void WriteCeil(uint32_t x,uint32_t y,string value);
+~TXlsxwriter();
+void WriteTString(TString ts);
+ClassDef(TXlsxwriter, 1);
+
+\subsection{Класс SpinParity}
+
+\subsection{Класс GammaTransitionData}
+
+\subsection{Класс GammaTransition}
+
+\subsection{Класс LevelData}
+
+\subsection{Класс LevelDeformationData}
+
+\subsection{Класс LevelDeformation}
+
+\subsection{Класс DeformationData}
+
+\subsection{Класс Deformation}
+
+\subsection{Класс Level}
+
+\subsection{Класс NucleusData}
+
 \subsection{Класс Nucleus}
 Класс Nucleus включает в себя набор объектов и методов для работы со свойствами ядра. Описание методов и членов этого класса приведено ниже
 \subsubsection{string Name,Reaction,Projectile}
@@ -151,7 +243,7 @@ Projectile -- строка string, содержащая, налетающую ч
 Указатель на начальное ядро, если рассматриваемое ядро является продуктом реакции и содержится в векторе Products. В случае, если рассматриваемое ядро является начальным ядром, он равен NULL. Устанавливается функцией AssignPointers().
 \subsubsection{Nucleus()}
 Конструктор по-умолчанию. Необходим для корректной работы динамических контейнеров.
-\subsubsection{Nucleus(string Name,string Reaction="")}
+\subsubsection{Nucleus(string Name,string Reaction=\textbf{""})}
 Конструктор. Принимает как аргумент Name-название ядра, например, "56Fe",  и Reaction-реакцию, в которой данное ядро образовалось. В случае начального ядра этот аргумент остается, по умолчанию, пустым. В процессе создания ядра данным конструктором выполняются считывание из базы TALYS величин Z, A, распространенности изотопа, схемы уровней, параметорв деформации и оптических потенциалов, выполняется присваивание указателей на данное ядро для уровней, деформаций и оптических потенциалов.
 \subsubsection{Nucleus(NucleusData ND)}
 Конструктор, позволяющий создать объект Nucleus из более компактного объекта NucleusData. В силу технических ограничений, не удалось реализовать запись объекта Nucleus в .root файл, возможно, эта проблема связана с указателями. Объект NucleusData записывается в .root файл и считывается из него без каких-либо проблем.
@@ -200,10 +292,15 @@ Projectile -- строка string, содержащая, налетающую ч
 Функция, вызывающая стирание указателей.
 \subsubsection{void AssignDeformationsToLevels()}
 Функция, приписывающая уровням указатель на соответствующий объект LevelDeformation, содержащий информацию о деформации уровня и его происхождении. Приписывание деформаций осуществляется по номеру уровня.
-\subsubsection{void SetLevelDeformation(int LevelNumber,char LevT, int BandN=-1, int BandL=-1, int NPhon=-1, int MagN=-1, vector<float> *Def=0)}
+\subsubsection{void SetLevelDeformation(int LevelNumber, char LevT, int BandN=-1, int BandL=-1, int NPhon=-1, int MagN=-1, vector<float> *Def=0)}
 Функция, позволяющая установить деформацию для уровня c номером LevelNumber. В случае, если аргумент = -1, он будет пропущен при записи деформации в файл. Параметры деформации описаны в TALYS manual (v 1.9), p. 138, LevT соответствует типу уровня (type of collectivity), BandN-номер полосы (the number of band), BandL-момент полосы или мультипольность(?) (multipolarity), NPhon-число фононов (phonon number of the level), MagN-магнитное квантовое число (magnetic quantum number). Значения деформации ($\beta_2...\beta_8$) передаются с помощью указателя на вектор *Def.
-\subsubsection{void SetLevelDeformation(double LevelEnergy,char LevT, int BandN=-1, int BandL=-1, int NPhon=-1, int MagN=-1, vector<float> *Def=0)}
-Функция, позволяющая установить деформацию для уровня c энергией LevelEnergy (точность задания энергии должна быть лучще 1 кэВ). В случае, если аргумент = -1, он будет пропущен при записи деформации в файл. Параметры деформации описаны в TALYS manual (v 1.9), p. 138, LevT соответствует типу уровня (type of collectivity), BandN-номер полосы (the number of band), BandL-момент полосы или мультипольность(?) (multipolarity), NPhon-число фононов (phonon number of the level), MagN-магнитное квантовое число (magnetic quantum number). Значения деформации ($\beta_2...\beta_8$) передаются с помощью указателя на вектор *Def.
+\subsubsection{void SetLevelDeformation(double LevelEnergy, char LevT, int BandN=-1, int BandL=-1, int NPhon=-1, int MagN=-1, vector<float> *Def=0)}
+Функция, позволяющая установить деформацию для уровня c энергией LevelEnergy (точность задания энергии должна быть лучше 1 кэВ). В случае, если аргумент = -1, он будет пропущен при записи деформации в файл. Параметры деформации описаны в TALYS manual (v 1.9), p. 138, LevT соответствует типу уровня (type of collectivity), BandN-номер полосы (the number of band), BandL-момент полосы или мультипольность(?) (multipolarity), NPhon-число фононов (phonon number of the level), MagN-магнитное квантовое число (magnetic quantum number). Значения деформации ($\beta_2...\beta_8$) передаются с помощью указателя на вектор *Def.
+
+\subsubsection{vector<float> GetLevelDeformationBeta(int LevelNumber)}
+Функция позволяющая вернуть вектор деформации ($\beta_2...\beta_8$) по номеру возбуждённого уровня ядра.
+\subsubsection{vector<float> GetLevelDeformationBeta(double LevelEnergy)}
+Функция позволяющая вернуть вектор деформации ($\beta_2...\beta_8$) по энергии возбуждённого уровня ядра (точность задания энергии должна быть лучше 1 кэВ).
 \subsubsection{string PrintLevels()}
 Функция, возвращающая список уровней данного ядра в виде строки.
 \subsubsection{string PrintReactions()}
@@ -220,6 +317,119 @@ Projectile -- строка string, содержащая, налетающую ч
 Функция, задающая имена и подписи осей для графиков. В качестве аргумента принимает имя переменной, которая соответствует оси $x$.
 \subsubsection{void AddPoint(double x_value, Nucleus* Nucl)}
 Функция, выполняющая заполнение графиков InelasticTotTalysV, InelasticDirectTalysV, InelasticCompoundTalysV, ElasticTotTalysV, ElasticDirectTalysV, ElasticCompoundTalysV, TotTalysV, BNECS_gamma, BNECS_neutron, BNECS_proton, BNECS_deuteron, BNECS_triton, BNECS_3He, BNECS_alpha, TEISGraphTot, TEISGraphCont, TEISGraphDiscr значениями, находящимися в объекте, на который указывает указатель Nucleus* Nucl, в качестве переменной $x$ передается x_value. Вызывает аналогичную функцию для уровней (void Level::AddPoint(double x_value,Level *level)). Используется классом TalysCalculation для построения графиков зависимости результатов вычислений от переменных, задаваемых пользователем.
+\subsection{Класс Level}
+
+\subsubsection{vector<Level*> SimilarLevels}
+
+\subsubsection{LevelDeformation *deformation=0}
+
+\subsubsection{bool IsGraphGenerated=false}
+
+\subsubsection{bool PlottedADist=false}
+
+\subsubsection{bool PlottedADist2D=false}
+
+\subsubsection{TGraph AdistTotalTalys, AdistCompoundTalys, AdistDirectTalys,AdistENDF}
+
+\subsubsection{TGraph2D AdistTotalTalys2D, AdistCompoundTalys2D, AdistDirectTalys2D}
+
+\subsubsection{TGraph CSGraph, CSCompoundGraph, CSDirectGraph, CSENDFGraph}
+
+\subsubsection{int Number}
+
+\subsubsection{vector <EXFORTable> EXFORAngularDistributions}
+
+\subsubsection{vector <EXFORTable> EXFORCrossSections}
+
+\subsubsection{list<TGraph> GeneratedGraphsList}
+
+\subsubsection{vector<GammaTransition> Gammas}
+
+\subsubsection{bool ReadLevel(string line,string ReadNuclName)}
+
+\subsubsection{void ReadTransition(string line)}
+
+\subsubsection{void AddLineFromTalys(double E, double CS)}
+
+\subsubsection{void AddLineFromTalys(double E, double CS, double E\_i, double E\_f, SpinParity JP\_i, SpinParity JP\_f, unsigned int InitLevelNumber, unsigned int FinalLevelNumber)}
+
+\subsubsection{void Reset()}
+
+\subsubsection{const char *GetName()  const}
+
+\subsubsection{bool CheckEnergy(float E,float Tolerancy,float intensity)}
+
+\subsubsection{vector<GammaTransition*> GetTransition(float E,float Tolerancy,float intensity)}
+\subsubsection{Nucleus* fNucleus}
+
+\subsubsection{void SetEnergy(float Energy)} 
+
+\subsubsection{void SetEnergyErr(float EnergyErr)} 
+
+\subsubsection{void SetTalysCS(float TalysCS)} 
+
+\subsubsection{void SetTalysSpinParity(SpinParity TalysJP)}
+
+\subsubsection{void SetOrigin(string Origin)} 
+
+\subsubsection{void AddJPValue(SpinParity JPValue)}
+ 
+\subsubsection{void AddSimilarLevel(Level* SimilarLevel)}
+ 
+\subsubsection{void SetDeformation(char LevT, int BandN=-1, int BandL=-1, int MagN=-1, int NPhon=-1,vector<float> *Def=0)}
+Генерирует объект deformation и добавляет его в ядерную деформацию.
+\subsubsection{vector<float> GetDeformationBeta()}
+Функция возвращает вектор значений коэф. деформации $\beta_2$, заданных для данного уровня.
+Порядок и назначение аргументов соответствуют .def файлу (ECIS\_report.pdf, стр.3)
+\subsubsection{float GetEnergy()} 
+
+\subsubsection{float GetEnergyErr()}
+
+\subsubsection{float GetTalysCS()} 
+
+\subsubsection{SpinParity GetTalysSpinParity()}
+
+\subsubsection{string GetOrigin()} 
+
+\subsubsection{vector<SpinParity>\textbf{\&} GetJPValues()}
+
+\subsubsection{vector<Level*>\textbf{\&} GetSimilarLevels()}
+
+\subsubsection{void AssignPointers()}
+
+\subsubsection{void ErasePointers()}
+
+\subsubsection{TGraph* GetAngularDistribution(string type="Total",string option="")}
+Если график уже построен, выдается сохраненный, если нет, или option=="new", строится заново
+\subsubsection{TGraph2D* GetAngularDistribution2D(string type="Total",string option="")}
+
+\subsubsection{TGraph* GetAngularDistributionAtEnergy(float Energy,string type="Total",string option="")}
+
+\subsubsection{TMultiGraph* GetTMultiGraphForAngularDistributions(string graphics="all")}
+
+\subsubsection{TGraph *GetCSGraph(string type="Total")}
+
+\subsubsection{LevelData ToLevelData()}
+
+\subsubsection{void SetTGraphNameAndTitle(string ValName)}
+
+\subsubsection{void AddPoint(double x\_value,Level *level)}
+
+\subsubsection{void AddPoint(Level *level)}
+
+\subsubsection{void GenerateGraphs()}
+
+\subsubsection{vector<TGraphErrors*> GetEXFORAngularDistributions(double Emin=0,double Emax=0)}
+
+\subsubsection{vector<TGraphErrors*> GetEXFORCrossSections(double Emin=0,double Emax=0)}
+
+\subsubsection{TMultiGraph* GetEXFORTMultiGraphForAngularDistributions(double Emin=0,double Emax=0)}
+
+\subsubsection{TMultiGraph* GetEXFORTMultiGraphForCrossSections(double Emin=0,double Emax=0)}
+
+\subsubsection{int GetIntegrityFactor()}
+Показывает уровень "целостности"-наличия указателей на уровень (1), ядро (2),родительское ядро(3), материал(4) 
+\subsubsection{int GetMT()}
 
 \subsection{Класс TalysCalculation}
 Класс TalysCalculation включает в себя набор объектов и методов для работы с вычислениями в TALYS. Присутствуют методы для запуска расчётов, изменения параметров вычислений. Описание методов и членов этого класса приведено ниже
@@ -294,8 +504,6 @@ PotentialKoningData -- набор для глобальной параметри
 \subsubsection{vector<double> PreviousParameters}
 \subsubsection{vector<double> Parameters}
 \subsubsection{vector<string> ParNames}
-\subsubsection{TF1}
-\subsubsection{TF1}
 \subsubsection{void EnableParTracking()}
 \subsubsection{void DisableParTracking()}
 \subsubsection{void TrackParChanges()}
@@ -305,5 +513,50 @@ PotentialKoningData -- набор для глобальной параметри
 
 \subsection{Класс TalysFitterMT}
 Класс TalysFitterMT нужен для многопоточного подбора параметров оптического потенциала, лучше всего описывающие экспериментальные сечения. 
+
+\subsubsection{bool Calculated}
+=false;
+\subsubsection{bool GeneratedTF1}
+=false;
+\subsubsection{TalysFitterMT(string NuclName, unsigned int ThreadNumber=0)}
+\subsubsection{unsigned int InitThreadNumber=0}
+\subsubsection{Nucleus Nuclide}
+\subsubsection{Nucleus InitNuclide}
+\subsubsection{Nucleus BestNuclide}
+\subsubsection{double lambda=1}
+\subsubsection{TGraph Chi2Values}
+\subsubsection{TGraph FitValues}
+\subsubsection{TGraph InitValues}
+\subsubsection{vector<TGraph> ParValuesGraphs}
+\subsubsection{void FillFitValues()}
+\subsubsection{void (*ParAssignmentFunctionForPar)(TalysFitterMT *PointetToTF,Nucleus *PointerToNucleus, double ParValue, int Index)}
+\subsubsection{double (*GetEvaluationResultForNucl)(TalysFitterMT *PointetToTF,double x_value,Nucleus *PointerToNucleus)}
+\subsubsection{void SaveToRootFile(TFile *f)}
+\subsubsection{TVirtualFitter *Fitter}
+CERN ROOT Abstract Base Class for Fitting.
+\subsubsection{void InitTVirtualFitter(string type)}
+\subsubsection{void Minimize(int NCalls=1000, double tolerance=0.01)}
+\subsubsection{void DrawFitProgress()}
+\subsubsection{double BestChi2=1e250}
+Самое наименьшее хи-квадрат/ndf, достигнутое после фитирования поданных данных.
+\subsubsection{void GetCurrentGraphNumberAndOffset(double x, int \textbf{\&}GraphIterator, double \textbf{\&}Offset)}
+\subsubsection{void SetParameter(unsigned int n, double value, string name, double epsilon, double low, double high)}
+\subsubsection{void SetParameter(unsigned int n, double value, string name, double epsilon, double range)}
+\subsubsection{void (*ParAssignmentFunction)(TalysFitterMT *PointetToTF,Nucleus *Nucl, vector<double> Parameters)}
+\subsubsection{double (*GetEvaluationResult)(double x_value,TalysFitterMT *PointetToTF,Nucleus *Nucl)}
+\subsubsection{void FCN(int \textbf{\&}npar, double *gin, double \textbf{\&}f, double *par, int flag)}
+\subsubsection{vector<double> InitParameters}
+\subsubsection{vector<double> Parameters}
+\subsubsection{vector<double> LowLimits}
+\subsubsection{vector<double> HighLimits}
+\subsubsection{vector<double> EpsilonValues}
+\subsubsection{vector<double> EvalGrad()}
+\subsubsection{vector<string> ParNames}
+\subsubsection{vector<double> Offsets}
+\subsubsection{TGraphErrors GraphForMultiFit}
+\subsubsection{void AddToGraphForMultiFit(TGraphErrors *gr, double Mv)}
+\subsubsection{void AddToGraphForMultiFit(TGraph *gr, double Mv)}
+\subsubsection{void GenerateGraphForMultiFit(vector<TObject*> \textbf{\&}PointersToGraphs,vector<double> \textbf{\&}_Offsets)}
+\subsubsection{TPaveText GenerateTPaveTextForFitResult(double x1=0.7,double y1=0.6,double x2=0.95,double y2=0.95,string Option="bl NDC")}
 
 \end{document}
