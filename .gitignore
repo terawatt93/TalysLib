@@ -23,3 +23,7 @@ tutorials/tutorials_for_data_analysis/GetEvaluatedData/1.tex
 tutorials/tutorials_for_data_analysis/GetEvaluatedData/2.tex
 tutorials/tutorials_for_data_analysis/GetEvaluatedData/3.tex
 tutorials/tutorials_for_data_analysis/GetEvaluatedData/references.txt
+*.toc
+*.out
+*.log
+*.aux
