@@ -492,6 +492,7 @@ vector<double> ENDFTable::GetZ()
 
 void ENDFTable::GetFromString(string inp,int *_MF,int *_MT)
 {
+	
 	if(_MF&&_MT)
 	{
 		if((MF!=*_MF)||(MT!=*_MT))
@@ -541,6 +542,18 @@ void ENDFTable::GetFromString(string inp,int *_MF,int *_MT)
 		if(Header.GetNRows()<5)
 		{
 			Header.GetFromStringBase(inp);
+		}
+		else
+		{
+			if(inp.size()>=75)
+			{
+				if(atoi(inp.substr(41,3).c_str())==451)
+				IsContentSection=true;
+			}
+			if(IsContentSection)
+			{
+				GetFromStringBase(inp);
+			}
 		}
 	}
 	

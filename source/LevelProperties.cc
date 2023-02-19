@@ -267,7 +267,7 @@ void Level::ReadTransition(string line)
 }
 void Level::Reset()
 {
-	Gammas.resize(0);
+	//Gammas.resize(0);
 	ADTot.resize(0);
 	ADDirect.resize(0);
 	ADCompound.resize(0);
@@ -294,28 +294,57 @@ bool Level::CheckEnergy(float E,float Tolerancy,float intensity)
 }
 void Level::AddLineFromTalys(double E, double CS)
 {
-	GammaTransition g;
-	g.Energy=E;
-	g.TalysCrossSection=CS;
-	g.Origin="Talys";
-	Gammas.push_back(g);
-	Gammas[Gammas.size()-1].fLevel=this;
+	GammaTransition *g=0;
+	for(unsigned int i=0;i<Gammas.size();i++)
+	{
+		if(abs(Gammas[i].Energy-E)<0.1)
+		{
+			g=&Gammas[i];
+		}
+	}
+	if(!g)
+	{
+		GammaTransition gg;
+		gg.Energy=E;
+		Gammas.push_back(gg);
+		g=&(Gammas[Gammas.size()-1]);
+	}
+	g->TalysCrossSection=CS;
+	g->Origin="Talys";
+	g->fLevel=this;
 	
 }
 void Level::AddLineFromTalys(double E, double CS, double E_i, double E_f, SpinParity JP_i, SpinParity JP_f, unsigned int InitLevelNumber, unsigned int FinalLevelNumber)
 {
-	GammaTransition g;
-	g.Energy=E;
-	g.TalysCrossSection=CS;
-	g.Origin="Talys";
-	g.TalysE_i=E_i;
-	g.TalysE_f=E_f;
-	g.TalysJP_f=JP_f;
-	g.TalysJP_i=JP_i;
-	g.InitLevelNumber=InitLevelNumber;
-	g.FinalLevelNumber=FinalLevelNumber;
-	g.EvalMultipolarity();
-	Gammas.push_back(g);
+	//GammaTransition g;
+	
+	GammaTransition *g=0;
+	for(unsigned int i=0;i<Gammas.size();i++)
+	{
+		if(abs(Gammas[i].Energy-E)<0.1)
+		{
+			g=&Gammas[i];
+		}
+	}
+	if(!g)
+	{
+		GammaTransition gg;
+		gg.Energy=E;
+		Gammas.push_back(gg);
+		g=&(Gammas[Gammas.size()-1]);
+	}
+	
+	//g.Energy=E;
+	g->TalysCrossSection=CS;
+	g->Origin="Talys";
+	g->TalysE_i=E_i;
+	g->TalysE_f=E_f;
+	g->TalysJP_f=JP_f;
+	g->TalysJP_i=JP_i;
+	g->InitLevelNumber=InitLevelNumber;
+	g->FinalLevelNumber=FinalLevelNumber;
+	g->EvalMultipolarity();
+	//Gammas.push_back(g);
 }
 vector<GammaTransition*> Level::GetTransition(float E,float Tolerancy,float intensity)
 {
@@ -878,6 +907,10 @@ TGraph* Level::GetCSGraph(string type)
 	else if(type=="ENDF")
 	{
 		type="ENDF-B-VIII.0";
+	}
+	if(result)
+	{
+		return result;
 	}
 	EVData.fLevel=this;
 	return EVData.GetEnergyDistribution(type);

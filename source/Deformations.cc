@@ -343,7 +343,7 @@ void Deformation::SetDefaultDeformationType(char _Type)
 }
 void Deformation::SetNLevels(int N)//установить количество уровней с деформацией
 {
-	if(N>LevelDeformations.size()-1)
+	if(N>(int)LevelDeformations.size()-1)
 	{
 		cout<<"This is Deformation::SetNLevels(int N): N> than number of assigned levels with deformation. This functional hasn't been implemented. Set N="<<LevelDeformations.size()<<"\n";
 		NLevels=LevelDeformations.size();

@@ -151,7 +151,7 @@ class TLElement//класс, соответствующий хим. элемен
 	OMPManager *fOMPManager=0;//!
 };
 
-class OMPManager//один объект для одного сеанса расчетов-> создается для одного начального ядра
+class OMPManager:public TObject//один объект для одного сеанса расчетов-> создается для одного начального ядра
 {
 	public:
 	vector<TLElement> ElementsInCalculation;
@@ -166,7 +166,7 @@ class OMPManager//один объект для одного сеанса рас�
 	ClassDef(OMPManager, 1);
 };
 
-class AdditionalInformationContainer
+class AdditionalInformationContainer:public TObject
 {
 	public:
 	map<string,double> AdditionalInformationMap;

@@ -47,6 +47,7 @@ Nucleus GetFromRemote(string name)
 		return *Nucl;
 	}
 	sock->Close();
+	return Nucleus();
 }
 void PerformRemoteCalculation(Nucleus *Nucl)
 {
@@ -286,6 +287,15 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 					unsigned int FinalLevelNumber=0;
 					float Branch=0;
 					s1>>FinalLevelNumber>>Branch;
+					GammaTransition gt;
+					gt.InitLevelNumber=lev.Number;
+					gt.FinalLevelNumber=FinalLevelNumber;
+					gt.Intensity=Branch;
+					if(Levels.size()>FinalLevelNumber)
+					{
+						gt.Energy=lev.Energy-Levels[FinalLevelNumber].Energy;
+						lev.Gammas.push_back(gt);
+					}
 					lev.Branching.push_back(Branch);
 					lev.NumbersOfFinalLevels.push_back(FinalLevelNumber);
 				}

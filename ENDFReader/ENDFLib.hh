@@ -157,7 +157,8 @@ class ENDFTable:public ENDFBasicTable
 	vector<ENDFAngularDistribution> ADist14;//угловое распределение, соответствующее MF=14(для гамма)
 	string GetRawTable();
 	ENDFFile *fFile=0;//!
-	ClassDef(ENDFTable, 1);
+	bool IsContentSection=false;//!  //флаг, показывающий, что идет считывание секции с содержанием файла из MF=451 
+	ClassDef(ENDFTable, 2);
 	//ENDFAngularDistribution *GetAngularDistribution(double Energy);
 };
 
