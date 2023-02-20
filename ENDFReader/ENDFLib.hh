@@ -79,7 +79,7 @@ class ENDFDescription:public TObject
 {
 	public:
 	string Content;
-	void GetZA(int &Z,int &A);
+	//void GetZA(int &Z,int &A);
 	void AddFromString(string inp);
 	ENDFFile *fFile;//!
 	ClassDef(ENDFDescription, 2);

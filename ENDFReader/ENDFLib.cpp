@@ -48,9 +48,9 @@ bool GetNextString(zip *z,zip_file *f, string &result)
     char c=0;
     while(zip_fread(f,&c,1)>0)
     {
-		if(c!='\r')
+		if((c!='\r')&&(c!='\n'))
 		{
-			if(c!='\n')
+			//if(c!='\n')
 			result+=c;
 		}
 		else
@@ -150,14 +150,14 @@ void ENDFDescription::AddFromString(string inp)
 	Content+=(inp.substr(0,66)+"\n");
 }
 
-void ENDFDescription::GetZA(int &Z,int &A)
+/*void ENDFDescription::GetZA(int &Z,int &A)
 {
 	stringstream str(Content);
 	int value=0;
 	str>>value;
 	Z=value/1000;
 	A=value%1000;
-}
+}*/
 
 bool ENDFContentEntry::GetFromString(string inp)
 {
@@ -854,6 +854,7 @@ bool ENDFFile::Read(string filename)
 	{
 		int MAT=0,MT=0,MF=0, NSTR=0;
 		GetMAT_MF_MT_NSTR(line,MAT,MF,MT,NSTR);
+		//cout<<"line:"<<line<<"\n";
 		//cout<<MAT<<" "<<MT<<" "<<MF<<" "<<NSTR<<"\n";
 		if(MT==451)//описание файла и содержание
 		{
@@ -894,16 +895,21 @@ bool ENDFFile::Read(string filename)
 	}
 	if(RawOutput.size()>0)
 	{
-		if(Z==0)
-		{
-			Description.GetZA(Z,A);
-		}
 		if(Projectile=="")
 		{
 			ENDFTable *t=GetENDFTable(1,451);//берем самую первую таблицу в файле (описание-ENDF-6 format manual, стр 4, стр 40)
 			if(t)
 			{
 				vector<double> Row=t->Header.GetRow(2);//берем третью строку
+				vector<double> Row0=t->Header.GetRow(0);//берем первую строку
+				
+				if(Row0.size()>1)
+				{
+					int ZA=Row0[0];
+					Z=ZA/1000;
+					A=ZA%1000;
+				}
+				
 				if(Row.size()>4)
 				{
 					int NSUB=Row[4];
@@ -936,6 +942,7 @@ bool ENDFFile::Read(string filename)
 						Projectile=to_string(AProjectile)+GetNucleusName(Z);
 					}
 				}
+				
 			}
 		}
 		return true;
