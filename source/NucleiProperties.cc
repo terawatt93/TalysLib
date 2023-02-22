@@ -2330,15 +2330,18 @@ vector<float> Nucleus::GetLevelDeformationBeta(double LevelEnergy)
 }
 Nucleus::~Nucleus()
 {
-	if((FastFlag)&&(FastCalculated))
+	if(TalysLibManager::Instance().DeleteCalculationFolder)
 	{
-		system(string("rm -rf "+PathToCalculationDir).c_str());
+		if((FastFlag)&&(FastCalculated))
+		{
+			system(string("rm -rf "+PathToCalculationDir).c_str());
+		}
+		else
+		{
+			system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
+		}
 	}
-	else
-	{
-		system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
-	}
-}	
+}
 Nucleus& Nucleus::Copy()
 {
 	Nucleus& result=*this;

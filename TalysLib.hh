@@ -125,7 +125,7 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	
 	bool IsInExcludedSubEntries(string SubEntry);//проверка SubEntry
 	void AddSubentryToExcludeList(string SubEntry);//добавить SubEntry в список исключений
-	
+	bool DeleteCalculationFolder=true;
 	void Purge();
 	string AOption;
 	void SetAOption(string value);//управляет запросом данных с A=0
