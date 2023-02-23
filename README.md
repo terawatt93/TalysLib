@@ -7,9 +7,9 @@
 2. [TALYS](https://tendl.web.psi.ch/tendl_2019/talys.html) 1.8 or 1.9 
 If TALYS is already installed on your system in the "/path/to_talys" directory:
     1) Make sure that the path to the TALYS executable (paste your path in the lines below) is added to PATH. Otherwise:
-        1.1) Add the following line to your .bashrc file: export PATH=$PATH:/path/to_talys/talys
+        ⋅⋅* Add the following line to your .bashrc file: export PATH=$PATH:/path/to_talys/talys
     2) In case it is not already defined, define a new environment variable TALYSDIR in the .bashrc file:
-        2.1) Add the following line to your .bashrc file: export TALYSDIR =/path/to_talys/talys
+        ⋅⋅* Add the following line to your .bashrc file: export TALYSDIR =/path/to_talys/talys
 3. [ROOT6](https://root.cern)
 4. Installed packages: libzip-dev, libsqlite3-dev
 If you are using the TalysLib auto-installation script, TalysLib/Install.sh, you will install the listed packages through the apt package manager.
@@ -22,18 +22,18 @@ If you are using the TalysLib auto-installation script, TalysLib/Install.sh, you
 
 New lines in ~/.bashrc file added for TalysLib should look like this:
     
-> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/user_name/some_directory/TalysLib
-> export CPATH=$CPATH:/home/user_name/some_directory/TalysLib
-> export TALYSLIBDIR=/home/user_name/some_directory/TalysLib
+> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/user_name/some_directory/TalysLib <br>
+> export CPATH=$CPATH:/home/user_name/some_directory/TalysLib <br>
+> export TALYSLIBDIR=/home/user_name/some_directory/TalysLib <br>
 
 ## Требования: 
 1. Дистрибутив Linux на основе Debian (мы рекомендуем [Linux Mint](https://linuxmint.com/))
 2. [TALYS](https://tendl.web.psi.ch/tendl_2019/talys.html) 1.8 or 1.9 
 Если TALYS уже установлен в вашей системе в директории "/path/to_talys":
     1) Убедитесь, что путь к исполняемому файлу TALYS (вставьте в строки ниже свой путь) добавлен в PATH. В ином случае:
-        1.1) Добавьте следующую строку в свой .bashrc файл: export PATH=$PATH:/path/to_talys/talys
+        ⋅⋅* Добавьте следующую строку в свой .bashrc файл: export PATH=$PATH:/path/to_talys/talys
     2) В случае, если она ещё не определена, определите новую переменную окружения TALYSDIR в .bashrc файле:
-        2.1) Добавьте следующую строку в свой .bashrc файл: export TALYSDIR =/path/to_talys/talys 
+        ⋅⋅* Добавьте следующую строку в свой .bashrc файл: export TALYSDIR =/path/to_talys/talys 
 3. [ROOT6](https://root.cern)
 4. Установленные пакеты: libzip-dev, libsqlite3-dev
 Если вы используете скрипт по автоматической установке TalysLib, TalysLib/Install.sh, вы установите перечисленные пакеты через манеджер пакетов apt.
@@ -46,7 +46,7 @@ New lines in ~/.bashrc file added for TalysLib should look like this:
 
 Новые записи в ~/.bashrc для TalysLib должны выглядеть примерно так:
     
-> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/user_name/some_directory/TalysLib
-> export CPATH=$CPATH:/home/user_name/some_directory/TalysLib
-> export TALYSLIBDIR=/home/user_name/some_directory/TalysLib
+> export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/user_name/some_directory/TalysLib <br>
+> export CPATH=$CPATH:/home/user_name/some_directory/TalysLib <br>
+> export TALYSLIBDIR=/home/user_name/some_directory/TalysLib <br>
 
