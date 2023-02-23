@@ -1467,7 +1467,7 @@ void Nucleus::GenerateProducts(string _Projectile)
 	AssignPointers();
 	if(TalysLibManager::Instance().GetC4Flag())
 	{
-		if((!IsProduct())&&(MainNucleusFlag!=1))
+		if((!IsProduct())&&(MainNucleusFlag!=1)&&(getenv("C4Base")))
 		{
 			//для неупругих реакций
 			string fname=GetPathToC4Base();
