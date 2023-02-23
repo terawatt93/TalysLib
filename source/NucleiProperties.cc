@@ -47,6 +47,7 @@ Nucleus GetFromRemote(string name)
 		return *Nucl;
 	}
 	sock->Close();
+	return Nucleus();
 }
 void PerformRemoteCalculation(Nucleus *Nucl)
 {
@@ -286,6 +287,15 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 					unsigned int FinalLevelNumber=0;
 					float Branch=0;
 					s1>>FinalLevelNumber>>Branch;
+					GammaTransition gt;
+					gt.InitLevelNumber=lev.Number;
+					gt.FinalLevelNumber=FinalLevelNumber;
+					gt.Intensity=Branch;
+					if(Levels.size()>FinalLevelNumber)
+					{
+						gt.Energy=lev.Energy-Levels[FinalLevelNumber].Energy;
+						lev.Gammas.push_back(gt);
+					}
 					lev.Branching.push_back(Branch);
 					lev.NumbersOfFinalLevels.push_back(FinalLevelNumber);
 				}
@@ -1457,7 +1467,7 @@ void Nucleus::GenerateProducts(string _Projectile)
 	AssignPointers();
 	if(TalysLibManager::Instance().GetC4Flag())
 	{
-		if((!IsProduct())&&(MainNucleusFlag!=1))
+		if((!IsProduct())&&(MainNucleusFlag!=1)&&(getenv("C4Base")))
 		{
 			//для неупругих реакций
 			string fname=GetPathToC4Base();
@@ -2320,15 +2330,18 @@ vector<float> Nucleus::GetLevelDeformationBeta(double LevelEnergy)
 }
 Nucleus::~Nucleus()
 {
-	if((FastFlag)&&(FastCalculated))
+	if(TalysLibManager::Instance().DeleteCalculationFolder)
 	{
-		system(string("rm -rf "+PathToCalculationDir).c_str());
+		if((FastFlag)&&(FastCalculated))
+		{
+			system(string("rm -rf "+PathToCalculationDir).c_str());
+		}
+		else
+		{
+			system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
+		}
 	}
-	else
-	{
-		system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
-	}
-}	
+}
 Nucleus& Nucleus::Copy()
 {
 	Nucleus& result=*this;

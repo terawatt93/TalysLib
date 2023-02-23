@@ -125,7 +125,7 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	
 	bool IsInExcludedSubEntries(string SubEntry);//проверка SubEntry
 	void AddSubentryToExcludeList(string SubEntry);//добавить SubEntry в список исключений
-	
+	bool DeleteCalculationFolder=true;
 	void Purge();
 	string AOption;
 	void SetAOption(string value);//управляет запросом данных с A=0
@@ -151,7 +151,7 @@ class TLElement//класс, соответствующий хим. элемен
 	OMPManager *fOMPManager=0;//!
 };
 
-class OMPManager//один объект для одного сеанса расчетов-> создается для одного начального ядра
+class OMPManager:public TObject//один объект для одного сеанса расчетов-> создается для одного начального ядра
 {
 	public:
 	vector<TLElement> ElementsInCalculation;
@@ -166,7 +166,7 @@ class OMPManager//один объект для одного сеанса рас�
 	ClassDef(OMPManager, 1);
 };
 
-class AdditionalInformationContainer
+class AdditionalInformationContainer:public TObject
 {
 	public:
 	map<string,double> AdditionalInformationMap;
