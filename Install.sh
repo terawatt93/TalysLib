@@ -8,22 +8,27 @@ echo "################################################################"
 echo "# Welcome to the TalysLib installation script!                 #"
 echo "# Please choose your preferred TalysLib installation method:   #"
 echo "# 1. With TALYS code installation.                             #"
-echo "# 2. WithOUT TALYS code installation.                           #"
-echo "# (In case you have already installed it)                     #"
+echo "# 2. WithOUT TALYS code installation.                          #"
+echo "# (In case you have already installed it)                      #"
 echo "################################################################"
 read choice
-# 2. Install libzip and gfortran package from apt package manager 
-# (that will do nothing if they have already been installed, no problem)
-echo 'Installing libzip-dev from apt utility.'
-sudo apt install -y libzip-dev
-echo 'Installing gfortran from apt utility.'
-sudo apt install -y gfortran
 
 talyslibdir=`pwd` # Define the TalysLib directory
 
 case $choice in
     "1")
         echo "#### Going with TALYS code installation!"
+        #
+        # 2. Install libzip, libsqlite and gfortran packages from apt package manager 
+        # (that will do nothing if they have already been installed, no problem)
+        echo 'Installing libzip-dev from apt utility.'
+        sudo apt install -y libzip-dev
+        echo 'Installing gfortran from apt utility.'
+        sudo apt install -y gfortran
+        echo 'Installing libsqlite-dev from apt utility.'
+        sudo apt install -y libsqlite-dev
+        echo 'Installing libsqlite-dev3 from apt utility.'
+        sudo apt install -y libsqlite3-dev
         cd ..
         #
         # 1-3. Download and unpack archive with TALYS
@@ -83,6 +88,17 @@ case $choice in
     ;;
     "2")
         echo "#### Going withOUT TALYS code installation!"
+        #
+        # 2. Install libzip, libsqlite and gfortran packages from apt package manager 
+        # (that will do nothing if they have already been installed, no problem)
+        echo 'Installing libzip-dev from apt utility.'
+        sudo apt install -y libzip-dev
+        echo 'Installing gfortran from apt utility.'
+        sudo apt install -y gfortran
+        echo 'Installing libsqlite-dev from apt utility.'
+        sudo apt install -y libsqlite-dev
+        echo 'Installing libsqlite-dev3 from apt utility.'
+        sudo apt install -y libsqlite3-dev
         #
         # 2-3. Check whether TALYS directory is set in .bashrc, go there
         if [ -z ${TALYSDIR+x} ];
