@@ -8,6 +8,66 @@
 //нужен пакет libzip-dev
 //substr(a,b) возвращает строку, начинающуюся с а длиной b символов
 
+double EvaluatedDataGraph::EvalChi2(TObject *InpObj)
+{
+	double result=0;
+	if(InpObj->InheritsFrom("TMultiGraph"))
+	{
+		TList* GraphList=((TMultiGraph*)InpObj)->GetListOfGraphs();
+		int NumberOfGraphs=GraphList->GetEntries();
+		cout<<"NumberOfGraphs:"<<NumberOfGraphs<<"\n";
+		for(int j=0;j<NumberOfGraphs;j++)
+		{
+			TObject* obj=GraphList->At(j);
+			if(obj->InheritsFrom("TGraphErrors"))
+			{
+				TGraphErrors* g=(TGraphErrors*)obj;
+				for(int k=0;k<g->GetN();k++)
+				{
+					double x,y,ex,ey;
+					g->GetPoint(k,x,y);
+					ex=g->GetErrorX(k);
+					ey=g->GetErrorY(k);
+					result+=pow(y-this->Eval(x),2)/(pow(ex,2)+pow(ey,2));
+				}
+			}
+			else if(obj->InheritsFrom("TGraph"))
+			{
+				TGraph* g=(TGraph*)obj;
+				for(int k=0;k<g->GetN();k++)
+				{
+					double x,y;
+					g->GetPoint(k,x,y);
+					result+=pow(y-this->Eval(x),2);
+				}
+			}
+		}
+	}
+	else if(InpObj->InheritsFrom("TGraphErrors"))
+	{
+		TGraphErrors* g=(TGraphErrors*)InpObj;
+		for(int k=0;k<g->GetN();k++)
+		{
+			double x,y,ex,ey;
+			g->GetPoint(k,x,y);
+			ex=g->GetErrorX(k);
+			ey=g->GetErrorY(k);
+			result+=pow(y-this->Eval(x),2)/(pow(ex,2)+pow(ey,2));
+		}
+	}
+	else if(InpObj->InheritsFrom("TGraph"))
+	{
+		TGraph* g=(TGraph*)InpObj;
+		for(int k=0;k<g->GetN();k++)
+		{
+			double x,y;
+			g->GetPoint(k,x,y);
+			result+=pow(y-this->Eval(x),2);
+		}
+	}
+	return result;
+}
+
 double ENDFAtof(string s)//костыль для устранения проблемы с представлением экспоненциальной части числа: по умолчанию 1.000000-5 читается как 1
 {
 	string s2;

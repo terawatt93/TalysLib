@@ -39,6 +39,7 @@ class EvaluatedDataGraph:public TGraph
 	//Nucleus *fNucleus=0;//!
 	Level *fLevel=0;//!
 	GammaTransition *fGammaTransition=0;//!
+	double EvalChi2(TObject *obj);
 	ClassDef(EvaluatedDataGraph, 1);
 };
 
