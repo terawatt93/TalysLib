@@ -892,6 +892,7 @@ class Nucleus:public NucleusData
 	C4Container C4Data;
 	void AssignC4DataToLevels(double Tolerancy=10);
 	ClassDef(Nucleus,3);
+	void AddCommandsToInputFile(string Addition);
 	private:
 	//using TObject::GetName;
 	using TObject::Copy;

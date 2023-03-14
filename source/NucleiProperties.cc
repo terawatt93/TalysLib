@@ -507,6 +507,10 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 		ofs<<"deformfile "<<Z<<" "<<GetNucleusName(Z)<<".def\n";
 		Def.WriteDeformation(PathToCalculationDir+Name+to_string(ID)+"/"+GetNucleusName(Z)+".def");
 	}
+	if(!fMotherNucleus)
+	{
+		ofs<<addition;
+	}
 	ofs.close();
 	system(string("cd "+PathToCalculationDir+Name+to_string(ID)+"/; talys <input >output").c_str());
 }
@@ -2823,4 +2827,15 @@ vector<Level*> Nucleus::GetLevelsWithAvalibleData(string DType,string SType)
 		
 	}
 	return Result;
+}
+void Nucleus::AddCommandsToInputFile(string Addition)
+{
+	addition+=Addition;
+	if(Addition.size()>0)
+	{
+		if(Addition[Addition.size()-1]!='\n')
+		{
+			addition+="\n";
+		}
+	}
 }
