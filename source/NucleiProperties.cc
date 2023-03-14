@@ -2839,3 +2839,7 @@ void Nucleus::AddCommandsToInputFile(string Addition)
 		}
 	}
 }
+string Nucleus::GetRawOutput()
+{
+	return RawOutput;
+}

@@ -893,6 +893,7 @@ class Nucleus:public NucleusData
 	void AssignC4DataToLevels(double Tolerancy=10);
 	ClassDef(Nucleus,3);
 	void AddCommandsToInputFile(string Addition);
+	string GetRawOutput();
 	private:
 	//using TObject::GetName;
 	using TObject::Copy;
