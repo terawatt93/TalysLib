@@ -35,6 +35,7 @@ class EvaluatedDataGraph:public TGraph
 	int A=0;
 	double LevelEnergy=-1;//нужно для идентификации объекта при сломавшихся указателях
 	int LevelNum=-1;//нужно для идентификации объекта при сломавшихся указателях
+	void Add(TGraph *gr);//выполняет сложение с графиком
 	ENDFFile *fFile=0;//!
 	//Nucleus *fNucleus=0;//!
 	Level *fLevel=0;//!

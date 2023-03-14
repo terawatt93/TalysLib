@@ -68,6 +68,40 @@ double EvaluatedDataGraph::EvalChi2(TObject *InpObj)
 	return result;
 }
 
+void EvaluatedDataGraph::Add(TGraph *gr)
+{
+	if(!gr)
+	{
+		cout<<"This is valuatedDataGraph::Add(TGraph *gr): pointer to TGraph is empty!\n";
+	}
+	EvaluatedDataGraph *g1=0,*g2=0;
+	if(GetN()>gr->GetN())
+	{
+		g1=this; g2=(EvaluatedDataGraph*)gr;
+	}
+	else
+	{
+		g2=this; g1=(EvaluatedDataGraph*)gr;
+	}
+	vector<double> x,y;
+	for(int i=0;i<g1->GetN();i++)
+	{
+		double x_val,y_val;
+		g1->GetPoint(i,x_val,y_val);
+		x.push_back(x_val);
+		y.push_back(y_val);
+	}
+	for(unsigned int i=0;i<x.size();i++)
+	{
+		y[i]+=g2->Eval(x[i]);
+	}
+	Set(0);
+	for(unsigned int i=0;i<x.size();i++)
+	{
+		SetPoint(i,x[i],y[i]);
+	}
+}
+
 double ENDFAtof(string s)//костыль для устранения проблемы с представлением экспоненциальной части числа: по умолчанию 1.000000-5 читается как 1
 {
 	string s2;
