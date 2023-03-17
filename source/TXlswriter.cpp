@@ -5,13 +5,14 @@
 #include <vector>
 #include "../libxlsxwriter/include/xlsxwriter.h"
 #include "TSystem.h"
+#include "../TXlsxwriter.hh"
 #pragma once
 
 R__LOAD_LIBRARY(../libxlsxwriter/lib/libxlsxwriter.so)
 
 using namespace std;
 
-class TXlsxwriter;
+//class TXlsxwriter;
 TXlsxwriter &operator << (TXlsxwriter &tx, double value);
 TXlsxwriter &operator << (TXlsxwriter &tx, float value);
 TXlsxwriter &operator << (TXlsxwriter &tx, int value);

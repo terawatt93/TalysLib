@@ -3,7 +3,7 @@ CXXFLAGS = `root-config --cflags` -fPIC -g -Wall
 ROOTLIBS = `root-config --glibs` -lMathMore
 SHARED = -shared
 SRCS = TalysLibDict.cxx TalysLib.cc
-HDRS = TalysLinkDef.h TalysLib.hh
+HDRS = TalysLinkDef.h TalysLib.hh TXlsxwriter.hh
 
 PROGRAM = TalysLib.so
 
@@ -12,7 +12,7 @@ all: $(PROGRAM)
 TalysLibDict.cxx: $(HDRS) TalysLinkDef.h
 	@echo "Generating dictionary ..."
 	#@rootcint -f $@ -c -p $^
-	@rootcling -f TalysLibDict.cxx -rml TalysLib.so -rmf TalysLib.rootmap TalysLib.hh TalysLinkDef.h 
+	@rootcling -f TalysLibDict.cxx -rml TalysLib.so -rmf TalysLib.rootmap TalysLib.hh TXlsxwriter.hh TalysLinkDef.h 
 
 $(PROGRAM): $(SRCS)
 	@echo "Building $(PROGRAM) ..."

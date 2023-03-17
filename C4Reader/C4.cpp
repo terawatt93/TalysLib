@@ -1,5 +1,6 @@
 #include <iostream>
 #include "C4.hh"
+#include "../Parser.cpp"
 #pragma once
 /*double ENDFAtof(string s)//костыль для устранения проблемы с представлением экспоненциальной части числа: по умолчанию 1.000000-5 читается как 1
 {
@@ -624,6 +625,120 @@ vector<C4EnergyDistribution>  C4Container::GetEnergyDistributions()
 		result.insert(result.end(), tmp.begin(), tmp.end());
 	}
 	return result;
+}
+
+void C4Container::GenerateBaseSummaryAndSaveToXLSX(string Filename,string Template)
+{
+	TXlsxwriter xl;
+	xl.Open(Filename);
+	GenerateBaseSummaryAndSaveToXLSX(xl,Template);
+}
+
+void C4Container::GenerateBaseSummaryAndSaveToXLSX(TXlsxwriter &xl,string Template)
+{
+	if(Data.size()==0)
+	{
+		cout<<"This is C4Container::GenerateBaseSummaryAndSaveToXLSX(): Data container is empty\n";
+		return;
+	}
+	vector<string> RawKeywords=SplitString(Template,' ');
+	string Addition;
+	vector<string> Keywords;
+	for(unsigned int i=0;i<RawKeywords.size();i++)
+	{
+		if(RawKeywords[i].find("WSAddition=")!=string::npos)
+		{
+			TString ts(RawKeywords[i].c_str());
+			ts.ReplaceAll("WSAddition=","");
+			Addition=string(ts.Data());
+		}
+		else
+		{
+			Keywords.push_back(RawKeywords[i]);
+		}
+	}
+	xl.GoToWorksheet("Angular Distributions "+Addition);
+	for(unsigned int i=0;i<Keywords.size();i++)
+	{
+		xl<<Keywords[i];
+	}
+	xl<<"\n";
+	vector<C4AngularDistribution> Ang=GetAngularDistributions();
+	vector<C4EnergyDistribution> ED=GetEnergyDistributions();
+	for(unsigned int i=0;i<Ang.size();i++)
+	{
+		for(unsigned int j=0;j<Keywords.size();j++)
+		{
+			if(Keywords[j]=="MF")
+			{
+				xl<<Ang[i].MF;
+			}
+			if(Keywords[j]=="MT")
+			{
+				xl<<Ang[i].MT;
+			}
+			if(Keywords[j]=="PrjE")
+			{
+				xl<<Ang[i].ProjectileEnergy;
+			}
+			if(Keywords[j]=="LevE")
+			{
+				xl<<Ang[i].LevelEnergy;
+			}
+			if(Keywords[j]=="Author")
+			{
+				xl<<Ang[i].Author1;
+			}
+			if(Keywords[j]=="Year")
+			{
+				xl<<Ang[i].Year;
+			}
+			if(Keywords[j]=="Reference")
+			{
+				xl<<Ang[i].Reference;
+			}
+		}
+		xl<<"\n";
+	}
+	xl.GoToWorksheet("Cross sections "+Addition);
+	for(unsigned int i=0;i<Keywords.size();i++)
+	{
+		if(Keywords[i]!="PrjE")
+		xl<<Keywords[i];
+	}
+	xl<<"\n";
+	for(unsigned int i=0;i<ED.size();i++)
+	{
+		for(unsigned int j=0;j<Keywords.size();j++)
+		{
+			if(Keywords[j]=="MF")
+			{
+				xl<<ED[i].MF;
+			}
+			if(Keywords[j]=="MT")
+			{
+				xl<<ED[i].MT;
+			}
+			if(Keywords[j]=="LevE")
+			{
+				xl<<ED[i].LevelEnergy;
+			}
+			if(Keywords[j]=="Author")
+			{
+				xl<<ED[i].Author1;
+			}
+			if(Keywords[j]=="Year")
+			{
+				xl<<ED[i].Year;
+			}
+			if(Keywords[j]=="Reference")
+			{
+				xl<<ED[i].Reference;
+			}
+		}
+		xl<<"\n";
+	}
+	//xl.Close();
 }
 
 C4Container RequestC4DataSubentVector(sqlite3 *db, TFile *BaseROOT,string reaction,string projectile,int Z, int A,string Option)//запрашивает все данные C4, определяя MT из reaction и все возможные MF. Если reaction=="", запрашивается упругое рассеяние

@@ -18,7 +18,7 @@
 #include <TVector3.h>
 #include "TXlswriter.cpp"
 #include <algorithm>
-
+#include <TXlsxwriter.hh>
 #include <TSocket.h>
 #include <TMessage.h>
 
@@ -2604,6 +2604,11 @@ void Nucleus::SaveToXLSX(string filename)
 		xlsx<<"Direct"<<Products[i].DirectInelastic<<"\n";
 		xlsx<<"Compound"<<Products[i].CompoundInelastic<<"\n";
 	}
+	C4Data.GenerateBaseSummaryAndSaveToXLSX(xlsx,"MF MT PrjE LevE Author Year Reference WSAddition=elastic");
+	for(unsigned int i=0;i<Products.size();i++)
+	{
+		Products[i].C4Data.GenerateBaseSummaryAndSaveToXLSX(xlsx,"MF MT PrjE LevE Author Year Reference WSAddition="+Products[i].Reaction);
+	}
 }
 
 vector<TGraphErrors*> Nucleus::GetEXFORAngularDistributions(double Emin,double Emax, bool GenerateHLink)
@@ -2843,3 +2848,14 @@ string Nucleus::GetRawOutput()
 {
 	return RawOutput;
 }
+/*Nucleus& Nucleus::operator =(const Nucleus& Nucl) 
+{
+	//проверка на самоприсваивание
+	if (this == &Nucl) 
+	{
+		return *this;
+	}
+	Nucleus *NuclResult=(Nucleus*)Nucl.Clone();
+	NuclResult->AssignPointers();
+	return *NuclResult;
+}*/

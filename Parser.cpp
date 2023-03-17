@@ -29,6 +29,18 @@ bool IsDirectoryAlreadyExsisted(string Name)//функция проверяет,
 	return true;
 }
 
+std::vector<std::string> SplitString(const std::string &s, char delim) 
+{
+	std::vector<std::string> result;
+	std::stringstream ss (s);
+	std::string item;
+	while (getline (ss, item, delim)) 
+	{
+		result.push_back (item);
+	}
+
+	return result;
+}
 
 string GetPotential(ifstream &ifs)//функция, считывающая блок с оптическим потенциалом
 {
