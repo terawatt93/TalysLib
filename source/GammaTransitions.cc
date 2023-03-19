@@ -377,7 +377,7 @@ void GammaTransition::GenerateGraphs()
 		{
 			for(unsigned int i=0;i<TalysCrossSections.size();i++)
 			{
-				CSGraph.SetPoint(i,fLevel->fNucleus->fMotherNucleus->EnergyGrid[i],TalysCrossSections[i]);
+				AddPointToTGraph(&CSGraph,fLevel->fNucleus->fMotherNucleus->EnergyGrid[i],TalysCrossSections[i]);
 			}
 		}
 	}
@@ -385,7 +385,7 @@ void GammaTransition::GenerateGraphs()
 	{
 		for(unsigned int i=0;i<TalysCrossSections.size();i++)
 		{
-			CSGraph.SetPoint(i,X_Values[i],TalysCrossSections[i]);
+			AddPointToTGraph(&CSGraph,X_Values[i],TalysCrossSections[i]);
 		}
 	}
 }

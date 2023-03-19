@@ -822,16 +822,16 @@ void Level::AddPoint(double x_value,Level *level)
 	
 	for(unsigned int i=0;i<level->Angle.size();i++)
 	{
-		int N2=AdistTotalTalys2D.GetN();
-		AdistTotalTalys2D.SetPoint(N2,x_value,level->Angle[i],level->ADTot[i]);
-		AdistCompoundTalys2D.SetPoint(N2,x_value,level->Angle[i],level->ADCompound[i]);
-		AdistDirectTalys2D.SetPoint(N2,x_value,level->Angle[i],level->ADDirect[i]);
+		//int N2=AdistTotalTalys2D.GetN();
+		AddPointToTGraph(&AdistTotalTalys2D, x_value,level->Angle[i],level->ADTot[i]);
+		AddPointToTGraph(&AdistCompoundTalys2D, x_value,level->Angle[i],level->ADCompound[i]);
+		AddPointToTGraph(&AdistDirectTalys2D, x_value,level->Angle[i],level->ADDirect[i]);
 	}
 
 	IsGraphGenerated=false;
-	CSGraph.SetPoint(CSGraph.GetN(),x_value,level->TalysCS); 
-	CSCompoundGraph.SetPoint(CSGraph.GetN(),x_value,level->TalysCSCompound);
-	CSDirectGraph.SetPoint(CSGraph.GetN(),x_value,level->TalysCSDirect);
+	AddPointToTGraph(&CSGraph, x_value,level->TalysCS); 
+	AddPointToTGraph(&CSCompoundGraph, x_value,level->TalysCSCompound);
+	AddPointToTGraph(&CSDirectGraph, x_value,level->TalysCSDirect);
 }
 
 void Level::AddPoint(Level *level)
@@ -1035,6 +1035,10 @@ TGraph2D* Level::GetAngularDistribution2D(string type,string option)//если �
 }
 TGraph* Level::GetAngularDistributionAtEnergy(float PrEnergy,string type,string option)
 {
+	if(fNucleus->fMotherNucleus->ProjectileEnergy==PrEnergy)
+	{
+		return GetAngularDistribution();
+	}
 	TGraph2D *refGraph=GetAngularDistribution2D(type,option);
 	if((PrEnergy>=fNucleus->fMotherNucleus->MinEnergy)&&(PrEnergy<=fNucleus->fMotherNucleus->MaxEnergy))
 	{
@@ -1051,10 +1055,15 @@ TGraph* Level::GetAngularDistributionAtEnergy(float PrEnergy,string type,string 
 	}
 	else//пока не работает из-за того, что GenerateProducts все очищает. Переделать потом
 	{
+		if(fNucleus->fMotherNucleus->EnergyGrid.size()==0)
+		{
+			fNucleus->fMotherNucleus->EnergyGrid.push_back(fNucleus->fMotherNucleus->ProjectileEnergy);
+		}
 		if(fNucleus->fMotherNucleus->EnergyGrid.size()>0)
 		{
 			fNucleus->fMotherNucleus->EnergyGrid.push_back(PrEnergy);
 			fNucleus->fMotherNucleus->MainNucleusFlag=0;
+			
 			fNucleus->fMotherNucleus->GenerateProducts(fNucleus->fMotherNucleus->Projectile);
 			return GetAngularDistributionAtEnergy(PrEnergy,type,option);
 		}

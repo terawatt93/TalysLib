@@ -18,6 +18,97 @@ const string Atomic_symbols[]={"H","He","Li","Be","B","C","N","O","F","Ne","Na",
 
 const char AngularMomentum[]={'s','p','d','f','g','h','i'};
 
+void AddPointToTGraph(TGraph* gr, double x_value, double y_value)
+{
+	int N=gr->GetN();
+	vector<double> x_values, y_values;
+	x_values.resize(N); y_values.resize(N);
+	for(int i=1;i<N;i++)
+	{
+		double x,y;
+		gr->GetPoint(i,x,y);
+		x_values[i]=x; y_values[i]=y;
+	}
+	if(N==1)
+	{
+		if(x_values[0]<x_value)
+		{
+			gr->SetPoint(1,x_value,y_value);
+		}
+		else
+		{
+			gr->SetPoint(0,x_value,y_value);
+			gr->SetPoint(1,x_values[0],y_values[0]);
+		}
+	}
+	else
+	{
+		bool AddPoint=false;
+		for(int i=1;i<N;i++)
+		{
+			if((x_values[i-1]<x_value)&&(x_values[i]>=x_value))
+			{
+				gr->SetPoint(i,x_value,y_value);
+				AddPoint=true;
+			}
+			if(AddPoint)
+			{
+				gr->SetPoint(i+1,x_values[i],y_values[i]);
+			}
+		}
+		if(!AddPoint)
+		{
+			gr->SetPoint(N,x_value,y_value);
+		}
+	}
+}
+
+void AddPointToTGraph(TGraph2D* gr, double x_value, double y_value, double z_value)
+{
+	int N=gr->GetN();
+	vector<double> x_values, y_values, z_values;
+	x_values.resize(N); y_values.resize(N); z_values.resize(N);
+	for(int i=1;i<N;i++)
+	{
+		double x,y,z;
+		gr->GetPoint(i,x,y,z);
+		x_values[i]=x; y_values[i]=y; z_values[i]=z;
+	}
+	if(N==1)
+	{
+		if(x_values[0]<x_value)
+		{
+			gr->SetPoint(1,x_value,y_value,z_value);
+		}
+		else
+		{
+			gr->SetPoint(0,x_value,y_value,z_value);
+			gr->SetPoint(1,x_values[0],y_values[0],z_values[0]);
+		}
+	}
+	else
+	{
+		bool AddPoint=false;
+		for(int i=1;i<N;i++)
+		{
+			if((x_values[i-1]<x_value)&&(x_values[i]>=x_value)&&(y_values[i-1]<y_value)&&(y_values[i]>=y_value))
+			{
+				gr->SetPoint(i,x_value,y_value,z_value);
+				AddPoint=true;
+			}
+			if(AddPoint)
+			{
+				gr->SetPoint(i+1,x_values[i],y_values[i],z_values[i]);
+			}
+		}
+		if(!AddPoint)
+		{
+			gr->SetPoint(N,x_value,y_value,z_value);
+		}
+	}
+}
+
+
 bool IsDirectoryAlreadyExsisted(string Name)//функция проверяет, существует ли директория с данным именем. Нужна для решения конфликтов, возникающих при одновременном расчете двух ядер с однинаковым именем
 {
 	DIR *dir;

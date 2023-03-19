@@ -473,14 +473,15 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 		}
 		FastCalculated=true;
 	}
+	
 	while(IsDirectoryAlreadyExsisted(PathToCalculationDir+Name+to_string(ID)))
 	{
 		ID++;
 	}
-	mkdir((PathToCalculationDir+Name+to_string(ID)).c_str(),S_IRWXU);
+	PathToCalculationDir=PathToCalculationDir+Name+to_string(ID);
+	mkdir((PathToCalculationDir).c_str(),S_IRWXU);
 	
-	string filename=PathToCalculationDir+Name+to_string(ID)+"/input";
-	system(("rm "+PathToCalculationDir+Name+to_string(ID)+"/").c_str());
+	string filename=PathToCalculationDir+"/input";
 	ofstream ofs(filename.c_str());
 	ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\noutexcitation y\n channels y\n";
 	for(unsigned int i=0;i<TalysOptions.size();i++)
@@ -489,7 +490,7 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 	}
 	if(!fMotherNucleus)
 	{
-		OMPManager_.WriteOMP(PathToCalculationDir+Name+to_string(ID)+"/",WriteOMPOrUseKoningP,WriteOMPOrUseKoningN);
+		OMPManager_.WriteOMP(PathToCalculationDir+"/",WriteOMPOrUseKoningP,WriteOMPOrUseKoningN);
 		ofs<<OMPManager_.GetAdditionToInputFile();
 	}
 	else
@@ -498,21 +499,21 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 		{
 			WriteOMPOrUseKoningP=-1;//исправляет segfault в Talys из-за ОП для продукта реакции n,p
 		}
-		fMotherNucleus->OMPManager_.WriteOMP(PathToCalculationDir+Name+to_string(ID)+"/",WriteOMPOrUseKoningP,WriteOMPOrUseKoningN);
+		fMotherNucleus->OMPManager_.WriteOMP(PathToCalculationDir+"/",WriteOMPOrUseKoningP,WriteOMPOrUseKoningN);
 		ofs<<fMotherNucleus->OMPManager_.GetAdditionToInputFile();
 	}
 	
 	if(WriteDeformation)
 	{
 		ofs<<"deformfile "<<Z<<" "<<GetNucleusName(Z)<<".def\n";
-		Def.WriteDeformation(PathToCalculationDir+Name+to_string(ID)+"/"+GetNucleusName(Z)+".def");
+		Def.WriteDeformation(PathToCalculationDir+"/"+GetNucleusName(Z)+".def");
 	}
 	if(!fMotherNucleus)
 	{
 		ofs<<addition;
 	}
 	ofs.close();
-	system(string("cd "+PathToCalculationDir+Name+to_string(ID)+"/; talys <input >output").c_str());
+	system(string("cd "+PathToCalculationDir+"/; talys <input >output").c_str());
 }
 
 void Nucleus::SortingLevels()
@@ -662,7 +663,7 @@ void Nucleus::ReadTalysOutput()
 	string filename;
 	if(fMotherNucleus)
 	{
-		filename=fMotherNucleus->PathToCalculationDir+fMotherNucleus->Name+to_string(ID)+"/output";
+		filename=fMotherNucleus->PathToCalculationDir+"/output";
 		
 		if(!OutputWasRead)
 		{
@@ -673,7 +674,7 @@ void Nucleus::ReadTalysOutput()
 	}
 	else
 	{
-		filename=PathToCalculationDir+Name+to_string(ID)+"/output";
+		filename=PathToCalculationDir+"/output";
 		if(!OutputWasRead)
 		{
 			ifstream ifs(filename);
@@ -1282,26 +1283,39 @@ void Nucleus::MergeLevels(float tolerancy)
 void Nucleus::GenerateEnergyGrid(float min, float step, float max)
 {
 	EnergyGrid.resize(0);
+	UseEnergyGrid=true;
 	float CurrE=min;
-	while(CurrE<max)
+	while(CurrE<=max)
 	{
 		EnergyGrid.push_back(CurrE);
 		CurrE+=step;
 	}
 }
 
-void Nucleus::MergeEnergyGridData(vector<Nucleus*> NucleiInEnergyGrid)
+void Nucleus::MergeEnergyGridData(vector<Nucleus> &NucleiInEnergyGrid)
 {
 	//по умолчанию для "главного" ядра задается максимальная на сетке энергия налетающей частицы
 	//функция вызывается уже после расчета в Talys (видимо, надо сделать ее private)
-	
+	if(UseEnergyGrid)
 	for(unsigned int i=0;i<NucleiInEnergyGrid.size();i++)
 	{
-		AddPoint(NucleiInEnergyGrid[i]->ProjectileEnergy,NucleiInEnergyGrid[i]);
-		if(NucleiInEnergyGrid[i]->MainNucleusFlag!=2)//нужно, чтобы не удалить "главное" ядро
+		AddPoint(NucleiInEnergyGrid[i].ProjectileEnergy,&NucleiInEnergyGrid[i]);
+		if(NucleiInEnergyGrid[i].MainNucleusFlag!=2)//нужно, чтобы не удалить "главное" ядро
 		{
-			delete NucleiInEnergyGrid[i];
+			if(TalysLibManager::Instance().DeleteNucleiInGrid)
+			{
+				/*if(NucleiInEnergyGrid[i])
+				{
+					delete NucleiInEnergyGrid[i];
+				}
+				NucleiInEnergyGrid[i]=0;*/
+			}
+			
 		}
+	}
+	if(TalysLibManager::Instance().DeleteNucleiInGrid)
+	{
+		NucleiInEnergyGrid.resize(0);
 	}
 }
 
@@ -1385,7 +1399,6 @@ void Nucleus::GenerateProducts(string _Projectile)
 	//system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
 	
 	ProjectileMass=GetNuclearMass(Projectile); 
-	
 	ExecuteCalculationInTalys(Projectile);
 	ReadTalysOutput();
 	ExclusiveCSData ECSD;
@@ -1396,8 +1409,7 @@ void Nucleus::GenerateProducts(string _Projectile)
 		return;
 	}
 	OutputWasRead=false;
-	vector<Nucleus*> NucleiInEnergyGrid;
-	if((EnergyGrid.size()>0)&&(MainNucleusFlag==0))
+	if((EnergyGrid.size()>0)&&(MainNucleusFlag==0)&&(UseEnergyGrid))
 	{
 		sort(EnergyGrid.begin(),EnergyGrid.end());
 		ProjectileEnergy=EnergyGrid[EnergyGrid.size()-1];
@@ -1405,23 +1417,26 @@ void Nucleus::GenerateProducts(string _Projectile)
 		if(EnergyGrid.size()>1)
 		{
 			MinEnergy=EnergyGrid[0]; MaxEnergy=EnergyGrid[EnergyGrid.size()-1];
-			for(unsigned int i=0;i<EnergyGrid.size()-1;i++)
+			for(unsigned int i=0;i<EnergyGrid.size();i++)
 			{
-				NucleiInEnergyGrid.emplace_back(new Nucleus(this->ToNucleusData()));
-				NucleiInEnergyGrid[i]->MainNucleusFlag=1;
-				NucleiInEnergyGrid[i]->ProjectileEnergy=EnergyGrid[i];
-				NucleiInEnergyGrid[i]->EnergyGrid.resize(0);
-				NucleiInEnergyGrid[i]->ThreadNumber=ThreadNumber*10000+i+1;
-				NucleiInEnergyGrid[i]->EnergyGridIndex=i;
-				NucleiInEnergyGrid[i]->fMotherNucleus=0;
+				NucleiInEnergyGrid.push_back(*this);
+				NucleiInEnergyGrid[i].MainNucleusFlag=1;
+				NucleiInEnergyGrid[i].ProjectileEnergy=EnergyGrid[i];
+				NucleiInEnergyGrid[i].EnergyGrid.resize(0);
+				NucleiInEnergyGrid[i].ThreadNumber=ThreadNumber*10000+i+1;
+				NucleiInEnergyGrid[i].EnergyGridIndex=i;
+				NucleiInEnergyGrid[i].fMotherNucleus=0;
+				NucleiInEnergyGrid[i].OMPN=OMPN;
+				NucleiInEnergyGrid[i].OMPP=OMPP;
+				NucleiInEnergyGrid[i].WriteOMPOrUseKoningN=WriteOMPOrUseKoningN;
 			}
 		}
-		NucleiInEnergyGrid.push_back(this);
+		//NucleiInEnergyGrid.push_back(*this);
 		for(unsigned int i=0;i<NucleiInEnergyGrid.size();i++)
 		{
 			if(!FastFlag)
 			{
-				NucleiInEnergyGrid[i]->GenerateProducts(Projectile);
+				NucleiInEnergyGrid[i].GenerateProducts(Projectile);
 			}
 		}
 		if(FastFlag)
@@ -1430,14 +1445,14 @@ void Nucleus::GenerateProducts(string _Projectile)
 			vector<thread> Threads;
 			for(unsigned int i=0;i<NucleiInEnergyGrid.size();i++)
 			{
-				Threads.emplace_back(EvalEdepData,NucleiInEnergyGrid[i],Projectile);
+				Threads.emplace_back(EvalEdepData,&NucleiInEnergyGrid[i],Projectile);
 			}
 			for(unsigned int i=0;i<Threads.size();i++)
 			{
 				Threads[i].join();
 			}
 		}
-	}	
+	}
 	for(unsigned int i=0;i<ECSD.ReactionList.size();i++)
 	{
 		string name=to_string(A+ECSD.DeltaA[i])+GetNucleusName(Z+ECSD.DeltaZ[i]);
@@ -1456,7 +1471,7 @@ void Nucleus::GenerateProducts(string _Projectile)
 	//	Products[i].AssignPointers();
 	}
 	
-	if(NucleiInEnergyGrid.size()>0)
+	if((NucleiInEnergyGrid.size()>0)&&(UseEnergyGrid))
 	{
 		MergeEnergyGridData(NucleiInEnergyGrid);
 		SetTGraphNameAndTitle("Energy");
@@ -1514,21 +1529,23 @@ void Nucleus::AssignC4DataToLevels(double Tolerancy)
 		if(!l)
 		{
 			l=FindLevelByEnergy(ADistEnergy,Tolerancy);
-			if(!l)
-			{
-				l=&Levels[1];
-			}
 		}
-		if(abs(l->Energy-ADistEnergy)<Tolerancy)
+		if(l)
 		{
-			l->C4AngularData.push_back(ADist[i]);
-		}
-		else
-		{
-			l=FindLevelByEnergy(ADistEnergy,Tolerancy);
-			if(l)
+			if(abs(l->Energy-ADistEnergy)<Tolerancy)
 			{
+				ADist[i].LevNumber=l->Number;
 				l->C4AngularData.push_back(ADist[i]);
+				
+			}
+			else
+			{
+				l=FindLevelByEnergy(ADistEnergy,Tolerancy);
+				if(l)
+				{
+					ADist[i].LevNumber=l->Number;
+					l->C4AngularData.push_back(ADist[i]);
+				}
 			}
 		}
 	}
@@ -1540,21 +1557,22 @@ void Nucleus::AssignC4DataToLevels(double Tolerancy)
 		if(!l)
 		{
 			l=FindLevelByEnergy(EDistEnergy,Tolerancy);
-			if(!l)
-			{
-				l=&Levels[1];
-			}
 		}
-		if(abs(l->Energy-EDistEnergy)<Tolerancy)
+		if(l)
 		{
-			l->C4EnergyData.push_back(EDist[i]);
-		}
-		else
-		{
-			l=FindLevelByEnergy(EDistEnergy,Tolerancy);
-			if(l)
+			if(abs(l->Energy-EDistEnergy)<Tolerancy)
 			{
+				EDist[i].LevNumber=l->Number;
 				l->C4EnergyData.push_back(EDist[i]);
+			}
+			else
+			{
+				l=FindLevelByEnergy(EDistEnergy,Tolerancy);
+				if(l)
+				{
+					EDist[i].LevNumber=l->Number;
+					l->C4EnergyData.push_back(EDist[i]);
+				}
 			}
 		}
 	}
@@ -2153,13 +2171,36 @@ void Nucleus::SetTGraphNameAndTitle(string ValName)
 		Products[i].SetTGraphNameAndTitle(ValName);
 	}
 }
+
+
+
 void Nucleus::AddPoint(double x_value,Nucleus* Nucl)
 {
 	if(!Nucl)
 	return;
 	if((Z!=Nucl->Z)||(A!=Nucl->A))
 	return;
-	int NPoints=ElasticTotTalysV.GetN();
+	
+	//AddPointToTGraph(TGraph* gr, double x_value, double y_value)
+	AddPointToTGraph(&TotTalysV,x_value,Nucl->TotTalys);
+	AddPointToTGraph(&ElasticTotTalysV, x_value,Nucl->TotElastic);
+	AddPointToTGraph(&ElasticDirectTalysV, x_value,Nucl->DirectElastic);
+	AddPointToTGraph(&ElasticCompoundTalysV, x_value,Nucl->CompoundElastic);
+	AddPointToTGraph(&InelasticTotTalysV, x_value,Nucl->TotInelastic);
+	AddPointToTGraph(&InelasticDirectTalysV, x_value,Nucl->DirectInelastic);
+	AddPointToTGraph(&InelasticCompoundTalysV, x_value,Nucl->CompoundInelastic);
+	AddPointToTGraph(&BNECS_gamma, x_value,Nucl->BNECS_g);
+	AddPointToTGraph(&BNECS_neutron, x_value,Nucl->BNECS_n);
+	AddPointToTGraph(&BNECS_proton, x_value,Nucl->BNECS_p);
+	AddPointToTGraph(&BNECS_deuteron, x_value,Nucl->BNECS_d);
+	AddPointToTGraph(&BNECS_triton, x_value,Nucl->BNECS_t);
+	AddPointToTGraph(&BNECS_3He, x_value,Nucl->BNECS_tau);
+	AddPointToTGraph(&BNECS_alpha, x_value,Nucl->BNECS_a);
+	AddPointToTGraph(&TEISGraphTot, x_value,Nucl->TEISTot);
+	AddPointToTGraph(&TEISGraphCont, x_value,Nucl->TEISCont);
+	AddPointToTGraph(&TEISGraphDiscr, x_value,Nucl->TEISDiscr);
+	
+	/*int NPoints=ElasticTotTalysV.GetN();
 	TotTalysV.SetPoint(NPoints,x_value,Nucl->TotTalys);
 	ElasticTotTalysV.SetPoint(NPoints,x_value,Nucl->TotElastic);
 	ElasticDirectTalysV.SetPoint(NPoints,x_value,Nucl->DirectElastic);
@@ -2176,7 +2217,7 @@ void Nucleus::AddPoint(double x_value,Nucleus* Nucl)
 	BNECS_alpha.SetPoint(NPoints,x_value,Nucl->BNECS_a);
 	TEISGraphTot.SetPoint(NPoints,x_value,Nucl->TEISTot);
 	TEISGraphCont.SetPoint(NPoints,x_value,Nucl->TEISCont);
-	TEISGraphDiscr.SetPoint(NPoints,x_value,Nucl->TEISDiscr);
+	TEISGraphDiscr.SetPoint(NPoints,x_value,Nucl->TEISDiscr);*/
 	for(unsigned int i=0;i<Levels.size();i++)
 	{
 		for(unsigned int j=0;j<Nucl->Levels.size();j++)
@@ -2264,6 +2305,17 @@ void Nucleus::GenerateGraphs()
 	TEISGraphCont=TGraph(EnergyGrid.size(),&EnergyGrid[0],&TEISCont_Values[0]);
 	TEISGraphDiscr=TGraph(EnergyGrid.size(),&EnergyGrid[0],&TEISDiscr_Values[0]);
 }
+
+void Nucleus::AddEnergyPoint(double EnergyValue)
+{
+	SetProjectileEnergy(EnergyValue);
+	Nucleus NuclTMP(to_string(A)+GetNucleusName(Z));
+	NuclTMP.ThreadNumber=10000+ThreadNumber;
+	NuclTMP.SetProjectileEnergy(EnergyValue);
+	NuclTMP.GenerateProducts(Projectile);
+	AddPoint(EnergyValue,&NuclTMP);
+}
+
 void Nucleus::SetLevelDeformation(int LevelNumber,char LevT, int BandN, int BandL, int MagN, int NPhon, vector<float> *DefVec)
 {
 	Level *l=FindLevelByNumber(LevelNumber);
@@ -2340,10 +2392,15 @@ Nucleus::~Nucleus()
 		{
 			system(string("rm -rf "+PathToCalculationDir).c_str());
 		}
-		else
+		if(MainNucleusFlag==0)
+		{
+			int len=string(Name+to_string(ID)).size();
+			system(string("rm -rf "+PathToCalculationDir.substr(0,PathToCalculationDir.size()-len)).c_str());
+		}
+		/*else
 		{
 			system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
-		}
+		}*/
 	}
 }
 Nucleus& Nucleus::Copy()
@@ -2847,6 +2904,53 @@ void Nucleus::AddCommandsToInputFile(string Addition)
 string Nucleus::GetRawOutput()
 {
 	return RawOutput;
+}
+Nucleus* Nucleus::FindProductByMT(int MT)
+{
+	string OutParticle="";
+	if(MT==2)//elastic
+	{
+		if(fMotherNucleus)
+		{
+			return fMotherNucleus;
+		}
+		else
+		{
+			return this;
+		}
+	}
+	else if((MT>=50)&&(MT<=91))
+	{
+		OutParticle="n";
+	}
+	else if((MT>=600)&&(MT<=649))
+	{
+		OutParticle="p";
+	}
+	else if((MT>=650)&&(MT<=699))
+	{
+		OutParticle="d";
+	}
+	else if((MT>=700)&&(MT<=749))
+	{
+		OutParticle="t";
+	}
+	else if((MT>=750)&&(MT<=799))
+	{
+		OutParticle="3He";
+	}
+	else if((MT>=800)&&(MT<=849))
+	{
+		OutParticle="a";
+	}
+	for(unsigned int i=0;i<Products.size();i++)
+	{
+		if(Products[i].OutgoingParticle==OutParticle)
+		{
+			return &Products[i];
+		}
+	}
+	return 0;
 }
 /*Nucleus& Nucleus::operator =(const Nucleus& Nucl) 
 {

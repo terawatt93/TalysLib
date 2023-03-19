@@ -96,6 +96,7 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	bool IsEnableWarning();
 	bool GenerateAllGraphs=true;
 	bool ReadC4=true;
+	bool DeleteNucleiInGrid=true;
 	bool DeleteDirectoryAfterReading=true;
 	bool RemoteCalculation=false;
 	string RemoteIP="127.0.0.1";
@@ -715,6 +716,7 @@ class NucleusData:public TObject
 class Nucleus:public NucleusData
 {
 	public:
+	bool UseEnergyGrid=false;
 	bool PlottedADist=false;
 	bool PlottedADist2D=false;
 	bool kAlwaysNewGraphs=false;
@@ -765,11 +767,12 @@ class Nucleus:public NucleusData
 	TH1F GammaSpectrum;
 	void SetOMPOption(string Particle="n",int _OMPoption=1);
 	void MergeLevels(float tolerancy);
-	void MergeEnergyGridData(vector<Nucleus*> NucleiInEnergyGrid);//функция выполняет копирование данных из вектора NucleiInEnergyGrid для построения энергетической сетки
+	void MergeEnergyGridData(vector<Nucleus> &NucleiInEnergyGrid);//функция выполняет копирование данных из вектора NucleiInEnergyGrid для построения энергетической сетки
 	void SortingLevels();
 	void GenerateEnergyGrid(float min, float step, float max);
 	Nucleus* FindProductByReaction(string reaction);
 	Nucleus* FindProductByName(string _Name);
+	Nucleus* FindProductByMT(int MT);
 	Nucleus* fMotherNucleus;//! 
 	TLMaterial *fMaterial;//! 
 	TalysCalculation* fTalysCalculation=0;//! 
@@ -807,6 +810,7 @@ class Nucleus:public NucleusData
 	 * аргумент BetterThan-вывести линии с уровней, mark которых меньше этого значения
 	 */
 	vector<Nucleus> Products;
+	vector<Nucleus> NucleiInEnergyGrid;
 	void GenerateProducts(string _Projectile="n");
 	void ExecuteCalculationInTalys(string _Projectile="n");
 	void ReadTalysCalculationResult();
@@ -852,9 +856,10 @@ class Nucleus:public NucleusData
 	vector<Level*> GetLevelsWithAvalibleData(string DType="ADist",string SType="ENDF");//DType="ADist" или "CS" SType: ENDF или EXFOR
 	C4Container C4Data;
 	void AssignC4DataToLevels(double Tolerancy=10);
-	ClassDef(Nucleus,3);
+	ClassDef(Nucleus,4);
 	void AddCommandsToInputFile(string Addition);
 	string GetRawOutput();
+	void AddEnergyPoint(double EnergyValue);
 	//Nucleus& operator =(const Nucleus& Nucl);
 	private:
 	//using TObject::GetName;
@@ -963,7 +968,7 @@ class TalysFitterMT
 	void AddToGraphForMultiFit(TGraphErrors *gr, double Mv);
 	void AddToGraphForMultiFit(TGraph *gr, double Mv);
 	void GenerateGraphForMultiFit(vector<TObject*> &PointersToGraphs,vector<double> &_Offsets);
-	
+	vector<C4Graph*> C4DataForFit;
 	void EstimateEpsilonValues();
 	void EstimateEpsilonValueForParameterThread(int parValue, double *result);
 	double EstimateEpsilonValueForParameter(int parValue);

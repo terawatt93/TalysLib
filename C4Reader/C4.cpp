@@ -1,6 +1,7 @@
 #include <iostream>
 #include "C4.hh"
 #include "../Parser.cpp"
+#include "../TalysLib.hh"
 #pragma once
 /*double ENDFAtof(string s)//костыль для устранения проблемы с представлением экспоненциальной части числа: по умолчанию 1.000000-5 читается как 1
 {
@@ -350,7 +351,7 @@ const char *C4Entry::GetName() const
 	return DataSet.DataSet.c_str();
 }
 
-void C4EnergyDistribution::CopyData()
+void C4Graph::CopyData()
 {
 	DataSet=fEntry->DataSet.DataSet; Reaction=fEntry->DataSet.Reaction;
 	Date=fEntry->DataSet.Date; MF=fEntry->DataSet.MF; MT=fEntry->DataSet.MT; Proj=fEntry->DataSet.Proj; Targ=fEntry->DataSet.Targ; ZTarg=fEntry->DataSet.ZTarg; ATarg=fEntry->DataSet.ATarg;
@@ -358,16 +359,6 @@ void C4EnergyDistribution::CopyData()
 	vector<string> Authors=fEntry->Authors;
 	Year=fEntry->Year;
 	//cout<<" "<<MT<<" "<<fEntry->DataSet.MT<<"\n";
-}
-
-
-void C4AngularDistribution::CopyData()
-{
-	DataSet=fEntry->DataSet.DataSet; Reaction=fEntry->DataSet.Reaction;
-	Date=fEntry->DataSet.Date; MF=fEntry->DataSet.MF; MT=fEntry->DataSet.MT; Proj=fEntry->DataSet.Proj; Targ=fEntry->DataSet.Targ; ZTarg=fEntry->DataSet.ZTarg; ATarg=fEntry->DataSet.ATarg;
-	Entry=fEntry->Entry; Author1=fEntry->Author1; RefCode=fEntry->RefCode; Reference=fEntry->Reference; Title=fEntry->Title; DOI=fEntry->DOI;
-	vector<string> Authors=fEntry->Authors;
-	Year=fEntry->Year;
 }
 
 /*void C4AngularDistribution::Draw(string Option)
@@ -593,6 +584,143 @@ vector<C4Entry> *C4Container::GetData(int MF)
 	}
 	return &Data[Index];
 }
+
+double C4Graph::EvalChi2(TObject *InpObj)
+{
+	double result=0;
+	if(InpObj->InheritsFrom("TGraph"))
+	{
+		TGraph* g=(TGraph*)InpObj;
+		for(int k=0;k<GetN();k++)
+		{
+			double x,y,x_err,y_err;
+			GetPoint(k,x,y);
+			x_err=GetErrorX(k);
+			y_err=GetErrorY(k);
+			if(x_err>0||y_err>0)
+			{
+				result+=pow(y-g->Eval(x),2)/(pow(x_err,2)+pow(y_err,2));
+			}
+			else
+			{
+				result+=pow(y-g->Eval(x),2);
+			}
+		}
+	}
+	else if(InpObj->InheritsFrom("Nucleus"))
+	{
+		Nucleus *Nucl=((Nucleus*)InpObj)->FindProductByMT(MT);
+		if(Nucl)
+		{
+			if(SumForLevels.size()>0)
+			{
+				EvaluatedDataGraph* g=(EvaluatedDataGraph*)(Nucl->Levels[SumForLevels[0]].GetAngularDistribution());
+				for(unsigned int i=0;i<SumForLevels.size();i++)
+				{
+					if(this->InheritsFrom("C4AngularDistribution"))
+					{
+						g->Add(Nucl->Levels[SumForLevels[i]].GetAngularDistributionAtEnergy(ProjectileEnergy*1e-6));
+					}
+					else if(this->InheritsFrom("C4EnergyDistribution"))
+					{
+						g->Add(Nucl->Levels[SumForLevels[i]].GetCSGraph());
+					}
+				}
+				result+=EvalChi2(g);
+			}
+			else
+			{
+				if(MT==2)
+				{
+					if(this->InheritsFrom("C4AngularDistribution"))
+					{
+						return EvalChi2(Nucl->GetElasticAngularDistributionAtEnergy(ProjectileEnergy*1e-6));
+					}
+					else if(this->InheritsFrom("C4EnergyDistribution"))
+					{
+						return EvalChi2(Nucl->GetCrossSectionGraph("Elastic"));
+					}
+				}
+				else
+				{
+					if(this->InheritsFrom("C4AngularDistribution"))
+					{
+						return EvalChi2(Nucl->Levels[LevNumber].GetAngularDistributionAtEnergy(ProjectileEnergy*1e-6));
+					}
+					else if(this->InheritsFrom("C4EnergyDistribution"))
+					{
+						return EvalChi2(Nucl->Levels[LevNumber].GetCSGraph());
+					}
+				}
+			}
+		}
+	}
+	return result;
+}
+void C4Graph::DrawWithCalculationResult(string Option,TObject *InpObj)
+{
+	EvaluatedDataGraph* g;
+	if(InpObj->InheritsFrom("TGraph"))
+	{
+		g=(EvaluatedDataGraph*)InpObj;
+		Draw(Option.c_str());
+		g->DrawClone("l");
+	}
+	else if(InpObj->InheritsFrom("Nucleus"))
+	{
+		Nucleus *Nucl=((Nucleus*)InpObj)->FindProductByMT(MT);
+		if(Nucl)
+		{
+			if(SumForLevels.size()>0)
+			{
+				g=(EvaluatedDataGraph*)(Nucl->Levels[SumForLevels[0]].GetAngularDistribution());
+				for(unsigned int i=0;i<SumForLevels.size();i++)
+				{
+					if(this->InheritsFrom("C4AngularDistribution"))
+					{
+						g->Add(Nucl->Levels[SumForLevels[i]].GetAngularDistributionAtEnergy(ProjectileEnergy*1e-6));
+					}
+					else if(this->InheritsFrom("C4EnergyDistribution"))
+					{
+						g->Add(Nucl->Levels[SumForLevels[i]].GetCSGraph());
+					}
+				}
+				Draw(Option.c_str());
+				g->DrawClone("l");
+			}
+			else
+			{
+				if(MT==2)
+				{
+					if(this->InheritsFrom("C4AngularDistribution"))
+					{
+						g=(EvaluatedDataGraph*)(Nucl->GetElasticAngularDistributionAtEnergy(ProjectileEnergy*1e-6));
+					}
+					else if(this->InheritsFrom("C4EnergyDistribution"))
+					{
+						g=(EvaluatedDataGraph*)(Nucl->GetCrossSectionGraph("Elastic"));
+					}
+					Draw(Option.c_str());
+					g->DrawClone("l");
+				}
+				else
+				{
+					if(this->InheritsFrom("C4AngularDistribution"))
+					{
+						g=(EvaluatedDataGraph*)(Nucl->Levels[LevNumber].GetAngularDistributionAtEnergy(ProjectileEnergy*1e-6));
+					}
+					else if(this->InheritsFrom("C4EnergyDistribution"))
+					{
+						g=(EvaluatedDataGraph*)(Nucl->Levels[LevNumber].GetCSGraph());
+					}
+					Draw(Option.c_str());
+					g->DrawClone("l");
+				}
+			}
+		}
+	}
+}
+
 
 vector<C4AngularDistribution> C4Container::GetAngularDistributions()
 {

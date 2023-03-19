@@ -34,6 +34,7 @@
 #pragma link C++ class C4EnergyDistribution+;
 #pragma link C++ class C4AngularDistribution+;
 #pragma link C++ class C4Container+;
+#pragma link C++ class C4Graph+;
 
 #pragma link C++ class ENDFDescription+;
 #pragma link C++ class ENDFContentEntry+;

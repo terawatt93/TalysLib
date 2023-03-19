@@ -65,7 +65,8 @@ class C4Entry:public TObject
 	const char *GetName()  const;
 	ClassDef(C4Entry,1);
 };
-class C4AngularDistribution:public TGraphErrors
+
+class C4Graph:public TGraphErrors
 {
 	public:
 	C4Entry *fEntry;//!
@@ -73,27 +74,29 @@ class C4AngularDistribution:public TGraphErrors
 	//TGraphErrors Graph;
 	void CopyData();
 	string DataSet, Reaction, ID;//ID-соответствует номеру записи в DataSet
-	int Date=0, MF=0, MT=0, Proj=0, Targ=0, ZTarg=0, ATarg=0;
+	int Date=0, MF=0, MT=0, Proj=0, Targ=0, ZTarg=0, ATarg=0, LevNumber=-1;
 	string Entry, Author1, RefCode, Reference, Title, DOI;
 	vector<string> Authors;
+	vector<int> SumForLevels;
+	double EvalChi2(TObject *InpObj);
+	void DrawWithCalculationResult(string Option,TObject *obj);
 	//void Draw(string Option="");
 	int Year;
-	ClassDef(C4AngularDistribution,1);
+	ClassDef(C4Graph,1);
+
 };
-class C4EnergyDistribution:public TGraphErrors
+
+class C4AngularDistribution:public C4Graph
 {
 	public:
-	C4Entry *fEntry;//!
-	double LevelEnergy;
-	//TGraphErrors Graph;
-	void CopyData();
-	string DataSet, Reaction, ID;
-	int Date=0, MF=0, MT=0, Proj=0, Targ=0, ZTarg=0, ATarg=0;
-	string Entry, Author1, RefCode, Reference, Title, DOI;
-	vector<string> Authors;
-	//void Draw(string Option="");
-	int Year;
-	ClassDef(C4EnergyDistribution,1);
+	double EvalChi2Talys(Nucleus *Nuclide);
+	ClassDef(C4AngularDistribution,2);
+};
+class C4EnergyDistribution:public C4Graph
+{
+	public:
+	double EvalChi2Talys(Nucleus *Nuclide);
+	ClassDef(C4EnergyDistribution,2);
 };
 vector<C4AngularDistribution> ExtractAngularDistributions(C4Entry *Entry);
 vector<C4EnergyDistribution> ExtractEnergyDistributions(C4Entry *Entry);
