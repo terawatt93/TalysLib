@@ -415,11 +415,8 @@ void TalysFitterMT::DrawFitProgress()
 	{
 		int nx,ny;
 		nx=sqrt(C4DataForFit.size());
-		ny=nx;
-		if(nx*ny<C4DataForFit.size())
-		{
-			ny+=1;
-		}
+		ny=(C4DataForFit.size())/nx+1;
+		
 		vector<TPad*> Pads=GeneratePadsOnCanvas(0.1,0.1,0.9,0.7,nx,ny,c);
 		TPad *p=new TPad("p","p",0.1,0.8,0.9,0.9);
 		p->Draw();
