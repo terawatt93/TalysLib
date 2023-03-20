@@ -20,12 +20,22 @@
 double EvalChi2(TalysFitterMT *TFM,Nucleus* Nucl)
 {
 	bool FillFitValues=false;
+	double result=0;
 	if(Nucl==0)
 	{
 		Nucl=&(TFM->Nuclide);
 		FillFitValues=true;
 	}
-	double result=0;
+	
+	if(UseC4&&C4DataForFit.size()>0)
+	{
+		for(unsigned int i=0;i<C4DataForFit.size();i++)
+		{
+			result+=C4DataForFit[i].EvalChi2(Nucl);
+		}
+	}
+	
+	
 	TGraphErrors GraphForMultiFit=TFM->GraphForMultiFit;
 	for(int i=0;i<GraphForMultiFit.GetN();i++)
 	{
@@ -79,6 +89,11 @@ void EvalDiffInThread(TalysFitterMT *TFM, int VarNumber, double &result)
 	//Nucleus Nucl(TFM->Nuclide.Name);
 	Nucleus Nucl=TFM->Nuclide;
 	Nucl.ProjectileEnergy=TFM->ProjectileEnergy;
+	if(UseC4&&C4DataForFit.size()>0)
+	{
+		Nucl.EnergyGrid=EnergyGrid;
+		Nucl.UseEnergyGrid=true;
+	}
 	Nucl.SetThreadNumber(TFM->InitThreadNumber+VarNumber);
 	cout<<"THREAD:"<<TFM->InitThreadNumber+VarNumber<<"\n";
 	Nucl.OMPN->SetDefaultOMP(TFM->Nuclide.OMPoptionN);
@@ -372,19 +387,42 @@ void TalysFitterMT::DrawFitProgress()
 {
 	if(gPad==0)
 	{
-		new TCanvas();
+		new TCanvas("c","c",1024,1450);
 	}
 	TCanvas *c=gPad->GetCanvas();
 	c->Clear();
-	c->Divide(1,2);
-	c->cd(1);
-	Chi2Values.Draw("al");
-	gPad->SetLogy(1);
-	c->cd(2);
-	GraphForMultiFit.Draw("ap");
-	FitValues.Draw("l");
-	gPad->SetLogy(1);
-	c->Update();
+	if(!UseC4)
+	{
+		c->Divide(1,2);
+		c->cd(1);
+		Chi2Values.Draw("al");
+		gPad->SetLogy(1);
+		c->cd(2);
+		GraphForMultiFit.Draw("ap");
+		FitValues.Draw("l");
+		gPad->SetLogy(1);
+		c->Update();
+	}
+	else
+	{
+		int nx,ny;
+		nx=sqrt(C4DataForFit.size());
+		ny=nx;
+		if(nx*ny<C4DataForFit.size())
+		{
+			ny+=1;
+		}
+		vector<TPad*> Pads=GeneratePadsOnCanvas(0.1,0.1,0.9,0.7,nx,ny,c);
+		TPad *p=new TPad("p","p",0.1,0.8,0.9,0.9);
+		p->Draw();
+		p->cd();
+		Chi2Values.Draw("al");
+		for(unsigned int i=0;i<C4DataForFit.size();i++)
+		{
+			Pads[i]->cd();
+			C4DataForFit[i]->DrawWithCalculationResult("alp",&Nuclide);
+		}
+	}
 }
 void TalysFitterMT::FCN(int &npar, double *gin, double &f, double *par, int flag)
 {
@@ -540,5 +578,19 @@ void TalysFitterMT::SaveToRootFile(TFile *f)
 	f->WriteTObject(&FitValues);
 	f->WriteTObject(&GraphForMultiFit);
 	f->WriteTObject(&InitValues);
-	
 }
+void TalysFitterMT::AddC4GraphVector(vector<TGraphErrors*> ExpData)
+{
+	for(unsigned int i=0;i<ExpData.size();i++)
+	{
+		C4Graph* data=(C4Graph*)ExpData[i];
+		C4DataForFit.push_back(data);
+		vector<double> ProjectileEnergies=data->GetProjectileEnergies()/1e6;//в С4 приняты энергии в эВ!
+		//сразу же сгенерируем сетку энергий:
+		EnergyGrid.insert(EnergyGrid.end(), ProjectileEnergies.begin(), ProjectileEnergies.end());
+	}
+	sort( EnergyGrid.begin(), EnergyGrid.end() );
+	EnergyGrid.erase( unique( EnergyGrid.begin(), EnergyGrid.end() ), EnergyGrid.end() );
+	UseC4=true;
+}
+

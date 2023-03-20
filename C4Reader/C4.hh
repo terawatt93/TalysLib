@@ -80,6 +80,7 @@ class C4Graph:public TGraphErrors
 	vector<int> SumForLevels;
 	double EvalChi2(TObject *InpObj);
 	void DrawWithCalculationResult(string Option,TObject *obj);
+	vector<double> GetProjectileEnergies();
 	//void Draw(string Option="");
 	int Year;
 	ClassDef(C4Graph,1);

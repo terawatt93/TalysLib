@@ -975,3 +975,24 @@ C4Container RequestC4DataSubentVector(sqlite3 *db, TFile *BaseROOT,string reacti
 	}
 	return result;
 }
+vector<double> C4Graph::GetProjectileEnergies()
+{
+	vector<double> result;
+	if(this->InheritsFrom("C4EnergyDistribution"))
+	{
+		for(int i=0;i<GetN();i++)
+		{
+			double x,y;
+			GetPoint(i,x,y);
+			result.push_back(x);
+		}
+	}
+	else if(this->InheritsFrom("C4AngularDistribution"))
+	{
+		result.push_back(ProjectileEnergy);
+		return result;
+	}
+	sort( result.begin(), result.end() );
+	result.erase( unique( result.begin(), result.end() ), result.end() );
+	return result;
+}

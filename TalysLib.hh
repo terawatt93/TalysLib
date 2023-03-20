@@ -929,6 +929,8 @@ class TalysFitterMT
 	public:
 	bool Calculated=false;
 	bool GeneratedTF1=false;
+	bool UseC4=false;
+	vector<double> EnergyGrid;
 	TalysFitterMT(string NuclName, unsigned int ThreadNumber=0);
 	unsigned int InitThreadNumber=0;
 	Nucleus Nuclide;
@@ -973,6 +975,8 @@ class TalysFitterMT
 	void EstimateEpsilonValueForParameterThread(int parValue, double *result);
 	double EstimateEpsilonValueForParameter(int parValue);
 	double EvalInitDiff(int parNumber, double Epsilon);
+	void AddC4GraphVector(vector<TGraphErrors*> ExpData);
+	vector<TPad*> PadsForDrawing;
 	TPaveText GenerateTPaveTextForFitResult(double x1=0.7,double y1=0.6,double x2=0.95,double y2=0.95,string Option="bl NDC");
 };
 double EvalChi2(TalysFitterMT *TFM,Nucleus* Nucl);
