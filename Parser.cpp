@@ -12,6 +12,8 @@
 #include <cstdlib>
 #include <dirent.h>
 #include <TPad.h>
+#include <TGraph.h>
+#include <TGraph2D.h>
 #include <TCanvas.h>
 #define AngularMomentumSize 7
 using namespace std;

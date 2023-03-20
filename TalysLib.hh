@@ -930,7 +930,7 @@ class TalysFitterMT
 	bool Calculated=false;
 	bool GeneratedTF1=false;
 	bool UseC4=false;
-	vector<double> EnergyGrid;
+	vector<float> EnergyGrid;
 	TalysFitterMT(string NuclName, unsigned int ThreadNumber=0);
 	unsigned int InitThreadNumber=0;
 	Nucleus Nuclide;

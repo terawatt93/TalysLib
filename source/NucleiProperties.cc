@@ -1164,7 +1164,7 @@ TGraph2D* Nucleus::GetElasticAngularDistribution2D(string type,string option)
 				ElasticDirectTalys=TGraph(Angle.size(), &Angle[0], &ElDirect[0]);
 			}*/
 			
-			for(unsigned int i=0;i<EnergyGrid.size();i++)
+			/*for(unsigned int i=0;i<EnergyGrid.size();i++)
 			{
 				for(unsigned int j=0;j<ElTotValues[i].size();j++)
 				{
@@ -1173,7 +1173,7 @@ TGraph2D* Nucleus::GetElasticAngularDistribution2D(string type,string option)
 					ElasticCompoundTalys2D.SetPoint(PointIterator,EnergyGrid[i],Angle[j],ElCompoundValues[i][j]);
 					PointIterator++;
 				}
-			}
+			}*/
 			
 			string TotName="ElTotTalys2D";
 			string CompName="ElCompTalys2D";
@@ -1300,18 +1300,6 @@ void Nucleus::MergeEnergyGridData(vector<Nucleus> &NucleiInEnergyGrid)
 	for(unsigned int i=0;i<NucleiInEnergyGrid.size();i++)
 	{
 		AddPoint(NucleiInEnergyGrid[i].ProjectileEnergy,&NucleiInEnergyGrid[i]);
-		if(NucleiInEnergyGrid[i].MainNucleusFlag!=2)//нужно, чтобы не удалить "главное" ядро
-		{
-			if(TalysLibManager::Instance().DeleteNucleiInGrid)
-			{
-				/*if(NucleiInEnergyGrid[i])
-				{
-					delete NucleiInEnergyGrid[i];
-				}
-				NucleiInEnergyGrid[i]=0;*/
-			}
-			
-		}
 	}
 	if(TalysLibManager::Instance().DeleteNucleiInGrid)
 	{
@@ -2199,6 +2187,20 @@ void Nucleus::AddPoint(double x_value,Nucleus* Nucl)
 	AddPointToTGraph(&TEISGraphTot, x_value,Nucl->TEISTot);
 	AddPointToTGraph(&TEISGraphCont, x_value,Nucl->TEISCont);
 	AddPointToTGraph(&TEISGraphDiscr, x_value,Nucl->TEISDiscr);
+	//!!!!!!!
+	for(unsigned int i=0;i<Nucl->Angle.size();i++)
+	{
+		AddPointToTGraph(&ElacticTotTalys2D, x_value,Nucl->Angle[i],Nucl->ElTot[i]);
+		AddPointToTGraph(&ElasticDirectTalys2D, x_value,Nucl->Angle[i],Nucl->ElDirect[i]);
+		AddPointToTGraph(&ElasticCompoundTalys2D, x_value,Nucl->Angle[i],Nucl->ElCompound[i]);
+	}
+	
+	
+				
+	//			ElTot.push_back(Tot);
+	//			ElCompound.push_back(Comp);
+	//			ElDirect.push_back(Dir);
+	
 	
 	/*int NPoints=ElasticTotTalysV.GetN();
 	TotTalysV.SetPoint(NPoints,x_value,Nucl->TotTalys);

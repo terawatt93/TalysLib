@@ -27,37 +27,38 @@ double EvalChi2(TalysFitterMT *TFM,Nucleus* Nucl)
 		FillFitValues=true;
 	}
 	
-	if(UseC4&&C4DataForFit.size()>0)
+	if(TFM->UseC4&&TFM->C4DataForFit.size()>0)
 	{
-		for(unsigned int i=0;i<C4DataForFit.size();i++)
+		for(unsigned int i=0;i<TFM->C4DataForFit.size();i++)
 		{
-			result+=C4DataForFit[i].EvalChi2(Nucl);
+			result+=TFM->C4DataForFit[i]->EvalChi2(Nucl);
 		}
 	}
-	
-	
-	TGraphErrors GraphForMultiFit=TFM->GraphForMultiFit;
-	for(int i=0;i<GraphForMultiFit.GetN();i++)
+	else
 	{
-		double x,y,x_err,y_err;
-		GraphForMultiFit.GetPoint(i,x,y);
-		x_err=GraphForMultiFit.GetErrorX(i);
-		y_err=GraphForMultiFit.GetErrorY(i);
-		double FuncValue=TFM->GetEvaluationResult(x,TFM,Nucl);
-		//cout<<"Chi2:x,y,x_err,y_err"<<x<<" "<<y<<" "<<x_err<<" "<<y_err<<"\n";
-		if(FillFitValues)
+		TGraphErrors GraphForMultiFit=TFM->GraphForMultiFit;
+		for(int i=0;i<GraphForMultiFit.GetN();i++)
 		{
-			TFM->FitValues.SetPoint(i,x,FuncValue);
-		}
-		if((!isnan(x))&&(!isnan(y))&&(!isnan(x_err))&&(!isnan(y_err)))
-		{
-			if(((x_err>0)||(y_err>0)))
+			double x,y,x_err,y_err;
+			GraphForMultiFit.GetPoint(i,x,y);
+			x_err=GraphForMultiFit.GetErrorX(i);
+			y_err=GraphForMultiFit.GetErrorY(i);
+			double FuncValue=TFM->GetEvaluationResult(x,TFM,Nucl);
+			//cout<<"Chi2:x,y,x_err,y_err"<<x<<" "<<y<<" "<<x_err<<" "<<y_err<<"\n";
+			if(FillFitValues)
 			{
-				result+=pow(y-FuncValue,2)/(pow(x_err,2)+pow(y_err,2));
+				TFM->FitValues.SetPoint(i,x,FuncValue);
 			}
-			else
+			if((!isnan(x))&&(!isnan(y))&&(!isnan(x_err))&&(!isnan(y_err)))
 			{
-				result+=pow(y-FuncValue,2);
+				if(((x_err>0)||(y_err>0)))
+				{
+					result+=pow(y-FuncValue,2)/(pow(x_err,2)+pow(y_err,2));
+				}
+				else
+				{
+					result+=pow(y-FuncValue,2);
+				}
 			}
 		}
 	}
@@ -73,6 +74,13 @@ double EvalChi2Init(TalysFitterMT *TFM,Nucleus* Nucl)
 	}
 	double result=0;
 	TGraph *Init=&(TFM->InitValues);
+	if(TFM->UseC4)
+	{
+		for(unsigned i=0;i<TFM->C4DataForFit.size();i++)
+		{
+			result+=TFM->C4DataForFit[i]->EvalChi2(Nucl);
+		}
+	}
 	for(int i=0;i<Init->GetN();i++)
 	{
 		double x,y;
@@ -89,9 +97,9 @@ void EvalDiffInThread(TalysFitterMT *TFM, int VarNumber, double &result)
 	//Nucleus Nucl(TFM->Nuclide.Name);
 	Nucleus Nucl=TFM->Nuclide;
 	Nucl.ProjectileEnergy=TFM->ProjectileEnergy;
-	if(UseC4&&C4DataForFit.size()>0)
+	if(TFM->UseC4&&TFM->C4DataForFit.size()>0)
 	{
-		Nucl.EnergyGrid=EnergyGrid;
+		Nucl.EnergyGrid=TFM->EnergyGrid;
 		Nucl.UseEnergyGrid=true;
 	}
 	Nucl.SetThreadNumber(TFM->InitThreadNumber+VarNumber);
@@ -585,12 +593,20 @@ void TalysFitterMT::AddC4GraphVector(vector<TGraphErrors*> ExpData)
 	{
 		C4Graph* data=(C4Graph*)ExpData[i];
 		C4DataForFit.push_back(data);
-		vector<double> ProjectileEnergies=data->GetProjectileEnergies()/1e6;//в С4 приняты энергии в эВ!
+		vector<double> ProjectileEnergies=data->GetProjectileEnergies();//в С4 приняты энергии в эВ!
+		for(unsigned int j=0;j<ProjectileEnergies.size();j++)
+		{
+			ProjectileEnergies[j]=ProjectileEnergies[j]/1e6;
+		}
 		//сразу же сгенерируем сетку энергий:
 		EnergyGrid.insert(EnergyGrid.end(), ProjectileEnergies.begin(), ProjectileEnergies.end());
 	}
 	sort( EnergyGrid.begin(), EnergyGrid.end() );
 	EnergyGrid.erase( unique( EnergyGrid.begin(), EnergyGrid.end() ), EnergyGrid.end() );
 	UseC4=true;
+	Nuclide.EnergyGrid=EnergyGrid;
+	Nuclide.UseEnergyGrid=true;
+	InitNuclide.EnergyGrid=EnergyGrid;
+	InitNuclide.UseEnergyGrid=true;
 }
 
