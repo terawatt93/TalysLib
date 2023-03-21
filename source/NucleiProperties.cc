@@ -1291,6 +1291,25 @@ void Nucleus::GenerateEnergyGrid(float min, float step, float max)
 		CurrE+=step;
 	}
 }
+void Nucleus::GenerateEnergyGrid(vector<TGraphErrors*> Data)
+{
+	UseEnergyGrid=true;
+	for(unsigned int i=0;i<Data.size();i++)
+	{
+		C4Graph* data=(C4Graph*)Data[i];
+		vector<double> ProjectileEnergies=data->GetProjectileEnergies();//в С4 приняты энергии в эВ!
+		for(unsigned int j=0;j<ProjectileEnergies.size();j++)
+		{
+			ProjectileEnergies[j]=ProjectileEnergies[j]/1e6;
+		}
+		EnergyGrid.insert(EnergyGrid.end(), ProjectileEnergies.begin(), ProjectileEnergies.end());
+		
+	}
+	//сразу же сгенерируем сетку энергий:
+	sort( EnergyGrid.begin(), EnergyGrid.end() );
+	EnergyGrid.erase( unique( EnergyGrid.begin(), EnergyGrid.end() ), EnergyGrid.end() );
+	UseEnergyGrid=true;
+}
 
 void Nucleus::MergeEnergyGridData(vector<Nucleus> &NucleiInEnergyGrid)
 {

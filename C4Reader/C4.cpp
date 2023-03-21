@@ -607,6 +607,25 @@ double C4Graph::EvalChi2(TObject *InpObj)
 			}
 		}
 	}
+	if(InpObj->InheritsFrom("TGraph2D"))
+	{
+		TGraph2D* g=(TGraph2D*)InpObj;
+		for(int k=0;k<GetN();k++)
+		{
+			double x,y,x_err,y_err;
+			GetPoint(k,x,y);
+			x_err=GetErrorX(k);
+			y_err=GetErrorY(k);
+			if(x_err>0||y_err>0)
+			{
+				result+=pow(y-g->Interpolate(ProjectileEnergy*1e-6,x),2)/(pow(x_err,2)+pow(y_err,2));
+			}
+			else
+			{
+				result+=pow(y-g->Interpolate(ProjectileEnergy*1e-6,x),2);
+			}
+		}
+	}
 	else if(InpObj->InheritsFrom("Nucleus"))
 	{
 		Nucleus *Nucl=((Nucleus*)InpObj)->FindProductByMT(MT);
@@ -634,7 +653,7 @@ double C4Graph::EvalChi2(TObject *InpObj)
 				{
 					if(this->InheritsFrom("C4AngularDistribution"))
 					{
-						return EvalChi2(Nucl->GetElasticAngularDistributionAtEnergy(ProjectileEnergy*1e-6));
+						return EvalChi2(Nucl->GetElasticAngularDistribution2D());
 					}
 					else if(this->InheritsFrom("C4EnergyDistribution"))
 					{
@@ -645,7 +664,7 @@ double C4Graph::EvalChi2(TObject *InpObj)
 				{
 					if(this->InheritsFrom("C4AngularDistribution"))
 					{
-						return EvalChi2(Nucl->Levels[LevNumber].GetAngularDistributionAtEnergy(ProjectileEnergy*1e-6));
+						return EvalChi2(Nucl->Levels[LevNumber].GetAngularDistribution2D());
 					}
 					else if(this->InheritsFrom("C4EnergyDistribution"))
 					{

@@ -770,6 +770,7 @@ class Nucleus:public NucleusData
 	void MergeEnergyGridData(vector<Nucleus> &NucleiInEnergyGrid);//функция выполняет копирование данных из вектора NucleiInEnergyGrid для построения энергетической сетки
 	void SortingLevels();
 	void GenerateEnergyGrid(float min, float step, float max);
+	void GenerateEnergyGrid(vector<TGraphErrors*> Data);//в функцию передается вектор указателей на TGraphErrors, которые на самом деле C4Data
 	Nucleus* FindProductByReaction(string reaction);
 	Nucleus* FindProductByName(string _Name);
 	Nucleus* FindProductByMT(int MT);
