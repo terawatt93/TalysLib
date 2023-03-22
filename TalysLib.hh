@@ -713,6 +713,42 @@ class NucleusData:public TObject
 	ClassDef(ElasticAndNonelasticData, 1);
 };*/
 
+class Keyword
+{
+	public:
+	string word;
+	string parameters;
+	char ParType;//тип параметра: 1-int, 2-float/double, 3-string, 4-
+};
+
+class TalysInput
+{
+	public:
+	vector<Keyword> keywords;
+	void Set(string content);
+	void SetKeyword(string keyword,int parameter);
+	void RemoveKeyword(string keyword);
+	void SetKeyword(string keyword,double parameter);
+	void SetKeyword(string keyword,string parameter);
+	Keyword* GetKeyword(string word);
+	string PathToCalculation;
+	string Get();
+	void Write();
+	bool Calculated=false;
+	Nucleus *fNucleus;//! указатель на ядро, из которого будут взяты ОП и деформации
+	int ID=0;
+};
+
+class TalysIO
+{
+	public:
+	vector<TalysInput> InputDescriptions;
+	void AddInput(string Content="",Nucleus *Nucl=0);
+	vector<string> Outputs;
+	void Calculate(int MaxNThreads);
+	vector<TalysInput*> GetInput(int ID);
+};
+
 class Nucleus:public NucleusData
 {
 	public:
