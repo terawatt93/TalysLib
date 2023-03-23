@@ -45,5 +45,8 @@
 #pragma link C++ class ENDFAngularDistribution+;
 #pragma link C++ class ENDFTable+;
 #pragma link C++ class MTEntry+;
+#pragma link C++ class Keyword;
+#pragma link C++ class TalysInput;
+#pragma link C++ class TalysIO;
 
 #endif

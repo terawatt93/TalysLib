@@ -26,6 +26,7 @@
 #include "ENDFReader/ENDFLib.cpp"
 #include "ENDFReader/EXFOR.cpp"
 #include "C4Reader/C4.cpp"
+#include "source/TalysIO.cpp"
 
 GammaTransition* GetBestTransitionFromVector(float Energy, float Tolerancy,vector<Nucleus> &Nuclei)
 {

@@ -1421,7 +1421,31 @@ void Nucleus::GenerateProducts(string _Projectile)
 		sort(EnergyGrid.begin(),EnergyGrid.end());
 		ProjectileEnergy=EnergyGrid[EnergyGrid.size()-1];
 		MainNucleusFlag=2;//ядро, для которого строится энергетическая зависимость
-		if(EnergyGrid.size()>1)
+		
+		TalysIO tio;//класс, выполняющий расчеты, позже перепилю все расчеты на него
+		PathToCalculationDir=TString::Format("/dev/shm/CalculationResults%d/",ThreadNumber);
+		for(unsigned int i=0;i<EnergyGrid.size();i++)
+		{
+			string InpFileContent="projectile "+Projectile+"\nelement "+GetNucleusName(Z)+"\nmass "+to_string(A)+"\nenergy "+to_string(ProjectileEnergy)+"\noutdiscrete y\noutgamdis y\noutangle y\noutexcitation y\n channels y\n"+addition;
+			TalysInput input;
+			input.Set(InpFileContent);
+			input.ID=i+1000;
+			input.fNucleus=this;
+			tio.InputDescriptions.push_back(input);
+		}
+		tio.Calculate(0);
+		for(unsigned int i=0;i<EnergyGrid.size();i++)
+		{
+			Nucleus Nucl(Name);
+			Nucl.SetProjectileEnergy(EnergyGrid[i]);
+			Nucl.Projectile=Projectile;
+			Nucl.RawOutput=tio.Outputs[i];
+			Nucl.OutputWasRead=true;
+			Nucl.ReadTalysCalculationResult();
+			Nucl.ReadElastic();
+			AddPoint(EnergyGrid[i],&Nucl);
+		}
+		/*if(EnergyGrid.size()>1)
 		{
 			MinEnergy=EnergyGrid[0]; MaxEnergy=EnergyGrid[EnergyGrid.size()-1];
 			for(unsigned int i=0;i<EnergyGrid.size();i++)
@@ -1458,7 +1482,7 @@ void Nucleus::GenerateProducts(string _Projectile)
 			{
 				Threads[i].join();
 			}
-		}
+		}*/
 	}
 	for(unsigned int i=0;i<ECSD.ReactionList.size();i++)
 	{

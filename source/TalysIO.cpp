@@ -6,7 +6,7 @@ void TalysInput::Set(string content)
 {
 	stringstream s(content);
 	string line;
-	while(getline(s,line));
+	while(getline(s,line))
 	{
 		stringstream s2(line);
 		Keyword k;
@@ -53,7 +53,7 @@ void TalysInput::RemoveKeyword(string word)
 		}
 	}
 }
-void TalysInput::SetKeyword(string keyword,double parameter)
+void TalysInput::SetKeyword(string word,double parameter)
 {
 	Keyword *k=GetKeyword(word);
 	if(!k)
@@ -70,7 +70,7 @@ void TalysInput::SetKeyword(string keyword,double parameter)
 		k->parameters=to_string(parameter);
 	}
 }
-void TalysInput::SetKeyword(string keyword,string parameter)
+void TalysInput::SetKeyword(string word,string parameter)
 {
 	Keyword *k=GetKeyword(word);
 	if(!k)
@@ -102,8 +102,8 @@ void TalysInput::Write()
 	{
 		ID++;
 	}
-	PathToCalculation+=to_string(ID)
-	mkdir((PathToCalculationDir).c_str(),S_IRWXU);
+	PathToCalculation+=to_string(ID);
+	mkdir((PathToCalculation).c_str(),S_IRWXU);
 	ofstream ofs(PathToCalculation+"/input");
 	ofs<<Get();
 	if(fNucleus)
@@ -112,27 +112,27 @@ void TalysInput::Write()
 		{
 			if(!fNucleus->fMotherNucleus)
 			{
-				fNucleus->OMPManager_.WriteOMP(PathToCalculationDir+"/",WriteOMPOrUseKoningP,WriteOMPOrUseKoningN);
+				fNucleus->OMPManager_.WriteOMP(PathToCalculation+"/",fNucleus->WriteOMPOrUseKoningP,fNucleus->WriteOMPOrUseKoningN);
 				ofs<<fNucleus->OMPManager_.GetAdditionToInputFile();
 			}
 			else
 			{
-				if(Reaction=="(n,p)")
+				if(fNucleus->Reaction=="(n,p)")
 				{
-					WriteOMPOrUseKoningP=-1;//исправляет segfault в Talys из-за ОП для продукта реакции n,p
+					fNucleus->WriteOMPOrUseKoningP=-1;//исправляет segfault в Talys из-за ОП для продукта реакции n,p
 				}
-				fNucleus->fMotherNucleus->OMPManager_.WriteOMP(PathToCalculationDir+"/",WriteOMPOrUseKoningP,WriteOMPOrUseKoningN);
+				fNucleus->fMotherNucleus->OMPManager_.WriteOMP(PathToCalculation+"/",fNucleus->WriteOMPOrUseKoningP,fNucleus->WriteOMPOrUseKoningN);
 				ofs<<fNucleus->fMotherNucleus->OMPManager_.GetAdditionToInputFile();
 			}
 			
 			if(fNucleus->WriteDeformation)
 			{
-				ofs<<"deformfile "<<Z<<" "<<GetNucleusName(Z)<<".def\n";
-				fNucleus->Def.WriteDeformation(PathToCalculationDir+"/"+GetNucleusName(Z)+".def");
+				ofs<<"deformfile "<<fNucleus->Z<<" "<<GetNucleusName(fNucleus->Z)<<".def\n";
+				fNucleus->Def.WriteDeformation(PathToCalculation+"/"+GetNucleusName(fNucleus->Z)+".def");
 			}
 			if(!fNucleus->fMotherNucleus)
 			{
-				ofs<<addition;
+				ofs<<fNucleus->addition;
 			}
 		}
 	}
@@ -148,15 +148,16 @@ void TalysIO::AddInput(string Content, Nucleus *Nucl)
 
 void CalculateInThread(TalysInput *inp,string *result)
 {
+	inp->Calculated=true;
+	inp->Write();
 	system(("cd "+inp->PathToCalculation+"; talys <input >output").c_str());
 	ifstream ifs((inp->PathToCalculation+"/output").c_str());
 	ifs.seekg(0, std::ios::end);
 	size_t SizeOfStr = ifs.tellg();
 	result->resize(SizeOfStr);
 	ifs.seekg(0);
-	ifs.read(result[0], SizeOfStr); 
+	ifs.read(&((*result)[0]), SizeOfStr); 
 	ifs.close();
-	inp->Calculated=true;
 }
 void CalculateInThread2(unsigned int index, TalysIO *inp,vector<string> *result)
 {
@@ -164,7 +165,17 @@ void CalculateInThread2(unsigned int index, TalysIO *inp,vector<string> *result)
 	{
 		if(!inp->InputDescriptions[index].Calculated)
 		{
-			CalculateInThread(TalysInput *inp,string *result)
+			CalculateInThread(&(inp->InputDescriptions[index]),&(result->at(index)));
+		}
+		else
+		{
+			for(unsigned int i=0;i<inp->InputDescriptions.size();i++)
+			{
+				if(!inp->InputDescriptions[i].Calculated)
+				{
+					CalculateInThread2(i,inp,result);
+				}
+			}
 		}
 	}
 	return ;
@@ -173,6 +184,24 @@ void CalculateInThread2(unsigned int index, TalysIO *inp,vector<string> *result)
 
 void TalysIO::Calculate(int MaxNThreads)
 {
-	int NRuns=InputDescriptions.size()/MaxNThreads+1;
+	vector<thread> threads;
+	Outputs.resize(InputDescriptions.size());
+	/*if((unsigned int)MaxNThreads>InputDescriptions.size())
+	{
+		MaxNThreads=InputDescriptions.size();
+	}
+	for(int i=0;i<MaxNThreads;i++)
+	{
+		threads.emplace_back(CalculateInThread2,i,this,&Outputs);
+	}*/
+	for(unsigned int i=0;i<InputDescriptions.size();i++)
+	{
+		//threads.emplace_back(CalculateInThread2,i,this,&Outputs);
+		threads.emplace_back(CalculateInThread,&(InputDescriptions[i]),&(Outputs[i]));
+	}
+	for(unsigned int i=0;i<threads.size();i++)
+	{
+		threads[i].join();
+	}
 }
 
