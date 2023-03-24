@@ -1389,12 +1389,45 @@ string GetPathToC4Base()
 	return filename;
 }
 
+void Nucleus::ParseTalysOutput()
+{
+	//OutputWasRead=false;
+	if(MainNucleusFlag!=1)
+	ReadTalysOutput();
+	ExclusiveCSData ECSD;
+	ECSD.ExtractDataFromBuffer(RawOutput);
+	if(Name.find("BKG")!=string::npos)
+	{
+		return;
+	}
+	
+	for(unsigned int i=0;i<ECSD.ReactionList.size();i++)
+	{
+		string name=to_string(A+ECSD.DeltaA[i])+GetNucleusName(Z+ECSD.DeltaZ[i]);
+		Products.push_back(Nucleus(name,ECSD.ReactionList[i]));
+	}
+	
+	for(unsigned int i=0;i<Products.size();i++)
+	{
+		Products[i].fMotherNucleus=this;
+		Products[i].FastFlag=FastFlag;
+		//Products[i].ReadENSDFFile();
+	}
+	for(unsigned int i=0;i<Products.size();i++)
+	{
+		Products[i].ReadTalysCalculationResult();
+	//	Products[i].AssignPointers();
+	}
+	AssignPointers();
+	ReadElastic();
+}
+
 void Nucleus::GenerateProducts(string _Projectile)
 {
 	Products.resize(0);
 	if(!PredefinedProjectile)
 	Projectile=_Projectile;
-	
+
 	if(TalysLibManager::Instance().RemoteCalculation)
 	{
 		PredefinedProjectile=true;
@@ -1406,31 +1439,28 @@ void Nucleus::GenerateProducts(string _Projectile)
 	//system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
 	
 	ProjectileMass=GetNuclearMass(Projectile); 
-	ExecuteCalculationInTalys(Projectile);
-	ReadTalysOutput();
-	ExclusiveCSData ECSD;
-	ECSD.ExtractDataFromBuffer(RawOutput);
-	
-	if(Name.find("BKG")!=string::npos)
+	if(EnergyGrid.size()==0)
 	{
-		return;
+		ExecuteCalculationInTalys(Projectile);
+		ParseTalysOutput();
 	}
-	OutputWasRead=false;
-	if((EnergyGrid.size()>0)&&(MainNucleusFlag==0)&&(UseEnergyGrid))
+	else if((EnergyGrid.size()>0)&&(MainNucleusFlag==0)&&(UseEnergyGrid))
 	{
 		sort(EnergyGrid.begin(),EnergyGrid.end());
 		ProjectileEnergy=EnergyGrid[EnergyGrid.size()-1];
 		MainNucleusFlag=2;//ядро, для которого строится энергетическая зависимость
-		
+		ExecuteCalculationInTalys(Projectile);
+		ParseTalysOutput();
 		TalysIO tio;//класс, выполняющий расчеты, позже перепилю все расчеты на него
 		PathToCalculationDir=TString::Format("/dev/shm/CalculationResults%d/",ThreadNumber);
 		for(unsigned int i=0;i<EnergyGrid.size();i++)
 		{
-			string InpFileContent="projectile "+Projectile+"\nelement "+GetNucleusName(Z)+"\nmass "+to_string(A)+"\nenergy "+to_string(ProjectileEnergy)+"\noutdiscrete y\noutgamdis y\noutangle y\noutexcitation y\n channels y\n"+addition;
+			string InpFileContent="projectile "+Projectile+"\nelement "+GetNucleusName(Z)+"\nmass "+to_string(A)+"\nenergy "+to_string(EnergyGrid[i])+"\noutdiscrete y\noutgamdis y\noutangle y\noutexcitation y\n channels y\n"+addition;
 			TalysInput input;
 			input.Set(InpFileContent);
-			input.ID=i+1000;
+			input.ID=i+10000+ID;
 			input.fNucleus=this;
+			input.PathToCalculation="/dev/shm/";
 			tio.InputDescriptions.push_back(input);
 		}
 		tio.Calculate(0);
@@ -1441,9 +1471,9 @@ void Nucleus::GenerateProducts(string _Projectile)
 			Nucl.Projectile=Projectile;
 			Nucl.RawOutput=tio.Outputs[i];
 			Nucl.OutputWasRead=true;
-			Nucl.ReadTalysCalculationResult();
-			Nucl.ReadElastic();
+			Nucl.ParseTalysOutput();
 			AddPoint(EnergyGrid[i],&Nucl);
+			cout<<"Add: "<<EnergyGrid[i]<<" "<<Nucl.TEISTot<<"\n";
 		}
 		/*if(EnergyGrid.size()>1)
 		{
@@ -1484,36 +1514,16 @@ void Nucleus::GenerateProducts(string _Projectile)
 			}
 		}*/
 	}
-	for(unsigned int i=0;i<ECSD.ReactionList.size();i++)
-	{
-		string name=to_string(A+ECSD.DeltaA[i])+GetNucleusName(Z+ECSD.DeltaZ[i]);
-		Products.push_back(Nucleus(name,ECSD.ReactionList[i]));
-	}
-	
-	for(unsigned int i=0;i<Products.size();i++)
-	{
-		Products[i].fMotherNucleus=this;
-		Products[i].FastFlag=FastFlag;
-		//Products[i].ReadENSDFFile();
-	}
-	for(unsigned int i=0;i<Products.size();i++)
-	{
-		Products[i].ReadTalysCalculationResult();
-	//	Products[i].AssignPointers();
-	}
 	
 	if((NucleiInEnergyGrid.size()>0)&&(UseEnergyGrid))
 	{
-		MergeEnergyGridData(NucleiInEnergyGrid);
+		//MergeEnergyGridData(NucleiInEnergyGrid);
 		SetTGraphNameAndTitle("Energy");
 		/*if(TalysLibManager::Instance().GenerateAllGraphs)
 		{
 			GenerateGraphs();
 		}*/
 	}
-	
-	AssignPointers();
-	ReadElastic();
 	AssignPointers();
 	if(TalysLibManager::Instance().GetC4Flag())
 	{

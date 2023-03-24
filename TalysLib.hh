@@ -810,6 +810,7 @@ class Nucleus:public NucleusData
 	void SortingLevels();
 	void GenerateEnergyGrid(float min, float step, float max);
 	void GenerateEnergyGrid(vector<TGraphErrors*> Data);//в функцию передается вектор указателей на TGraphErrors, которые на самом деле C4Data
+	void ParseTalysOutput();//Выполняет все операции по работе с выдачей TALYS
 	Nucleus* FindProductByReaction(string reaction);
 	Nucleus* FindProductByName(string _Name);
 	Nucleus* FindProductByMT(int MT);

@@ -158,6 +158,10 @@ void CalculateInThread(TalysInput *inp,string *result)
 	ifs.seekg(0);
 	ifs.read(&((*result)[0]), SizeOfStr); 
 	ifs.close();
+	if(TalysLibManager::Instance().DeleteDirectoryAfterReading)
+	{
+		system(("rm -rf "+inp->PathToCalculation).c_str());
+	}
 }
 void CalculateInThread2(unsigned int index, TalysIO *inp,vector<string> *result)
 {
