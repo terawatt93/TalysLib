@@ -739,7 +739,46 @@ void C4Graph::DrawWithCalculationResult(string Option,TObject *InpObj)
 		}
 	}
 }
-
+void C4Graph::PrintInformationToTXlsxwriterStream(TXlsxwriter &out,string Keyword)
+{
+	if(Keyword=="Entry")
+	{
+		out<<fEntry->Entry;
+	}
+	if(Keyword=="SubEntry")
+	{
+		out<<fEntry->DataSet.DataSet;
+	}
+	if(Keyword=="MF")
+	{
+		out<<MF;
+	}
+	if(Keyword=="MT")
+	{
+		out<<MT;
+	}
+	if(Keyword=="PrjE")
+	{
+		if(this->InheritsFrom("C4AngularDistribution"))
+		out<<ProjectileEnergy;
+	}
+	if(Keyword=="LevE")
+	{
+		out<<LevelEnergy;
+	}
+	if(Keyword=="Author")
+	{
+		out<<Author1;
+	}
+	if(Keyword=="Year")
+	{
+		out<<Year;
+	}
+	if(Keyword=="Reference")
+	{
+		out<<Reference;
+	}
+}
 
 vector<C4AngularDistribution> C4Container::GetAngularDistributions()
 {
@@ -816,34 +855,7 @@ void C4Container::GenerateBaseSummaryAndSaveToXLSX(TXlsxwriter &xl,string Templa
 	{
 		for(unsigned int j=0;j<Keywords.size();j++)
 		{
-			if(Keywords[j]=="MF")
-			{
-				xl<<Ang[i].MF;
-			}
-			if(Keywords[j]=="MT")
-			{
-				xl<<Ang[i].MT;
-			}
-			if(Keywords[j]=="PrjE")
-			{
-				xl<<Ang[i].ProjectileEnergy;
-			}
-			if(Keywords[j]=="LevE")
-			{
-				xl<<Ang[i].LevelEnergy;
-			}
-			if(Keywords[j]=="Author")
-			{
-				xl<<Ang[i].Author1;
-			}
-			if(Keywords[j]=="Year")
-			{
-				xl<<Ang[i].Year;
-			}
-			if(Keywords[j]=="Reference")
-			{
-				xl<<Ang[i].Reference;
-			}
+			Ang[i].PrintInformationToTXlsxwriterStream(xl,Keywords[j]);
 		}
 		xl<<"\n";
 	}
@@ -858,30 +870,7 @@ void C4Container::GenerateBaseSummaryAndSaveToXLSX(TXlsxwriter &xl,string Templa
 	{
 		for(unsigned int j=0;j<Keywords.size();j++)
 		{
-			if(Keywords[j]=="MF")
-			{
-				xl<<ED[i].MF;
-			}
-			if(Keywords[j]=="MT")
-			{
-				xl<<ED[i].MT;
-			}
-			if(Keywords[j]=="LevE")
-			{
-				xl<<ED[i].LevelEnergy;
-			}
-			if(Keywords[j]=="Author")
-			{
-				xl<<ED[i].Author1;
-			}
-			if(Keywords[j]=="Year")
-			{
-				xl<<ED[i].Year;
-			}
-			if(Keywords[j]=="Reference")
-			{
-				xl<<ED[i].Reference;
-			}
+			ED[i].PrintInformationToTXlsxwriterStream(xl,Keywords[j]);
 		}
 		xl<<"\n";
 	}

@@ -81,6 +81,7 @@ class C4Graph:public TGraphErrors
 	double EvalChi2(TObject *InpObj);
 	void DrawWithCalculationResult(string Option,TObject *obj);
 	vector<double> GetProjectileEnergies();
+	void PrintInformationToTXlsxwriterStream(TXlsxwriter &out,string Keyword);
 	//void Draw(string Option="");
 	int Year;
 	ClassDef(C4Graph,1);
@@ -111,8 +112,8 @@ class C4Container:public TObject//хранит c4 в упорядоченном 
 	vector<C4Entry> *GetData(int MF);
 	vector<C4AngularDistribution> GetAngularDistributions();
 	vector<C4EnergyDistribution>  GetEnergyDistributions();
-	void GenerateBaseSummaryAndSaveToXLSX(string Filename,string Template="MF MT PrjE LevE Author Year Reference");
-	void GenerateBaseSummaryAndSaveToXLSX(TXlsxwriter &xl,string Template="MF MT PrjE LevE Author Year Reference");
+	void GenerateBaseSummaryAndSaveToXLSX(string Filename,string Template="Entry SubEntry MF MT PrjE LevE Author Year Reference");
+	void GenerateBaseSummaryAndSaveToXLSX(TXlsxwriter &xl,string Template="Entry SubEntry MF MT PrjE LevE Author Year Reference");
 	ClassDef(C4Container,2);
 };//
 

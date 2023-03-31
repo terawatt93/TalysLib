@@ -2716,10 +2716,10 @@ void Nucleus::SaveToXLSX(string filename)
 		xlsx<<"Direct"<<Products[i].DirectInelastic<<"\n";
 		xlsx<<"Compound"<<Products[i].CompoundInelastic<<"\n";
 	}
-	C4Data.GenerateBaseSummaryAndSaveToXLSX(xlsx,"MF MT PrjE LevE Author Year Reference WSAddition=elastic");
+	C4Data.GenerateBaseSummaryAndSaveToXLSX(xlsx,"Entry SubEntry MF MT PrjE LevE Author Year Reference WSAddition=elastic");
 	for(unsigned int i=0;i<Products.size();i++)
 	{
-		Products[i].C4Data.GenerateBaseSummaryAndSaveToXLSX(xlsx,"MF MT PrjE LevE Author Year Reference WSAddition="+Products[i].Reaction);
+		Products[i].C4Data.GenerateBaseSummaryAndSaveToXLSX(xlsx,"Entry SubEntry MF MT PrjE LevE Author Year Reference WSAddition="+Products[i].Reaction);
 	}
 }
 
