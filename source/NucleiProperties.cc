@@ -895,6 +895,200 @@ void Nucleus::ReadTalysCalculationResult()
 	}
 	//ifs.close();//закоментировано для работы с буфером
 }
+
+void Nucleus::AddPoint(double var,string varname,string CalculationResult)
+{
+	stringstream ifs(CalculationResult);
+	//конец 
+	string line;
+	bool read_flag=false;
+	
+	//сбросим данные для уровней
+	for(unsigned int i=0;i<Levels.size();i++)
+	{
+		Levels[i].Reset();
+	}
+	//TOTGamProd=0, TOTNProd=0, TOTPProd=0, TOTDProd=0, TOTAProd=0;
+	while(getline(ifs,line))
+	{
+		if(((int)line.find("Nuclide:"))>0)
+		{
+			if(((int)line.find(Name))>0)
+			read_flag=true;
+		}
+		if(read_flag&&(((int)line.find("--->"))>0))
+		{
+			int Numi,Numf;
+			double Ei,Ef,Egamma,CrossSection;
+			string JPi,JPf,tmp;
+			stringstream s(line);
+			s>>Numi>>JPi>>Ei>>tmp>>Numf>>JPf>>Ef>>Egamma>>CrossSection;
+			//float TalysJP=TalysJPToNormalJP(JPi);
+			SpinParity TalysJP(JPi);
+			SpinParity TalysJPF(JPf);
+			Ei=Ei*1000;
+			Ef=Ef*1000;
+			Egamma=Egamma*1000;
+			if(!TalysGroundStateExsists)//add ground state from Talys
+			{
+				if(Ef==0)//signature of ground state
+				{
+					Levels.emplace_back();
+					Levels[Levels.size()-1].SetEnergy(Ef); Levels[Levels.size()-1].SetTalysSpinParity(TalysJPF);
+					Levels[Levels.size()-1].Number=Numf;
+					TalysGroundStateExsists=true;
+				}
+			}
+			Level *TalysLevel=FindLevelFromTalys(Ei,TalysJP);
+			if(!TalysLevel)
+			{
+				Levels.emplace_back();
+				Levels[Levels.size()-1].SetEnergy(Ei); Levels[Levels.size()-1].SetTalysSpinParity(TalysJP);
+				TalysLevel=&Levels[Levels.size()-1];
+				Levels[Levels.size()-1].SetOrigin("Talys");
+				Levels[Levels.size()-1].AddJPValue(TalysJP);
+				Levels[Levels.size()-1].Number=Numi;
+			}
+			TalysLevel->AddLineFromTalys(Egamma,CrossSection,Ei,Ef,SpinParity(JPi),SpinParity(JPf),Numi,Numf);
+			TalysLevel->fNucleus=this;
+			//cout<<"Egamma:"<<Egamma<<"; Level:"<<TalysLevel->Energy<<"; "<<Levels[Levels.size()-1].Energy;
+			/*if(Egamma>TalysLevel->Energy)
+			{
+				cout<<"!!!!!!!!!";
+			}
+			cout<<"\n";*/
+		}
+		if((((int)line.find("Total"))>0)&&read_flag)
+		{
+			//ifs.close();//закоментировано для работы с буфером
+			read_flag=false;
+			//return ;
+			
+		}
+	}
+	stringstream ifs2;
+	
+	if(fMotherNucleus)
+	{
+		ifs2<<fMotherNucleus->RawOutput;
+		//cout<<"******\n"<<fMotherNucleus->RawOutput<<"\n";
+	}
+	else
+	{
+		ifs2<<RawOutput;
+	}
+
+	//чтобы получить список уровней, сначала нужно прочитать список гамма, позже переделаю для более эффективной работы
+	bool ExcitationFlag=false;
+	bool ADistFlag=false;
+	//ifs.open(filename.c_str());//закоментировано для работы с буфером
+	string TalysExcitationMark=ReactionToTalysNotation(kExcitationCS);
+	string TalysADistMark=ReactionToTalysNotation(kAngularDistribution);
+	//cout<<"TalysExcitationMark:"<<Reaction<<" "<<TalysExcitationMark<<"\n";
+	Level* UsedLevel=0;
+	int CurrentLevelNumber=0;
+	if(TalysExcitationMark!="NDEF")
+	{
+		while(getline(ifs2,line))
+		{
+			if(((int)line.find(TalysExcitationMark))>-1)
+			{
+				ExcitationFlag=true;
+				UsedLevel=0;
+				line.resize(0);
+			}
+			if(((int)line.find(TalysADistMark))>-1)
+			{
+				ADistFlag=true;
+				line.resize(0);
+				CurrentLevelNumber=-1;
+			}
+			if(((int)line.find("---------"))>0)
+			{
+				ExcitationFlag=false;
+				UsedLevel=0;
+			}
+			if(((int)line.find("Gamma-ray intensities"))>0)
+			{
+				ADistFlag=false;
+				UsedLevel=0;
+			}
+			if((ExcitationFlag)&&(line.size()>10))
+			{
+				stringstream s(line);
+				
+				unsigned int N;
+				string tmp;
+				float Energy,OutEnergy, Direct, Compound, Total;
+				OutEnergy=0;
+				s>>N>>Energy>>OutEnergy>>tmp>>Direct>>Compound>>Total;
+				UsedLevel=FindLevelByNumber(N);
+				if((UsedLevel)&&(line.size()>22)&&(OutEnergy>0))
+				{
+					UsedLevel->OutgoingParticleEnergy=OutEnergy;
+					UsedLevel->TalysCSDirect=Direct;
+					UsedLevel->TalysCSCompound=Compound;
+					UsedLevel->TalysCS=Total;
+				}
+			}
+			if((ADistFlag)&&line.size()>10)
+			{
+				if(((int)line.find("Level"))>-1)
+				{
+					string tmp;
+					int NLev;
+					stringstream s(line);
+					s>>tmp>>NLev;
+					if(CurrentLevelNumber>NLev)
+					{
+						UsedLevel=0;
+						ADistFlag=false;
+					}
+					else
+					{
+						CurrentLevelNumber=NLev;
+						UsedLevel=FindLevelByNumber(CurrentLevelNumber);
+					}
+					
+				}
+				stringstream s(line);
+				string tmp;
+				
+				if((line.size()>22)&&(UsedLevel)&&CurrentLevelNumber>0)
+				{
+					float Angle=0, Total=0, Compound=0, Direct=0;
+					s>>Angle>>Total>>Direct>>Compound;
+					if(Total!=0)
+					{
+						UsedLevel->ADTot.push_back(Total);
+						UsedLevel->ADDirect.push_back(Direct);
+						UsedLevel->ADCompound.push_back(Compound);
+						UsedLevel->Angle.push_back(Angle);
+						//ConvertAngleToLab(double angle, double ma, double Ta, double mA, double mb, double mB, double Tb)
+						double MNMass, PrEnergy, PrMass;
+						if(fMotherNucleus)
+						{
+							MNMass=fMotherNucleus->Mass;
+							PrEnergy=fMotherNucleus->ProjectileEnergy;
+							PrMass=fMotherNucleus->ProjectileMass;
+						}
+						else
+						{
+							MNMass=Mass;
+						}
+						UsedLevel->AngleLab.push_back(ConvertAngleToLab(Angle,PrMass,PrEnergy,MNMass,OutgoingParticleMass,Mass,UsedLevel->OutgoingParticleEnergy));
+					}
+				}
+			}
+			if(line.find("EXCITATION FUNCTIONS")!=string::npos)
+			{
+				//ifs.close();//закоментировано для работы с буфером
+				return;
+			}
+		}
+	}
+}
+
 void Nucleus::ReadElastic()
 {
 	string filename;

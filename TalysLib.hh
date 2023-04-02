@@ -797,7 +797,7 @@ class Nucleus:public NucleusData
 	TGraph* GetElasticAngularDistributionAtEnergy(float Energy, string type="Total",string option="");
 	TGraph2D* GetElasticAngularDistribution2D(string type="Total",string option="");
 	TGraph *GetCrossSectionGraph(string type="Total");
-	
+	void AddPoint(double var,string varname,string CalculationResult);//var-значение параметра, от которого строится зависимость, varname-имя переменной, CalculationResult-содержимое файла результатов Talys
 	vector<TGraphErrors*> GetEXFORAngularDistributions(double Emin=0,double Emax=0, bool GenerateHLink=true);
 	vector<TGraphErrors*> GetEXFORCrossSections(string Type,double Emin=0,double Emax=0,bool GenerateHLink=true);
 	TMultiGraph* GetEXFORTMultiGraphForAngularDistributions(double Emin=0,double Emax=0);
