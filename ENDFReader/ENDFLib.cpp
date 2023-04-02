@@ -1,7 +1,7 @@
 #include "ENDFLib.hh"
 #include "../Parser.cpp"
-#include "Math/IFunction.h"
-#include "Math/SpecFuncMathMore.h"
+#include <Math/IFunction.h>
+#include <Math/SpecFuncMathMore.h>
 #include <cmath>
 //#include <curl/curl.h>
 #pragma once

@@ -18,7 +18,7 @@
 #include <TVector3.h>
 #include "TXlswriter.cpp"
 #include <algorithm>
-#include <TXlsxwriter.hh>
+#include "../TXlsxwriter.hh"
 #include <TSocket.h>
 #include <TMessage.h>
 
