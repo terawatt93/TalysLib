@@ -26,6 +26,9 @@ New lines in ~/.bashrc file added for TalysLib should look like this:
 > export CPATH=$CPATH:/home/user_name/some_directory/TalysLib <br>
 > export TALYSLIBDIR=/home/user_name/some_directory/TalysLib <br>
 
+If you want to use testing feature working with EXFOR and ENDF, download http://159.93.100.133:85/C4/C4Base.db and http://159.93.100.133:85/C4/Base.root put them into same directory and add path to them in .bashrc:
+export C4Base=/Path/to/C4Base.db
+
 ## Требования: 
 1. Дистрибутив Linux на основе Debian (мы рекомендуем [Linux Mint](https://linuxmint.com/))
 2. [TALYS](https://tendl.web.psi.ch/tendl_2019/talys.html) 1.8 or 1.9 
