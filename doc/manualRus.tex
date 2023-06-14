@@ -507,7 +507,7 @@ PotentialKoningData -- набор для глобальной параметри
 \subsubsection{void EnableParTracking()}
 \subsubsection{void DisableParTracking()}
 \subsubsection{void TrackParChanges()}
-\subsubsection{double Eval(double *x, double *p)}
+\subsubsection{double Eval(ENDFTabledouble *x, double *p)}
 \subsubsection{double (*GetEvaluationResult)(double x_value,TalysFitter *PointetToTF)}
 \subsubsection{TF1 GenerateTF1(string name, double x_min,double x_max)}
 
@@ -558,5 +558,9 @@ CERN ROOT Abstract Base Class for Fitting.
 \subsubsection{void AddToGraphForMultiFit(TGraph *gr, double Mv)}
 \subsubsection{void GenerateGraphForMultiFit(vector<TObject*> \textbf{\&}PointersToGraphs,vector<double> \textbf{\&}_Offsets)}
 \subsubsection{TPaveText GenerateTPaveTextForFitResult(double x1=0.7,double y1=0.6,double x2=0.95,double y2=0.95,string Option="bl NDC")}
+\subsection{ENDF}
+Работа с ENDF в TalysLib организована с помощью классов \textbf{ENDFFile, ENDFTable}, содержащих всю информацию из ENDF файла. \textbf{ENDFFile} хранит набор (map) таблиц \textbf{ENDFTable}, индексируемый по MF и MT как $i=MF*1000+MT$. Для поиска и получения указателя на нужную таблицу используется метод \textbf{ENDFFile::FindENDFTable(int MF,int MT)}, в случае отсутствия такой таблицы в наборе будет возвращен нулевой указатель. Аналогичная функция \textbf{ENDFFile::GetENDFTable(int MF,int MT)}, которая вернет указатель на нужную таблицу, создав ее при необходимости.
+Открытие и считывание файла осуществляется с помощью метода \textbf{ENDFFile::Read(string filename)}, в котором также выполняется разбор содержимого на таблицы.
 
+Каждая таблица представляет из себя комбинацию из заголовка (\textbf{Header}) и тела (\textbf{ENDFBasicTable::vector<vector<double> > Table}), для которой реалиованы методы произвольного доступа к ячейкам по двум индексам (\textbf{double\& ENDFBasicTable::at(unsigned int Column, unsigned int Row)}) и (\textbf{double* ENDFBasicTable::Get(unsigned int Column, unsigned int Row)}), также из нее могут быть получены векторы строк и столбцов с помощью функций \textbf{vector<double> ENDFBasicTable::GetColumn(unsigned int Column) и \textbf{vector<double> ENDFBasicTable::GetRaw(unsigned int Raw)}.
 \end{document}
