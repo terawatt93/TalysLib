@@ -151,6 +151,7 @@ class ENDFTable:public ENDFBasicTable
 	vector<double> GetX();
 	vector<double> GetY();
 	vector<double> GetZ();
+	vector<vector<double>> GetList(unsigned int CurrentRow);
 	TGraph TableGraph;
 	TGraph* GetTGraph();
 	void GenerateAngularDistributions4();//генерировать угловые распределения в соотв. с файлом 4

@@ -526,6 +526,23 @@ TGraph* ENDFAngularDistribution::GetAngularDistribution(string _Type,int NPoints
 	return &ADistGraph;
 }
 
+vector<vector<double>> ENDFTable::GetList(unsigned int CurrentRow)
+{
+	vector<vector<double>> result;
+	double *NRS=Get(5,CurrentRow);
+	result.resize((unsigned int)(*NRS));
+	CurrentRow++;
+	for(unsigned int i=0;i<result.size();i++)
+	{
+		for(unsigned int j=0;j<6;j++)
+		{
+			result[i].push_back(*Get(j,CurrentRow));
+		}
+		CurrentRow++;
+	}
+	return result;
+}
+
 vector<double> ENDFTable::GetX()
 {
 	vector<double> result;
