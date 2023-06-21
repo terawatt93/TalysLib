@@ -1465,7 +1465,7 @@ EvaluatedDataGraph ENDFFile::GetAngularDistribution(string OutgoingParticle,int 
 	result.SetTitle(TString::Format("%s %s angular distribution (En=%.1fMeV, Level=%d);%s;#frac{d#sigma}{d#Omega}, mb",Source.c_str(),OutgoingParticle.c_str(),NeutronEnergy,LevelNum,_Type.c_str()));
 	for(unsigned int i=0;i<X.size();i++)
 	{
-		cout<<"Interp:"<<X[i]<<" "<<Norm<<" "<<Gr2D.Interpolate(NeutronEnergy,X[i])<<" "<<NeutronEnergy<<"\n";
+		//cout<<"Interp:"<<X[i]<<" "<<Norm<<" "<<Gr2D.Interpolate(NeutronEnergy,X[i])<<" "<<NeutronEnergy<<"\n";
 		if(Gr2D.Interpolate(NeutronEnergy,X[i])>0)
 		result.SetPoint(result.GetN(),X[i],Norm*Gr2D.Interpolate(NeutronEnergy,X[i]));
 	}
