@@ -494,7 +494,12 @@ TGraph* ENDFAngularDistribution::GetAngularDistribution(string _Type,int NPoints
 	else if(Type==2)//таблица
 	{
 		CosVector=XValues;
-		Y=YValues;
+		
+		for(unsigned int i=0;i<YValues.size();i++)
+		{
+			Y.push_back(YValues[i]/(2*M_PI));
+		}
+		
 		for(unsigned int i=0;i<CosVector.size();i++)
 		{
 			DegVector.push_back(acos(CosVector[i])*180/3.1416);
@@ -594,6 +599,17 @@ void ENDFTable::GetFromString(string inp,int *_MF,int *_MT)
 			return;
 		}
 	}
+	if(MF==2)
+	{
+		if(Header.GetNRows()<3)
+		{
+			Header.GetFromStringBase(inp);
+		}
+		else
+		{
+			GetFromStringBase(inp);
+		}		
+	}
 	//видимо, в будущем надо будет добавить возможность подгружать правила чтения из текстового файла
 	if(MF==3)
 	{
@@ -685,7 +701,25 @@ void ENDFTable::GenerateAngularDistributions4()
 	}
 	if(LTT==2&&LI==0)//Tabulated Probability Distributions (LTT=2, LI=0), найдем пример, тогда и сделаем//Упругое на 31P, смотреть описание на английском стр 109 или стр 100 на русском (https://www.ippe.ru/images/oyarit/reactor-constants-datacenter/ENDF-6format.pdf)
 	{
-		
+		unsigned int NColumns=0, NRows=0;
+		GetSizes(NColumns,NRows);
+		unsigned int CurrentRow=0;
+		while(CurrentRow<NRows)
+		{
+			ENDFAngularDistribution ADist;
+			ADist.Type=2;
+			unsigned int CurrentColumn;
+			double *Energy_p=Get(1,CurrentRow);
+			double *NPoints_p=Get(5,CurrentRow);
+			ADist.Energy=*Energy_p;
+			CurrentRow+=2;
+			unsigned int NextRow=0;
+			GetSequence2(ADist.XValues,ADist.YValues,0,CurrentRow,*NPoints_p,&CurrentColumn,&NextRow);
+			ADist.fTable=this;
+			CurrentRow=NextRow;
+			ADist4.push_back(ADist);
+			CurrentRow++;
+		}
 	}
 	if(LTT==3&&LI==0)//Angular Distribution Over Two Energy Ranges (LTT=3,LI=0)
 	{
@@ -1396,17 +1430,20 @@ EvaluatedDataGraph ENDFFile::GetAngularDistribution(string OutgoingParticle,int 
 		return result;
 	}
 	double Norm=1;
+	
 	TGraph ReferenceCS=GetCrossSections(OutgoingParticle,LevelNum);
 	if(ReferenceCS.GetN()>0)
 	{
 		Norm=ReferenceCS.Eval(NeutronEnergy)/(4*3.1416);
 	}
+	
 	vector<double> X;
 	if(_Type=="Deg")
 	{
 		double Step=180.0/NPoints;
+		cout << "step:" << " " <<  Step << "\n";
 		double Deg=0;
-		while(Deg<180)
+		while(Deg<181)
 		{
 			X.push_back(Deg);
 			Deg+=Step;
@@ -1422,11 +1459,13 @@ EvaluatedDataGraph ENDFFile::GetAngularDistribution(string OutgoingParticle,int 
 			Cos+=Step;
 		}
 	}
+	TFile f("Gr2D.root","RECREATE");
+	f.WriteTObject(&Gr2D);
 	result.SetName(TString::Format("ADist_E_%.1f_Lev_%d",NeutronEnergy,LevelNum));
 	result.SetTitle(TString::Format("%s %s angular distribution (En=%.1fMeV, Level=%d);%s;#frac{d#sigma}{d#Omega}, mb",Source.c_str(),OutgoingParticle.c_str(),NeutronEnergy,LevelNum,_Type.c_str()));
 	for(unsigned int i=0;i<X.size();i++)
 	{
-		//cout<<"Interp:"<<X[i]<<" "<<Norm<<" "<<Gr2D.Interpolate(NeutronEnergy,X[i])<<" "<<NeutronEnergy<<"\n";
+		cout<<"Interp:"<<X[i]<<" "<<Norm<<" "<<Gr2D.Interpolate(NeutronEnergy,X[i])<<" "<<NeutronEnergy<<"\n";
 		if(Gr2D.Interpolate(NeutronEnergy,X[i])>0)
 		result.SetPoint(result.GetN(),X[i],Norm*Gr2D.Interpolate(NeutronEnergy,X[i]));
 	}
