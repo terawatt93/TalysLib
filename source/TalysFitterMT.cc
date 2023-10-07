@@ -27,14 +27,14 @@ double EvalChi2(TalysFitterMT *TFM,Nucleus* Nucl)
 		FillFitValues=true;
 	}
 	
-	if(TFM->UseC4&&TFM->C4DataForFit.size()>0)
+	/*if(TFM->UseC4&&TFM->C4DataForFit.size()>0)
 	{
 		for(unsigned int i=0;i<TFM->C4DataForFit.size();i++)
 		{
 			result+=TFM->C4DataForFit[i]->EvalChi2(Nucl);
 		}
-	}
-	else
+	}*/
+	//else
 	{
 		TGraphErrors GraphForMultiFit=TFM->GraphForMultiFit;
 		for(int i=0;i<GraphForMultiFit.GetN();i++)

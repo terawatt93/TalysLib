@@ -45,5 +45,7 @@
 #pragma link C++ class ENDFAngularDistribution+;
 #pragma link C++ class ENDFTable+;
 #pragma link C++ class MTEntry+;
+#pragma link C++ class ENDFAnalyser+;
+#pragma link C++ class SQLLib+;
 
 #endif

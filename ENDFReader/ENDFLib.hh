@@ -182,6 +182,7 @@ class ENDFFile:public TObject
 	vector<ENDFAngularDistribution*> GetNeutronAngularDistributions(int LevelNum);
 	vector<ENDFAngularDistribution*> GetAngularDistributions(string OutgoingParticle,int LevelNum);
 	bool DownloadFromOnlineENDF(string Projectile,string Nuclide,string _Source="ENDF-B-VIII.0");
+	bool DownloadFromOnlineENDF(string FName);
 	TGraph2D GetTGraph2DGammaAngularDistributions(double GammaEnergy,double Thr=1,string _Type="Deg",int NPoints=180);
 	TGraph2D GetTGraph2DNeutronAngularDistributions(int LevelNum,string _Type="Deg",int NPoints=180);
 	EvaluatedDataGraph GetGammaAngularDistribution(double GammaEnergy,double NeutronEnergy,double Thr=1,string _Type="Deg",int NPoints=180);
@@ -213,4 +214,37 @@ class ENDFFile:public TObject
 	~ENDFFile();
 	ClassDef(ENDFFile, 3);
 };
+
+class SQLLib:public TObject//возвращает таблицу строк, из которой потом извлекаются нужные данные
+{
+	private:
+	sqlite3* Base;//!
+	public:
+	bool Opened=false;
+	string Filename;
+	bool Open(string _Filename);
+	vector<vector<string> > Table;
+	string GetElement(int column,int row);
+	vector<string> GetColumn(int column);
+	vector<string> GetRow(int row);
+	int NCol=0,NRow=0;
+	bool Request(string Request);
+	~SQLLib()
+	{
+		if(!Opened)
+		{
+			sqlite3_close(Base);
+		}
+	}
+	ClassDef(SQLLib, 1);
+};
+
+
+class ENDFAnalyser:public TObject//вывод статистической информации об оцененных данных
+{
+	public:
+	vector<vector<TH2F> > GetNZDistributionForTables(string Projectile,vector<int> MT, vector<int> MF,string _Source="ENDF-B-VIII.0",int Zinit=1,int Zfin=108,int Ninit=0, int Nfin=180); 
+	ClassDef(ENDFAnalyser, 1);
+};
+
 int GetAdditionIndex(string Projectile,string OutgoingParticle,int LevelNum);

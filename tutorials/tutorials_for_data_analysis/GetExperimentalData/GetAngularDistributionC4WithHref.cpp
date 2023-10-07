@@ -3,7 +3,7 @@
 
 void GetAngularDistributionC4WithHref()
 {
-    Nucleus C("32S");
+    Nucleus C("12C");
     C.GenerateProducts();
     TCanvas c;
     c.Print("ADIST.pdf[","pdf");

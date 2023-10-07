@@ -1514,6 +1514,28 @@ string ENDFFile::GetBaseNameInTable(string Name)
 	return "";
 }
 
+string GetBaseNameInTable(string Name)
+{
+	sqlite3* ENDFBASE;
+	string PathToLinkDB=getenv("TALYSLIBDIR");
+	PathToLinkDB+="/ENDFReader/ENDFFlieLists/ENDFBASE.db";
+	sqlite3_open((PathToLinkDB).c_str(), &ENDFBASE); 
+	
+	sqlite3_stmt *stmt;
+	
+	sqlite3_prepare_v2(ENDFBASE,("SELECT InThisBase from TablesList WHERE BaseName == \""+Name+"\"").c_str(), -1, &stmt, NULL);
+	string BaseName;
+	sqlite3_step(stmt);
+	const unsigned char* requestRes=sqlite3_column_text(stmt, 0);
+	if(requestRes)
+	{
+		 sqlite3_close_v2(ENDFBASE);
+		return string(reinterpret_cast<const char*>(requestRes));
+	}
+	sqlite3_close_v2(ENDFBASE);
+	return "";
+}
+
 string ENDFFile::GetENDFFileName(string Projectile,string Nuclide,string _Source)
 {
 	string BaseName=GetBaseNameInTable(_Source);
@@ -1553,6 +1575,11 @@ bool ENDFFile::DownloadFromOnlineENDF(string Projectile,string Nuclide,string _S
 	LoadedFileName=OutputFileName;
 	system(("wget --user-agent=\"Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/51.0.2704.103 Safari/537.36\" -O "+OutputFileName+" "+Link).c_str());
 	return true;
+}
+
+bool DownloadFromOnlineENDF(string FName)
+{
+	
 }
 
 bool ENDFFile::Read(string _Projectile,string Nuclide)
@@ -1644,5 +1671,170 @@ vector<string> ENDFFile::GetListOfBases(string Projectile,int Z, int A)
 		}
 	}
 	sqlite3_finalize(stmt);
+	return result;
+}
+
+
+vector<vector<TH2F> > ENDFAnalyser::GetNZDistributionForTables(string Projectile,vector<int> MT, vector<int> MF,string _Source,int Zinit,int Zfin,int Ninit, int Nfin)
+{
+	_Source=GetBaseNameInTable(_Source);
+	if(_Source.size()==0)
+	{
+		cout<<"This is ENDFAnalyser::GetNZDistributionForTables: cannot find base!\n";
+	}
+	vector<vector<TH2F> > result;
+	result.resize(MT.size());
+	for(int i=0;i<(int)MT.size();i++)
+	{
+		for(int j=0;j<(int)MF.size();j++)
+		{
+			result[i].emplace_back(TString::Format("%s_%d_%d",Projectile.c_str(),MT[i],MF[j]),TString::Format("NZ diag for data %s_%d_%d",Projectile.c_str(),MT[i],MF[j]),Nfin-Ninit+1,Ninit,Nfin,Zfin-Zinit+1,Zinit,Zfin);
+			cout<<"Zfin-Zinit+1 "<<Zfin-Zinit+1<<" "<<Zinit<<" "<<Zfin<<"\n";;
+		}
+	}
+	SQLLib sql;
+	string PathToLinkDB=getenv("TALYSLIBDIR");
+	PathToLinkDB+="/ENDFReader/ENDFFlieLists/ENDFBASE.db";
+	if(!sql.Open(PathToLinkDB))
+	{
+		cout<<"This is ENDFAnalyser::GetNZDistributionForTables(): cannot open db!\n";
+		return result;
+	}
+	for(int k=Zinit;k<=Zfin;k++)
+	{
+		if(sql.Request("SELECT * from "+_Source+" WHERE Projectile == \""+Projectile+"\" AND Z=="+to_string(k)+";"))
+		{
+			vector<string> AStr=sql.GetColumn(2);
+			for(unsigned int p=0;p<AStr.size();p++)
+			{
+				cout<<"AStr[p]:"<<AStr[p]<<"\n";
+				if(stoi(AStr[p])>0)
+				{
+					ENDFFile f;
+					string NuclName=AStr[p]+GetNucleusName(k);
+					cout<<"NuclName:"<<NuclName<<"\n";
+					f.Read(Projectile,NuclName);
+					for(unsigned int i=0;i<MT.size();i++)
+					{
+						for(unsigned int j=0;j<MF.size();j++)
+						{
+							if(f.FindENDFTable(MF[j],MT[i]))
+							{
+								result[i][j].Fill(stoi(AStr[p])-k,k);
+							}
+						}
+					}
+				}
+			}
+			
+		}
+	}
+	return result;
+}
+
+bool SQLLib::Open(string _Filename)
+{
+	Filename=_Filename;
+	if(!Opened)
+	{
+		sqlite3_close(Base);
+	}
+	if (sqlite3_open(Filename.c_str(), &Base) != SQLITE_OK) 
+	{
+		cout << "This is SQLLib::Open: Could not open database:"<<Filename<<"\n";
+		Opened=false;
+		return false;
+	}
+	Opened=true;
+	return true;
+	
+}
+string SQLLib::GetElement(int column,int row)
+{
+	if(column<(int)Table.size())
+	{
+		if(row<(int)Table[column].size())
+		{
+			return Table[column][row];
+		}
+		else
+		{
+			cout<<"This is SQLLib:: GetElement("<<column<<","<<row<<"): index row is out of range. Actual size of Table["<<column<<"] is "<<Table[column].size()<<"\n";
+			return "";
+		}
+	}
+	else
+	{
+		cout<<"This is SQLLib:: GetElement("<<column<<","<<row<<"): index column is out of range. Actual size of Table is "<<Table.size()<<"\n";
+		return "";
+	}
+	return "";
+}
+
+int select_callback(void *p_data, int num_fields, char **p_fields, char **p_col_names)
+{
+	vector<vector<string> >* records = static_cast<vector<vector<string> >* >(p_data);
+	try 
+	{
+		records->emplace_back(p_fields, p_fields + num_fields);
+	}
+	catch (...) 
+	{
+		// abort select on failure, don't let exception propogate thru sqlite3 call-stack
+		return 1;
+	}
+	return 0;
+}
+
+vector<vector<string> > select_stmt(sqlite3* db,const char* stmt, int &status)
+{
+	vector<vector<string> > records;  
+	char *errmsg;
+	int ret = sqlite3_exec(db, stmt, select_callback, &records, &errmsg);
+	if (ret != SQLITE_OK)
+	{
+		std::cerr << "Error in select statement " << stmt << "[" << errmsg << "]\n";
+		status=0;
+	}
+	status=1;
+	return records;
+}
+
+bool SQLLib::Request(string Request)
+{
+	int Status=0;
+	Table=select_stmt(Base,Request.c_str(),Status);
+	if(Status==1)
+	{
+		return true;
+	}
+	return false;
+}
+vector<string> SQLLib::GetRow(int row)
+{
+	vector<string> result;
+	if(row<(int)Table.size())
+	{
+		for(unsigned int i=0;i<Table[row].size();i++)
+		{
+			result.push_back(Table[row][i]);
+		}
+	}
+	else
+	{
+		cout<<"This is SQLLib::GetRow("<<row<<"): column is out of range\n";
+	}
+	return result;
+}
+vector<string> SQLLib::GetColumn(int column)
+{
+	vector<string> result;
+	for(unsigned int i=0;i<Table.size();i++)
+	{
+		if(column<(int)Table[i].size())
+		{
+			result.push_back(Table[i][column]);
+		}
+	}
 	return result;
 }
