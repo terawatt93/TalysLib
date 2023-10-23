@@ -709,6 +709,21 @@ double HPGeSigma(double E,string Nucleus)
 	//return 0.45*pow(E,0.2788)+DopplerBroading(E,m)/2;
 	return 0.7*pow(E,0.189)+DopplerBroading(E,m)/2;
 }
+
+double RefSigmaForDet(double E, TString Det)
+{
+	Det.ToLower();
+	if(Det=="hpge")
+	{
+		return 0.7*pow(E,0.189);
+	}
+	if(Det=="labr")
+	{
+		return 0.32*sqrt(E);
+	}
+	return 0;
+}
+
 double HPGeSigmaOSGI(double E)
 {
 	return 0.7*pow(E,0.189);
