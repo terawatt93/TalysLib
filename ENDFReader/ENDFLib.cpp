@@ -778,7 +778,11 @@ void ENDFTable::GenerateAngularDistributions14()
 				ADist.SecondaryEnergy=GammaEnergy;
 				//cout<<"Eg:"<<GammaEnergy<<" En:"<<ADist.Energy/1e6<<" NL:"<<NL<<" ADist14.size:"<<ADist14.size()<<"\n";
 				ADist.LegendreCoefficients=GetSequence(0,CurrentRow+1,NL,&CurrentColumn,&CurrentRow);
-				CurrentRow++;
+				/*for(unsigned int i=0;i<ADist.LegendreCoefficients.size();i++)
+				{
+					cout<<" CurrentRow: "<<ADist.LegendreCoefficients[i]<<"\n";
+				}
+				CurrentRow++;*/
 				ADist.fTable=this;
 				ADist14.push_back(ADist);
 			}

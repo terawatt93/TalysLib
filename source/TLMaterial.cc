@@ -73,6 +73,24 @@ void TLMaterial::Calculate()
 		}
 	}
 }
+
+int TLMaterial::GetElementQuantity(string Element)
+{
+	for(unsigned int i=0;i<ElementsVector.size();i++)
+	{
+		if(Element==ElementsVector[i])
+		{
+			return QVector[i];
+		}
+	}
+	return 0;
+}
+int TLMaterial::GetElementQuantity(Nucleus *Nucl)
+{
+	string ElementName=GetNucleusName(Nucl->Z);
+	return GetElementQuantity(ElementName);
+}
+
 TLMaterial::TLMaterial(string _MaterialFormula)
 {
 	MaterialFormula=_MaterialFormula;
