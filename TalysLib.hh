@@ -1026,6 +1026,7 @@ class TLMaterial:public TObject
 	int NThreads=7;
 	vector<string> ElementsVector;
 	vector<int> QVector;
+	int NAtoms=0;
 	int GetElementQuantity(string Element);
 	int GetElementQuantity(Nucleus *Nucl);
 	bool GeneratedLineList=false;

@@ -101,6 +101,7 @@ TLMaterial::TLMaterial(string _MaterialFormula)
 	{
 		MolarMass+=GetAverageMass(Elements[i])*Q[i];
 		AddElement(Elements[i],Q[i]);
+		NAtoms+=Q[i];
 	}
 	
 	ElementsVector=Elements;
