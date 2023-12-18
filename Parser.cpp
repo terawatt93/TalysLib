@@ -1052,31 +1052,29 @@ string GetFileName(string line)
 	return InvertString(name);
 }
 float EvalKineticEnergy(float ma,float mA,float mb,float mB,float Ta,float angle,float Q)//reference: http://nuclphys.sinp.msu.ru/reactions/cinem.htm
+//ошибки в описании процесса вывода - AO должен быть в числителе!
 {
-	angle=angle/180*3.1416;
-	float v1=(mb+mB)*((mB-ma)*Ta+mB*Q)/(ma*mb*Ta);
-	  
-	int sign=0;
-	if(v1>=0)
+	angle=angle/180.0*3.1416;
+	double Pa=2*ma*Ta;
+	double AO=pow(mb/(mb+mB),2)*Pa;
+	double OC=Pa*mb*mB/((mb+mB)*ma)*(ma/(ma+mA)+Q/Ta);
+	double AC=0;
+	double k1=OC/AO-1;
+	if(k1>=0)
 	{
-		sign=1;
+		AC=AO*pow(cos(angle)+sqrt(pow(cos(angle),2)+OC/AO-1),2);
 	}
 	else
 	{
-		sign=-1;
-		float thetaMAX=acos(sqrt(-v1));
-			
+		double thetaMAX=acos(sqrt(-k1));
 		if(thetaMAX<angle)
 		{
 			cout<<"angle "<<angle/3.1416*180<<"deg is not valid, maximal angle is "<<thetaMAX/3.1416*180<<"deg\n";
 			return -1;
 		}
-	
+		AC=AO*pow(cos(angle)-sqrt(pow(cos(angle),2)+OC/AO-1),2);
 	}
-
-	double res = ma*mb*Ta/pow(mb+mB,2)*pow(cos(angle)+sign*sqrt(pow(cos(angle),2)+v1),2);
-
-	return res;
+	return AC/(2*mb);
 }
 float EvalKineticEnergy(string a,string A,string b,string B,float Ta,float angle)//reference: http://nuclphys.sinp.msu.ru/reactions/cinem.htm
 {
