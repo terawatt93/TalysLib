@@ -1099,6 +1099,16 @@ float EvalKineticEnergy(string a,string A,string b,string B,float Ta,float angle
 	//cout<<"ma: "<<ma<<" mA: "<<mA<<" mb: "<<mb<<" mB: "<<mB<<" Q: "<<Q<<"\n";
 	return EvalKineticEnergy(ma,mA,mb,mB,Ta,angle,Q);
 }
+double RelKineticEnergy(float ma,float mA,float mb,float mB,float Ta,float angle)//релятивистская формула для кинетической энергии. Для расчета энергий неупруго рассеянных нейтронов нужно добавить Q к mB при вызове
+{
+	angle=angle/180.0*3.1416;
+	double Ep=ma+mA+Ta;
+	double P1=sqrt(2*ma*Ta+pow(Ta,2));
+	double A=Ep*Ep-pow(P1,2)+pow(mb,2)-pow(mB,2);
+	double Eb=(A*Ep+P1*cos(angle)*sqrt(pow(A,2)-4*mb*mb*(pow(Ep,2)-pow(P1*cos(angle),2))))/(2*(Ep*Ep-pow(P1*cos(angle),2)));
+	double T=Eb-mb;
+	return T;
+}
 int GetColor(int nCol)
 {
 	if((nCol>4)&&(nCol<9))
