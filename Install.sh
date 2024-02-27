@@ -31,59 +31,90 @@ case $choice in
         sudo apt install -y libsqlite3-dev
         cd ..
         #
-        # 1-3. Download and unpack archive with TALYS
-        wget https://tendl.web.psi.ch/tendl_2019/talys/talys.tar 
-        echo 'The TALYS archive has been downloaded.'
-        tar -xzf talys.tar
-        echo 'The TALYS archive has been uncompressed.'
+        # 1-3. Clonning of the TALYS repository
+        echo 'Clonning the TALYS repository from github.'
+        git clone https://github.com/arjankoning1/talys
         cd talys
-        unalias -a # Note: The unalias utility shall remove the definition 
-        #           for each alias name specified
+        echo 'Downloading TALYS database and examples.'
+        wget  -U 'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0' https://nds.iaea.org/talys/misc/structure.tar
+        wget  -U 'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0' https://nds.iaea.org/talys/samples/talys_samples.tar
+        echo 'Decompressing of the TALYS database.'
+        tar zxf structure.tar
+        tar zxf talys_samples.tar
+        echo 'Removing archives.'
+        rm structure.tar
+        rm talys_samples.tar
+  
+        code=talys
         #
-        # 1-4. Define Fortran compiler for TALYS
-        compiler='gfortran'       
-        #compiler='lf95 --staticlink' 
-        Thome=${HOME}
-        cd ..
-        talysdir=`pwd` # Define the TALYS directory
+        # Script for fortran code installation on Linux and MacOS.
+        # Adapt the following compilation variables.
         #
-        # 1-5. Ensure that all directories have execute permission and that 
-        #    all files have a read and write permission   
-        chmod -R u+rwX talys
+        FC='gfortran'
+        FFLAGS='-w'
         #
-        # 1-6. Ensure that TALYS can read the structure database by replacing
-        #    the path name in subroutine machine.f
-        datapath=${talysdir}'/'
-        datapathnew=`echo $datapath | sed 's/\//\\\\\//g'`
-        cd ${talysdir}'/talys/source/'
-        sed "s/ home='.*'/ home='${datapathnew}'/" machine.f  > machine_tmp.f
-        mv -f machine_tmp.f machine.f
-        # 
-        # 1-7. Compile TALYS
-        #    Please note that the compilation of ecis06t.f
-        #    may result in some trivial warning messages
-        ${compiler} -c *.f
-        ${compiler} *.o -o talys
+        # Basic installation (verified with the sample cases)
         #
-        # 1-8. Check whether TALYS setup procedure has been successful
-        if [ -e talys ] 
-        then
-          mv -f talys ../talys
-          cd ../
+        # FC="gfortran " FFLAGS=" "
+        #
+        # Distribution FC & FFLAGS (options provided by J-C Sublet)
+        #
+        # FC="gfortran " FFLAGS=" -Ofast "
+        # FC="ifort    " FFLAGS=" -Ofast "
+        # FC="nagfor   " FFLAGS=" -w     "
+        #
+        # Development FC & FFLAGS  (options provided by J-C Sublet)
+        #
+        # FC="gfortran " FFLAGS=" -Wall -fcheck=all -Og -g -fbacktrace   "
+        # FC="ifort    " FFLAGS=" -O0 -g -traceback -check all -debug all"
+        # FC="nagfor   " FFLAGS=" -C=all -O0 -g -gline                   "
+        #
+        #
+        # Set directories
+        #
+        cwd=`pwd`'/'
+        sourcedir=${cwd}'source/'
+        bindir=${cwd}'bin'
+        cd $sourcedir
+        if [ $code != endftables ] && [ $code != sacs ] ; then
+          ../path_change
+        fi
+        #
+        # Clean up previous .o and .mod files and compile code.
+        #
+        echo "Compiling ${code}...."
+        ls *.o > /dev/null 2>&1
+        if [ $? -eq 0 ] ;then
+          rm *.o
+        fi
+        ls *.mod > /dev/null 2>&1
+        if [ $? -eq 0 ] ;then
+          rm *.mod
+        fi
+        ls *.f > /dev/null 2>&1
+        if [ $? -eq 0 ] ;then
+          ${FC} ${FFLAGS} -c *.f
+        fi
+        ls *.f90 > /dev/null 2>&1
+        if [ $? -eq 0 ] ;then
+          ${FC} ${FFLAGS} -c *.f90
+        fi
+        ${FC} ${FFLAGS} *.o -o ${code}
+        rm -f *.o *.mod
+        #
+        # Check whether the build procedure has been successful
+        #
+        if [ -e $code ] ; then
+          mv -f $code ../
           echo ' '
-          echo 'The TALYS setup has been completed.'
-          echo ' '
-          echo 'You will find a talys executable in your' `pwd` 'directory.'
-          echo ' '
-          echo 'You are all set to run the sample problems in the samples directory'
-          echo 'with the verify script.'
+          echo 'The '${code}' build has been completed.'
+          echo 'Adding paths to .bashrc'
           echo 'export TALYSDIR='`pwd`>>~/.bashrc 
           echo 'export PATH=$PATH:'`pwd`>>~/.bashrc
-          mkdir CalculationResults # Create directory for TalysLib calculation results
-          cd ..
-          rm talys.tar # Delete used TALYS archive
+          echo 'export TALYSVERSION=2' >>~/.bashrc
+          echo ' '
         else
-          echo 'Error: TALYS setup failed'
+          echo ${code} 'build failed'
         fi
     ;;
     "2")

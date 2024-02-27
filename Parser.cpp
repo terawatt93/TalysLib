@@ -500,23 +500,38 @@ void GetAZ(string nucleus, int &Z, int &A)
 	Z=-1;
 	return ;
 }
+
+int GetTalysVersion()
+{
+	if(getenv("TALYSVERSION"))
+	{
+		return atoi(getenv("TALYSVERSION"));
+	}
+	return 0;
+}
+
 double GetNuclearMass(string nucleus)
 {
 	int A,Z;
 	GetAZ(nucleus,Z,A);
-	ifstream MassFile(string(TString::Format((GetPathToTalysData()+"/structure/masses/audi/z%03d").c_str(),Z)).c_str());
-	if(!MassFile.good())
+	if(nucleus=="n")
 	{
-		if(nucleus=="n")
-		{
-			return 939.565;
-		}
-		if(nucleus=="p")
-		{
-			return 938.272;
-		}		
-		MassFile.open(string(TString::Format((GetPathToTalysData()+"/structure/masses/audi/%s.mass").c_str(),GetNucleusName(Z).c_str())).c_str());
+		return 939.565;
 	}
+	if(nucleus=="p")
+	{
+		return 938.272;
+	}
+	TString MassFileName;
+	if(GetTalysVersion()>=2)
+	{
+		MassFileName=TString::Format((GetPathToTalysData()+"/structure/masses/ame2020/%s.mass").c_str(),GetNucleusName(Z).c_str());
+	}
+	else
+	{
+		MassFileName=TString::Format((GetPathToTalysData()+"/structure/masses/audi/%s.mass").c_str(),GetNucleusName(Z).c_str());
+	}
+	ifstream MassFile(MassFileName.Data());
 	string str;
 	while(getline(MassFile,str))
 	{
@@ -585,13 +600,21 @@ double GetAverageMass(string nucleus)
 
 double GetNuclearMass(int Z, int A)
 {
-	ifstream MassFile(string(TString::Format((GetPathToTalysData()+"/structure/masses/audi/z%03d").c_str(),Z)).c_str());
-	if(!MassFile)
+	if((Z==0)&&(A==1))
 	{
-		MassFile.open(string(TString::Format((GetPathToTalysData()+"/structure/masses/audi/%s.mass").c_str(),GetNucleusName(Z).c_str())).c_str());
-		//cout<<"Error:file \""+string(TString::Format((GetPathToTalysData()+"/structure/masses/audi/z%03d").c_str(),Z))+"\" not found \n"; 
+		return 939.565;
+	}
+	TString MassFileName;
+	if(GetTalysVersion()>=2)
+	{
+		MassFileName=TString::Format((GetPathToTalysData()+"/structure/masses/ame2020/%s.mass").c_str(),GetNucleusName(Z).c_str());
+	}
+	else
+	{
+		MassFileName=TString::Format((GetPathToTalysData()+"/structure/masses/audi/%s.mass").c_str(),GetNucleusName(Z).c_str());
 	}
 	string str;
+	ifstream MassFile(MassFileName.Data());
 	while(getline(MassFile,str))
 	{
 		int a=atoi(GetField(str,2).c_str());

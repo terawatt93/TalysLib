@@ -253,7 +253,9 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 	unsigned int NumberOfLevels=0;
 	while(getline(ifs,line))
 	{
-		if((int)line.find(Name)>-1)
+		//заплатка из-за изменения формата файлов в версии 2.0
+		TString NameTemplate=TString::Format("%s%03d",Element.c_str(),A);
+		if(((int)line.find(Name)>-1)||((int)line.find(NameTemplate.Data())>-1))
 		{
 			stringstream s(line);
 			string tmp;
