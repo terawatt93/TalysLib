@@ -106,6 +106,7 @@ case $choice in
         #
         if [ -e $code ] ; then
           mv -f $code ../
+          cd ../
           echo ' '
           echo 'The '${code}' build has been completed.'
           echo 'Adding paths to .bashrc'
