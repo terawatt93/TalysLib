@@ -106,7 +106,7 @@ TLMaterial::TLMaterial(string _MaterialFormula)
 	
 	ElementsVector=Elements;
 	QVector=Q;
-	Calculate();
+	//Calculate();
 
 }
 double TLMaterial::GetMolarMass()
@@ -124,7 +124,7 @@ void TLMaterial::AddElement(string Element, int Q)
 		N->fMaterial=this;
 		//N->Projectile=Projectile;
 		N->ProjectileEnergy=ProjectileEnergy;
-		N->GenerateProducts(Projectile);
+		//N->GenerateProducts(Projectile);
 		Nuclides.push_back(N);
 		Quantities.push_back(Q);
 		Shares.push_back(Q*Abundances[j]);
