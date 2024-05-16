@@ -265,12 +265,13 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 		{
 			for(unsigned int i=0;i<NumberOfLevels;i++)
 			{
-				float E,J;
+				float E,J,Width;
 				int N=0; int Parity=1; unsigned int NGammas=0;
 				getline(ifs,line);
 				stringstream s(line);
 				string tmp;
-				s>>N>>E>>J>>Parity>>NGammas;
+				s>>N>>E>>J>>Parity>>NGammas>>Width;
+				Width=6.582*log(2)/Width*1e-22;//конвертируем период полураспада в ширину (МэВ)
 				if(E==0)
 				{
 					TalysGroundStateExsists=true;
@@ -281,6 +282,7 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 				lev.SetTalysSpinParity(JP);
 				lev.Number=N;
 				lev.SetOrigin("Talys");
+				lev.Width=Width;
 				for(unsigned int j=0;j<NGammas;j++)
 				{
 					getline(ifs,line);

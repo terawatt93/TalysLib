@@ -462,11 +462,11 @@ class LevelData:public TObject
 {
 	public:
 	LevelData():TObject() { }
-	string Nuclide, HalfLife,HalfLifeErr,JP,Origin;
+	string Nuclide,JP,Origin,HalfLife,HalfLifeErr;
 	vector<SpinParity> JP_values;
 	vector<GammaTransitionData> GammasData;
 	int Mark;//величина, определяющая достоверность уровня: размер вектора с JP, если JP.size=0, то Mark=99,если есть неопределенность (скобки), то размер ветора*2
-	float Energy, EnergyErr, TalysCS, TalysCSCompound, TalysCSDirect, OutgoingParticleEnergy; SpinParity TalysJP;
+	float Energy, EnergyErr, TalysCS, TalysCSCompound, TalysCSDirect, OutgoingParticleEnergy, Width; SpinParity TalysJP;//Width - in MeV (From RIPL-3)
 	vector<float> ADTot,ADDirect, ADCompound, Angle, AngleLab, Branching;
 	vector<unsigned int> NumbersOfFinalLevels;
 	vector<float> CSValues, CSCompoundValues, CSDirectValues;
@@ -474,7 +474,7 @@ class LevelData:public TObject
 	vector<vector<float > > ADTotValues,ADDirectValues, ADCompoundValues, AngleLabValues;
 	AdditionalInformationContainer AI;
 	double& AdditionalInformation(string Key); 
-	ClassDef(LevelData, 2);
+	ClassDef(LevelData, 3);
 };
 
 class LevelDeformationData:public TObject
@@ -613,7 +613,7 @@ class Level:public LevelData
 	vector<C4EnergyDistribution> C4EnergyData;
 	void AddHyperlinksToTeX(string &filename,string href_addition="https://sci-hub.ru/");
 	vector<string> HyperlinksTMP;//! нужен для генерации картинки с тех и гиперссылками	
-	ClassDef(Level, 2);
+	ClassDef(Level, 3);
 };
 
 class ExclusiveCSData//хранит информацию из блока 6 output файла и используется для создания более полного списка продуктов. Реализация в NucleiProperties.cpp
