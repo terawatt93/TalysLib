@@ -22,9 +22,11 @@
 #include <map>  
 #include <TROOT.h>  
 #include <TVirtualFitter.h>
+#include <complex>
 #include "libxlsxwriter/include/xlsxwriter.h"
 #include "ENDFReader/ENDFLib.hh"
 #include "ENDFReader/EXFOR.hh"
+#include "SMatrix/SMatrix.hh"
 #include "C4Reader/C4.hh"
 
 /*#include <Minuit2/FunctionMinimum.h>
@@ -83,6 +85,9 @@ class OpticalModelParameters;
 class Radionuclide;
 class TLMaterial;
 class OMPManager;
+
+typedef complex<double> complexd;
+
 class TalysLibManager//потом перенсти в отдельный файл!
 {
 	public:
@@ -614,6 +619,14 @@ class Level:public LevelData
 	void AddHyperlinksToTeX(string &filename,string href_addition="https://sci-hub.ru/");
 	vector<string> HyperlinksTMP;//! нужен для генерации картинки с тех и гиперссылками	
 	ClassDef(Level, 3);
+};
+
+class SMatrixElement
+{
+	public: 
+	complexd Value;
+	int l_a,l_b;
+	float j_a,j_b;
 };
 
 class ExclusiveCSData//хранит информацию из блока 6 output файла и используется для создания более полного списка продуктов. Реализация в NucleiProperties.cpp
