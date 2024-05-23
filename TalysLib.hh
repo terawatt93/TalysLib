@@ -29,6 +29,11 @@
 #include "SMatrix/SMatrix.hh"
 #include "C4Reader/C4.hh"
 
+/* ключевые слова для 
+outecis y
+eciscompound y
+ecissave y
+*/
 /*#include <Minuit2/FunctionMinimum.h>
 #include <Minuit2/MnMinimize.h>
 #include <Minuit2/MnMigrad.h>
@@ -421,6 +426,9 @@ class GammaTransition:public GammaTransitionData
 	public:
 	//float Energy,EnergyErr,Intensity,CrossSection,E_in,Tolerancy,Rel_Cs,TalysCrossSection, TalysE_i,TalysE_f, TalysJP_i,TalysJP_f,TalysMultipolarity;
 	TGraph CSGraph, AdistENDF;
+	//Полина!
+	TF1 TalysAngularDistribution;
+	//Конец
 	bool IsCSGraphGenerated=false;
 	int InitLevelNumber, FinalLevelNumber;
 	TH1F DetectorResponse;
@@ -460,7 +468,7 @@ class GammaTransition:public GammaTransitionData
 	int GetIntegrityFactor();//показывает уровень "целостности"-наличия указателей на уровень (1), ядро (2),родительское ядро(3), материал(4) 
 	TGraph *GetCSGraph();
 	TGraph *GetENDFAngularDistribution();
-	ClassDef(GammaTransition, 1);
+	ClassDef(GammaTransition, 2);
 };
 
 class LevelData:public TObject
@@ -477,9 +485,10 @@ class LevelData:public TObject
 	vector<float> CSValues, CSCompoundValues, CSDirectValues;
 	vector<float> X_Values;
 	vector<vector<float > > ADTotValues,ADDirectValues, ADCompoundValues, AngleLabValues;
+	
 	AdditionalInformationContainer AI;
 	double& AdditionalInformation(string Key); 
-	ClassDef(LevelData, 3);
+	ClassDef(LevelData, 4);
 };
 
 class LevelDeformationData:public TObject
@@ -571,7 +580,11 @@ class Level:public LevelData
 	vector <EXFORTable> EXFORAngularDistributions;
 	vector <EXFORTable> EXFORCrossSections;
 	list<TGraph> GeneratedGraphsList;
-	
+	//Полина!
+	TF1 AlternativeAdist;
+	bool CalculatedAlternativeAdist=false;
+	void EvalAlternativeAdist();
+	//Конец
 	//float Energy, EnergyErr,TalysCS,TalysJP;
 	vector<GammaTransition> Gammas;
 	bool ReadLevel(string line,string ReadNuclName);
@@ -579,6 +592,7 @@ class Level:public LevelData
 	void AddLineFromTalys(double E, double CS);
 	void AddLineFromTalys(double E, double CS, double E_i, double E_f, SpinParity JP_i, SpinParity JP_f, unsigned int InitLevelNumber, unsigned int FinalLevelNumber);
 	void Reset();
+	
 	//void Print();
 	const char *GetName()  const;
 	bool CheckEnergy(float E,float Tolerancy,float intensity);
@@ -875,16 +889,23 @@ class Nucleus:public NucleusData
 	string GetRawOutput();
 	void AddEnergyPoint(double EnergyValue);
 	//Nucleus& operator =(const Nucleus& Nucl);
-	private:
-	//using TObject::GetName;
-	using TObject::Copy;
+	
 	int GetIntegrityFactor();
 	string RawOutput;//содержит всю информацию из файла output
+
+	//дальше идет блок для работы с S-матрицами для расчетов Полины. Потом переделать! Переделанные области помечены как "Полина!"
+	string SMatrixOutput;//строка, содержащая текст из файла fort.60, куда записываются элементы s-матрицы
+	string TransmissionCoeffOutput;//строка, содержащая текст из файла fort.70, куда записываются коэффициенты проницаемости
+	ST_Matrix s_mat;
+	//блок закончен
 	bool OutputWasRead=false;
 	void ReadTalysOutput();//считывает информацию из файла output в RawOutputContent
 	
 	sqlite3* C4Base=0;//!
 	TFile* C4ROOTBase=0;//!
+	private:
+	//using TObject::GetName;
+	using TObject::Copy;
 };
 
 class Radionuclide:public Nucleus

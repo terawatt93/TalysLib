@@ -1284,6 +1284,68 @@ TMultiGraph* Level::GetEXFORTMultiGraphForCrossSections(double Emin,double Emax,
 	}
 	return mgr;
 }
+
+void Level::EvalAlternativeAdist()
+{
+	//Полина!
+	CalculatedAlternativeAdist=true;
+	if(GetIntegrityFactor()>=2)//есть начальное ядро
+	{
+		ST_Matrix s_mat=fNucleus->fMotherNucleus->s_mat;
+
+		map<tuple<int, int, int>, double> D; // write results of coefficients to map
+
+
+		for (int Q = 0; Q < 6; Q += 2){
+			for (int lam1 = 0; lam1 < 7; lam1++) {
+				for (int lam = abs(Q - lam1); lam <= Q + lam1; lam++) {
+				
+					Dlam dl(lam, lam1, Q);
+	              
+					dl.addS(s_mat);
+					//dl.addT(s_mat);
+					if (dl.pr_result() != 0) { 
+					    D[make_tuple(lam, lam1, Q)] = dl.pr_result(); 
+						//fprintf(tf,"%d %d %d %f %f\n",lam,lam1,Q, dl.pr_result(),dl.pr_result()*(2*lam+1));
+					}
+				}
+			}
+		}
+		TString neutron; 
+		TString gamma;
+		for(auto &i: D)
+		{	auto j = i.first;
+			int lam = get<0>(j),
+				lam1 = get<1>(j),
+				Q = get<2>(j);
+			
+			if(Q == 0)
+			{
+				if(i.second>0) neutron+="+";
+				neutron+=TString::Format("%f*legendre(%d,cos(3.14*x/180))",i.second*(2*lam+1)/D[make_tuple(0,0,0)],lam);
+
+			}
+			if(lam1 == 0)
+			{	
+				if(i.second>0) gamma+="+";
+				gamma+=TString::Format("%f*legendre(%d,cos(3.14*x/180))",i.second*(2*Q+1)/D[make_tuple(0,0,0)],Q);
+			}
+		}
+		char c {'+'};
+		neutron.Remove(TString::kLeading,c);
+		gamma.Remove(TString::kLeading,c);
+		/*cout<<gamma<<endl;
+		cout<<"neutron "<<endl;
+		cout<<neutron<<endl;*/
+
+		if(Gammas.size()>0)
+		{
+			Gammas[0].TalysAngularDistribution=TF1(TString::Format("ADist_g%.d",int(10*Gammas[0].Energy)),gamma,0,180);
+		}
+		AlternativeAdist=TF1(TString::Format("ADist_n%.d",int(Energy)),neutron,0,180);
+	}
+}
+
 void ExtractHyperlinkAndTitle(string inp, string &title,string &href)
 {
 	int titleLength=inp.find(";");

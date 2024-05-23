@@ -40,6 +40,7 @@ class ST_Matrix;
 // class with elements after reading fort.60 and fort.70
 class ST_Matrix
 {	
+	public:
 	// S_matrix  S_{J} (l_\alpha j_\alpha \to l_\beta j_beta)
 	// see formula 17 in file Gamma-02.pdf
 	map<tuple<int, int, int, int, double, double>, complexd> S1; // S-matrix indexes [(el/inel, number of block, l_a, l_b, j_a, j_b)] 
@@ -49,15 +50,16 @@ class ST_Matrix
 	
 	friend class Dlam;
 	
-	int ReadSmatrix(TString fname);
-	int ReadTransCoef(TString fname);
+	int ReadSmatrix(string SMBuf);
+	int ReadTransCoef(string TransBuf);
 	
-	public:
-	ST_Matrix(TString inputname)
+	
+	void Read(string SMBuf,string TransBuf)
 	{
-		ReadSmatrix(inputname);
-		ReadTransCoef("fort.70");
+		ReadSmatrix(SMBuf);
+		ReadTransCoef(TransBuf);
 	}
+	int BlockNumber=0;
 };
 
 // class of coefficients before angular functuons 
@@ -70,8 +72,10 @@ class Dlam
 	double beg; 
 	int L = 2;
 	int Ii = 2, If = 0, Ia = 0;
+	int BlockNumber=0;
 	double s = 0.5;
 	public:
+	Dlam();	
 	Dlam(int Lam,int Lam1,int QQ);
 	
 	int addS(ST_Matrix &AD);// function to calculate direct part of reaction

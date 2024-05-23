@@ -260,6 +260,7 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 			stringstream s(line);
 			string tmp;
 			s>>tmp>>tmp>>tmp>>NumberOfLevels;
+			//cout<<"Nucleus::ReadLevelsFromTalysDatabase:NumberOfLevels: "<<NumberOfLevels<<"\n";
 		}
 		if(NumberOfLevels>0)
 		{
@@ -487,6 +488,9 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 	string filename=PathToCalculationDir+"/input";
 	ofstream ofs(filename.c_str());
 	ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\noutexcitation y\n channels y\n";
+	//Полина!
+	ofs<<"outecis y\neciscompound y\necissave y\n";
+	//конец
 	for(unsigned int i=0;i<TalysOptions.size();i++)
 	{
 		ofs<<TalysOptions[i]<<"\n";
@@ -666,14 +670,7 @@ void Nucleus::ReadTalysOutput()
 	string filename;
 	if(fMotherNucleus)
 	{
-		filename=fMotherNucleus->PathToCalculationDir+"/output";
-		
-		if(!OutputWasRead)
-		{
-			ifstream ifs(filename);
-			CopyFileContentToBuffer(ifs,fMotherNucleus->RawOutput);
-			fMotherNucleus->OutputWasRead=true;
-		}
+		fMotherNucleus->ReadTalysOutput();
 	}
 	else
 	{
@@ -682,6 +679,33 @@ void Nucleus::ReadTalysOutput()
 		{
 			ifstream ifs(filename);
 			CopyFileContentToBuffer(ifs,RawOutput);
+			ifs.close();
+			//Полина! Чтение файлов fort.60 и fort.70 в 
+			ifstream ifs60(PathToCalculationDir+"/fort.60");
+			CopyFileContentToBuffer(ifs60,SMatrixOutput);
+			ifs60.close();
+			ifstream ifs70(PathToCalculationDir+"/fort.70");
+			CopyFileContentToBuffer(ifs70,TransmissionCoeffOutput);
+			ifs70.close();
+			
+			string ECISDiscINP,ECISIncINP;
+			ifstream ifsEcisDisc(PathToCalculationDir+"/ecisdisc.inp");
+			CopyFileContentToBuffer(ifsEcisDisc,ECISDiscINP);
+			ifsEcisDisc.close();
+
+			ifstream ifsEcisInc(PathToCalculationDir+"/ecisinc.inp");
+			CopyFileContentToBuffer(ifsEcisInc,ECISIncINP);
+			ifsEcisInc.close();
+
+			if(ECISDiscINP.find("2.00 0 1+   4.43982")!=string::npos)
+			{
+				s_mat.BlockNumber=1;
+			}
+			if(ECISIncINP.find("2.00 0 1+   4.43982")!=string::npos)
+			{
+				s_mat.BlockNumber=0;
+			}
+			//конец
 			OutputWasRead=true;
 		}
 	}
@@ -718,6 +742,8 @@ void Nucleus::ReadTalysCalculationResult()
 		Levels[i].Reset();
 	}
 	//TOTGamProd=0, TOTNProd=0, TOTPProd=0, TOTDProd=0, TOTAProd=0;
+
+
 	while(getline(ifs,line))
 	{
 		if(((int)line.find("Nuclide:"))>0)
@@ -1481,6 +1507,9 @@ void Nucleus::GenerateProducts(string _Projectile)
 	//	Products[i].AssignPointers();
 	}
 	
+	//Полина! Разбор строк s-матрицы
+	s_mat.Read(SMatrixOutput,TransmissionCoeffOutput);
+	//конец
 	if((NucleiInEnergyGrid.size()>0)&&(UseEnergyGrid))
 	{
 		MergeEnergyGridData(NucleiInEnergyGrid);

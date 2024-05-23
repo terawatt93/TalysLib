@@ -38,7 +38,7 @@ double j9sym(double j1, double j2, double j3, double j4, double j5, double j6, d
 	return wigner_9j(twoj1, twoj2, twoj3, twoj4, twoj5, twoj6, twoj7, twoj8, twoj9);
 }
 
-double g_J(double J, double s=0.5, int Ia =0 )
+double g_J(double J, double s, int Ia)
 {	
 	return (2*J+1)/((2*s+1)*(2*Ia+1));
 }
@@ -73,14 +73,20 @@ vector<tuple<double, int, double, int, double>> lj() {
   return a;
 }
 
-ST_Matrix::ST_Matrix(TString inputname)
-{
-	ReadSmatrix(inputname);
-	ReadTransCoef("fort.70");
-}
 
 // class of coefficients before angular functuons 
 // D^{lam}_{lam1 Q}
+
+Dlam::Dlam(int Lam,int Lam1,int QQ)
+{
+	lam=Lam, lam1=Lam1, Q=QQ;
+
+	double c1 = clebsh_gordan(L,1,Q,0,L,1); 
+	
+	double raca = Racah(If,Ii,L,Q,L,Ii); 
+	double coef = sqrt(2*Q+1)*sqrt((2*Ii+1)*(2*lam1+1));
+	beg = raca*coef*c1;
+}
 
 int Dlam::addS(ST_Matrix &AD)
 {
@@ -88,6 +94,7 @@ int Dlam::addS(ST_Matrix &AD)
 	int la, la1, lb, lb1;
 	double J,J1, ja,ja1,jb,jb1;	
 	complexd summa = complexd(0,0);
+	BlockNumber=AD.BlockNumber;
 	for (auto &a : lj()) 
 	{
 		for(auto &a1 : lj()) 
@@ -120,8 +127,9 @@ int Dlam::addS(ST_Matrix &AD)
 			//cout<<racah1<<" r "<<racah2<<" r "<<racah3<<" r "<<j9<<endl;
 			coef *= c1*c2*racah1*racah2*racah3*j9;
 			if(coef==0) continue;
-			complexd S = AD.S1[make_tuple(2,0,la,lb,ja,jb)]*conj(AD.S1[make_tuple(2,0,la1,lb1,ja1,jb1)]);//el = 2 - inelastic, nb = 0 - the first block
-			//cout<<S<<endl;
+			//complexd S = AD.S1[make_tuple(2,0,la,lb,ja,jb)]*conj(AD.S1[make_tuple(2,0,la1,lb1,ja1,jb1)]);//el = 2 - inelastic, nb = 0 - the first block
+			complexd S = AD.S1[make_tuple(2,BlockNumber,la,lb,ja,jb)]*conj(AD.S1[make_tuple(2,BlockNumber,la1,lb1,ja1,jb1)]);//el = 2 - inelastic, nb = 0 - the first block//cout<<"SMTuple:"<<2<<" "<<0<<" "<<la<<" "<<lb<<" "<<ja<<" "<<jb<<"\n";
+			//cout<<"SM="<<AD.S1[make_tuple(2,0,la,lb,ja,jb)]<<endl;
 			//cout<<coef<<endl;
 			summa += S*coef;
 			//cout<<summa<<endl;
@@ -129,7 +137,6 @@ int Dlam::addS(ST_Matrix &AD)
 	
 	}
 	result += beg*summa;
-	//cout<<result<<endl;
 	
 	return 2;
 }
@@ -184,16 +191,14 @@ int Dlam::addT(ST_Matrix &AD)
 	return 2;
 }
 
-int ST_Matrix::ReadSmatrix(TString fname)
+int ST_Matrix::ReadSmatrix(string SMBuf)
 {
-
-  ifstream f(fname);
+  stringstream f(SMBuf);
   string line;
   vector<string> lines;
   while (getline(f, line)) {
     lines.push_back(line);
   }
-  f.close();
 
   // read from lines to dict S1[(level,nb,l_a,l_b,j_a,j_b)] level - elastic, non-elastic,
   // nb - number of block (depends on nucleus state)
@@ -242,6 +247,7 @@ int ST_Matrix::ReadSmatrix(TString fname)
         SS.ReplaceAll("D","e");
         complexd S = complexd(atof(reS), atof(imS));
         S1[make_tuple(el, nb, l_a, l_b, j_a, j_b)] = S;
+       // cout<<"S1("<<el<<" "<<nb<<" "<<l_a<<" "<<l_b<<" "<<j_a<<" "<<j_b<<") "<<S<<"\n";
         Smod[make_tuple(el, nb, l_a, l_b, j_a, j_b)] = atof(SS);
       }
     }
@@ -251,15 +257,14 @@ int ST_Matrix::ReadSmatrix(TString fname)
 	return 1;
 }
 
-int ST_Matrix::ReadTransCoef(TString fname)
+int ST_Matrix::ReadTransCoef(string TransBuf)
 {
-  ifstream f(fname);
+  stringstream f(TransBuf);
   string line;
   vector<string> lines;
   while (getline(f, line)) {
     lines.push_back(line);
   }
-  f.close();
 
   // read from lines to dict S1[(level,nb,l_a,l_b,j_a,j_b)] level - elastic, non-elastic,
   // nb - number of block (depends on nucleus state)
@@ -299,12 +304,10 @@ int ST_Matrix::ReadTransCoef(TString fname)
 
     }
   return 0;
-	
-
 }
 
 // calculate D coefficients and gives two functuion TF1 for inelastic scattered neutron (1st level) and gamma distribution
-void Dcoef_v2(TString inputname, TString outname)
+/*void Dcoef_v2(TString inputname, TString outname)
 {
 	TString name1 = "./txt/"+outname+".txt";
 	FILE *tf = fopen(name1,"w");
@@ -359,4 +362,4 @@ void Dcoef_v2(TString inputname, TString outname)
 	TF1 *fgamma = new TF1("gamma",gamma,0,180);//угловое распределение гамма
 	TF1 *fneutron = new TF1("neutron",neutron,0,180);//угловое распределение нейтронов
 
-}
+}*/
