@@ -25,6 +25,15 @@ const string Atomic_symbols[]={"H","He","Li","Be","B","C","N","O","F","Ne","Na",
 
 const char AngularMomentum[]={'s','p','d','f','g','h','i'};
 
+void CopyFileContentToBuffer(ifstream &t,string &buff)
+{
+	t.seekg(0, std::ios::end);
+	size_t SizeOfStr = t.tellg();
+	buff=string(SizeOfStr,' ');
+	t.seekg(0);
+	t.read(&buff[0], SizeOfStr); 
+}
+
 vector<string> GetListOfObjectNames(TFile *f)
 {
 	vector<string> result;
@@ -180,6 +189,70 @@ std::vector<std::string> SplitString(const std::string &s, char delim)
 		result.push_back (item);
 	}
 
+	return result;
+}
+
+std::vector<std::string> FromFortranFormat(string str,string Format)
+{
+	//упрощенный вариант, скобки внутри формата пока не поддерживаются!
+	vector<string> result;
+	TString fr(Format.c_str());
+	fr.ReplaceAll("(","");
+	fr.ReplaceAll(")","");
+	int str_iter=0;
+	vector<string> Formats=SplitString(fr.Data(),',');
+	for(unsigned int i=0;i<Formats.size();i++)
+	{
+		int Nrepeat=1,length=0;
+		string NrepeatStr="";
+		string LengthStr="";
+		char FormatDescriptor=0;
+		bool FoundFormatDescriptor=false;
+		for(unsigned int j=0;j<Formats[i].size();j++)
+		{
+			if((!FoundFormatDescriptor)&&((Formats[i][j]>='0')&&(Formats[i][j]<='9')))
+			{
+				NrepeatStr+=Formats[i][j];
+			}
+			else if((Formats[i][j]>='A')&&(Formats[i][j]<='z'))
+			{
+				FoundFormatDescriptor=true;
+				FormatDescriptor=Formats[i][j];
+				Nrepeat=atoi(NrepeatStr.c_str());
+			}
+			else if(FoundFormatDescriptor&&((Formats[i][j]>='0')&&(Formats[i][j]<='9')))
+			{
+				LengthStr+=Formats[i][j];
+			}
+			else if(Formats[i][j]=='.')
+			{
+				break;
+			}
+		}
+		length=atoi(LengthStr.c_str());
+		if(Nrepeat==0)
+		{
+			Nrepeat=1;
+		}
+		if((length==0)&&(FormatDescriptor>0))
+		{
+			length=1;
+		}
+		for(int rep=0; rep<Nrepeat;rep++)
+		{
+			string sub;
+			for(int l=0;l<length;l++)
+			{
+				if(str_iter>=str.size())
+				{
+					break;
+				}
+				sub+=str[str_iter];
+				str_iter++;
+			}
+			result.push_back(sub);
+		}
+	}
 	return result;
 }
 

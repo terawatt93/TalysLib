@@ -656,14 +656,6 @@ Nucleus* Nucleus::FindProductByName(string _Name)
 	return 0;
 }
 
-void CopyFileContentToBuffer(ifstream &t,string &buff)
-{
-	t.seekg(0, std::ios::end);
-	size_t SizeOfStr = t.tellg();
-	buff=string(SizeOfStr,' ');
-	t.seekg(0);
-	t.read(&buff[0], SizeOfStr); 
-}
 
 void Nucleus::ReadTalysOutput()
 {

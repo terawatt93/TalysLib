@@ -76,6 +76,7 @@ double GetEvaluationResult(double x_value,TalysFitterMT *PointetToTF,Nucleus *Po
 	}
 	if(GraphIterator==2)//предполагаем, что под этим номером стоит угловое распределение гамма
 	{
+		//return Lev2InCarbon->Gammas[0].TalysAngularDistribution.Eval(x_value-CurrentOffset)*Lev2InCarbon->Gammas[0].TalysCrossSection/(4*3.1416);
 		return Lev2InCarbon->Gammas[0].TalysAngularDistribution.Eval(x_value-CurrentOffset);
 	}
 	return 0;
@@ -97,8 +98,11 @@ void MultiFitMT()
 	NuclForExpData.GenerateProducts();
 	TCanvas c1;	
 	
-	TMultiGraph *mgrElastic=NuclForExpData.GetEXFORTMultiGraphForAngularDistributions(14,14.5);
-	TMultiGraph *mgrInelastic=NuclForExpData.FindProductByReaction("(n,n')")->Levels[1].GetEXFORTMultiGraphForAngularDistributions(14,14.5);
+	TFile fData("data/Data.root");
+	TGraphErrors grElastic=*((TGraphErrors*)fData.Get("Elastic"));
+	TGraphErrors grInelastic=*((TGraphErrors*)fData.Get("Inelastic"));
+	TGraphErrors grGamma=*((TGraphErrors*)fData.Get("Gamma_Norm"));
+	fData.Close();
 	
 	TalysLibManager::Instance().SetC4Flag(false);
 	
@@ -120,11 +124,13 @@ void MultiFitMT()
 	tf->GetEvaluationResult=GetEvaluationResult;
 	
 	vector<TObject*> Graphs;
-	Graphs.push_back(mgrElastic);
-	Graphs.push_back(mgrInelastic);
+	Graphs.push_back(&grElastic);
+	Graphs.push_back(&grInelastic);
+	Graphs.push_back(&grGamma);
 	vector<double> Offsets;
 	Offsets.push_back(0);
 	Offsets.push_back(181);
+	Offsets.push_back(362);
 	cout<<"size:"<<Offsets.size()<<"\n";
 	tf->GenerateGraphForMultiFit(Graphs,Offsets);	
 	
@@ -162,12 +168,13 @@ void MultiFitMT()
 	c1.Clear();
 	c1.Print("TestMultiFitMT.pdf[","pdf");
 	gPad->SetLogy(1);
-	mgrElastic->Draw("a plc pmc");
+
+	grElastic.Draw("ap");
 	Elastic->SetLineColor(2);
 	Elastic->Draw("l");
 	gPad->BuildLegend();
 	c1.Print("TestMultiFitMT.pdf","pdf");
-	mgrInelastic->Draw("a plc pmc");
+	grInelastic.Draw("ap");
 	INL4->SetLineColor(2);
 	INL4->Draw("l");
 	gPad->BuildLegend();
