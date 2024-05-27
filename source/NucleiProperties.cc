@@ -1500,7 +1500,11 @@ void Nucleus::GenerateProducts(string _Projectile)
 	}
 	
 	//Полина! Разбор строк s-матрицы
-	s_mat.Read(SMatrixOutput,TransmissionCoeffOutput);
+	if(SMatrixOutput.size()>0)
+	{
+		s_mat.Read(SMatrixOutput,TransmissionCoeffOutput);
+	}
+	
 	//конец
 	if((NucleiInEnergyGrid.size()>0)&&(UseEnergyGrid))
 	{
