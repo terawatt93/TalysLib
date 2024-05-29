@@ -15,6 +15,7 @@ TalysFitterMT *tf;
 
 void ParAssignmentFunction(TalysFitterMT *TF,Nucleus *Nucl, vector<double> Parameters)//функция, описывающая приписывание параметров из вектора Parameters ядру, которое происходит при каждом вычислении \chi^2
 {
+	Nucl->ReadSMatrix=true;
 	Nucl->OMPN->PotentialKoning.v1=Parameters[0];//V_V
 	Nucl->OMPN->PotentialKoning.w1=Parameters[1];//W_V
 	Nucl->OMPN->PotentialKoning.d1=Parameters[2];//W_D
