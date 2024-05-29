@@ -487,10 +487,16 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 	
 	string filename=PathToCalculationDir+"/input";
 	ofstream ofs(filename.c_str());
-	ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\noutexcitation y\n channels y\n";
+	//ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\noutexcitation y\n channels y\n";
+	ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\n channels y\n";
 	//Полина!
-	ofs<<"outecis y\neciscompound y\necissave y\n";
-	//конец
+	if(ReadSMatrix)
+	{
+		//Полина!
+		ofs<<"outecis y\neciscompound y\necissave y\n";
+		//конец
+	}
+	
 	for(unsigned int i=0;i<TalysOptions.size();i++)
 	{
 		ofs<<TalysOptions[i]<<"\n";
@@ -520,7 +526,7 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 		ofs<<addition;
 	}
 	ofs.close();
-	system(string("cd "+PathToCalculationDir+"/; talys <input >output").c_str());
+	system(string("cd "+PathToCalculationDir+"/; "+TalysLibManager::Instance().GetExecutableName()+" <input >output").c_str());
 }
 
 void Nucleus::SortingLevels()
@@ -672,32 +678,36 @@ void Nucleus::ReadTalysOutput()
 			ifstream ifs(filename);
 			CopyFileContentToBuffer(ifs,RawOutput);
 			ifs.close();
-			//Полина! Чтение файлов fort.60 и fort.70 в 
-			ifstream ifs60(PathToCalculationDir+"/fort.60");
-			CopyFileContentToBuffer(ifs60,SMatrixOutput);
-			ifs60.close();
-			ifstream ifs70(PathToCalculationDir+"/fort.70");
-			CopyFileContentToBuffer(ifs70,TransmissionCoeffOutput);
-			ifs70.close();
+			if(ReadSMatrix)
+			{
+				//Полина! Чтение файлов fort.60 и fort.70 в 
+				ifstream ifs60(PathToCalculationDir+"/fort.60");
+				CopyFileContentToBuffer(ifs60,SMatrixOutput);
+				ifs60.close();
+				ifstream ifs70(PathToCalculationDir+"/fort.70");
+				CopyFileContentToBuffer(ifs70,TransmissionCoeffOutput);
+				ifs70.close();
+				
+				string ECISDiscINP,ECISIncINP;
+				ifstream ifsEcisDisc(PathToCalculationDir+"/ecisdisc.inp");
+				CopyFileContentToBuffer(ifsEcisDisc,ECISDiscINP);
+				ifsEcisDisc.close();
+
+				ifstream ifsEcisInc(PathToCalculationDir+"/ecisinc.inp");
+				CopyFileContentToBuffer(ifsEcisInc,ECISIncINP);
+				ifsEcisInc.close();
+
+				if(ECISDiscINP.find("2.00 0 1+   4.43982")!=string::npos)
+				{
+					s_mat.BlockNumber=1;
+				}
+				if(ECISIncINP.find("2.00 0 1+   4.43982")!=string::npos)
+				{
+					s_mat.BlockNumber=0;
+				}
+				//конец
+			}
 			
-			string ECISDiscINP,ECISIncINP;
-			ifstream ifsEcisDisc(PathToCalculationDir+"/ecisdisc.inp");
-			CopyFileContentToBuffer(ifsEcisDisc,ECISDiscINP);
-			ifsEcisDisc.close();
-
-			ifstream ifsEcisInc(PathToCalculationDir+"/ecisinc.inp");
-			CopyFileContentToBuffer(ifsEcisInc,ECISIncINP);
-			ifsEcisInc.close();
-
-			if(ECISDiscINP.find("2.00 0 1+   4.43982")!=string::npos)
-			{
-				s_mat.BlockNumber=1;
-			}
-			if(ECISIncINP.find("2.00 0 1+   4.43982")!=string::npos)
-			{
-				s_mat.BlockNumber=0;
-			}
-			//конец
 			OutputWasRead=true;
 		}
 	}

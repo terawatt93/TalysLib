@@ -74,12 +74,14 @@ class ECISinput//класс, обеспечивающий чтение файл�
 	std::vector<bool> flags;
 	string title;
 	vector<bool> ecis1, ecis2;
-	bool legendre=false, disp;
+	bool legendre=false, disp=false,vibrational=false;
 	int ncoll, njmax, iterm, npp;
 	double hint, rmatch;
-	double w=0, rw=0, aw=0, vd=0, rvd=0, avd=0, wd=0, rwd=0, awd=0, vso=0, rvso=0, avso=0, wso=0, rwso=0, awso=0,rc=0;
+	double w=0, rw=0, aw=0, vd=0, rvd=0, avd=0, wd=0, rwd=0, awd=0, vso=0, rvso=0, avso=0, wso=0, rwso=0, awso=0,rc=0,v=0,rv=0,av=0;
 	double tarspin, e, spin, projmass, resmass, angbeg, anginc, angend, eopt,efer, w2disp,d3disp, d2disp;
 	int tarparity, prodZ, idvib;
+	vector<double> Jlevel, Elevel;
+	vector<int> Plevel, iph,iband;
 	static vector<ECISinput> ReadFromBuffer(string Buffer);
 	static vector<ECISinput> ReadFromFile(string Filename);
 };

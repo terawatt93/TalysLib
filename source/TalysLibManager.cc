@@ -176,6 +176,14 @@ void TalysLibManager::SetEXFORSource(string Source)
 		EXFORSource=0;
 	}
 }
+void TalysLibManager::SetExecutableName(string Name)//нужно для работы с разными версиями Talys
+{
+	ExecutableName=Name;
+}
+string TalysLibManager::GetExecutableName()
+{
+	return ExecutableName;
+}
 int TalysLibManager::GetEXFORSource()
 {
 	return EXFORSource;

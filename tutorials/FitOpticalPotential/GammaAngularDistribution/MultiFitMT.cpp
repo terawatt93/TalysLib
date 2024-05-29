@@ -58,6 +58,14 @@ double GetEvaluationResult(double x_value,TalysFitterMT *PointetToTF,Nucleus *Po
 	double CurrentOffset=0;
 	int GraphIterator=0;
 	PointetToTF->GetCurrentGraphNumberAndOffset(x_value,GraphIterator,CurrentOffset);//функция, вычисляющая номер графика, которому соответствует данный x и его сдвижку
+	if(!PointerToNucleus->Success)
+	{
+		return 0;
+	}
+	if(!PointerToNucleus->FindProductByReaction("(n,n')"))
+	{
+		return 0;
+	}
 	if(GraphIterator==0)//Каждому графику соответствует номер, в данном коде нулевой график-упругое рассеяние, первый -неупругое на 4.4 МэВ
 	{
 		TGraph *Elastic=PointerToNucleus->GetElasticAngularDistribution("Total");

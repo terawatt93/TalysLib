@@ -4,6 +4,7 @@ void CreateListOfGammaLines()
 {
 	TalysLibManager::Instance().SetEnableWarning(false);
 	TLMaterial Cr2O3("NaCl");
+	Cr2O3.Calculate();
 	Cr2O3.AddBackground("background.txt");
 	cout<<"In Material:\n";
 	for(unsigned int i=0;i<Cr2O3.Nuclides.size();i++)

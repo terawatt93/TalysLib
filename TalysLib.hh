@@ -139,6 +139,9 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	bool DeleteCalculationFolder=true;
 	void Purge();
 	string AOption;
+	string ExecutableName="talys";//нужно для работы с разными версиями Talys
+	void SetExecutableName(string Name);
+	string GetExecutableName();
 	void SetAOption(string value);//управляет запросом данных с A=0
 	string GetAOption();//управляет запросом данных с A=0
 	private:
@@ -749,6 +752,7 @@ class Nucleus:public NucleusData
 	bool kAlwaysNewGraphs=false;
 	bool ConvertToLab=false;
 	bool Success=false;//флаг, подтверждающий успешность вычислений
+	bool ReadSMatrix=false;//флаг, управляющий чтением s-матриц
 	bool PredefinedProjectile=false;//флаг, определяющий, приписывать ли Projectile аргумент из GenerateProducts;
 	int MainNucleusFlag=0;
 	int ID=0;
@@ -995,6 +999,7 @@ class TalysFitterMT
 	void FCN(int &npar, double *gin, double &f, double *par, int flag);
 	vector<double> InitParameters;
 	vector<double> Parameters;
+	vector<double> BestParameters;
 	vector<double> LowLimits;
 	vector<double> HighLimits;
 	vector<double> EpsilonValues;
