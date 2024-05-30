@@ -196,6 +196,10 @@ int ST_Matrix::ReadSmatrix(string SMBuf)
   stringstream f(SMBuf);
   string line;
   vector<string> lines;
+  if(SMBuf.size()>0)
+  {
+	  WasRead=true;
+  }
   while (getline(f, line)) {
     lines.push_back(line);
   }

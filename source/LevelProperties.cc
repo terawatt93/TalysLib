@@ -1292,7 +1292,11 @@ void Level::EvalAlternativeAdist()
 	if(GetIntegrityFactor()>=2)//есть начальное ядро
 	{
 		ST_Matrix s_mat=fNucleus->fMotherNucleus->s_mat;
-
+		if(!s_mat.WasRead)
+		{
+			Gammas[0].TalysAngularDistribution=TF1(TString::Format("ADist_g%.d",int(10*Gammas[0].Energy)),"0",0,180);
+			AlternativeAdist=TF1(TString::Format("ADist_n%.d",int(Energy)),"0",0,180);
+		}
 		map<tuple<int, int, int>, double> D; // write results of coefficients to map
 
 

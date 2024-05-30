@@ -707,7 +707,7 @@ void Nucleus::ReadTalysOutput()
 				}
 				//конец
 			}
-			
+			//конец
 			OutputWasRead=true;
 		}
 	}

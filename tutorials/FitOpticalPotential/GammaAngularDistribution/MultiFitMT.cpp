@@ -14,7 +14,7 @@
 TalysFitterMT *tf;
 
 void ParAssignmentFunction(TalysFitterMT *TF,Nucleus *Nucl, vector<double> Parameters)//функция, описывающая приписывание параметров из вектора Parameters ядру, которое происходит при каждом вычислении \chi^2
-{
+{	
 	Nucl->ReadSMatrix=true;
 	Nucl->OMPN->PotentialKoning.v1=Parameters[0];//V_V
 	Nucl->OMPN->PotentialKoning.w1=Parameters[1];//W_V
@@ -128,7 +128,7 @@ void MultiFitMT()
 	tf->SetParameter(9,tf->Nuclide.OMPN->PotentialKoning.Rso,"r_{SO}",0.001,0.5,2);
 	tf->SetParameter(10,tf->Nuclide.OMPN->PotentialKoning.Aso,"a_{SO}",0.001,0.1,2);
 	tf->SetParameter(11,-0.62,"#beta_{2}",0.001,-1,1);//это деформация, beta_2
-	
+	tf->log<<"\n";
 	tf->ParAssignmentFunction=ParAssignmentFunction;
 	tf->GetEvaluationResult=GetEvaluationResult;
 	
@@ -160,8 +160,8 @@ void MultiFitMT()
 	arglist[1] = 1; // tolerance
 	tf->Fitter->ExecuteCommand("MIGRAD",arglist,2);
 	tf->Fitter->ExecuteCommand("HESSE",0,0);
-	
-	TFile f("TestMultiFitMT.root","RECREATE");
+	tf->BestNuclide.SaveToXLSX("BestResult.xlsx");
+	/*TFile f("TestMultiFitMT.root","RECREATE");
 	for(unsigned int i=0;i<tf->ParValuesGraphs.size();i++)
 	{
 		f.WriteTObject(&(tf->ParValuesGraphs[i]));
@@ -195,6 +195,6 @@ void MultiFitMT()
 	p.Draw();
 	c1.Print("TestMultiFitMT.pdf","pdf");
 	
-	c1.Print("TestMultiFitMT.pdf]","pdf");
+	c1.Print("TestMultiFitMT.pdf]","pdf");*/
 }
 

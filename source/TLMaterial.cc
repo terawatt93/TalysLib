@@ -218,13 +218,16 @@ vector<GammaTransition*> TLMaterial::GetGammaTransitions(double CrossSectionThre
 				GT.push_back(&Nuclides[i]->Levels[0].Gammas[p]);
 			}
 		}
+		//cout<<"Nuclides["<<i<<"] "<<Nuclides[i]->Name<<"\n";
 		for(unsigned int j=0;j<Nuclides[i]->Products.size();j++)
 		{
+			//cout<<"Nuclides["<<i<<"]->Products["<<j<<"]"<<Nuclides[i]->Products[j].Name<<"\n";
 			for(unsigned int k=0;k<Nuclides[i]->Products[j].Levels.size();k++)
 			{
+				//cout<<"Nuclides["<<i<<"]->Products["<<j<<"].Levels.size()"<<Nuclides[i]->Products[j].Levels.size()<<"\n";
 				for(unsigned int p=0;p<Nuclides[i]->Products[j].Levels[k].Gammas.size();p++)
 				{
-					
+					//cout<<"Nuclides["<<i<<"]->Products["<<j<<"].Levels["<<k<<"].Gammas["<<p<<"]:E"<<Nuclides[i]->Products[j].Levels[k].Gammas[p].Energy<<"\n";
 					GT.push_back(&Nuclides[i]->Products[j].Levels[k].Gammas[p]);
 				}
 			}

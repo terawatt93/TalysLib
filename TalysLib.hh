@@ -1018,6 +1018,7 @@ class TalysFitterMT
 	void AddC4GraphVector(vector<TGraphErrors*> ExpData);
 	vector<TPad*> PadsForDrawing;
 	TPaveText GenerateTPaveTextForFitResult(double x1=0.7,double y1=0.6,double x2=0.95,double y2=0.95,string Option="bl NDC");
+	ofstream log;
 };
 double EvalChi2(TalysFitterMT *TFM,Nucleus* Nucl);
 

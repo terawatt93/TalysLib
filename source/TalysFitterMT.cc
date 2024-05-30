@@ -232,6 +232,7 @@ void TalysFitterMT::SetParameter(unsigned int n, double value, string name, doub
 	EpsilonValues[n]=epsilon;
 	LowLimits[n]=low;
 	HighLimits[n]=high;
+	log<<name<<"\n";
 }
 void TalysFitterMT::SetParameter(unsigned int n, double value, string name, double epsilon, double range)
 {
@@ -262,6 +263,7 @@ TalysFitterMT::TalysFitterMT(string NuclName, unsigned int ThreadNumber)
 	InitNuclide.SetThreadNumber(InitThreadNumber);
 	InitNuclide.AssignPointers();
 	Nuclide.AssignPointers();
+	log.open(NuclName+"_log.txt");
 }
 void TalysFitterMT::AddToGraphForMultiFit(TGraphErrors *gr, double Mv)
 {
@@ -472,6 +474,11 @@ void TalysFitterMT::FCN(int &npar, double *gin, double &f, double *par, int flag
 			BestChi2=f;
 			BestNuclide=Nuclide.Copy();
 		}
+		for(unsigned int i=0;i<Parameters.size();i++)
+		{
+			log<<Parameters[i]<<" ";
+		}
+		log<<f<<"\n";
 		Chi2Values.SetPoint(Chi2Values.GetN(),Chi2Values.GetN(),f);
 		break;
 	}

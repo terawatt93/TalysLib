@@ -49,7 +49,7 @@ class ST_Matrix
 	map<tuple<double, TString>, double> Tfull; // sum of all channels for spin of compound nucleus J
 	
 	friend class Dlam;
-	
+	bool WasRead=false;
 	int ReadSmatrix(string SMBuf);
 	int ReadTransCoef(string TransBuf);
 	
