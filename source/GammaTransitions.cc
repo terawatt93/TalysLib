@@ -15,10 +15,10 @@
 #pragma once
 
 //Методы класса GammaTransition
-double& GammaTransitionData::AdditionalInformation(string Key)
+/*double& GammaTransitionData::AdditionalInformation(string Key)
 {
 	return AI(Key);
-}
+}*/
 GammaTransition::GammaTransition(GammaTransitionData d)
 {
 	Energy=d.Energy; EnergyErr=d.EnergyErr; Intensity=d.Intensity; CrossSection=d.CrossSection; E_in=d.E_in; Tolerancy=d.Tolerancy;

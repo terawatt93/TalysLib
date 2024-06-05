@@ -29,6 +29,8 @@
 #include "SMatrix/SMatrix.hh"
 #include "C4Reader/C4.hh"
 
+#include "nlohmann/json.hpp"//нужно для работы с json - объектами, которые хранятся в виде string
+
 /* ключевые слова для 
 outecis y
 eciscompound y
@@ -183,9 +185,17 @@ class OMPManager:public TObject//один объект для одного се�
 class AdditionalInformationContainer:public TObject
 {
 	public:
-	map<string,double> AdditionalInformationMap;
-	double& operator() (string Key);
-	ClassDef(AdditionalInformationContainer, 1);
+	//map<string,double> AdditionalInformationMap;
+	//double& operator() (string Key);
+	
+	nlohmann::json DataContainer;
+	void AddInformation(string key,double value);
+	void AddInformation(string key,int value);
+	void AddInformation(string key,string value);
+	double GetInformationD(string key);
+	string GetInformationS(string key);
+	int GetInformationI(string key);
+	ClassDef(AdditionalInformationContainer, 3);
 };
 
 
@@ -547,6 +557,7 @@ class Deformation:public DeformationData
 	//void RestoreDeformation();
 	void Sort();
 	DeformationData ToDeformationData();
+	AdditionalInformationContainer AI;
 	void AssignPointers();
 	ClassDef(Deformation, 1);
 };
@@ -635,6 +646,7 @@ class Level:public LevelData
 	vector<C4EnergyDistribution> C4EnergyData;
 	void AddHyperlinksToTeX(string &filename,string href_addition="https://sci-hub.ru/");
 	vector<string> HyperlinksTMP;//! нужен для генерации картинки с тех и гиперссылками	
+	
 	ClassDef(Level, 3);
 };
 
