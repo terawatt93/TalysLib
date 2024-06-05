@@ -27,6 +27,10 @@ const char AngularMomentum[]={'s','p','d','f','g','h','i'};
 
 void CopyFileContentToBuffer(ifstream &t,string &buff)
 {
+	if(!t.is_open())
+	{
+		return;
+	}
 	t.seekg(0, std::ios::end);
 	size_t SizeOfStr = t.tellg();
 	buff=string(SizeOfStr,' ');
