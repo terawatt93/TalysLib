@@ -913,6 +913,7 @@ class Nucleus:public NucleusData
 	string SMatrixOutput;//строка, содержащая текст из файла fort.60, куда записываются элементы s-матрицы
 	string TransmissionCoeffOutput;//строка, содержащая текст из файла fort.70, куда записываются коэффициенты проницаемости
 	ST_Matrix s_mat;
+	double NormInelastic1=0;
 	//блок закончен
 	bool OutputWasRead=false;
 	void ReadTalysOutput();//считывает информацию из файла output в RawOutputContent

@@ -1317,30 +1317,39 @@ void Level::EvalAlternativeAdist()
 		}
 		TString neutron; 
 		TString gamma;
+		
+		double ProjEnergy=fNucleus->fMotherNucleus->ProjectileEnergy;
+		double ProjMass=fNucleus->fMotherNucleus->ProjectileMass;
+		double k2=2*ProjMass*ProjEnergy/pow(197.3,2)/10.0;
+		
 		for(auto &i: D)
-		{	auto j = i.first;
+		{	
+			auto j = i.first;
 			int lam = get<0>(j),
 				lam1 = get<1>(j),
 				Q = get<2>(j);
+				//для расчета сечений!!
 			
 			if(Q == 0)
 			{
 				if(i.second>0) neutron+="+";
-				neutron+=TString::Format("%f*legendre(%d,cos(3.14*x/180))",i.second*(2*lam+1)/D[make_tuple(0,0,0)],lam);
+				neutron+=TString::Format("%f*legendre(%d,cos(3.14*x/180))",1.0/(k2*4)*i.second*(2*lam+1),lam);
 
 			}
 			if(lam1 == 0)
 			{	
 				if(i.second>0) gamma+="+";
-				gamma+=TString::Format("%f*legendre(%d,cos(3.14*x/180))",i.second*(2*Q+1)/D[make_tuple(0,0,0)],Q);
+				gamma+=TString::Format("%f*legendre(%d,cos(3.14*x/180))",1.0/(k2*4)*i.second*(2*Q+1),Q);
 			}
+			//модификация закончена
 		}
 		char c {'+'};
 		neutron.Remove(TString::kLeading,c);
 		gamma.Remove(TString::kLeading,c);
-		/*cout<<gamma<<endl;
-		cout<<"neutron "<<endl;
-		cout<<neutron<<endl;*/
+		//cout<<"k2="<<k2<<"\n";
+		//cout<<gamma<<endl;
+		//cout<<"neutron "<<endl;
+		//cout<<neutron<<endl;
 
 		if(Gammas.size()>0)
 		{
