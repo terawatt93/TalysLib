@@ -221,10 +221,10 @@ int Level::GetIntegrityFactor()
 	}
 	return factor;
 }
-double& LevelData::AdditionalInformation(string Key)
+/*double& LevelData::AdditionalInformation(string Key)
 {
 	return AI(Key);
-}
+}*/
 bool Level::ReadLevel(string line,string ReadNuclName)
 {
 	string type;

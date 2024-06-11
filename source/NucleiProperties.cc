@@ -266,13 +266,15 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 		{
 			for(unsigned int i=0;i<NumberOfLevels;i++)
 			{
-				float E,J,Width;
+				float E=0,J=0,Width=0;
 				int N=0; int Parity=1; unsigned int NGammas=0;
 				getline(ifs,line);
 				stringstream s(line);
 				string tmp;
 				s>>N>>E>>J>>Parity>>NGammas>>Width;
+				if(Width!=0)
 				Width=6.582*log(2)/Width*1e-22;//конвертируем период полураспада в ширину (МэВ)
+				
 				if(E==0)
 				{
 					TalysGroundStateExsists=true;

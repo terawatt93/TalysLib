@@ -35,8 +35,9 @@ void CopyFileContentToBuffer(ifstream &t,string &buff)
 		t.seekg(0);
 		t.read(&buff[0], SizeOfStr); 
 	}
-	
 }
+	
+
 
 vector<string> GetListOfObjectNames(TFile *f)
 {

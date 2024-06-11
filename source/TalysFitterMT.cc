@@ -469,14 +469,16 @@ void TalysFitterMT::FCN(int &npar, double *gin, double &f, double *par, int flag
 		
 		Nuclide.GenerateProducts();
 		f=EvalChi2(this,0);
+		for(unsigned int i=0;i<Parameters.size();i++)
+		{
+			log<<Parameters[i]<<" ";
+		}
+		
 		if(f<BestChi2)
 		{
 			BestChi2=f;
 			BestNuclide=Nuclide.Copy();
-		}
-		for(unsigned int i=0;i<Parameters.size();i++)
-		{
-			log<<Parameters[i]<<" ";
+			log<<"BestChi!";
 		}
 		log<<f<<"\n";
 		Chi2Values.SetPoint(Chi2Values.GetN(),Chi2Values.GetN(),f);
