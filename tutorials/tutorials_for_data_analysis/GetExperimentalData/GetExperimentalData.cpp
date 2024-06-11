@@ -7,7 +7,7 @@ void GetExperimentalData()
 	TalysLibManager::Instance().DeleteExpDataForAuthor("Litvinski");
 	TalysLibManager::Instance().DeleteExpDataForAuthor("Pomerance");*/
 	
-	Nucleus Nucl("56Fe");
+	Nucleus Nucl("12C");
 	//Nucl.FastFlag=false;
 	Nucl.GenerateEnergyGrid(0,1,20);//установить сетку энергий : от 0 до 20 МэВ с шагом 0.2 МэВ
 	Nucl.GenerateProducts();//выполнить расчеты в Talys

@@ -107,7 +107,7 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	bool GetC4Flag();
 	bool IsEnableWarning();
 	bool GenerateAllGraphs=true;
-	bool ReadC4=true;
+	bool ReadC4=false;
 	bool DeleteNucleiInGrid=true;
 	bool DeleteDirectoryAfterReading=true;
 	bool RemoteCalculation=false;
@@ -188,7 +188,8 @@ class AdditionalInformationContainer:public TObject
 	//map<string,double> AdditionalInformationMap;
 	//double& operator() (string Key);
 	
-	nlohmann::json DataContainer;
+	nlohmann::json DataContainer;//!
+	string json_str;//добавить потом запись в строку с помощью json::dump()!
 	void AddInformation(string key,double value);
 	void AddInformation(string key,int value);
 	void AddInformation(string key,string value);
@@ -766,6 +767,7 @@ class Nucleus:public NucleusData
 	bool Success=false;//флаг, подтверждающий успешность вычислений
 	bool ReadSMatrix=false;//флаг, управляющий чтением s-матриц
 	bool PredefinedProjectile=false;//флаг, определяющий, приписывать ли Projectile аргумент из GenerateProducts;
+	bool C4WasRead=false;
 	int MainNucleusFlag=0;
 	int ID=0;
 	unsigned int EnergyGridIndex=0;
@@ -883,6 +885,7 @@ class Nucleus:public NucleusData
 	void ReadFromRootFile(TFile *f,string Name="");
 	void ReadFromRootFile(string FileName="",string Name="");
 	void SaveToXLSX(string filename);
+	void ReadC4();
 	GammaTransition* GetMostIntenseGammaTransition();
 	ENDFFile ENDF;
 	list<ENDFFile> ENDFBases;
@@ -912,7 +915,7 @@ class Nucleus:public NucleusData
 	//дальше идет блок для работы с S-матрицами для расчетов Полины. Потом переделать! Переделанные области помечены как "Полина!"
 	string SMatrixOutput;//строка, содержащая текст из файла fort.60, куда записываются элементы s-матрицы
 	string TransmissionCoeffOutput;//строка, содержащая текст из файла fort.70, куда записываются коэффициенты проницаемости
-	ST_Matrix s_mat;
+	ST_Matrix s_mat;//!
 	double NormInelastic1=0;
 	//блок закончен
 	bool OutputWasRead=false;

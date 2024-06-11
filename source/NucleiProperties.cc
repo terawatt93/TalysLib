@@ -1533,39 +1533,50 @@ void Nucleus::GenerateProducts(string _Projectile)
 	AssignPointers();
 	if(TalysLibManager::Instance().GetC4Flag())
 	{
-		if((!IsProduct())&&(MainNucleusFlag!=1)&&(getenv("C4Base")))
-		{
-			//для неупругих реакций
-			string fname=GetPathToC4Base();
-			sqlite3_open((fname+"C4Base.db").c_str(), &C4Base); 
-			C4ROOTBase=new TFile((fname+"Base.root").c_str());
-			for(unsigned int i=0;i<Products.size();i++)
-			{
-				Products[i].C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,Products[i].Reaction,Projectile,Z,A,TalysLibManager::Instance().GetAOption());
-			}
-			//для упругих/полных
-			//упругие:
-			C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,"elastic",Projectile,Z,A,TalysLibManager::Instance().GetAOption());
-		}
-		if(MainNucleusFlag!=1)
-		{
-			C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,Reaction,Projectile,Z,A,TalysLibManager::Instance().GetAOption());
-		}
-		if(C4ROOTBase)
-		{
-			C4ROOTBase->Close();
-		}
-		if(C4Base)
-		{
-			sqlite3_close_v2(C4Base);
-		}
-		AssignC4DataToLevels();
+		ReadC4();
 	}
 	/*if(TalysLibManager::Instance().DeleteDirectoryAfterReading)
 	{
 		system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
 	}*/
 }
+
+void Nucleus::ReadC4()
+{
+	if(C4WasRead)
+	{
+		return;
+	}
+	if((!IsProduct())&&(MainNucleusFlag!=1)&&(getenv("C4Base")))
+	{
+		//для неупругих реакций
+		string fname=GetPathToC4Base();
+		sqlite3_open((fname+"C4Base.db").c_str(), &C4Base); 
+		C4ROOTBase=new TFile((fname+"Base.root").c_str());
+		for(unsigned int i=0;i<Products.size();i++)
+		{
+			Products[i].C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,Products[i].Reaction,Projectile,Z,A,TalysLibManager::Instance().GetAOption());
+		}
+		//для упругих/полных
+		//упругие:
+		C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,"elastic",Projectile,Z,A,TalysLibManager::Instance().GetAOption());
+		C4WasRead=true;
+	}
+	if(MainNucleusFlag!=1)
+	{
+		C4Data=RequestC4DataSubentVector(C4Base,C4ROOTBase,Reaction,Projectile,Z,A,TalysLibManager::Instance().GetAOption());
+	}
+	if(C4ROOTBase)
+	{
+		C4ROOTBase->Close();
+	}
+	if(C4Base)
+	{
+		sqlite3_close_v2(C4Base);
+	}
+	AssignC4DataToLevels();
+}
+
 void Nucleus::AssignC4DataToLevels(double Tolerancy)
 {
 	vector<C4AngularDistribution> ADist=C4Data.GetAngularDistributions();

@@ -1122,6 +1122,14 @@ vector<TGraphErrors*> Level::GetEXFORAngularDistributions(double Emin,double Ema
 	}
 	if(TalysLibManager::Instance().GetEXFORSource()==1)
 	{
+		TalysLibManager *manager=TalysLibManager::GetPointer();
+		if(!manager->GetC4Flag())
+		{
+			if(GetIntegrityFactor()>=2)
+			{
+				fNucleus->fMotherNucleus->ReadC4();
+			}
+		}
 		if(GenerateHLink)
 		{
 			HyperlinksTMP.resize(0);
@@ -1141,7 +1149,7 @@ vector<TGraphErrors*> Level::GetEXFORAngularDistributions(double Emin,double Ema
 		for(unsigned int i=0;i<PointerToLevel->C4AngularData.size();i++)
 		{
 			//cout<<"C4AngularData[i].ProjectileEnergy/1e6 "<<C4AngularData[i].ProjectileEnergy/1e6<<"\n";
-			TalysLibManager *manager=TalysLibManager::GetPointer();
+			
 			bool Add=true;
 			if((manager->ThereAreIncludedSubentries())||(manager->ThereAreIncludedAuthors()))
 			{
