@@ -27,11 +27,15 @@ const char AngularMomentum[]={'s','p','d','f','g','h','i'};
 
 void CopyFileContentToBuffer(ifstream &t,string &buff)
 {
-	t.seekg(0, std::ios::end);
-	size_t SizeOfStr = t.tellg();
-	buff=string(SizeOfStr,' ');
-	t.seekg(0);
-	t.read(&buff[0], SizeOfStr); 
+	if(t.is_open())
+	{
+		t.seekg(0, std::ios::end);
+		size_t SizeOfStr = t.tellg();
+		buff=string(SizeOfStr,' ');
+		t.seekg(0);
+		t.read(&buff[0], SizeOfStr); 
+	}
+	
 }
 
 vector<string> GetListOfObjectNames(TFile *f)

@@ -52,8 +52,8 @@ vector<tuple<double, int, double, int, double>> lj() {
   int L = 2;
   double I_a = 0;
   vector<tuple<double, int, double, int, double>> a;
-  for (int l_alpha = 0; l_alpha < 4; l_alpha++) {
-    for (int l_beta = 0; l_beta < 4; l_beta++) {
+  for (int l_alpha = 0; l_alpha < 6; l_alpha++) {
+    for (int l_beta = 0; l_beta < 6; l_beta++) {
       if (pow(-1, l_alpha + l_beta) == -1) {
         continue;
       }

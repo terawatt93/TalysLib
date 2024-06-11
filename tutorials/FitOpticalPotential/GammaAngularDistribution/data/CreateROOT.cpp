@@ -64,13 +64,15 @@ TGraphErrors ScaleGammaGraph(TGraphErrors &gr)
 
 void CreateROOT()
 {
-	TGraphErrors Elastic=ReadFromFile("neutrons/tangra_2021_(n,n0)_14_1MeV_cm_int_15-50_norm.txt");
-	Elastic.SetName("Elastic");
-	TGraphErrors Inelastic=ReadFromFile("neutrons/tangra_2021_(n,n1)_14_1MeV_cm_int_15-50_norm.txt");
-	Inelastic.SetName("Inelastic");
+	//TGraphErrors Elastic=ReadFromFile("neutrons/tangra_2021_(n,n0)_14_1MeV_cm_int_15-50_norm.txt");
+	//TGraphErrors Inelastic=ReadFromFile("neutrons/tangra_2021_(n,n1)_14_1MeV_cm_int_15-50_norm.txt");
 	TFile f("gammas/CrossSection_c12_90perc_AngStep_5deg_fps_random.root");
 	TGraphErrors Gammas=*((TGraphErrors*)f.Get("Cross_section_for_Gamma"));
+	TGraphErrors Elastic=*((TGraphErrors*)f.Get("Cross_section_for_Elastic"));
+	TGraphErrors Inelastic=*((TGraphErrors*)f.Get("Cross_section_for_Inelastic_at_En_{1}=4.44_MeV"));
 	f.Close();
+	Inelastic.SetName("Inelastic");
+	Elastic.SetName("Elastic");
 	Gammas.SetName("Gamma");
 	TGraphErrors GammasNorm=ScaleGammaGraph(Gammas);
 

@@ -28,6 +28,7 @@ void ParAssignmentFunction(TalysFitterMT *TF,Nucleus *Nucl, vector<double> Param
 	Nucl->OMPN->PotentialKoning.Rso=Parameters[9];//r_SO
 	Nucl->OMPN->PotentialKoning.Aso=Parameters[10];//a_SO
 	Nucl->WriteOMPOrUseKoningN=2;
+	Nucl->NormInelastic1=Parameters[12];
 	char Col_type='R';//тип коллективности ядра "S", "R", "V", "A", см. 
 	//int LevelNumber=1;//номер уровня, для которого задаётся деформация
 	char Level_type='R';//тип коллективности уровня: "D", "R", "V"
@@ -52,6 +53,8 @@ void ParAssignmentFunction(TalysFitterMT *TF,Nucleus *Nucl, vector<double> Param
 	std::cout<<"Ad = "<<Nucl->OMPN->PotentialKoning.Ad<<"\n";//a_D
 	std::cout<<"Rso = "<<Nucl->OMPN->PotentialKoning.Rso<<"\n";//r_SO
 	std::cout<<"Aso = "<<Nucl->OMPN->PotentialKoning.Aso<<"\n";//a_SO 
+	std::cout<<"Def = "<<TF->Parameters[11]<<"\n";//a_SO 
+	std::cout<<"Norm = "<<TF->Parameters[12]<<"\n";//a_SO 
 }
 
 double GetEvaluationResult(double x_value,TalysFitterMT *PointetToTF,Nucleus *PointerToNucleus)//функция, возвращающая результат расчетов для данного значения x. Экспериментальные данные записаны в графике TalysFitterMT::GraphForMultiFit
@@ -67,6 +70,11 @@ double GetEvaluationResult(double x_value,TalysFitterMT *PointetToTF,Nucleus *Po
 	{
 		return 0;
 	}
+	Level* Lev2InCarbon=&(PointerToNucleus->FindProductByReaction("(n,n')")->Levels[1]);
+	if(!Lev2InCarbon->CalculatedAlternativeAdist)//если угловое распределение гамма не посчитано, то посчитать!
+	{
+		Lev2InCarbon->EvalAlternativeAdist();
+	}
 	if(GraphIterator==0)//Каждому графику соответствует номер, в данном коде нулевой график-упругое рассеяние, первый -неупругое на 4.4 МэВ
 	{
 		TGraph *Elastic=PointerToNucleus->GetElasticAngularDistribution("Total");
@@ -74,15 +82,13 @@ double GetEvaluationResult(double x_value,TalysFitterMT *PointetToTF,Nucleus *Po
 	}
 	else if(GraphIterator==1)
 	{
-		TGraph *INL4=PointerToNucleus->FindProductByReaction("(n,n')")->Levels[1].GetAngularDistribution("Total");
-		return INL4->Eval(x_value-CurrentOffset,0,"S");
+		//TGraph *INL4=PointerToNucleus->FindProductByReaction("(n,n')")->Levels[1].GetAngularDistribution("Total");
+		//return Lev2InCarbon->AlternativeAdist.Eval(x_value-CurrentOffset)*PointerToNucleus->NormInelastic1;
+		return Lev2InCarbon->AlternativeAdist.Eval(x_value-CurrentOffset);
+		//return INL4->Eval(x_value-CurrentOffset,0,"S");
 	}
 	//Расчеты Полины
-	Level* Lev2InCarbon=&(PointerToNucleus->FindProductByReaction("(n,n')")->Levels[1]);
-	if(!Lev2InCarbon->CalculatedAlternativeAdist)//если угловое распределение гамма не посчитано, то посчитать!
-	{
-		Lev2InCarbon->EvalAlternativeAdist();
-	}
+
 	if(GraphIterator==2)//предполагаем, что под этим номером стоит угловое распределение гамма
 	{
 		//return Lev2InCarbon->Gammas[0].TalysAngularDistribution.Eval(x_value-CurrentOffset)*Lev2InCarbon->Gammas[0].TalysCrossSection/(4*3.1416);
@@ -110,7 +116,7 @@ void MultiFitMT()
 	TFile fData("data/Data.root");
 	TGraphErrors grElastic=*((TGraphErrors*)fData.Get("Elastic"));
 	TGraphErrors grInelastic=*((TGraphErrors*)fData.Get("Inelastic"));
-	TGraphErrors grGamma=*((TGraphErrors*)fData.Get("Gamma_Norm"));
+	TGraphErrors grGamma=*((TGraphErrors*)fData.Get("Gamma"));
 	fData.Close();
 	
 	TalysLibManager::Instance().SetC4Flag(false);
@@ -121,13 +127,14 @@ void MultiFitMT()
 	tf->SetParameter(2,tf->Nuclide.OMPN->PotentialKoning.d1,"W_{D}",0.1,0,10);
 	tf->SetParameter(3,tf->Nuclide.OMPN->PotentialKoning.vso1,"V_{SO}",0.1,-1,10);
 	tf->SetParameter(4,tf->Nuclide.OMPN->PotentialKoning.wso1,"W_{SO}",0.01,0,10);	
-	tf->SetParameter(5,tf->Nuclide.OMPN->PotentialKoning.Rv,"r_{V}",0.001,0.5,2);
-	tf->SetParameter(6,tf->Nuclide.OMPN->PotentialKoning.Av,"a_{V}",0.001,0.1,2);
-	tf->SetParameter(7,tf->Nuclide.OMPN->PotentialKoning.Rd,"r_{D}",0.001,0.5,2);
-	tf->SetParameter(8,tf->Nuclide.OMPN->PotentialKoning.Ad,"a_{D}",0.001,0.1,2);
-	tf->SetParameter(9,tf->Nuclide.OMPN->PotentialKoning.Rso,"r_{SO}",0.001,0.5,2);
-	tf->SetParameter(10,tf->Nuclide.OMPN->PotentialKoning.Aso,"a_{SO}",0.001,0.1,2);
-	tf->SetParameter(11,-0.62,"#beta_{2}",0.001,-1,1);//это деформация, beta_2
+	tf->SetParameter(5,tf->Nuclide.OMPN->PotentialKoning.Rv,"r_{V}",0.005,0.5,2);
+	tf->SetParameter(6,tf->Nuclide.OMPN->PotentialKoning.Av,"a_{V}",0.005,0.1,2);
+	tf->SetParameter(7,tf->Nuclide.OMPN->PotentialKoning.Rd,"r_{D}",0.005,0.5,2);
+	tf->SetParameter(8,tf->Nuclide.OMPN->PotentialKoning.Ad,"a_{D}",0.005,0.1,2);
+	tf->SetParameter(9,tf->Nuclide.OMPN->PotentialKoning.Rso,"r_{SO}",0.005,0.5,2);
+	tf->SetParameter(10,tf->Nuclide.OMPN->PotentialKoning.Aso,"a_{SO}",0.005,0.1,2);
+	tf->SetParameter(11,-0.62,"#beta_{2}",0.005,-1,1);//это деформация, beta_2
+	tf->SetParameter(12,30,"norm",0.1,1,50);// нормировка функции от Полины
 	tf->log<<"\n";
 	tf->ParAssignmentFunction=ParAssignmentFunction;
 	tf->GetEvaluationResult=GetEvaluationResult;
