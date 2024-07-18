@@ -28,6 +28,7 @@
 #include "ENDFReader/EXFOR.hh"
 #include "SMatrix/SMatrix.hh"
 #include "C4Reader/C4.hh"
+#include "C4Reader/C5.hh"
 
 #include "nlohmann/json.hpp"//нужно для работы с json - объектами, которые хранятся в виде string
 
@@ -438,6 +439,15 @@ class GammaTransitionData:public TObject
 class GammaTransition:public GammaTransitionData
 {
 	public:
+	
+	//EXFOR
+	vector<EnergyDistribution*> C5EnergyDistribution;
+	vector<AngularDistribution*> C5AngularDistribution;
+	
+	vector<TGraphErrors*> GetEnergyDistributionGraph(double Emin, double Emax);
+	
+	//EXFOR
+	
 	//float Energy,EnergyErr,Intensity,CrossSection,E_in,Tolerancy,Rel_Cs,TalysCrossSection, TalysE_i,TalysE_f, TalysJP_i,TalysJP_f,TalysMultipolarity;
 	TGraph CSGraph, AdistENDF;
 	//Полина!
@@ -594,6 +604,14 @@ class Level:public LevelData
 	int Number;
 	vector <EXFORTable> EXFORAngularDistributions;
 	vector <EXFORTable> EXFORCrossSections;
+	
+	//EXFOR
+	vector<EnergyDistribution*> C5EnergyDistribution;
+	vector<AngularDistribution*> C5AngularDistribution;
+	vector<TGraphErrors*> GetEnergyDistributionGraph(double Emin, double Emax);
+	
+	//EXFOR
+	
 	list<TGraph> GeneratedGraphsList;
 	//Полина!
 	TF1 AlternativeAdist;
@@ -759,6 +777,20 @@ class NucleusData:public TObject
 class Nucleus:public NucleusData
 {
 	public:
+	
+	//EXFOR
+	
+	C5Manager c5_manager;
+	
+	void AssignC5ToLevel();
+	void AssignC5EnergyDistributionToLevel(SubentData subent);
+	void AssignC5AngularDistributionToLevel(SubentData subent);	
+	
+	vector<EnergyDistribution*> C5EnergyDistribution();
+	vector<AngularDistribution*> C5AngularDistribution();
+	
+	//EXFOR
+	
 	bool UseEnergyGrid=false;
 	bool PlottedADist=false;
 	bool PlottedADist2D=false;
@@ -1174,7 +1206,10 @@ class SampleInformation:public TObject //класс, хранящий инфор
 	void GetPosition(double &PositionX, double &PositionY, double &PositionZ);
 	ClassDef(SampleInformation, 1);
 	private:
-	using TObject::GetName;
+	using TObject::GetName
+	
+	
+	;
 };
 
 

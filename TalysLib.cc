@@ -1,6 +1,5 @@
 #include "TalysLib.hh"
 #include <sys/stat.h>
-
 #include <bits/stdc++.h>
 #include <cstring>
 #include <algorithm>
@@ -26,6 +25,7 @@
 #include "ENDFReader/ENDFLib.cpp"
 #include "ENDFReader/EXFOR.cpp"
 #include "C4Reader/C4.cpp"
+#include "C4Reader/C5.cpp"
 #include "SMatrix/SMatrix.cpp"
 
 GammaTransition* GetBestTransitionFromVector(float Energy, float Tolerancy,vector<Nucleus> &Nuclei)
