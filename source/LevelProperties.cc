@@ -1070,6 +1070,7 @@ TGraph* Level::GetAngularDistributionAtEnergy(float PrEnergy,string type,string 
 	}
 	return 0;
 }
+
 vector<TGraphErrors*> Level::GetEXFORAngularDistributions(double Emin,double Emax, bool GenerateHLink)
 {
 	vector<TGraphErrors*> result;
@@ -1471,3 +1472,33 @@ int Level::GetMT()
 	}
 	return 0;
 }
+
+vector<TGraphErrors*> Level:: GetEnergyDistributionGraph(double Emin, double Emax)
+{
+	vector<TGraphErrors*> result;
+	for(unsigned int j=0;j<C5EnergyDistribution.size();j++)
+	{
+		bool InRange=false;
+		for(int i=0;i<C5EnergyDistribution[j]->GetN();i++)
+		{
+			if(C5EnergyDistribution[j]->GetPointX(i) >= Emin && C5EnergyDistribution[j]->GetPointX(i) <= Emax)
+			{
+				InRange=true;
+				break;
+			}
+		}
+		if(InRange)
+		{
+			result.push_back(C5EnergyDistribution[j]);
+		}
+		
+	}
+	return result;
+} 
+/*
+vector<TGraphErrors*> Level:: GetAngularDistributionGraph(double Emin, double Emax)
+{
+	
+} 
+*/
+
