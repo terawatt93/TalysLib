@@ -15,7 +15,7 @@ void strip(string &str)
 		++end;
 	str = string(begin, end.base());
 }
-
+/*
 multimap<double, C5Row*> SubentData::GroupByData(int col_num)
 {
 	multimap<double, C5Row*> pair;
@@ -25,6 +25,30 @@ multimap<double, C5Row*> SubentData::GroupByData(int col_num)
 		Keys.insert(DataTable[i]->Row[col_num]);
 	}
 	return pair;
+}
+*/
+
+multimap< double, C5Row* > SubentData::GroupEnergyDistribution()
+{
+	multimap< double, C5Row* > map;
+	for(int i=0; i<DataTable.size(); i++)
+	{
+		map.insert(pair<double, C5Row*>(DataTable[i]->Row[4], DataTable[i]));
+		ED_keys.insert(DataTable[i]->Row[4]);
+	}
+	return map;
+}
+
+multimap< pair<double, double>, C5Row* > SubentData::GroupAngularDistribution()
+{
+	multimap< pair<double, double>, C5Row* > map;
+	for(int i=0; i<DataTable.size(); i++)
+	{
+		pair<double, double> AD_pair = make_pair(DataTable[i]->Row[4], DataTable[i]->Row[2]);
+		map.insert(pair<pair<double, double>, C5Row*>(make_pair(AD_pair, DataTable[i])));
+		AD_keys.insert(AD_pair);
+	}
+	return map;
 }
 
 void EntryData::GetAuthors(json &authors)
@@ -275,10 +299,14 @@ void C5Manager::ExtractData(string SubentID, string Quant, vector<string> SF, in
 void C5Manager::GetC5EnergyDistribution(multimap<double, C5Row*> table, double key)
 {
 	EnergyDistribution ED;
+	
+	auto itr = table.begin();
+	ED.fEntry = itr->second->fSubent->fEntry;
+	ED.fSubent = itr->second->fSubent;
+	
 	for(auto[itr, end] = table.equal_range(key); itr!=end; itr++)
 	{
 		int N = ED.GetN();
-		ED.fEntry = itr->second->fSubent->fEntry;
 		double y = itr->second->Row[0]*1e3;
 		double dy = itr->second->Row[1]*1e3;
 		double En = itr->second->Row[2]/1e6;
@@ -289,19 +317,38 @@ void C5Manager::GetC5EnergyDistribution(multimap<double, C5Row*> table, double k
 	ED_vec.push_back(ED);
 }
 
-void C5Manager::GetC5AngularDistribution(multimap<double, C5Row*> table, double key)
-{
+void C5Manager::GetC5AngularDistribution(multimap<pair<double, double>, C5Row*> table, pair<double, double> key)
+{	
 	AngularDistribution AD;
+	
+	auto itr = table.begin();
+	AD.fEntry = itr->second->fSubent->fEntry;
+	AD.fSubent = itr->second->fSubent;
+	string x3_name = itr->second->fSubent->col_names[1];
+	
 	for(auto[itr, end] = table.equal_range(key); itr!=end; ++itr)
 	{
 		int N = AD.GetN();
-		AD.fEntry = itr->second->fSubent->fEntry;
 		double y = itr->second->Row[0]*1e3;
 		double dy = itr->second->Row[1]*1e3;
-		double En = itr->second->Row[2]/1e6;
-		double dEn = itr->second->Row[3]/1e6; 
-		AD.SetPoint(N, En, y);
-		AD.SetPointError(N, dEn, dy);						
+		double Angle = itr->second->Row[6];
+		double dAngle = itr->second->Row[7];
+		
+		if(x3_name == "Angle: cosine")
+		{
+			Angle = acos(Angle)/3.1416*180;
+			dAngle = abs(acos(Angle+dAngle)-acos(Angle-dAngle))/3.1416*180;
+		}
+		/*
+		else if(x3_name == "Anngle: q (momentum transfer)")
+		{
+			
+		} 
+		*/
+		
+		AD.SetPoint(N, Angle, y);
+		AD.SetPointError(N, dAngle, dy);	
+		AD.En = key.second/1e6;				
 	}
 	AD_vec.push_back(AD);
 }
