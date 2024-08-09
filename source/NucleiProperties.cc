@@ -3072,8 +3072,8 @@ void Nucleus::AssignC5EnergyDistributionToLevel(SubentData subent)
 {
 	if(subent.SF[3] == "0-G-0")
 	{
-		auto table = subent.GroupByData(4);
-		for(double E2: subent.Keys)
+		auto table = subent.GroupEnergyDistribution();
+		for(double E2: subent.ED_keys)
 		{
 			if(subent.col_names[2] == "Secondary energy: particle energy")
 			{
@@ -3097,8 +3097,8 @@ void Nucleus::AssignC5EnergyDistributionToLevel(SubentData subent)
 			{
 				if(subent.SF[6] == "G")
 				{
-					auto table = subent.GroupByData(4);
-					for(double E2: subent.Keys)
+					auto table = subent.GroupEnergyDistribution();
+					for(double E2: subent.ED_keys)
 					{
 						if(subent.col_names[2] == "Secondary energy: particle energy")
 						{
@@ -3129,10 +3129,10 @@ void Nucleus::AssignC5EnergyDistributionToLevel(SubentData subent)
 					}
 					
 				}
-				if(subent.SF[2] != "G" && subent.SF[2] != "SCT" && subent.SF[2] != "NON")
+				else if(subent.SF[2] != "G" && subent.SF[2] != "SCT" && subent.SF[2] != "NON")
 				{
-					auto table = subent.GroupByData(4);
-					for(double E2: subent.Keys)
+					auto table = subent.GroupEnergyDistribution();
+					for(double E2: subent.ED_keys)
 					{
 						if(subent.col_names[2] == "Secondary energy: level energy")
 						{
@@ -3193,13 +3193,13 @@ void Nucleus::AssignC5AngularDistributionToLevel(SubentData subent)
 {
 	if(subent.SF[3] == "0-G-0")
 	{
-		auto table = subent.GroupByData(4);
-		for(double E2: subent.Keys)
+		auto table = subent.GroupAngularDistribution();
+		for(pair<double, double> key: subent.AD_keys)
 		{
 			if(subent.col_names[2] == "Secondary energy: particle energy")
 			{
-				auto lvl = GetBestTransition(E2/1e3,100);
-				c5_manager.GetC5AngularDistribution(table, E2);
+				auto lvl = GetBestTransition(key.first/1e3,100);
+				c5_manager.GetC5AngularDistribution(table, key);
 				lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());
 			}
 			/*
@@ -3218,23 +3218,23 @@ void Nucleus::AssignC5AngularDistributionToLevel(SubentData subent)
 			{
 				if(subent.SF[6] == "G")
 				{
-					auto table = subent.GroupByData(4);
-					for(double E2: subent.Keys)
+					auto table = subent.GroupAngularDistribution();
+					for(pair<double, double> key: subent.AD_keys)
 					{
 						if(subent.col_names[2] == "Secondary energy: particle energy")
 						{
-							auto lvl = product.GetBestTransition(E2/1e3,100);
-							c5_manager.GetC5AngularDistribution(table, E2);
+							auto lvl = product.GetBestTransition(key.first/1e3,100);
+							c5_manager.GetC5AngularDistribution(table, key);
 							lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());							
 						}
 						else if(subent.col_names[2] == "Secondary energy: level energy")
 						{
-							auto search = table.find(E2);
+							auto search = table.find(key);
 							json cdat = search->second->cdat;
 							if(cdat.contains("ilv")) // Если указан номер уровня значит это гамма переход с этого уровня в основное состояние
 							{
-								auto lvl = product.GetBestTransition(E2/1e3, 100);
-								c5_manager.GetC5AngularDistribution(table, E2);
+								auto lvl = product.GetBestTransition(key.first/1e3, 100);
+								c5_manager.GetC5AngularDistribution(table, key);
 								lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());
 							}
 						}
@@ -3246,19 +3246,19 @@ void Nucleus::AssignC5AngularDistributionToLevel(SubentData subent)
 						*/
 					}
 				}
-				if(subent.SF[2] != "G" && subent.SF[2] != "SCT" && subent.SF[2] != "NON") //как то учесть N,SCT и N,NON. пока уберем.
+				else if(subent.SF[2] != "G" && subent.SF[2] != "SCT" && subent.SF[2] != "NON") //как то учесть N,SCT и N,NON. пока уберем.
 				{
-					auto table = subent.GroupByData(4);
-					for(double E2: subent.Keys)
+					auto table = subent.GroupAngularDistribution();
+					for(pair<double, double> key: subent.AD_keys)
 					{
 						if(subent.col_names[2] == "Secondary energy: level energy")
 						{
-							auto search = table.find(E2);
+							auto search = table.find(key);
 							json cdat = search->second->cdat;
 							if(cdat.contains("ilv"))
 							{
 								auto lvl = product.FindLevelByNumber(cdat["ilv"].template get<int>());
-								c5_manager.GetC5AngularDistribution(table, E2);
+								c5_manager.GetC5AngularDistribution(table, key);
 								lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());
 							}
 							else if(cdat.contains("ilvm"))
@@ -3268,21 +3268,21 @@ void Nucleus::AssignC5AngularDistributionToLevel(SubentData subent)
 								for(int n=lvl_min; n<lvl_max+1;n++)
 								{
 									auto lvl = product.FindLevelByNumber(n);
-									c5_manager.GetC5AngularDistribution(table, E2);
+									c5_manager.GetC5AngularDistribution(table, key);
 									lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());
 								}
 							}
 							else
 							{
-								auto lvl = product.FindLevelByEnergy(E2/1e3, 100);
-								c5_manager.GetC5AngularDistribution(table, E2);
+								auto lvl = product.FindLevelByEnergy(key.first/1e3, 100);
+								c5_manager.GetC5AngularDistribution(table, key);
 								lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());
 							}
 						}
 						else if(subent.col_names[2] == "Secondary energy: level number") 
 						{
-							auto lvl = product.FindLevelByNumber(E2);
-							c5_manager.GetC5AngularDistribution(table, E2);
+							auto lvl = product.FindLevelByNumber(key.first);
+							c5_manager.GetC5AngularDistribution(table, key);
 							lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());
 						}
 						/*
