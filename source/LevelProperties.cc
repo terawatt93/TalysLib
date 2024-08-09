@@ -1473,7 +1473,7 @@ int Level::GetMT()
 	return 0;
 }
 
-vector<TGraphErrors*> Level:: GetEnergyDistributionGraph(double Emin, double Emax)
+vector<TGraphErrors*> Level::GetEnergyDistributionGraph(double Emin, double Emax)
 {
 	vector<TGraphErrors*> result;
 	for(unsigned int j=0;j<C5EnergyDistribution.size();j++)
@@ -1495,10 +1495,19 @@ vector<TGraphErrors*> Level:: GetEnergyDistributionGraph(double Emin, double Ema
 	}
 	return result;
 } 
-/*
-vector<TGraphErrors*> Level:: GetAngularDistributionGraph(double Emin, double Emax)
+
+vector<TGraphErrors*> Level::GetAngularDistributionGraph(double Emin, double Emax)
 {
-	
+	vector<TGraphErrors*> result;
+	for(unsigned int i=0;i<C5AngularDistribution.size();i++)
+	{
+		if(C5AngularDistribution[i]->En >= Emin && C5AngularDistribution[i]->En <= Emax)
+		{
+			result.push_back(C5AngularDistribution[i]);
+		}
+	}
+	return result;
 } 
-*/
+
+
 

@@ -459,7 +459,7 @@ TGraph* GammaTransition::GetENDFAngularDistribution()
 	return &AdistENDF;
 }
 
-vector<TGraphErrors*> GammaTransition:: GetEnergyDistributionGraph(double Emin, double Emax)
+vector<TGraphErrors*> GammaTransition::GetEnergyDistributionGraph(double Emin, double Emax)
 {
 	vector<TGraphErrors*> result;
 	for(unsigned int j=0;j<C5EnergyDistribution.size();j++)
@@ -478,6 +478,19 @@ vector<TGraphErrors*> GammaTransition:: GetEnergyDistributionGraph(double Emin, 
 			result.push_back(C5EnergyDistribution[j]);
 		}
 		
+	}
+	return result;
+} 
+
+vector<TGraphErrors*> GammaTransition::GetAngularDistributionGraph(double Emin, double Emax)
+{
+	vector<TGraphErrors*> result;
+	for(unsigned int i=0;i<C5AngularDistribution.size();i++)
+	{
+		if(C5AngularDistribution[i]->En >= Emin && C5AngularDistribution[i]->En <= Emax)
+		{
+			result.push_back(C5AngularDistribution[i]);
+		}
 	}
 	return result;
 } 

@@ -445,6 +445,7 @@ class GammaTransition:public GammaTransitionData
 	vector<AngularDistribution*> C5AngularDistribution;
 	
 	vector<TGraphErrors*> GetEnergyDistributionGraph(double Emin, double Emax);
+	vector<TGraphErrors*> GetAngularDistributionGraph(double Emin, double Emax);
 	
 	//EXFOR
 	
@@ -609,6 +610,7 @@ class Level:public LevelData
 	vector<EnergyDistribution*> C5EnergyDistribution;
 	vector<AngularDistribution*> C5AngularDistribution;
 	vector<TGraphErrors*> GetEnergyDistributionGraph(double Emin, double Emax);
+	vector<TGraphErrors*> GetAngularDistributionGraph(double Emin, double Emax);
 	
 	//EXFOR
 	
