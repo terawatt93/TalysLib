@@ -1324,6 +1324,15 @@ void Nucleus::GenerateEnergyGrid(float min, float step, float max)
 		CurrE+=step;
 	}
 }
+
+void Nucleus::SetEnergyGrid(vector<float> &grid)
+{
+	EnergyGrid.resize(0);
+	UseEnergyGrid=true;
+	EnergyGrid=grid;
+	sort( EnergyGrid.begin(), EnergyGrid.end() );
+}
+
 void Nucleus::GenerateEnergyGrid(vector<TGraphErrors*> Data)
 {
 	UseEnergyGrid=true;

@@ -816,6 +816,7 @@ class Nucleus:public NucleusData
 	void SortingLevels();
 	void GenerateEnergyGrid(float min, float step, float max);
 	void GenerateEnergyGrid(vector<TGraphErrors*> Data);//в функцию передается вектор указателей на TGraphErrors, которые на самом деле C4Data
+	void SetEnergyGrid(vector<float> &grid);
 	Nucleus* FindProductByReaction(string reaction);
 	Nucleus* FindProductByName(string _Name);
 	Nucleus* FindProductByMT(int MT);
@@ -1023,6 +1024,7 @@ class TalysFitterMT
 	vector<string> ParNames;
 	vector<double> Offsets;
 	TGraphErrors GraphForMultiFit;
+	
 	void AddToGraphForMultiFit(TGraphErrors *gr, double Mv);
 	void AddToGraphForMultiFit(TGraph *gr, double Mv);
 	void GenerateGraphForMultiFit(vector<TObject*> &PointersToGraphs,vector<double> &_Offsets);
