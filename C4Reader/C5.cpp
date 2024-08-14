@@ -15,18 +15,29 @@ void strip(string &str)
 		++end;
 	str = string(begin, end.base());
 }
-/*
-multimap<double, C5Row*> SubentData::GroupByData(int col_num)
+
+multimap< double, C5Row* > SubentData::GroupByOneColumn(int col_num)
 {
-	multimap<double, C5Row*> pair;
+	multimap< double, C5Row* > map;
 	for(int i=0; i<DataTable.size(); i++)
 	{
-		pair.insert(std::pair<double,C5Row*>(DataTable[i]->Row[col_num], DataTable[i]));
-		Keys.insert(DataTable[i]->Row[col_num]);
+		map.insert(pair<double, C5Row*>(DataTable[i]->Row[col_num], DataTable[i]));
+		Keys1.insert(DataTable[i]->Row[col_num]);
 	}
-	return pair;
+	return map;
 }
-*/
+
+multimap< pair<double, double>, C5Row* > SubentData::GroupByTwoColumns(int col_num1, int col_num2)
+{
+	multimap< pair<double, double>, C5Row* > map;
+	for(int i=0; i<DataTable.size(); i++)
+	{
+		pair<double, double> key_pair = make_pair(DataTable[i]->Row[col_num1], DataTable[i]->Row[col_num2]);
+		map.insert(pair<pair<double, double>, C5Row*>(make_pair(key_pair, DataTable[i])));
+		Keys2.insert(key_pair);
+	}
+	return map;
+}
 
 multimap< double, C5Row* > SubentData::GroupEnergyDistribution()
 {
@@ -317,38 +328,25 @@ void C5Manager::GetC5EnergyDistribution(multimap<double, C5Row*> table, double k
 	ED_vec.push_back(ED);
 }
 
-void C5Manager::GetC5AngularDistribution(multimap<pair<double, double>, C5Row*> table, pair<double, double> key)
+template<typename MapType, typename KeyType>
+void C5Manager::GetC5AngularDistribution(MapType table, KeyType key, int col_num)
 {	
 	AngularDistribution AD;
 	
 	auto itr = table.begin();
 	AD.fEntry = itr->second->fSubent->fEntry;
 	AD.fSubent = itr->second->fSubent;
-	string x3_name = itr->second->fSubent->col_names[1];
 	
 	for(auto[itr, end] = table.equal_range(key); itr!=end; ++itr)
 	{
 		int N = AD.GetN();
 		double y = itr->second->Row[0]*1e3;
 		double dy = itr->second->Row[1]*1e3;
-		double Angle = itr->second->Row[6];
-		double dAngle = itr->second->Row[7];
-		
-		if(x3_name == "Angle: cosine")
-		{
-			Angle = acos(Angle)/3.1416*180;
-			dAngle = abs(acos(Angle+dAngle)-acos(Angle-dAngle))/3.1416*180;
-		}
-		/*
-		else if(x3_name == "Anngle: q (momentum transfer)")
-		{
-			
-		} 
-		*/
-		
+		AD.En = itr->second->Row[2]/1e6;
+		double Angle = itr->second->Row[col_num];
+		double dAngle = itr->second->Row[col_num+1];
 		AD.SetPoint(N, Angle, y);
-		AD.SetPointError(N, dAngle, dy);	
-		AD.En = key.second/1e6;				
+		AD.SetPointError(N, dAngle, dy);				
 	}
 	AD_vec.push_back(AD);
 }

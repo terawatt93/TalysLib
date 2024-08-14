@@ -54,10 +54,14 @@ class SubentData: public TObject // класс хранящий информац
 	vector<string> col_names;
 	int zTarg, aTarg, zProd, aProd; 
 	vector<C5Row*> DataTable; // таблица из строк с5_dat
+	multimap<double, C5Row*> GroupByOneColumn(int col_num);
+	multimap< pair<double, double>, C5Row* > GroupByTwoColumns(int col_num1, int col_num2);
 	multimap<double, C5Row*> GroupEnergyDistribution();
 	multimap< pair<double, double>, C5Row* > GroupAngularDistribution();
 	set<double> ED_keys;
 	set<pair<double, double>> AD_keys;
+	set<double> Keys1;
+	set<pair<double, double>> Keys2;
 	EntryData* fEntry; // указатель на ентри которому принадлежит сабент
 	ClassDef(SubentData,1);
 };
@@ -111,7 +115,8 @@ class C5Manager: public TObject
 	void SearchSubent(string Target);
 	
 	void GetC5EnergyDistribution(multimap<double, C5Row*> table, double key);
-	void GetC5AngularDistribution(multimap<pair<double, double>, C5Row*> table, pair<double, double> key);
+	template<typename MapType, typename KeyType>
+	void GetC5AngularDistribution(MapType table, KeyType key, int col_num);
 
 	ClassDef(C5Manager,1);
 
