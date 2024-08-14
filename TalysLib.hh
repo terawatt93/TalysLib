@@ -787,6 +787,7 @@ class Nucleus:public NucleusData
 	void AssignC5ToLevel();
 	void AssignC5EnergyDistributionToLevel(SubentData subent);
 	void AssignC5AngularDistributionToLevel(SubentData subent);	
+	void AssignC5ElasticAngularDistribution(SubentData subent);
 	
 	vector<EnergyDistribution*> C5EnergyDistribution();
 	vector<AngularDistribution*> C5AngularDistribution();
