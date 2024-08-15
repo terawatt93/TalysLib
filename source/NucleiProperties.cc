@@ -3328,3 +3328,22 @@ void Nucleus::AssignC5ElasticAngularDistribution(SubentData subent)
 	}
 }
 
+vector<GammaTransition*> Nucleus::GetGammaTransitionsEDWithExforData()
+{
+	vector<GammaTransition*> result;
+	for(auto &level: Levels)
+	{
+		if(level.Gammas.size() != 0)
+		{
+			for(auto &transition: level.Gammas)
+			{
+				if(transition.C5EnergyDistribution.size() != 0)
+				{
+					result.push_back(&transition);
+				}
+			}
+		}
+	}
+	return result;
+}
+

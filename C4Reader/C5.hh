@@ -117,7 +117,7 @@ class C5Manager: public TObject
 	void GetC5EnergyDistribution(multimap<double, C5Row*> table, double key);
 	template<typename MapType, typename KeyType>
 	void GetC5AngularDistribution(MapType table, KeyType key, int col_num);
-
+	
 	ClassDef(C5Manager,1);
 
 };

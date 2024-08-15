@@ -792,6 +792,8 @@ class Nucleus:public NucleusData
 	vector<EnergyDistribution*> C5EnergyDistribution();
 	vector<AngularDistribution*> C5AngularDistribution();
 	
+	vector<GammaTransition*> GetGammaTransitionsEDWithExforData();
+	
 	//EXFOR
 	
 	bool UseEnergyGrid=false;
