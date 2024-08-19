@@ -288,6 +288,9 @@ TH1F *TLMaterial::GenerateGammaSpectrum(string DetectorType,TF1 *ResolutionFunct
 		{
 			TH1F hist_tmp=*h;
 			hist_tmp.Scale(GetMoleFraction(Nuclides[i]));
+			hist_tmp.SetName((Nuclides[i]->Name).c_str());
+			hist_tmp.SetTitle((Nuclides[i]->Name+"; E,keV; Counts").c_str());
+			GammaSpectraPerNuclei.push_back(hist_tmp);
 			if(GammaSpectrum.Integral()==0)
 			{
 				GammaSpectrum=hist_tmp;
@@ -298,6 +301,8 @@ TH1F *TLMaterial::GenerateGammaSpectrum(string DetectorType,TF1 *ResolutionFunct
 			}
 		}
 	}
+	GammaSpectrum.SetName((MaterialFormula+"_"+DetectorType).c_str());
+	GammaSpectrum.SetTitle((MaterialFormula+":"+DetectorType+";E, keV; Counts").c_str());
 	return &GammaSpectrum;
 }
 vector<GammaTransition*> TLMaterial::FindGammaTransitions(double Energy,double CrossSectionThreshold,double Tolerancy,bool UseAbundancy)

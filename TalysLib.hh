@@ -1119,6 +1119,7 @@ class TLMaterial:public TObject
 	vector<GammaTransition*> GetGammaTransitions(double CrossSectionThreshold=0,bool UseAbundancy=true);
 	vector<GammaTransition*> GetGammaTransitionsE(double EnergyThreshold=0,double CrossSectionThreshold=0,bool UseAbundancy=true);
 	vector<GammaTransition*> FindGammaTransitions(double Energy,double CrossSectionThreshold=0,double Tolerancy=1,bool UseAbundancy=true);
+	vector<TH1F> GammaSpectraPerNuclei;
 	TH1F GammaSpectrum;
 	TH1F* GenerateGammaSpectrum(string DetectorType="HPGe",TF1 *ResolutionFunction=0);
 	GammaTransition* GetMostIntenseGammaTransition();

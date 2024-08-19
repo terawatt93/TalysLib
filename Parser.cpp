@@ -1012,6 +1012,7 @@ void GenerateListOfElements(string composition, vector<string> &Elements, vector
 			p1=composition.find(Elements[i])+Elements[i].size();
 			p2=composition.find(Elements[i+1]);
 			Q_values.push_back(composition.substr(p1,p2-p1));
+			composition=composition.substr(p1);
 		}
 		if(i==Elements.size()-1)
 		{
@@ -1031,6 +1032,28 @@ void GenerateListOfElements(string composition, vector<string> &Elements, vector
 			Quantity.push_back(atoi(Q_values[i].c_str()));
 		}
 	}
+	vector<string> Elements_tmp;
+	vector<int> Quantity_tmp;
+	
+	for(unsigned int i=0;i<Elements.size();i++)
+	{
+		int Q=Quantity[i];
+		for(unsigned int j=i+1;j<Elements.size();j++)
+		{
+			if((Elements[i]==Elements[j])&&(Elements[i]!="*"))
+			{
+				Q+=Quantity[j];
+				Elements[j]="*";
+			}
+		}
+		if(Elements[i]!="*")
+		{
+			Elements_tmp.push_back(Elements[i]);
+			Quantity_tmp.push_back(Q);
+		}
+	}
+	Quantity=Quantity_tmp;
+	Elements=Elements_tmp;
 }
 double GetMolarMass(string Composition)
 {
