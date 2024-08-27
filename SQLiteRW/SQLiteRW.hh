@@ -21,6 +21,7 @@ class SQLRow:public TObject
 	string AsString();
 	string AsSQLString();
 	string AsUpdateString();
+	string GetValue(string Key);
 	int current_index_in=0;
 	int TotalContent=0;
 	int current_index_out=0;
@@ -28,6 +29,7 @@ class SQLRow:public TObject
 	int GetI(int index);
 	string GetS(int index);
 	void FromSQL(sqlite3_stmt* stmt);
+	ClassDef(SQLRow,1);
 };
 
 SQLRow &operator << (SQLRow &tx, double value);
@@ -54,6 +56,9 @@ class SQLiteRW:public TObject
 	void Insert();
 	void Update(string Condition);
 	bool getline(SQLRow &line);
+	void SetNullHandlingType(string Option="Empty str");//установить тип обработки NULL: "Empty str"-пустая строка (по-умолчанию), "NaNI" - NAN (целое), "NaNF" - NAN (дробное), "0I" - ноль (целый), "0F" - 0 (дробное) 
+	int NullHandlingType=0;
+	ClassDef(SQLiteRW,1);
 };
 
 SQLiteRW &operator << (SQLiteRW &tx, double value);

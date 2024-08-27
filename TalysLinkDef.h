@@ -48,4 +48,7 @@
 #pragma link C++ class ENDFAnalyser+;
 #pragma link C++ class SQLLib+;
 
+#pragma link C++ class SQLiteRW+;
+#pragma link C++ class SQLRow+;
+
 #endif

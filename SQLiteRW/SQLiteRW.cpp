@@ -1,4 +1,4 @@
-#include "SQLIteRW.hh"
+#include "SQLiteRW.hh"
 
 vector<string> SplitStr(string s, string delimiter)
 {
@@ -14,6 +14,31 @@ vector<string> SplitStr(string s, string delimiter)
 	if(s.size()>0)
 	result.push_back(s);
 	return result;
+}
+
+string SQLRow::GetValue(string Key)
+{
+	stringstream sstr;
+	for(unsigned int i=0;i<Headers.size();i++)
+	{
+		if(Headers[i]==Key)
+		{
+			if(Types[i]=='f')
+			{
+				sstr<<GetD(i);
+			}
+			if(Types[i]=='i')
+			{
+				sstr<<GetI(i);
+			}
+			if(Types[i]=='s')
+			{
+				sstr<<"\'"<<GetS(i)<<"\'";
+			}
+			return sstr.str();
+		}
+	}
+	return "";
 }
 
 string SQLRow::AsUpdateString()
@@ -243,6 +268,49 @@ void SQLRow::FromSQL(sqlite3_stmt* stmt)
 			TotalContent++;
 			Types+='s';
 		}
+		if(Type==5)
+		{
+			int NullHandlingType=0;
+			if(fBase)
+			{
+				NullHandlingType=fBase->NullHandlingType;
+			}
+			if(NullHandlingType==0)//пустая строка
+			{
+				Content_s.push_back(pair<int,string>(current_index_in,""));
+				current_index_in++;
+				TotalContent++;
+				Types+='s';
+			}
+			if(NullHandlingType==1)//NANI
+			{
+				Content_i.push_back(pair<int,int>(current_index_in,std::nan("")));
+				current_index_in++;
+				TotalContent++;
+				Types+='i';
+			}
+			if(NullHandlingType==2)//NANF
+			{
+				Content_d.push_back(pair<int,double>(current_index_in,std::nan("")));
+				current_index_in++;
+				TotalContent++;
+				Types+='f';
+			}
+			if(NullHandlingType==3)//0I
+			{
+				Content_i.push_back(pair<int,int>(current_index_in,0));
+				current_index_in++;
+				TotalContent++;
+				Types+='i';
+			}
+			if(NullHandlingType==4)//0F
+			{
+				Content_d.push_back(pair<int,double>(current_index_in,0));
+				current_index_in++;
+				TotalContent++;
+				Types+='f';
+			}
+		}
 	}
 }
 
@@ -324,7 +392,7 @@ void SQLiteRW::Insert()
 	TString Command;
 	for(unsigned int i=0;i<ToInsert.size();i++)
 	{
-		cout<<ToInsert[i].TotalContent<<"\n";
+		//cout<<ToInsert[i].TotalContent<<"\n";
 		if(ToInsert[i].TotalContent>0)
 		{
 			Command+=TString::Format("INSERT INTO %s(",CurrentTable.c_str());
@@ -343,7 +411,7 @@ void SQLiteRW::Insert()
 		}
 		
 	}
-	cout<<Command<<"\n";
+	//cout<<Command<<"\n";
 	rc = sqlite3_exec(db,Command.Data(), 0, 0, 0);
 }
 void SQLiteRW::Update(string Condition)
@@ -352,11 +420,26 @@ void SQLiteRW::Update(string Condition)
 	
 	for(unsigned int i=0;i<ToInsert.size();i++)
 	{
-	
 		if(Condition.find("UPDATE")==string::npos)
 		{
+			vector<string> Values=SplitStr(Condition,"{");
+			for(unsigned int j=0;j<Values.size();j++)
+			{
+				if(Values[j].find("}")!=string::npos)
+				{
+					TString Key=Values[j];
+					Key.ReplaceAll("}","");
+					Values[j]=ToInsert[i].GetValue(Key.Data());
+				}
+			}
+			Condition="";
+			for(unsigned int j=0;j<Values.size();j++)
+			{
+				Condition+=Values[j];
+			}
+			
 			Command<<TString::Format("UPDATE %s SET ",CurrentTable.c_str());
-			Command<<ToInsert[i].AsUpdateString;
+			Command<<ToInsert[i].AsUpdateString();
 			
 			if(Condition.size()>0)
 			{
@@ -364,12 +447,12 @@ void SQLiteRW::Update(string Condition)
 				cond.ReplaceAll("&&","AND");
 				cond.ReplaceAll("||","OR");
 				cond.ReplaceAll("! ","NOT");
-				Command+=" WHERE "+cond;
+				Command<<" WHERE "+cond;
 			}
 		}
-		Command+=";";
+		Command<<";";
 	}
-	cout<<"Command:"<<Command<<"\n";
+	rc = sqlite3_exec(db,(Command.str()).c_str(), 0, 0, 0);
 }
 SQLiteRW &operator << (SQLiteRW &tx, double value)
 {
@@ -428,7 +511,7 @@ vector<SQLRow> SQLiteRW::Select(string Condition)
 		}
 	}
 	Command+=";";
-	cout<<"Command:"<<Command<<"\n";
+	//cout<<"Command:"<<Command<<"\n";
 	sqlite3_stmt* stmt;
 	sqlite3_prepare_v2(db, Command.Data(),Command.Length(), &stmt, NULL);
 	bool done=false;
@@ -437,6 +520,7 @@ vector<SQLRow> SQLiteRW::Select(string Condition)
 		if(sqlite3_step (stmt)==SQLITE_ROW)
 		{
 			SQLRow r;
+			r.fBase=this;
 			r.FromSQL(stmt);
 			result.push_back(r);
 		}
@@ -453,15 +537,28 @@ void Test()
 	SQLiteRW rw;
 	rw.Open("test.db");
 	rw.SelectTable("test_table");
-	rw.CreateTable("test_d<double>;test_i<int>;test_s<string>");
+	rw.CreateTable("test_d<double>;test_i<int>;test_s<string>,test_n<string>");
 	//SQLRow r;
 	//r.Headers=rw.TabHeaders;
-	rw<<1.2<<2<<"a"<<"\n";
-	rw<<12.0<<23<<"ab"<<"\n";
+	rw<<gRandom->Uniform()<<2<<"a"<<"\n";
+	//rw<<12.0<<23<<"ab"<<"\n";
 	rw.Insert();
+	//rw.Update("test_s={test_s}");
 	rw.Close();
 	
 	rw.Open("test.db");
 	rw.SelectTable("test_table");
+}
+
+void TestRead()
+{
+	SQLiteRW rw;
+	rw.Open("test.db");
+	rw.SelectTable("test_table");
+	vector<SQLRow> lines=rw.Select("");
+	for(unsigned int i=0;i<lines.size();i++)
+	{
+		cout<<lines[i].AsString()<<"\n";
+	}
 }
 
