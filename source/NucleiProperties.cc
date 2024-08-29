@@ -296,7 +296,7 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 					GammaTransition gt;
 					gt.InitLevelNumber=lev.Number;
 					gt.FinalLevelNumber=FinalLevelNumber;
-					gt.Intensity=Branch;
+					gt.Branching=Branch;
 					if(Levels.size()>FinalLevelNumber)
 					{
 						gt.Energy=lev.Energy-Levels[FinalLevelNumber].Energy;
@@ -2656,27 +2656,54 @@ void Nucleus::SaveToXLSX(string filename)
 		xlsx<<"\n";
 	}
 	xlsx.GoToWorksheet("Gammas");
-	vector<GammaTransition*> gs=GetGammaTransitions();
-	xlsx<<"E_gamma"<<"E_i"<<"JPi"<<"E_f"<<"JPf"<<"Target"<<"Reaction"<<"Product"<<"CS"<<"\n";
-	for(unsigned int i=0;i<gs.size();i++)
+	
+	if(!InheritsFrom("Radionuclide"))
 	{
-		xlsx<<gs[i]->Energy<<gs[i]->TalysE_i<<gs[i]->TalysJP_i.GetLine()<<gs[i]->TalysE_f<<gs[i]->TalysJP_f.GetLine()<<gs[i]->fLevel->fNucleus->fMotherNucleus->Name<<gs[i]->fLevel->fNucleus->Reaction<<gs[i]->fLevel->fNucleus->Name<<gs[i]->TalysCrossSection<<"\n";
-	}
-	xlsx.GoToWorksheet("LevelExcitationCS");
-	xlsx<<"E_level"<<"JP"<<"Nucleus"<<"CSCompound"<<"CSDirect"<<"CSTotal"<<"\n";
-	for(unsigned int i=0;i<Products.size();i++)
-	{
-		for(unsigned int j=0;j<Products[i].Levels.size();j++)
+		vector<GammaTransition*> gs=GetGammaTransitions();
+		xlsx<<"E_gamma"<<"E_i"<<"JPi"<<"E_f"<<"JPf"<<"Target"<<"Reaction"<<"Product"<<"CS"<<"\n";
+		for(unsigned int i=0;i<gs.size();i++)
 		{
-			Level* l=&(Products[i].Levels[j]);
-			if((l->TalysCS>0)||(l->Energy==0))
+			xlsx<<gs[i]->Energy<<gs[i]->TalysE_i<<gs[i]->TalysJP_i.GetLine()<<gs[i]->TalysE_f<<gs[i]->TalysJP_f.GetLine()<<gs[i]->fLevel->fNucleus->fMotherNucleus->Name<<gs[i]->fLevel->fNucleus->Reaction<<gs[i]->fLevel->fNucleus->Name<<gs[i]->TalysCrossSection<<"\n";
+		}
+		xlsx.GoToWorksheet("LevelExcitationCS");
+		xlsx<<"E_level"<<"JP"<<"Nucleus"<<"CSCompound"<<"CSDirect"<<"CSTotal"<<"\n";
+		for(unsigned int i=0;i<Products.size();i++)
+		{
+			for(unsigned int j=0;j<Products[i].Levels.size();j++)
 			{
-				xlsx<<l->Energy<<l->TalysJP.GetLine()<<l->fNucleus->Name<<l->TalysCSCompound<<l->TalysCSDirect<<l->TalysCS<<"\n";
+				Level* l=&(Products[i].Levels[j]);
+				if((l->TalysCS>0)||(l->Energy==0))
+				{
+					xlsx<<l->Energy<<l->TalysJP.GetLine()<<l->fNucleus->Name<<l->TalysCSCompound<<l->TalysCSDirect<<l->TalysCS<<"\n";
+				}
+				
+			}
+			xlsx<<"\n";
+		}
+	}
+	else
+	{
+		vector<GammaTransition*> gs=((Radionuclide*)(this))->GetGammaTransitions();
+		xlsx<<"E_gamma"<<"E_i"<<"JPi"<<"E_f"<<"JPf"<<"Target"<<"Decay type"<<"Product"<<"Yeld (for parent)"<<"Yield (Total)"<<"\n";
+		for(unsigned int i=0;i<gs.size();i++)
+		{
+			if(gs[i]->Intensity>0)
+			{
+				xlsx<<gs[i]->Energy<<gs[i]->TalysE_i<<gs[i]->TalysJP_i.GetLine()<<gs[i]->TalysE_f<<gs[i]->TalysJP_f.GetLine()<<gs[i]->fLevel->fNucleus->fMotherNucleus->Name<<gs[i]->fLevel->fNucleus->Reaction<<gs[i]->fLevel->fNucleus->Name<<gs[i]->Intensity<<gs[i]->GetRelativeIntensity()<<"\n";
 			}
 			
+			/*cout<<"gs[i]->Energy "<<gs[i]->Energy<<"\n";
+			cout<<"gs[i]->TalysE_i "<<gs[i]->TalysE_i<<"\n";
+			cout<<"gs[i]->TalysJP_i.GetLine() "<<gs[i]->TalysJP_i.GetLine()<<"\n";
+			cout<<"gs[i]->TalysE_f<<gs[i]->TalysE_f "<<"\n";
+			cout<<"gs[i]->TalysJP_f.GetLine() "<<gs[i]->TalysJP_f.GetLine()<<"\n";
+			cout<<"gs[i]->fLevel->fNucleus->fMotherNucleus->Name "<<gs[i]->fLevel->fNucleus->fMotherNucleus->Name<<"\n";
+			cout<<"gs[i]->fLevel->fNucleus->Reaction "<<gs[i]->fLevel->fNucleus->Reaction<<"\n";
+			cout<<"gs[i]->fLevel->fNucleus->Name "<<gs[i]->fLevel->fNucleus->Name<<"\n";
+			cout<<"gs[i]->Intensity "<<gs[i]->Intensity<<"\n";*/
 		}
-		xlsx<<"\n";
 	}
+	
 	xlsx.GoToWorksheet("Deformations");
 	xlsx<<"E_level"<<"JP"<<"Nucleus"<<"LevelType"<<"CollType"<<"BandNo"<<"BandL"<<"NumberOfPhonons"<<"MagN"<<"Beta"<<"\n";
 	for(unsigned int i=0;i<Levels.size();i++)

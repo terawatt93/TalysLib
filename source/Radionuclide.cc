@@ -90,7 +90,7 @@ vector<GammaTransition*> Radionuclide::GetGammaTransitions(double E_thr,double I
 			GammaTransition* gt=&(Levels[i].Gammas[j]);
 			if(gt->Energy>E_thr)
 			{
-				if(gt->GetRelativeIntensity()>Int_thr)
+				if((gt->GetRelativeIntensity()>Int_thr)&&(gt->Intensity>0))
 				{
 					result.push_back(gt);
 				}
@@ -166,37 +166,39 @@ void Radionuclide::ReadGRDatabase()
 				string Origin=Substr[4];
 				int LevNumberI=atoi(Substr[6].c_str());
 				int LevNumberF=atoi(Substr[7].c_str());
-				GammaTransition gt;
+				GammaTransition *gt;
 				
 				Radionuclide *Nucl=FindProductByName(ConvertNuclName(Substr[5]));
+				gt=GetBestTransition(E_gamma,0.5);
 				if((Nucl)&&(E_gamma>0))
 				{
 					
-					if((LevNumberI>=0)&&(LevNumberF>=0))
+					if(gt&&(LevNumberI>=0)&&(LevNumberF>=0))
 					{
 						//cout<<"LevNumberF, LevNumberI:"<<LevNumberF<<" "<<LevNumberI<<"\n";
 						int NLevels=Nucl->Levels.size();
 						if((LevNumberI<NLevels)&&(((LevNumberF<NLevels)&&(LevNumberI>LevNumberF))||((LevNumberF==0)&&(LevNumberI==0))))
 						{
 							
-							gt.Energy=E_gamma;
-							gt.Origin=Origin;
-							gt.Intensity=Intensity;
-							Level *Li=&(Nucl->Levels[LevNumberI]);
-							Level *Lf=&(Nucl->Levels[LevNumberF]);
-							gt.fLevel=Li;
-							gt.fFinalLevel=Lf;
-							Li->Gammas.push_back(gt);
+							gt->Energy=E_gamma;
+							gt->Origin=Origin;
+							gt->Intensity=Intensity;
+							//Level *Li=&(Nucl->Levels[LevNumberI]);
+							//Level *Lf=&(Nucl->Levels[LevNumberF]);
+							//gt->fLevel=Li;
+							//gt->fFinalLevel=Lf;
+							//Li->Gammas.push_back(gt);
 						}
 					}
 					else
 					{
-						gt.fLevel=&(Nucl->Levels[0]);
-						gt.fFinalLevel=&(Nucl->Levels[0]);
-						gt.Energy=E_gamma;
-						gt.Origin=Origin;
-						gt.Intensity=Intensity;
-						Nucl->Levels[0].Gammas.push_back(gt);
+						Nucl->Levels[0].Gammas.emplace_back();
+						gt=&(Nucl->Levels[0].Gammas[Nucl->Levels[0].Gammas.size()-1]);
+						gt->fLevel=&(Nucl->Levels[0]);
+						gt->fFinalLevel=&(Nucl->Levels[0]);
+						gt->Energy=E_gamma;
+						gt->Origin=Origin;
+						gt->Intensity=Intensity;
 					}
 				}
 			}

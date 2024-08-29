@@ -426,7 +426,7 @@ class GammaTransitionData:public TObject
 	GammaTransitionData():TObject(){ }
 	//float Energy=0,EnergyErr=0,Intensity=0,CrossSection=0,E_in=0,Tolerancy=0,Rel_Cs=0,TalysCrossSection=0, TalysE_i=0,TalysE_f=0;
 	//расширение для разных энергий
-	float Energy=0,EnergyErr=0,Intensity=0,CrossSection=0,E_in=0,Tolerancy=0,Rel_Cs=0,TalysCrossSection=0, TalysE_i=0,TalysE_f=0;
+	float Energy=0,EnergyErr=0,Branching=0,Intensity=0,CrossSection=0,E_in=0,Tolerancy=0,Rel_Cs=0,TalysCrossSection=0, TalysE_i=0,TalysE_f=0;
 	vector<float> TalysCrossSections;
 	vector<float> X_Values;
 	SpinParity TalysJP_i,TalysJP_f;
@@ -936,7 +936,7 @@ class Radionuclide:public Nucleus
 	public:
 	void ReadGRDatabase();
 	bool IsRead=false;
-	Radionuclide(string _Name):Nucleus(_Name) { ReadGRDatabase(); }
+	Radionuclide(string _Name):Nucleus(_Name) { ReadGRDatabase(); fMotherNucleus=this;}
 	Radionuclide():Nucleus() {  }
 	double BranchRatio=0;
 	double DecayConstant=0;
@@ -946,7 +946,7 @@ class Radionuclide:public Nucleus
 	void AssignPointers();
 	vector<GammaTransition*> GetGammaTransitions(double E_thr=0,double Int_thr=0);
 	Radionuclide* FindProductByName(string _Name);
-	Radionuclide* fMotherNucleus=0;//! 
+	//Nucleus* fMotherNucleus=0;//! 
 	ClassDef(Radionuclide, 1);
 };
 

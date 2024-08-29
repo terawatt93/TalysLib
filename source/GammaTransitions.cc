@@ -21,7 +21,7 @@
 }*/
 GammaTransition::GammaTransition(GammaTransitionData d)
 {
-	Energy=d.Energy; EnergyErr=d.EnergyErr; Intensity=d.Intensity; CrossSection=d.CrossSection; E_in=d.E_in; Tolerancy=d.Tolerancy;
+	Energy=d.Energy; EnergyErr=d.EnergyErr; Branching=d.Branching; Intensity=d.Intensity; CrossSection=d.CrossSection; E_in=d.E_in; Tolerancy=d.Tolerancy;
 	Rel_Cs=d.Rel_Cs; TalysCrossSection=d.TalysCrossSection; TalysE_i=d.TalysE_i; TalysE_f=d.TalysE_f;
 	TalysJP_i=d.TalysJP_i; TalysJP_f=d.TalysJP_f;
 	TalysMultipolarity=d.TalysMultipolarity;
@@ -43,9 +43,9 @@ bool GammaTransition::ReadTransition(string line,string ReadNuclName, float E_in
 		{
 			Energy=atof(line.substr(9,9).c_str());
 			EnergyErr=atof(line.substr(19,1).c_str());
-			Intensity=atof(line.substr(21,7).c_str());
+			Branching=atof(line.substr(21,7).c_str());
 			Multipolarity=line.substr(31,9);
-			if(Intensity>100)
+			if(Branching>100)
 			{
 				Intensity=0;
 			}
@@ -67,7 +67,7 @@ string GammaTransition::GetLine(string option)
 	}
 	if(option=="brief")
 	{
-		return (to_string(Energy)+" "+to_string(Intensity)+" "+to_string(CrossSection)+" "+to_string(TalysCrossSection));
+		return (to_string(Energy)+" "+to_string(Branching)+" "+to_string(CrossSection)+" "+to_string(TalysCrossSection));
 	}
 	else if(option=="full")
 	{
@@ -143,12 +143,12 @@ string GammaTransition::GetLine(string option)
 		return result;
 	}
 	
-	return ("E:"+to_string(Energy)+" Mult:"+Multipolarity+"Int:"+to_string(Intensity)+" CS:"+to_string(CrossSection)+" Talys:"+to_string(TalysCrossSection));
+	return ("E:"+to_string(Energy)+" Mult:"+Multipolarity+"Branch:"+to_string(Branching)+" CS:"+to_string(CrossSection)+" Talys:"+to_string(TalysCrossSection));
 }
-bool GammaTransition::CheckEnergy(float E,float Tolerancy,float intensity)
+bool GammaTransition::CheckEnergy(float E,float Tolerancy,float Branching_)
 {
 	this->Tolerancy=Tolerancy;
-	if((abs(Energy-E)<=Tolerancy)&&((Intensity>intensity)||(Intensity==0)))
+	if((abs(Energy-E)<=Tolerancy)&&((Branching>Branching_)||(Branching==0)))
 	{
 		return true;
 	}
@@ -183,12 +183,17 @@ double GammaTransition::GetRelativeIntensity()
 	double BranchRatio=1;
 	if(Nucl)
 	{
-		while((((Radionuclide*)Nucl->fMotherNucleus)->BranchRatio)>0)
-		{			
-		//	cout<<"GetRelativeIntensity():"<<Nucl->fMotherNucleus->Name<<" "<<Energy<<" "<<BranchRatio<<" "<<((Radionuclide*)Nucl->fMotherNucleus)->BranchRatio<<"\n";
-			Nucl=Nucl->fMotherNucleus;
-			BranchRatio=BranchRatio*Nucl->BranchRatio;
+		//while((((Radionuclide*)Nucl->fMotherNucleus)->BranchRatio)>0)
+		if(Nucl->fMotherNucleus)
+		{
+			while((((Radionuclide*)Nucl->fMotherNucleus)->BranchRatio)>0)
+			{			
+			//	cout<<"GetRelativeIntensity():"<<Nucl->fMotherNucleus->Name<<" "<<Energy<<" "<<BranchRatio<<" "<<((Radionuclide*)Nucl->fMotherNucleus)->BranchRatio<<"\n";
+				Nucl=(Radionuclide*)(Nucl->fMotherNucleus);
+				BranchRatio=BranchRatio*Nucl->BranchRatio;
+			}
 		}
+		
 	}
 	return Intensity*BranchRatio;
 }
