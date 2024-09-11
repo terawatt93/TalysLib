@@ -69,12 +69,15 @@ class SubentData: public TObject // класс хранящий информац
 class EntryData: public TObject // класс хранящий информацию о Entry EXFOR
 {
 	public:
-	string EntryID, FirstAuthor, Year, Title, DOI, Reference, Detector; // номер ентри, первый автор, год публикации, название, DOI, реф пока не знаю в каком виде добавить, детекторы
+	string EntryID, Year, Title, DOI, Reference; // номер ентри, первый автор, год публикации, название, DOI, реф пока не знаю в каком виде добавить, детекторы
+	vector<pair<string, string>> Detector; // Информация о детекторах. Val1 -- код детектора. Val2 -- текст описание.
+	vector<pair<string, string>> Method; // Информация об используемом методе. Val1 -- набор кодов. Val2 -- текст описание.
 	vector<string> Authors; // полный список авторов
 	vector<SubentData*> fSubentVec; // указатель на сабенты которые принадлежат данному ентри
 	void GetAuthors(json &authors); // json в string
 	void GetTitle(json &title); // json в string
 	void GetDetector(json &detectors); // json в string
+	void GetMethod(json &method);
 	ClassDef(EntryData,1);
 };
 
