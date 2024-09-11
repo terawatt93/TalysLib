@@ -68,7 +68,6 @@ void EntryData::GetAuthors(json &authors)
 	{
 		Authors.push_back(string(author["ini"]) + string(author["nam"]));
 	}
-	FirstAuthor = Authors[0];
 }
 
 void EntryData::GetTitle(json &title)
@@ -90,7 +89,11 @@ void EntryData::GetDetector(json &detectors)
 			
 		if(detector.contains("x4codes"))
 		{
-			x4code = string(detector["x4codes"][0]["hlp"]);
+			x4code = string(detector["x4codes"][0]["code"]);
+		}
+		else
+		{
+			x4code = "No info";
 		}
 			
 		if(detector.contains("x4freetext"))
@@ -102,8 +105,12 @@ void EntryData::GetDetector(json &detectors)
 				x4freetext += sub_str + " ";
 			}
 		}
-			
-		Detector += x4code + " " + x4freetext + "\n";
+		else
+		{
+			x4freetext = "No info";
+		}
+		
+		Detector.push_back(pair<string, string>(x4code, x4freetext)); 
 	}
 }
 
@@ -171,13 +178,13 @@ void C5Manager::SearchSubent(string Target) // эта функция выпол�
 
 void C5Manager::ExtractData(string SubentID, string Quant, vector<string> SF, int zTarg, int aTarg, int zProd, int aProd) // эта функция извлекает данные из x4pro
 {
-	//sqlite3 *db;
 	sqlite3_stmt *stmt;
 	string EntryID = SubentID.substr(0,5);
 	const char* extract_subent_query = "SELECT * FROM x4pro_c5dat WHERE DatasetID = ?";
 	const char* extract_columns_name = "SELECT expansion FROM x4pro_hdr WHERE DatasetID = ? AND typ = 'c' "; // идентифицируем колонки в x4pro_c5dat
 	const char* extract_entry_query =  "SELECT * FROM\n\
-										(SELECT SUBSTR(Subent,0,6) AS EntryID, json_extract(jx4z, '$.BIB.AUTHOR[0].x4codes'), json_extract(jx4z, '$.BIB.TITLE[0].x4freetext'), json_extract(jx4z, '$.BIB.DETECTOR')\n\
+										(SELECT SUBSTR(Subent,0,6) AS EntryID, json_extract(jx4z, '$.BIB.AUTHOR[0].x4codes'), json_extract(jx4z, '$.BIB.TITLE[0].x4freetext'),\n\
+										json_extract(jx4z, '$.BIB.DETECTOR'), json_extract(jx4z, '$.BIB.METHOD')\n\
 										FROM x4pro_x4z\n\
 										WHERE Subent = ?) AS a\n\
 										INNER JOIN\n\
@@ -188,8 +195,6 @@ void C5Manager::ExtractData(string SubentID, string Quant, vector<string> SF, in
 										// год, DOI извлекаются из Entry
 										// может быть нужно добавить reference, но пока не знаю в каком формате.
 	
-	//int connection = sqlite3_open(db_name.c_str(), &db);
-	
 	SubentData Subent;
 	Subent.SubentID = SubentID;
 	Subent.Quant = Quant;
@@ -199,6 +204,8 @@ void C5Manager::ExtractData(string SubentID, string Quant, vector<string> SF, in
 	Subent.zProd = zProd;
 	Subent.aProd = aProd;
 	Subents.push_back(Subent);
+	
+	// Считываем data table из x4pro_c5dat
 				
 	sqlite3_prepare_v2(db, extract_subent_query, -1, &stmt, 0);
 	if(connection == SQLITE_OK)
@@ -226,6 +233,8 @@ void C5Manager::ExtractData(string SubentID, string Quant, vector<string> SF, in
 	
 	sqlite3_finalize(stmt);
 	
+	// Считываем названия колонок из x4pro_hdr
+	
 	vector<string> col_names;
 	sqlite3_prepare_v2(db, extract_columns_name, -1, &stmt, 0);
 	if(connection == SQLITE_OK)
@@ -239,7 +248,8 @@ void C5Manager::ExtractData(string SubentID, string Quant, vector<string> SF, in
 	Subents.back().col_names = col_names;
 	
 	sqlite3_finalize(stmt);
-
+	
+	// Считываем разную информацию об entry из x4pro_x4z и ENTRY
 	
 	if(Entries.back().EntryID != EntryID)
 	{
@@ -255,42 +265,55 @@ void C5Manager::ExtractData(string SubentID, string Quant, vector<string> SF, in
 			
 			while(sqlite3_step(stmt) == SQLITE_ROW)
 			{
-				
 				if(sqlite3_column_type(stmt,1) != SQLITE_NULL)
 				{
 					json authors = json::parse((char*)sqlite3_column_text(stmt,1));
-					Entries.back().GetAuthors(authors); // заполняем vector<string> Authors и FirstAuthor
-				}
-				
-				if(sqlite3_column_type(stmt, 2) == SQLITE_NULL)
-				{
-					Entries.back().Title = "no title";
+					Entries.back().GetAuthors(authors); // заполняем vector<string> Authors 
 				}
 				else
+				{
+					Entries.back().Authors.push_back("No info");
+				}
+				
+				if(sqlite3_column_type(stmt, 2) != SQLITE_NULL)
 				{
 					json title = json::parse((char*)sqlite3_column_text(stmt,2));
 					Entries.back().GetTitle(title); // заполняем Title
 				}
-				
-				if(sqlite3_column_type(stmt, 3) == SQLITE_NULL) // sqlite не обрабатывает null если это текст
-				{
-					Entries.back().Detector = "no detector info";
-				}
 				else
+				{
+					Entries.back().Title = "No info";
+				}
+				
+				if(sqlite3_column_type(stmt, 3) != SQLITE_NULL) 
 				{
 					json detectors = json::parse((char*)sqlite3_column_text(stmt,3));
 					Entries.back().GetDetector(detectors); // заполняем Detector
 				}
-
-				Entries.back().Year = (char*)sqlite3_column_text(stmt,4); // год
-				
-				if(sqlite3_column_type(stmt, 5) == SQLITE_NULL)
+				else
 				{
-					Entries.back().DOI = "";
+					Entries.back().Detector.push_back(pair<string, string>("No info", "No info"));
+				}
+				/*
+				if(sqlite3_column_type(stmt, 4) != SQLITE_NULL)
+				{
+					json method = json::parse((char*)sqlite3_column_text(stmt,4)); 
+					Entries.back().GetMethod(method); // заполняем Method
 				}
 				else
 				{
-					Entries.back().DOI = (char*)sqlite3_column_text(stmt,5); // DOI
+					Entries.back().Method.push_back(pair<string, string>("No info", "No info"));
+				}
+				*/
+				Entries.back().Year = (char*)sqlite3_column_text(stmt,5); // год
+				
+				if(sqlite3_column_type(stmt, 6) != SQLITE_NULL)
+				{
+					Entries.back().DOI = (char*)sqlite3_column_text(stmt,6); // DOI
+				}
+				else
+				{
+					Entries.back().DOI = "No info";
 				}
 			}
 		}	

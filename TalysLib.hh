@@ -798,6 +798,11 @@ class Nucleus:public NucleusData
 	
 	//EXFOR
 	
+	// Talys input additional strings
+	
+	int maxband=0;
+	int maxrot=2;
+	
 	bool UseEnergyGrid=false;
 	bool PlottedADist=false;
 	bool PlottedADist2D=false;
