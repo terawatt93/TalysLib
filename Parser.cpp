@@ -351,6 +351,7 @@ int FindInVector(int element,vector<int> v)
 	}
 	return -1;
 }
+
 void ParseReaction(string reaction, string &Projectile, string &OutgoingParticle)
 {
 	TString ts(reaction.c_str());

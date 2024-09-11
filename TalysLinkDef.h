@@ -36,6 +36,13 @@
 #pragma link C++ class C4Container+;
 #pragma link C++ class C4Graph+;
 
+#pragma link C++ class C5Row+;
+#pragma link C++ class SubentData+;
+#pragma link C++ class EntryData+;
+#pragma link C++ class C5Manager+;
+#pragma link C++ class EnergyDistribution+;
+#pragma link C++ class AngularDistribution+;
+
 #pragma link C++ class ENDFDescription+;
 #pragma link C++ class ENDFContentEntry+;
 #pragma link C++ class ENDFContent+;

@@ -1548,7 +1548,10 @@ void Nucleus::GenerateProducts(string _Projectile)
 	{
 		system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
 	}*/
+	string target = Element + "-" + to_string(A); 
+	c5_manager.SearchSubent(target);
 }
+
 
 void Nucleus::ReadC4()
 {
@@ -3071,3 +3074,312 @@ Nucleus* Nucleus::FindProductByMT(int MT)
 	NuclResult->AssignPointers();
 	return *NuclResult;
 }*/
+/*
+Nucleus* Nucleus::SearchProductForC5(int aProd, int zProd)
+{
+	for(unsigned int i=0; i<Products.size();i++)
+	{
+		if(Products[i].A == aProd && Products[i].Z == zProd)
+		{
+			return &Products[i];
+		}
+			
+	}
+}
+*/
+void Nucleus::AssignC5ToLevel()
+{
+	for(SubentData &subent: c5_manager.Subents)
+	{
+		// CSP 
+		if(subent.Quant == "CSP" && subent.SF[4] == "PAR" && subent.SF[5] == "SIG" && (subent.SF[6] == "" || subent.SF[6] == "G") && subent.SF[7] == ""  && subent.SF[8] == "" && subent.col_names.size() == 3)
+		{
+			//cout << "CSP" << "\n";
+			AssignC5EnergyDistributionToLevel(subent);
+		}
+		// DAP
+		else if(subent.Quant == "DAP" && subent.SF[4] == "PAR" && subent.SF[5] == "DA" && (subent.SF[6] == "" || subent.SF[6] == "G") && subent.SF[7] == ""  && subent.SF[8] == "" && subent.col_names.size() == 4)
+		{
+			//cout << "DAP" << "\n";
+			AssignC5AngularDistributionToLevel(subent);
+		}
+		// DA
+		else if(subent.Quant == "DA" && subent.SF[4] == "" && subent.SF[6] == "" && subent.SF[7] == ""  && subent.SF[8] == "")
+		{
+			AssignC5ElasticAngularDistribution(subent);
+		}
+		
+	}
+}
+
+void Nucleus::AssignC5EnergyDistributionToLevel(SubentData subent)
+{
+	if(subent.SF[3] == "0-G-0")
+	{
+		auto table = subent.GroupEnergyDistribution();
+		for(double E2: subent.ED_keys)
+		{
+			if(subent.col_names[2] == "Secondary energy: particle energy")
+			{
+				auto lvl = GetBestTransition(E2/1e3,100);
+				c5_manager.GetC5EnergyDistribution(table, E2);
+				lvl->C5EnergyDistribution.push_back(&c5_manager.ED_vec.back());
+			}
+			/*
+			else if(subent.col_names[2] == "Secondary energy: excitation energy")
+			{
+				
+			}
+			*/
+		}
+	}
+	else
+	{
+		for(Nucleus &product: Products)
+		{
+			if(product.A == subent.aProd && product.Z == subent.zProd)
+			{
+				if(subent.SF[6] == "G")
+				{
+					auto table = subent.GroupEnergyDistribution();
+					for(double E2: subent.ED_keys)
+					{
+						if(subent.col_names[2] == "Secondary energy: particle energy")
+						{
+							auto lvl = product.GetBestTransition(E2/1e3,100);
+							if(lvl != NULL)
+							{
+								c5_manager.GetC5EnergyDistribution(table, E2);
+								lvl->C5EnergyDistribution.push_back(&c5_manager.ED_vec.back());
+							}
+						}
+						else if(subent.col_names[2] == "Secondary energy: level energy") // Таких данных не много
+						{
+							auto search = table.find(E2);
+							json cdat = search->second->cdat;
+							if(cdat.contains("ilv")) // Если указан номер уровня значит это гамма переход с этого уровня в основное состояние
+							{
+								auto lvl = product.GetBestTransition(E2/1e3, 100);
+								c5_manager.GetC5EnergyDistribution(table, E2);
+								lvl->C5EnergyDistribution.push_back(&c5_manager.ED_vec.back());
+							}
+							/*
+							else if(cdat.contains("ilvm")) // С этим флагом есть ошибки в самом EXFOR, либо я пока не до конца понимаю как он работает.
+							{
+								
+							}
+							*/
+						}
+					}
+					
+				}
+				else if(subent.SF[2] != "G" && subent.SF[2] != "SCT" && subent.SF[2] != "NON")
+				{
+					auto table = subent.GroupEnergyDistribution();
+					for(double E2: subent.ED_keys)
+					{
+						if(subent.col_names[2] == "Secondary energy: level energy")
+						{
+							auto search = table.find(E2);
+							json cdat = search->second->cdat;
+							if(cdat.contains("ilv"))
+							{
+								auto lvl = product.FindLevelByNumber(cdat["ilv"].template get<int>());
+								c5_manager.GetC5EnergyDistribution(table, E2);
+								lvl->C5EnergyDistribution.push_back(&c5_manager.ED_vec.back());
+							}
+							else if(cdat.contains("ilvm"))
+							{
+								int lvl_min = cdat["ilvm"][0].template get<int>();
+								int lvl_max = cdat["ilvm"][1].template get<int>();
+								for(int n=lvl_min; n<lvl_max+1;n++)
+								{
+									auto lvl = product.FindLevelByNumber(n);
+									c5_manager.GetC5EnergyDistribution(table, E2);
+									lvl->C5EnergyDistribution.push_back(&c5_manager.ED_vec.back());
+								}
+							}
+							else
+							{
+								auto lvl = product.FindLevelByEnergy(E2/1e3, 100);
+								c5_manager.GetC5EnergyDistribution(table, E2);
+								lvl->C5EnergyDistribution.push_back(&c5_manager.ED_vec.back());
+							}
+						}
+						else if(subent.col_names[2] == "Secondary energy: level number")
+						{
+							auto lvl = product.FindLevelByNumber(E2);
+							c5_manager.GetC5EnergyDistribution(table,E2);
+							lvl->C5EnergyDistribution.push_back(&c5_manager.ED_vec.back());
+						}
+						/*
+						else if(subent.col_names[2] == "Secondary energy: Q value")
+						{
+							
+						}
+						else if(subent.col_names[2] == "Secondary energy: particle energy")
+						{
+							
+						}
+						else if(subent.col_names[2] == "Secondary energy: excitation energy")
+						{
+							
+						}
+						*/	
+					}
+				}			
+			}
+		}
+	}
+}			
+
+
+void Nucleus::AssignC5AngularDistributionToLevel(SubentData subent)
+{
+	if(subent.SF[3] == "0-G-0")
+	{
+		auto table = subent.GroupByTwoColumns(4,2);
+		for(pair<double, double> key: subent.Keys2)
+		{
+			if(subent.col_names[2] == "Secondary energy: particle energy")
+			{
+				auto lvl = GetBestTransition(key.first/1e3,100);
+				c5_manager.GetC5AngularDistribution(table, key, 6);
+				lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());
+			}
+			/*
+			else if(subent.col_names[2] == "Secondary energy: excitation energy")
+			{
+				
+			}
+			*/
+		}
+	}
+	else
+	{
+		for(Nucleus &product: Products)
+		{
+			if(product.A == subent.aProd && product.Z == subent.zProd)
+			{
+				if(subent.SF[6] == "G")
+				{
+					auto table = subent.GroupByTwoColumns(4,2);
+					for(pair<double, double> key: subent.Keys2)
+					{
+						if(subent.col_names[2] == "Secondary energy: particle energy")
+						{
+							auto lvl = product.GetBestTransition(key.first/1e3,100);
+							c5_manager.GetC5AngularDistribution(table, key, 6);
+							lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());							
+						}
+						else if(subent.col_names[2] == "Secondary energy: level energy")
+						{
+							auto search = table.find(key);
+							json cdat = search->second->cdat;
+							if(cdat.contains("ilv")) // Если указан номер уровня значит это гамма переход с этого уровня в основное состояние
+							{
+								auto lvl = product.GetBestTransition(key.first/1e3, 100);
+								c5_manager.GetC5AngularDistribution(table, key, 6);
+								lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());
+							}
+						}
+						/*
+						else if(subent.col_names[2] == "Secondary energy: level number")
+						{
+							
+						}
+						*/
+					}
+				}
+				else if(subent.SF[2] != "G" && subent.SF[2] != "SCT" && subent.SF[2] != "NON") //как то учесть N,SCT и N,NON. пока уберем.
+				{
+					auto table = subent.GroupByTwoColumns(4,2);
+					for(pair<double, double> key: subent.Keys2)
+					{
+						if(subent.col_names[2] == "Secondary energy: level energy")
+						{
+							auto search = table.find(key);
+							json cdat = search->second->cdat;
+							if(cdat.contains("ilv"))
+							{
+								auto lvl = product.FindLevelByNumber(cdat["ilv"].template get<int>());
+								c5_manager.GetC5AngularDistribution(table, key, 6);
+								lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());
+							}
+							else if(cdat.contains("ilvm"))
+							{
+								int lvl_min = cdat["ilvm"][0].template get<int>();
+								int lvl_max = cdat["ilvm"][1].template get<int>();
+								for(int n=lvl_min; n<lvl_max+1;n++)
+								{
+									auto lvl = product.FindLevelByNumber(n);
+									c5_manager.GetC5AngularDistribution(table, key, 6);
+									lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());
+								}
+							}
+							else
+							{
+								auto lvl = product.FindLevelByEnergy(key.first/1e3, 100);
+								c5_manager.GetC5AngularDistribution(table, key, 6);
+								lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());
+							}
+						}
+						else if(subent.col_names[2] == "Secondary energy: level number") 
+						{
+							auto lvl = product.FindLevelByNumber(key.first);
+							c5_manager.GetC5AngularDistribution(table, key, 6);
+							lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());
+						}
+						/*
+						else if(subent.col_names[2] == "Secondary energy: particle energy")
+						{
+								
+						}
+						else if(subent.col_names[2] == "Secondary energy: Q value")
+						{
+							
+						}
+						else if(subent.col_names[2] == "Secondary energy: excitation energy")
+						{
+								
+						}
+						*/
+					}	
+				}
+			}
+		}	
+	}
+}
+
+void Nucleus::AssignC5ElasticAngularDistribution(SubentData subent)
+{
+	if(subent.SF[2] == "EL")
+	{
+		auto table = subent.GroupByOneColumn(2);
+		for(double key: subent.Keys1)
+		{
+			c5_manager.GetC5AngularDistribution(table, key, 4);
+			FindProductByReaction("(n,n')")->Levels[0].C5AngularDistribution.push_back(&c5_manager.AD_vec.back());
+		}
+	}
+}
+
+vector<GammaTransition*> Nucleus::GetGammaTransitionsEDWithExforData()
+{
+	vector<GammaTransition*> result;
+	for(auto &level: Levels)
+	{
+		if(level.Gammas.size() != 0)
+		{
+			for(auto &transition: level.Gammas)
+			{
+				if(transition.C5EnergyDistribution.size() != 0)
+				{
+					result.push_back(&transition);
+				}
+			}
+		}
+	}
+	return result;
+}
+

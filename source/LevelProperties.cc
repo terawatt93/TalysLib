@@ -1070,6 +1070,7 @@ TGraph* Level::GetAngularDistributionAtEnergy(float PrEnergy,string type,string 
 	}
 	return 0;
 }
+
 vector<TGraphErrors*> Level::GetEXFORAngularDistributions(double Emin,double Emax, bool GenerateHLink)
 {
 	vector<TGraphErrors*> result;
@@ -1471,3 +1472,56 @@ int Level::GetMT()
 	}
 	return 0;
 }
+
+vector<TGraphErrors*> Level::GetEnergyDistributionGraph(double Emin, double Emax)
+{
+	vector<TGraphErrors*> result;
+	TalysLibManager *manager=TalysLibManager::GetPointer();
+	for(unsigned int j=0;j<C5EnergyDistribution.size();j++)
+	{
+		bool InRange=false;
+		bool Add=true;
+		for(int i=0;i<C5EnergyDistribution[j]->GetN();i++)
+		{
+			if(C5EnergyDistribution[j]->GetPointX(i) >= Emin && C5EnergyDistribution[j]->GetPointX(i) <= Emax)
+			{
+				if(manager->IsInExcludedSubEntries(C5EnergyDistribution[j]->fSubent->SubentID))
+				{
+					Add = false;
+				}
+				InRange=true;
+				break;
+			}
+		}
+		if(InRange == true && Add == true)
+		{
+			result.push_back(C5EnergyDistribution[j]);
+		}
+		
+	}
+	return result;
+} 
+
+vector<TGraphErrors*> Level::GetAngularDistributionGraph(double Emin, double Emax)
+{
+	vector<TGraphErrors*> result;
+	TalysLibManager *manager=TalysLibManager::GetPointer();
+	for(unsigned int i=0;i<C5AngularDistribution.size();i++)
+	{
+		if(C5AngularDistribution[i]->En >= Emin && C5AngularDistribution[i]->En <= Emax)
+		{
+			bool Add = true;
+			if(manager->IsInExcludedSubEntries(C5AngularDistribution[i]->fSubent->SubentID))
+			{
+				Add = false;
+			}
+			if(Add)
+			{
+				result.push_back(C5AngularDistribution[i]);
+			}
+		}
+	}
+	return result;
+} 
+
+
