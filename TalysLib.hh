@@ -108,9 +108,12 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	void SetEnableWarning(bool flag);
 	void SetC4Flag(bool flag);
 	bool GetC4Flag();
+	void SetC5Flag(bool flag);
+	bool GetC5Flag();
 	bool IsEnableWarning();
 	bool GenerateAllGraphs=true;
 	bool ReadC4=false;
+	bool ReadC5=false;
 	bool DeleteNucleiInGrid=true;
 	bool DeleteDirectoryAfterReading=true;
 	bool RemoteCalculation=false;

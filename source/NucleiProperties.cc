@@ -1548,8 +1548,12 @@ void Nucleus::GenerateProducts(string _Projectile)
 	{
 		system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
 	}*/
-	string target = Element + "-" + to_string(A); 
-	c5_manager.SearchSubent(target);
+	string target = Element + "-" + to_string(A);
+	
+	if(TalysLibManager::Instance().GetC5Flag())
+	{
+		c5_manager.SearchSubent(target);
+	} 
 }
 
 

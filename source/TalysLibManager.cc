@@ -165,6 +165,17 @@ bool TalysLibManager::GetC4Flag()
 {
 	return ReadC4;
 }
+
+void TalysLibManager::SetC5Flag(bool flag)
+{
+	ReadC5=flag;
+}
+
+bool TalysLibManager::GetC5Flag()
+{
+	return ReadC5;
+}
+
 void TalysLibManager::SetEXFORSource(string Source)
 {
 	if(Source=="C4")
