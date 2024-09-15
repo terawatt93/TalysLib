@@ -248,6 +248,9 @@ void Nucleus::SetThreadNumber(int _ThreadNumber)
 void Nucleus::ReadLevelsFromTalysDatabase(string type)
 {
 	string Filename=GetPathToTalysData()+"/structure/levels/"+type+"/"+GetNucleusName(Z)+".lev";
+	
+	cout<<Filename<<"\n";
+	
 	ifstream ifs(Filename.c_str());
 	string line;
 	unsigned int NumberOfLevels=0;
@@ -255,6 +258,7 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 	{
 		//заплатка из-за изменения формата файлов в версии 2.0
 		TString NameTemplate=TString::Format("%s%03d",Element.c_str(),A);
+		//cout<<"NameTemplate: "<<NameTemplate<<"\n";
 		if(((int)line.find(Name)>-1)||((int)line.find(NameTemplate.Data())>-1))
 		{
 			stringstream s(line);
@@ -306,6 +310,7 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 					lev.NumbersOfFinalLevels.push_back(FinalLevelNumber);
 				}
 				Levels.push_back(lev);
+				//cout<<"Levels.size() "<<Levels.size()<<"\n";
 			}
 			break;
 		}
@@ -490,7 +495,7 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 	string filename=PathToCalculationDir+"/input";
 	ofstream ofs(filename.c_str());
 	//ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\noutexcitation y\n channels y\n";
-	ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\n channels y\n"<<"maxband "<<maxband<<"\nmaxrot "<<maxrot<<"\n";
+	ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\n channels y\n";
 	//Полина!
 	if(ReadSMatrix)
 	{
@@ -522,6 +527,10 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 	{
 		ofs<<"deformfile "<<Z<<" "<<GetNucleusName(Z)<<".def\n";
 		Def.WriteDeformation(PathToCalculationDir+"/"+GetNucleusName(Z)+".def");
+		if(Def.UseBandRestrictons)
+		{
+			ofs<<"maxband "<<Def.maxband<<"\nmaxrot "<<Def.maxrot<<"\n";
+		}
 	}
 	if(!fMotherNucleus)
 	{

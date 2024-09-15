@@ -1279,7 +1279,29 @@ TMultiGraph* Level::GetEXFORTMultiGraphForAngularDistributions(double Emin,doubl
 	vector<TGraphErrors*> Graphs=GetEXFORAngularDistributions(Emin,Emax);
 	for(unsigned int i=0;i<Graphs.size();i++)
 	{
-		mgr->Add(Graphs[i],"p");
+		if((Option.find("LAB")!=string::npos)||(Option.find("CM")!=string::npos))
+		{
+			C4Graph *gr=(C4Graph*)Graphs[i];
+			if(Option.find("LAB")!=string::npos)
+			{
+				if(!gr->CM)
+				{
+					mgr->Add(Graphs[i],"p");
+				}
+			}
+			if(Option.find("CM")!=string::npos)
+			{
+				if(gr->CM)
+				{
+					mgr->Add(Graphs[i],"p");
+				}
+			}
+		}
+		else
+		{
+			mgr->Add(Graphs[i],"p");
+		}
+		
 	}
 	return mgr;
 }
@@ -1289,7 +1311,28 @@ TMultiGraph* Level::GetEXFORTMultiGraphForCrossSections(double Emin,double Emax,
 	vector<TGraphErrors*> Graphs=GetEXFORCrossSections(Emin,Emax);
 	for(unsigned int i=0;i<Graphs.size();i++)
 	{
-		mgr->Add(Graphs[i],"p");
+		if((Option.find("LAB")!=string::npos)||(Option.find("CM")!=string::npos))
+		{
+			C4Graph *gr=(C4Graph*)Graphs[i];
+			if(Option.find("LAB")!=string::npos)
+			{
+				if(!gr->CM)
+				{
+					mgr->Add(Graphs[i],"p");
+				}
+			}
+			if(Option.find("CM")!=string::npos)
+			{
+				if(gr->CM)
+				{
+					mgr->Add(Graphs[i],"p");
+				}
+			}
+		}
+		else
+		{
+			mgr->Add(Graphs[i],"p");
+		}
 	}
 	return mgr;
 }

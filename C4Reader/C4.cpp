@@ -84,7 +84,7 @@ void C4String::GetFromString(string str)
 	M=atoi(str.substr(11,1).c_str());
 	MF=atoi(str.substr(12,3).c_str());
 	MT=atoi(str.substr(15,4).c_str());
-	PXC=str.substr(19,1);
+	PXC=str.substr(19,3);
 	Energy=ENDFAtof(str.substr(22,9));
 	dEnergy=ENDFAtof(str.substr(31,9));
 	Data=ENDFAtof(str.substr(40,9));
@@ -194,6 +194,10 @@ void C4DataSet::Read(ifstream &ifs, string _DataSet)
 			{
 				C4String c4s;
 				c4s.GetFromString(line);
+				if(c4s.PXC.find("C")!=string::npos)
+				{
+					CM=true;
+				}
 				Table.push_back(c4s);
 			}
 		}
@@ -344,6 +348,7 @@ void C4Entry::Read(ifstream &ifs)
 			}
 		}
 	}
+	CM=DataSet.CM;
 }
 
 const char *C4Entry::GetName() const
@@ -355,8 +360,9 @@ void C4Graph::CopyData()
 {
 	DataSet=fEntry->DataSet.DataSet; Reaction=fEntry->DataSet.Reaction;
 	Date=fEntry->DataSet.Date; MF=fEntry->DataSet.MF; MT=fEntry->DataSet.MT; Proj=fEntry->DataSet.Proj; Targ=fEntry->DataSet.Targ; ZTarg=fEntry->DataSet.ZTarg; ATarg=fEntry->DataSet.ATarg;
-	Entry=fEntry->Entry; Author1=fEntry->Author1; RefCode=fEntry->RefCode; Reference=fEntry->Reference; Title=fEntry->Title; DOI=fEntry->DOI;
+	Entry=fEntry->Entry; Author1=fEntry->Author1; RefCode=fEntry->RefCode; Reference=fEntry->Reference; Title=fEntry->Title; DOI=fEntry->DOI; CM=fEntry->CM;
 	vector<string> Authors=fEntry->Authors;
+	
 	Year=fEntry->Year;
 	//cout<<" "<<MT<<" "<<fEntry->DataSet.MT<<"\n";
 }

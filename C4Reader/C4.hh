@@ -36,7 +36,7 @@ class C4String:public TObject
 	string I78, PXC, Reference;
 	void GetFromString(string str);
 	double *GetField(string colname);
-	ClassDef(C4String,1);
+	ClassDef(C4String,2);
 };
 
 class C4DataSet:public TObject
@@ -44,13 +44,14 @@ class C4DataSet:public TObject
 	public:
 	string DataSet, Reaction;
 	int Date=0, MF=0, MT=0, Proj=0, Targ=0, ZTarg=0, ATarg=0;
+	bool CM=false;//флаг центра масс
 	vector<C4String> Table;
 	void Read(ifstream &ifs, string _DataSet="");
 	int GetZTarg();
 	int GetATarg();
 	vector<double> GetVectorOfValues(string colname,string RefColName="",double RefValue=0,double Difference=0);//возвращает вектор значений, соответствующих значениям в колонке RefColName, отличающимся от RefValue не более, чем на Difference
 	vector<double> GetVectorOfPossibleValues(string colname);//возвращает вектор значений, которые принимает соответствующая колонка
-	ClassDef(C4DataSet,1);
+	ClassDef(C4DataSet,2);
 };
 
 
@@ -63,7 +64,8 @@ class C4Entry:public TObject
 	int Year;
 	void Read(ifstream &ifs);
 	const char *GetName()  const;
-	ClassDef(C4Entry,1);
+	bool CM=false;//флаг центра масс
+	ClassDef(C4Entry,2);
 };
 
 class C4Graph:public TGraphErrors
@@ -75,6 +77,7 @@ class C4Graph:public TGraphErrors
 	void CopyData();
 	string DataSet, Reaction, ID;//ID-соответствует номеру записи в DataSet
 	int Date=0, MF=0, MT=0, Proj=0, Targ=0, ZTarg=0, ATarg=0, LevNumber=-1;
+	bool CM=false;//флаг центра масс
 	string Entry, Author1, RefCode, Reference, Title, DOI;
 	vector<string> Authors;
 	vector<int> SumForLevels;
@@ -83,7 +86,7 @@ class C4Graph:public TGraphErrors
 	vector<double> GetProjectileEnergies();
 	//void Draw(string Option="");
 	int Year;
-	ClassDef(C4Graph,1);
+	ClassDef(C4Graph,2);
 
 };
 

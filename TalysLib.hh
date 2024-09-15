@@ -570,6 +570,8 @@ class Deformation:public DeformationData
 	vector<float> GetDeformationBeta(Level *l);
 	void SetDefaultDeformationType(char _Type='D');
 	char DefaultDeformation='D';
+	int maxrot=0,maxband=0;
+	bool UseBandRestrictons=false;
 	void SetNLevels(int N);//установить количество уровней с деформацией
 	//void RestoreDeformation();
 	void Sort();
@@ -801,10 +803,6 @@ class Nucleus:public NucleusData
 	
 	//EXFOR
 	
-	// Talys input additional strings
-	
-	int maxband=0;
-	int maxrot=2;
 	
 	bool UseEnergyGrid=false;
 	bool PlottedADist=false;
