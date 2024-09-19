@@ -4,6 +4,7 @@
 #include <TObject.h>
 #include <vector>
 #include <utility>
+#pragma once
 //int sqlite3_column_type( sqlite3_stmt* stmt, int cidx ); - возвращает тип колонки, 1 - SQLITE_INTEGER, 2-SQLITE_FLOAT, 3-SQLITE_TEXT, 4-SQLITE_BLOB, 5-SQLITE_NULL
 
 class SQLiteRW;

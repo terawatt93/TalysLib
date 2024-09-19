@@ -319,6 +319,7 @@ void SQLiteRW::Open(string Filename)
 	rc = sqlite3_open(Filename.c_str(), &db);
 	if( rc )
 	{
+		sqlite3_errmsg(db);
 		cout<<"Cannot open file with name \""<<Filename<<"\"\n";
 	}
 }

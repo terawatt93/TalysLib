@@ -97,7 +97,6 @@ void C4String::GetFromString(string str)
 	Reference=str.substr(97,23);
 	Sub=atoi(str.substr(127,3).c_str());
 	
-	
 	/*cout<<str.substr(0,5)<<"\n";
 	cout<<str.substr(5,6)<<"\n";
 	cout<<str.substr(11,1)<<"\n";
@@ -319,6 +318,7 @@ void C4Entry::Read(ifstream &ifs)
 		{
 			ConutneReference=false;
 			DataSet.Read(ifs);
+			CM=DataSet.CM;
 		}
 		if(key=="#+")
 		{
@@ -348,7 +348,7 @@ void C4Entry::Read(ifstream &ifs)
 			}
 		}
 	}
-	CM=DataSet.CM;
+	
 }
 
 const char *C4Entry::GetName() const
