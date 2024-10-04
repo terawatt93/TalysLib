@@ -84,16 +84,16 @@ class EntryData: public TObject // класс хранящий информац�
 class EnergyDistribution: public TGraphErrors
 {
 	public:
-	EntryData* fEntry;
-	SubentData* fSubent;
+	EntryData* fEntry;//!
+	SubentData* fSubent;//!
 	ClassDef(EnergyDistribution,1);
 };
 
 class AngularDistribution: public TGraphErrors
 {
 	public:
-	EntryData* fEntry;
-	SubentData* fSubent;
+	EntryData* fEntry;//!
+	SubentData* fSubent;//!
 	double En;
 	ClassDef(AngularDistribution,1);
 };
