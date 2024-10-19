@@ -40,7 +40,7 @@ class AngularDistribution;
 class C5Row: public TObject // класс хранящий информацию о строке x4pro_c5dat
 {
 	public:
-	vector<double> Row; // вектор хранит значение полей 
+	unordered_map<string, double> Row; // вектор хранит значение полей 
 	json cdat;
 	SubentData* fSubent; // указатель на сабент которому принадлежит строка
 	ClassDef(C5Row,1);
@@ -50,18 +50,12 @@ class SubentData: public TObject // класс хранящий информац
 {
 	public:
 	string SubentID, Quant; // строка номер сабента, тип измеренной велечины
-	vector<string> SF; // вектор который хранит SF1-8
-	vector<string> col_names;
-	int zTarg, aTarg, zProd, aProd; 
+	int zTarg, aTarg, zProd, aProd;
+	array<string, 9> SF; // вектор который хранит SF1-8
+	vector<string> col_names_EXFOR; 
+	vector<string> col_names_expansion;
+	size_t it=0;
 	vector<C5Row*> DataTable; // таблица из строк с5_dat
-	multimap<double, C5Row*> GroupByOneColumn(int col_num);
-	multimap< pair<double, double>, C5Row* > GroupByTwoColumns(int col_num1, int col_num2);
-	multimap<double, C5Row*> GroupEnergyDistribution();
-	multimap< pair<double, double>, C5Row* > GroupAngularDistribution();
-	set<double> ED_keys;
-	set<pair<double, double>> AD_keys;
-	set<double> Keys1;
-	set<pair<double, double>> Keys2;
 	EntryData* fEntry; // указатель на ентри которому принадлежит сабент
 	ClassDef(SubentData,1);
 };
@@ -81,20 +75,21 @@ class EntryData: public TObject // класс хранящий информац�
 	ClassDef(EntryData,1);
 };
 
-class EnergyDistribution: public TGraphErrors
+class EnergyDistribution: public TObject
 {
 	public:
-	EntryData* fEntry;//!
-	SubentData* fSubent;//!
+	vector<double> Y,X,ErrorY,ErrorX;
+	bool InRange(double emin, double emax);
+	SubentData* fSubent;
 	ClassDef(EnergyDistribution,1);
 };
 
-class AngularDistribution: public TGraphErrors
+class AngularDistribution: public TObject
 {
 	public:
-	EntryData* fEntry;//!
-	SubentData* fSubent;//!
-	double En;
+	vector<double> Y,X,ErrorY,ErrorX;
+	double ProjectileEnergy;
+	SubentData* fSubent;
 	ClassDef(AngularDistribution,1);
 };
 
@@ -102,26 +97,24 @@ class C5Manager: public TObject
 {
 	public:
 	
-	string db_name = "/home/diamonddog/Programs/x4sqlite1.db";
+	string db_name = "../../../../../ZFSRAID/EXFOR_library/x4sqlite1.db";
 	sqlite3 *db = 0;
 	int connection = 0;
-	string TargetNucl;
 	
 	list<C5Row> Rows;
 	list<SubentData> Subents;
 	list<EntryData> Entries;
 		
-	list<EnergyDistribution> ED_vec;
-	list<AngularDistribution> AD_vec;
+	//list<EnergyDistribution> ED_vec;
+	//list<AngularDistribution> AD_vec;
 	
-	void ExtractData(string SubentID, string Quant, vector<string> SF, int zTarg, int aTarg, int zProd, int aProd);
-	void SearchSubent(string Target);
+	void SearchSubents(const string& Target);
+	void ExtractSubentData(const string& SubentID, const string& Quant, const array<string,9>& SF, int zTarg, int aTarg, int zProd, int aProd);
 	
-	void GetC5EnergyDistribution(multimap<double, C5Row*> table, double key);
-	template<typename MapType, typename KeyType>
-	void GetC5AngularDistribution(MapType table, KeyType key, int col_num);
+	EnergyDistribution GetC5EnergyDistribution(SubentData& subent);
+	AngularDistribution GetC5AngularDistribution(SubentData& subent);
+	AngularDistribution GetC5ElasticAngularDistribution(SubentData& subent);
 	
 	ClassDef(C5Manager,1);
 
 };
-

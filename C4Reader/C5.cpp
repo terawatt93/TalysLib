@@ -16,52 +16,6 @@ void strip(string &str)
 	str = string(begin, end.base());
 }
 
-multimap< double, C5Row* > SubentData::GroupByOneColumn(int col_num)
-{
-	multimap< double, C5Row* > map;
-	for(int i=0; i<DataTable.size(); i++)
-	{
-		map.insert(pair<double, C5Row*>(DataTable[i]->Row[col_num], DataTable[i]));
-		Keys1.insert(DataTable[i]->Row[col_num]);
-	}
-	return map;
-}
-
-multimap< pair<double, double>, C5Row* > SubentData::GroupByTwoColumns(int col_num1, int col_num2)
-{
-	multimap< pair<double, double>, C5Row* > map;
-	for(int i=0; i<DataTable.size(); i++)
-	{
-		pair<double, double> key_pair = make_pair(DataTable[i]->Row[col_num1], DataTable[i]->Row[col_num2]);
-		map.insert(pair<pair<double, double>, C5Row*>(make_pair(key_pair, DataTable[i])));
-		Keys2.insert(key_pair);
-	}
-	return map;
-}
-
-multimap< double, C5Row* > SubentData::GroupEnergyDistribution()
-{
-	multimap< double, C5Row* > map;
-	for(int i=0; i<DataTable.size(); i++)
-	{
-		map.insert(pair<double, C5Row*>(DataTable[i]->Row[4], DataTable[i]));
-		ED_keys.insert(DataTable[i]->Row[4]);
-	}
-	return map;
-}
-
-multimap< pair<double, double>, C5Row* > SubentData::GroupAngularDistribution()
-{
-	multimap< pair<double, double>, C5Row* > map;
-	for(int i=0; i<DataTable.size(); i++)
-	{
-		pair<double, double> AD_pair = make_pair(DataTable[i]->Row[4], DataTable[i]->Row[2]);
-		map.insert(pair<pair<double, double>, C5Row*>(make_pair(AD_pair, DataTable[i])));
-		AD_keys.insert(AD_pair);
-	}
-	return map;
-}
-
 void EntryData::GetAuthors(json &authors)
 {
 	for(auto author: authors)
@@ -114,41 +68,33 @@ void EntryData::GetDetector(json &detectors)
 	}
 }
 
-void C5Manager::SearchSubent(string Target) // эта функция выполняет поиск нужных сабентов и заполняет поля классов C5Row, SubentData, EntryData.
+void C5Manager::SearchSubents(const string& Target) // эта функция выполняет поиск нужных сабентов и заполняет поля классов C5Row, SubentData, EntryData.
 {
-	TargetNucl = Target;
+	string natural_isotop = Target.substr(0,Target.find("-")) + "-0";
 	sqlite3_stmt *stmt;
-	const char* search_subent_query;
+	connection = sqlite3_open_v2(db_name.c_str(), &db, SQLITE_OPEN_READONLY, NULL);
 	
-	connection = sqlite3_open(db_name.c_str(), &db);
-						
+	const char* search_subent_query;				
 	search_subent_query = "SELECT DISTINCT SubentID, zTarg, aTarg, zProd, aProd, Quant, SF1, SF2, SF3, SF4, SF5, SF6, SF7, SF8, SF9\n\
 						FROM REACSTR\n\
-						WHERE Target = ?\n\
+						WHERE (Target = ? OR Target = ?)\n\
 						AND Projectile = 'N'\n\
-						AND SubentID IN\n\
-						(SELECT DatasetID FROM x4pro_c5dat)\n\
 						GROUP BY SubentID\n\
 						HAVING COUNT(SubentID) = 1";
 					  
 	sqlite3_prepare_v2(db, search_subent_query, -1, &stmt, 0);
-	
-	if (connection == SQLITE_OK)
+	if(connection == SQLITE_OK)
 	{
 		sqlite3_bind_text(stmt, 1, Target.c_str(), -1, SQLITE_STATIC);
-		//sqlite3_bind_text(stmt, 2, Projectile.c_str(), -1, SQLITE_STATIC);
-		
+		sqlite3_bind_text(stmt, 2, natural_isotop.c_str(), -1, SQLITE_STATIC);
 		while(sqlite3_step(stmt) == SQLITE_ROW)
-		{
-			vector<string> SF;
+		{	
 			string SubentID = (char*)sqlite3_column_text(stmt, 0);
-			
 			int zTarg = sqlite3_column_int(stmt, 1);
 			int aTarg = sqlite3_column_int(stmt, 2);
 			int zProd = sqlite3_column_int(stmt, 3);
 			int aProd = sqlite3_column_int(stmt, 4);
 			string Quant = (char*)sqlite3_column_text(stmt, 5);
-			
 			string SF1 = (sqlite3_column_type(stmt,6) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,6) : "";
 			string SF2 = (sqlite3_column_type(stmt,7) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,7) : "";
 			string SF3 = (sqlite3_column_type(stmt,8) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,8) : "";
@@ -158,30 +104,19 @@ void C5Manager::SearchSubent(string Target) // эта функция выпол�
 			string SF7 = (sqlite3_column_type(stmt,12) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,12) : "";			
 			string SF8 = (sqlite3_column_type(stmt,13) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,13) : "";
 			string SF9 = (sqlite3_column_type(stmt,14) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,14) : "";
-			
-			SF.push_back(SF1);
-			SF.push_back(SF2);
-			SF.push_back(SF3);
-			SF.push_back(SF4);
-			SF.push_back(SF5);
-			SF.push_back(SF6);
-			SF.push_back(SF7);
-			SF.push_back(SF8);
-			SF.push_back(SF9);
-			
-			ExtractData(SubentID, Quant, SF, zTarg, aTarg, zProd, aProd); // вызывается функция для заполнения полей классов найденного сабента
+			std::array<string, 9> SF = {SF1, SF2, SF3, SF4, SF5, SF6, SF7, SF8, SF9};
+			ExtractSubentData(SubentID, Quant, SF, zTarg, aTarg, zProd, aProd); 
 		}
 	}
 	sqlite3_finalize(stmt);
 	sqlite3_close(db);
 }
 
-void C5Manager::ExtractData(string SubentID, string Quant, vector<string> SF, int zTarg, int aTarg, int zProd, int aProd) // эта функция извлекает данные из x4pro
+void C5Manager::ExtractSubentData(const string& SubentID, const string& Quant, const array<string,9>& SF, int zTarg, int aTarg, int zProd, int aProd) // эта функция извлекает данные из x4pro
 {
 	sqlite3_stmt *stmt;
-	string EntryID = SubentID.substr(0,5);
 	const char* extract_subent_query = "SELECT * FROM x4pro_c5dat WHERE DatasetID = ?";
-	const char* extract_columns_name = "SELECT expansion FROM x4pro_hdr WHERE DatasetID = ? AND typ = 'c' "; // идентифицируем колонки в x4pro_c5dat
+	const char* extract_columns_name = "SELECT famCode, expansion FROM x4pro_hdr WHERE DatasetID = ? AND typ = 'c' "; // идентифицируем колонки в x4pro_c5dat
 	const char* extract_entry_query =  "SELECT * FROM\n\
 										(SELECT SUBSTR(Subent,0,6) AS EntryID, json_extract(jx4z, '$.BIB.AUTHOR[0].x4codes'), json_extract(jx4z, '$.BIB.TITLE[0].x4freetext'),\n\
 										json_extract(jx4z, '$.BIB.DETECTOR'), json_extract(jx4z, '$.BIB.METHOD')\n\
@@ -194,6 +129,8 @@ void C5Manager::ExtractData(string SubentID, string Quant, vector<string> SF, in
 										// список авторов, название статьи и информация о детекторах извлекаются из x4pro_x4z в json формате и дальше обрабатываются в string 
 										// год, DOI извлекаются из Entry
 										// может быть нужно добавить reference, но пока не знаю в каком формате.
+										
+	string EntryID = SubentID.substr(0,5);
 	
 	SubentData Subent;
 	Subent.SubentID = SubentID;
@@ -203,66 +140,73 @@ void C5Manager::ExtractData(string SubentID, string Quant, vector<string> SF, in
 	Subent.aTarg = aTarg;
 	Subent.zProd = zProd;
 	Subent.aProd = aProd;
+	///////////////////
+	sqlite3_prepare_v2(db, extract_columns_name, -1, &stmt, 0);
+	sqlite3_bind_text(stmt, 1, SubentID.c_str(), -1, SQLITE_STATIC);
+	if(sqlite3_step(stmt) == SQLITE_DONE)
+	{
+		return;
+	}
+	sqlite3_reset(stmt);
+
+	if(connection == SQLITE_OK)
+	{
+		//sqlite3_bind_text(stmt, 1, SubentID.c_str(), -1, SQLITE_STATIC);
+		while(sqlite3_step(stmt) == SQLITE_ROW)
+		{
+			string data_col_EXFOR = (char*)sqlite3_column_text(stmt,0);
+			Subent.col_names_expansion.push_back((char*)sqlite3_column_text(stmt,1));
+			string error_col_EXFOR = "d"+data_col_EXFOR;
+			Subent.col_names_EXFOR.push_back(data_col_EXFOR);
+			Subent.col_names_EXFOR.push_back(error_col_EXFOR);
+		}
+	}
+	sqlite3_finalize(stmt);
 	Subents.push_back(Subent);
-	
-	// Считываем data table из x4pro_c5dat
+	///////////////////
 				
+	///////////////////				
 	sqlite3_prepare_v2(db, extract_subent_query, -1, &stmt, 0);
 	if(connection == SQLITE_OK)
 	{
 		sqlite3_bind_text(stmt, 1, SubentID.c_str(), -1, SQLITE_STATIC);
-			
 		while(sqlite3_step(stmt) == SQLITE_ROW)
 		{
-			C5Row new_row;
-			new_row.Row.push_back(sqlite3_column_double(stmt, 3));
-			new_row.Row.push_back(sqlite3_column_double(stmt, 4));
-			new_row.Row.push_back(sqlite3_column_double(stmt, 5));
-			new_row.Row.push_back(sqlite3_column_double(stmt, 6));
-			new_row.Row.push_back(sqlite3_column_double(stmt, 7));
-			new_row.Row.push_back(sqlite3_column_double(stmt, 8));
-			new_row.Row.push_back(sqlite3_column_double(stmt, 9));
-			new_row.Row.push_back(sqlite3_column_double(stmt, 10));
+			C5Row row;
+			vector<double> vec;
+			vec.push_back(sqlite3_column_double(stmt, 3));
+			vec.push_back(sqlite3_column_double(stmt, 4));
+			vec.push_back(sqlite3_column_double(stmt, 5));
+			vec.push_back(sqlite3_column_double(stmt, 6));
+			vec.push_back(sqlite3_column_double(stmt, 7));
+			vec.push_back(sqlite3_column_double(stmt, 8));
+			vec.push_back(sqlite3_column_double(stmt, 9));
+			vec.push_back(sqlite3_column_double(stmt, 10));
 			if(sqlite3_column_type(stmt, 25) != SQLITE_NULL)
-				new_row.cdat = json::parse((char*)sqlite3_column_text(stmt,25));
-			new_row.fSubent = &Subents.back();
-			Rows.push_back(new_row);
+				row.cdat = json::parse((char*)sqlite3_column_text(stmt,25));
+			for(size_t i=0;i<Subent.col_names_EXFOR.size();i++)
+			{
+				row.Row.insert(pair<std::string, double>(Subent.col_names_EXFOR[i], vec[i]));
+			}
+			row.fSubent = &Subents.back();
+			Rows.push_back(row);
 			Subents.back().DataTable.push_back(&Rows.back());
 		}
 	}
-	
 	sqlite3_finalize(stmt);
+	///////////////////
 	
-	// Считываем названия колонок из x4pro_hdr
-	
-	vector<string> col_names;
-	sqlite3_prepare_v2(db, extract_columns_name, -1, &stmt, 0);
-	if(connection == SQLITE_OK)
-	{
-		sqlite3_bind_text(stmt, 1, SubentID.c_str(), -1, SQLITE_STATIC);
-		while(sqlite3_step(stmt) == SQLITE_ROW)
-		{
-			col_names.push_back((char*)sqlite3_column_text(stmt,0));
-		}
-	} 
-	Subents.back().col_names = col_names;
-	
-	sqlite3_finalize(stmt);
-	
-	// Считываем разную информацию об entry из x4pro_x4z и ENTRY
-	
-	if(Entries.back().EntryID != EntryID)
+	//////////////////
+	if(Entries.empty() || Entries.back().EntryID != EntryID)
 	{
 		EntryData Entry;
 		Entry.EntryID = EntryID;
 		Entries.push_back(Entry);
 		
 		sqlite3_prepare_v2(db, extract_entry_query, -1, &stmt, 0);
-		
 		if(connection == SQLITE_OK)
 		{
 			sqlite3_bind_text(stmt, 1, (EntryID + "001").c_str(), -1, SQLITE_STATIC);
-			
 			while(sqlite3_step(stmt) == SQLITE_ROW)
 			{
 				if(sqlite3_column_type(stmt,1) != SQLITE_NULL)
@@ -294,19 +238,8 @@ void C5Manager::ExtractData(string SubentID, string Quant, vector<string> SF, in
 				{
 					Entries.back().Detector.push_back(pair<string, string>("No info", "No info"));
 				}
-				/*
-				if(sqlite3_column_type(stmt, 4) != SQLITE_NULL)
-				{
-					json method = json::parse((char*)sqlite3_column_text(stmt,4)); 
-					Entries.back().GetMethod(method); // заполняем Method
-				}
-				else
-				{
-					Entries.back().Method.push_back(pair<string, string>("No info", "No info"));
-				}
-				*/
 				Entries.back().Year = (char*)sqlite3_column_text(stmt,5); // год
-				
+					
 				if(sqlite3_column_type(stmt, 6) != SQLITE_NULL)
 				{
 					Entries.back().DOI = (char*)sqlite3_column_text(stmt,6); // DOI
@@ -318,7 +251,6 @@ void C5Manager::ExtractData(string SubentID, string Quant, vector<string> SF, in
 			}
 		}	
 		sqlite3_finalize(stmt);
-		
 		Subents.back().fEntry = &Entries.back();
 		Entries.back().fSubentVec.push_back(&Subents.back());
 	}
@@ -327,53 +259,97 @@ void C5Manager::ExtractData(string SubentID, string Quant, vector<string> SF, in
 		Subents.back().fEntry = &Entries.back();
 		Entries.back().fSubentVec.push_back(&Subents.back());
 	}
-	
+	///////////////////
 }
 
-void C5Manager::GetC5EnergyDistribution(multimap<double, C5Row*> table, double key)
+EnergyDistribution C5Manager::GetC5EnergyDistribution(SubentData& subent)
 {
 	EnergyDistribution ED;
-	
-	auto itr = table.begin();
-	ED.fEntry = itr->second->fSubent->fEntry;
-	ED.fSubent = itr->second->fSubent;
-	
-	for(auto[itr, end] = table.equal_range(key); itr!=end; itr++)
+	size_t& i = subent.it;
+	ED.fSubent = &subent;
+	for(;i<subent.DataTable.size();++i)
 	{
-		int N = ED.GetN();
-		double y = itr->second->Row[0]*1e3;
-		double dy = itr->second->Row[1]*1e3;
-		double En = itr->second->Row[2]/1e6;
-		double dEn = itr->second->Row[3]/1e6; 
-		ED.SetPoint(N, En, y);
-		ED.SetPointError(N, dEn, dy);						
+		ED.Y.push_back(subent.DataTable[i]->Row["Data"]*1e3);
+		ED.X.push_back(subent.DataTable[i]->Row["EN"]/1e6);
+		ED.ErrorY.push_back(subent.DataTable[i]->Row["dData"]*1e3);
+		ED.ErrorX.push_back(subent.DataTable[i]->Row["dEN"]/1e6);
+		if(i+1 == subent.DataTable.size() || subent.DataTable[i]->Row["E2"] != subent.DataTable[i+1]->Row["E2"])
+		{
+			++i;
+			break;
+		}
 	}
-	ED_vec.push_back(ED);
+	return ED;
 }
 
-template<typename MapType, typename KeyType>
-void C5Manager::GetC5AngularDistribution(MapType table, KeyType key, int col_num)
+AngularDistribution C5Manager::GetC5AngularDistribution(SubentData& subent)
 {	
 	AngularDistribution AD;
-	
-	auto itr = table.begin();
-	AD.fEntry = itr->second->fSubent->fEntry;
-	AD.fSubent = itr->second->fSubent;
-	
-	for(auto[itr, end] = table.equal_range(key); itr!=end; ++itr)
+	size_t& i = subent.it;
+	AD.fSubent = &subent;
+	AD.ProjectileEnergy = subent.DataTable[i]->Row["EN"]/1e6;
+	for(;i<subent.DataTable.size();++i)
 	{
-		int N = AD.GetN();
-		double y = itr->second->Row[0]*1e3;
-		double dy = itr->second->Row[1]*1e3;
-		AD.En = itr->second->Row[2]/1e6;
-		double Angle = itr->second->Row[col_num];
-		double dAngle = itr->second->Row[col_num+1];
-		AD.SetPoint(N, Angle, y);
-		AD.SetPointError(N, dAngle, dy);				
+		AD.Y.push_back(subent.DataTable[i]->Row["Data"]*1e3);
+		AD.X.push_back(subent.DataTable[i]->Row["ANG"]);
+		AD.ErrorY.push_back(subent.DataTable[i]->Row["dData"]*1e3);
+		AD.ErrorX.push_back(subent.DataTable[i]->Row["dANG"]);
+		if(i+1 == subent.DataTable.size() || subent.DataTable[i]->Row["EN"] != subent.DataTable[i+1]->Row["EN"] || subent.DataTable[i]->Row["E2"] != subent.DataTable[i+1]->Row["E2"])
+		{
+			++i;
+			break;
+		}
 	}
-	AD_vec.push_back(AD);
+	return AD;
+}	
+
+AngularDistribution C5Manager::GetC5ElasticAngularDistribution(SubentData& subent)
+{
+	AngularDistribution AD;
+	size_t& i = subent.it;
+	AD.fSubent = &subent;
+	AD.ProjectileEnergy = subent.DataTable[i]->Row["EN"]/1e6;
+	for(;i<subent.DataTable.size();++i)
+	{
+		AD.Y.push_back(subent.DataTable[i]->Row["Data"]*1e3);
+		AD.X.push_back(subent.DataTable[i]->Row["ANG"]);
+		AD.ErrorY.push_back(subent.DataTable[i]->Row["dData"]*1e3);
+		AD.ErrorX.push_back(subent.DataTable[i]->Row["dANG"]);
+		if(i+1 == subent.DataTable.size() || subent.DataTable[i]->Row["EN"] != subent.DataTable[i+1]->Row["EN"])
+		{
+			++i;
+			break;
+		}
+	}
+	return AD;
 }
 
+bool EnergyDistribution::InRange(double emin, double emax)
+{
+	size_t left = 0;
+	size_t right = X.size()-1;
+	
+	if(!(emax < X[left] || X[right] < emin)){
+		if(X[right] < emax)
+			emax = X[right];
+		if(X[left] > emin)
+			emin = X[left];
+		while((X[right] - X[left] > emax - emin) || ((X[left] < emin) || (X[right] > emax))){
+			if(X[left] < emin)
+				++left;
+			if(X[right] > emax)
+				--right;
+		}
+		if(left <= right){
+			Y = vector<double>(Y.begin() + left, Y.begin() + right + 1);
+			X = vector<double>(X.begin() + left, X.begin() + right + 1);
+			ErrorY = vector<double>(ErrorY.begin() + left, ErrorY.begin() + right + 1);
+			ErrorX = vector<double>(ErrorX.begin() + left, ErrorX.begin() + right + 1);
+			return true;
+		} else return false;
+	}
+	return false;
+}
 
 
 

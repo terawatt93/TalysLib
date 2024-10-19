@@ -1372,7 +1372,8 @@ void Level::EvalAlternativeAdist()
 		
 		double ProjEnergy=fNucleus->fMotherNucleus->ProjectileEnergy;
 		double ProjMass=fNucleus->fMotherNucleus->ProjectileMass;
-		double k2=2*ProjMass*ProjEnergy/pow(197.3,2)/10.0;
+		double CMenergy = 12.01;
+		double k2=2*ProjMass*CMenergy/pow(197.3,2)/10.0;
 		
 		for(auto &i: D)
 		{	
@@ -1516,6 +1517,18 @@ int Level::GetMT()
 	return 0;
 }
 
+
+vector<EnergyDistribution> Level::GetEnergyDistributionInRange(double emin, double emax)
+{
+	vector<EnergyDistribution> result;
+	for(EnergyDistribution ed: C5EnergyDistribution){
+		if(ed.InRange(emin, emax))
+			result.push_back(ed);
+	}
+	return result;
+}
+
+/*
 vector<TGraphErrors*> Level::GetEnergyDistributionGraph(double Emin, double Emax)
 {
 	vector<TGraphErrors*> result;
@@ -1566,5 +1579,6 @@ vector<TGraphErrors*> Level::GetAngularDistributionGraph(double Emin, double Ema
 	}
 	return result;
 } 
+*/
 
 

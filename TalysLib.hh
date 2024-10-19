@@ -446,11 +446,10 @@ class GammaTransition:public GammaTransitionData
 	public:
 	
 	//EXFOR
-	vector<EnergyDistribution*> C5EnergyDistribution;
-	vector<AngularDistribution*> C5AngularDistribution;
+	vector<EnergyDistribution> C5EnergyDistribution;
+	vector<AngularDistribution> C5AngularDistribution;
 	
-	vector<TGraphErrors*> GetEnergyDistributionGraph(double Emin, double Emax);
-	vector<TGraphErrors*> GetAngularDistributionGraph(double Emin, double Emax);
+	vector<EnergyDistribution> GetEnergyDistributionInRange(double E_min, double E_max);
 	
 	//EXFOR
 	
@@ -614,10 +613,10 @@ class Level:public LevelData
 	vector <EXFORTable> EXFORCrossSections;
 	
 	//EXFOR
-	vector<EnergyDistribution*> C5EnergyDistribution;
-	vector<AngularDistribution*> C5AngularDistribution;
-	vector<TGraphErrors*> GetEnergyDistributionGraph(double Emin, double Emax);
-	vector<TGraphErrors*> GetAngularDistributionGraph(double Emin, double Emax);
+	vector<EnergyDistribution> C5EnergyDistribution;
+	vector<AngularDistribution> C5AngularDistribution;
+	
+	vector<EnergyDistribution> GetEnergyDistributionInRange(double E_min, double E_max);
 	
 	//EXFOR
 	
@@ -792,14 +791,12 @@ class Nucleus:public NucleusData
 	C5Manager c5_manager;
 	
 	void AssignC5ToLevel();
-	void AssignC5EnergyDistributionToLevel(SubentData subent);
-	void AssignC5AngularDistributionToLevel(SubentData subent);	
-	void AssignC5ElasticAngularDistribution(SubentData subent);
+	void AssignC5EnergyDistributionToLevel(SubentData& subent);
+	void AssignC5AngularDistributionToLevel(SubentData& subent);	
+	void AssignC5ElasticAngularDistribution(SubentData& subent);
+	vector<pair<GammaTransition*, vector<EnergyDistribution>>> GetGammaEnergyDistributionInRange(double emin, double emax);
 	
-	vector<EnergyDistribution*> C5EnergyDistribution();
-	vector<AngularDistribution*> C5AngularDistribution();
-	
-	vector<GammaTransition*> GetGammaTransitionsEDWithExforData();
+	//vector<GammaTransition*> GetGammaTransitionsEDWithExforData();
 	
 	//EXFOR
 	
