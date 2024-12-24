@@ -1417,7 +1417,8 @@ void ExclusiveCSData::ExtractDataFromBuffer(string Buffer)
 			{
 				stringstream s2(line);
 				int nn=0,np=0,nd=0,nt=0,nh=0,na=0;
-				s2>>nn>>np>>nd>>nt>>nh>>na;
+				double CS=0;
+				s2>>nn>>np>>nd>>nt>>nh>>na>>CS;
 				int ZProd=np+nd+nt+nh*2+na*2;
 				int AProd=nn+np+2*nd+3*nt+3*nh+4*na;
 				int APrj=0,ZPrj=0;
@@ -1432,6 +1433,7 @@ void ExclusiveCSData::ExtractDataFromBuffer(string Buffer)
 					DeltaZ.push_back(ZPrj-ZProd);
 					DeltaA.push_back(APrj-AProd);
 					ReactionList.push_back(reaction.Data());
+					CrossSections.push_back(CS);
 				}
 				
 			}
@@ -1533,6 +1535,7 @@ void Nucleus::GenerateProducts(string _Projectile)
 	{
 		string name=to_string(A+ECSD.DeltaA[i])+GetNucleusName(Z+ECSD.DeltaZ[i]);
 		Products.push_back(Nucleus(name,ECSD.ReactionList[i]));
+		Products[i].Production=ECSD.CrossSections[i];
 	}
 	
 	for(unsigned int i=0;i<Products.size();i++)
@@ -2801,6 +2804,7 @@ void Nucleus::SaveToXLSX(string filename)
 		xlsx<<"Total"<<Products[i].TotInelastic<<"\n";
 		xlsx<<"Direct"<<Products[i].DirectInelastic<<"\n";
 		xlsx<<"Compound"<<Products[i].CompoundInelastic<<"\n";
+		xlsx<<"Production"<<Products[i].Production<<"\n";
 	}
 	C4Data.GenerateBaseSummaryAndSaveToXLSX(xlsx,"MF MT PrjE LevE Author Year Reference WSAddition=elastic");
 	for(unsigned int i=0;i<Products.size();i++)
