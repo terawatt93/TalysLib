@@ -719,7 +719,7 @@ class BNECSData//Binary non-elastic cross sections (non-exclusive) Реализ�
 class BNECSGraphs:public TObject//Binary non-elastic cross sections graphs Реализация в NucleiProperties.cpp
 {
 	public:
-	TGraph gamma, neutron, proton, deuteron, triton, helium3, alpha;;
+	TGraph gamma, neutron, proton, deuteron, triton, helium3, alpha;
 	void GenerateGraphs(vector<double> X_values,TBCSData *Data);
 	ClassDef(BNECSGraphs, 1);
 };

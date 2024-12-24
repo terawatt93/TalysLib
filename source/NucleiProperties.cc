@@ -495,7 +495,7 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 	string filename=PathToCalculationDir+"/input";
 	ofstream ofs(filename.c_str());
 	//ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\noutexcitation y\n channels y\n";
-	ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\n channels y\n";
+	ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\n channels y\noutexcitation y\n";
 	//Полина!
 	if(ReadSMatrix)
 	{
@@ -832,7 +832,8 @@ void Nucleus::ReadTalysCalculationResult()
 	//ifs.open(filename.c_str());//закоментировано для работы с буфером
 	string TalysExcitationMark=ReactionToTalysNotation(kExcitationCS);
 	string TalysADistMark=ReactionToTalysNotation(kAngularDistribution);
-	//cout<<"TalysExcitationMark:"<<Reaction<<" "<<TalysExcitationMark<<"\n";
+	string TalysCSMark=ReactionToTalysNotation(kTotalInelasticCS);
+	cout<<"TalysExcitationMark:"<<Reaction<<" "<<TalysCSMark<<"\n";
 	Level* UsedLevel=0;
 	int CurrentLevelNumber=0;
 	if(TalysExcitationMark!="NDEF")
@@ -861,6 +862,7 @@ void Nucleus::ReadTalysCalculationResult()
 				ADistFlag=false;
 				UsedLevel=0;
 			}
+			//в новой версии Talys это выпилено
 			if((ExcitationFlag)&&(line.size()>10))
 			{
 				stringstream s(line);
@@ -871,6 +873,7 @@ void Nucleus::ReadTalysCalculationResult()
 				OutEnergy=0;
 				s>>N>>Energy>>OutEnergy>>tmp>>Direct>>Compound>>Total;
 				UsedLevel=FindLevelByNumber(N);
+				
 				if((UsedLevel)&&(line.size()>22)&&(OutEnergy>0))
 				{
 					UsedLevel->OutgoingParticleEnergy=OutEnergy;
@@ -878,7 +881,23 @@ void Nucleus::ReadTalysCalculationResult()
 					UsedLevel->TalysCSCompound=Compound;
 					UsedLevel->TalysCS=Total;
 				}
+				
 			}
+			//костыль, появившийся в версии 2.0
+			if((((int)line.find(TalysCSMark))>-1)&&(line.size()>50))
+			{
+				string tmp;
+				stringstream s(line);
+				if(TalysCSMark.find("Inelastic")==string::npos)
+				{
+					s>>tmp>>tmp>>tmp>>DirectInelastic>>CompoundInelastic>>TotInelastic;
+				}
+				else
+				{
+					s>>tmp>>tmp>>DirectInelastic>>CompoundInelastic>>TotInelastic;
+				}
+			}
+			
 			if((ADistFlag)&&line.size()>10)
 			{
 				if(((int)line.find("Level"))>-1)
