@@ -833,7 +833,6 @@ void Nucleus::ReadTalysCalculationResult()
 	string TalysExcitationMark=ReactionToTalysNotation(kExcitationCS);
 	string TalysADistMark=ReactionToTalysNotation(kAngularDistribution);
 	string TalysCSMark=ReactionToTalysNotation(kTotalInelasticCS);
-	cout<<"TalysExcitationMark:"<<Reaction<<" "<<TalysCSMark<<"\n";
 	Level* UsedLevel=0;
 	int CurrentLevelNumber=0;
 	if(TalysExcitationMark!="NDEF")
