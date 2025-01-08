@@ -6,6 +6,7 @@
 #include <algorithm>
 #include <cctype>
 #include "../Parser.cpp"
+#include "../YAML/YAML.cpp"
 #include <TLine.h>
 #include <TText.h>
 #include <TList.h>
@@ -496,6 +497,11 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 	ofstream ofs(filename.c_str());
 	//ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\noutexcitation y\n channels y\n";
 	ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\n channels y\noutexcitation y\n";
+	if(atof(getenv("TALYSVERSION"))>2)
+	{
+		ofs<<"outall y\n";
+	}
+	
 	//Полина!
 	if(ReadSMatrix)
 	{
@@ -732,9 +738,8 @@ void Nucleus::ReadTalysOutput()
 	}
 }
 
-void Nucleus::ReadTalysCalculationResult()
+void Nucleus::ReadTalysCalculationResultNew()
 {
-	 //кусок, выполняющий чтение из буфера, ранее прочитанного в GenerateProducts
 	stringstream ifs;
 	if(fMotherNucleus)
 	{
@@ -755,8 +760,90 @@ void Nucleus::ReadTalysCalculationResult()
 		Levels[i].Reset();
 	}
 	//TOTGamProd=0, TOTNProd=0, TOTPProd=0, TOTDProd=0, TOTAProd=0;
+	while(getline(ifs,line))
+	{
+		//считываем сечения гамма
+	}
+}
 
+void Nucleus::ReadTalysCalculationResultsForGamma(stringstream &ifs)
+{
+	string line;
+	bool read_flag=false;
+	while(getline(ifs,line))
+	{
+		if(((int)line.find("Nuclide:"))>0)
+		{
+			if(((int)line.find(Name))>0)
+			read_flag=true;
+		}
+		if(read_flag)
+		{
+			vector<string> Lines=SplitString(line,' ');
+			if(Lines.size()==9)
+			{
+				int LevelNumber=atoi(Lines[0].c_str());
+				if(LevelNumber<Levels.size()-1)
+				{
+					Level* TalysLevel=&(Levels[LevelNumber]);
+					TalysLevel->AddLineFromTalys(atof(Lines[7].c_str()),atof(Lines[8].c_str()),atof(Lines[2].c_str()),atof(Lines[6].c_str()),SpinParity(Lines[1]),SpinParity(Lines[5]),LevelNumber,atoi(Lines[4].c_str()));
+				}
+			}
+			else if(Lines.size()==2)
+			{
+				if(Lines[0]=="Total")
+				{
+					read_flag=false;
+					return;
+				}
+			}
+		}
+	}
+}
 
+void Nucleus::ReadTalysCalculationResultsForAngularDistributions()
+{
+	if(!fMotherNucleus)
+	{
+		AssignDataToLevels(this,RawOutput);
+	}
+	
+}
+
+void Nucleus::ReadTalysCalculationResult()
+{
+	 //кусок, выполняющий чтение из буфера, ранее прочитанного в GenerateProducts
+	stringstream ifs;
+	if(fMotherNucleus)
+	{
+		ifs<<fMotherNucleus->RawOutput;
+		//cout<<"******\n"<<fMotherNucleus->RawOutput<<"\n";
+	}
+	else
+	{
+		ifs<<RawOutput;
+	}
+	//конец 
+	if(atof(getenv("TALYSVERSION"))>2)
+	{
+		ReadTalysCalculationResultsForGamma(ifs);
+		if(fMotherNucleus)
+		{
+			fMotherNucleus->ReadTalysCalculationResultsForAngularDistributions();
+		}
+		return;
+	}
+	
+	
+	string line;
+	bool read_flag=false;
+	
+	//сбросим данные для уровней
+	for(unsigned int i=0;i<Levels.size();i++)
+	{
+		Levels[i].Reset();
+	}
+	//TOTGamProd=0, TOTNProd=0, TOTPProd=0, TOTDProd=0, TOTAProd=0;
 	while(getline(ifs,line))
 	{
 		if(((int)line.find("Nuclide:"))>0)
@@ -799,12 +886,6 @@ void Nucleus::ReadTalysCalculationResult()
 			}
 			TalysLevel->AddLineFromTalys(Egamma,CrossSection,Ei,Ef,SpinParity(JPi),SpinParity(JPf),Numi,Numf);
 			TalysLevel->fNucleus=this;
-			//cout<<"Egamma:"<<Egamma<<"; Level:"<<TalysLevel->Energy<<"; "<<Levels[Levels.size()-1].Energy;
-			/*if(Egamma>TalysLevel->Energy)
-			{
-				cout<<"!!!!!!!!!";
-			}
-			cout<<"\n";*/
 		}
 		if((((int)line.find("Total"))>0)&&read_flag)
 		{
@@ -1549,7 +1630,6 @@ void Nucleus::GenerateProducts(string _Projectile)
 		Products[i].ReadTalysCalculationResult();
 	//	Products[i].AssignPointers();
 	}
-	
 	//Полина! Разбор строк s-матрицы
 	if(SMatrixOutput.size()>0)
 	{

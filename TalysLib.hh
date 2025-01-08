@@ -905,6 +905,13 @@ class Nucleus:public NucleusData
 	void GenerateProducts(string _Projectile="n");
 	void ExecuteCalculationInTalys(string _Projectile="n");
 	void ReadTalysCalculationResult();
+	
+	//этот блок появился из-за необходимости переписать парсинг результатов в новой версии Talys
+	//реорганизуем чтение результатов: отдельные методы для чтения сечений гамма и угловых распределений
+	void ReadTalysCalculationResultNew();//В версии 2.1 радикально изменился формат вывода данных. Поэтому проще переписать всю функцию парсинга результатов
+	void ReadTalysCalculationResultsForGamma(stringstream &ifs);//метод для считывания результатов по гамма
+	void ReadTalysCalculationResultsForAngularDistributions();//метод для считывания угловых распределений
+	
 	void AssignSimilarLevels(float Tolerancy=1.5);
 	void DrawLevelScheme(double MinTalysCS=0);
 	void AssignPointers();

@@ -184,14 +184,21 @@ bool IsDirectoryAlreadyExsisted(string Name)//функция проверяет,
 	return true;
 }
 
-std::vector<std::string> SplitString(const std::string &s, char delim) 
+std::vector<std::string> SplitString(const std::string &s, char delim, bool MergeDelimeters=true) 
 {
 	std::vector<std::string> result;
 	std::stringstream ss (s);
 	std::string item;
 	while (getline (ss, item, delim)) 
 	{
-		result.push_back (item);
+		if(!MergeDelimeters)
+		{
+			result.push_back (item);
+		}
+		else if (item.size()>0)
+		{
+			result.push_back (item);
+		}
 	}
 
 	return result;
