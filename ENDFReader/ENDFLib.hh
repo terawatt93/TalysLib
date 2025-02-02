@@ -109,6 +109,7 @@ class ENDFBasicTable:public TObject
 {
 	public:
 	vector<vector<double> > Table;
+	
 	int GetNRows();
 	double& at(unsigned int Column, unsigned int Row);//метод, изменяющий размерность таблицы и возвращающий ссылку на ячейку
 	double* Get(unsigned int Column, unsigned int Row);//метод, не меняющий размера таблицы и возвращающий указатель на нее
@@ -118,6 +119,7 @@ class ENDFBasicTable:public TObject
 	void GetSizes(unsigned int &NColumns,unsigned int &NRows);
 	vector<double> GetSequence(unsigned int Column,unsigned int Row,unsigned int Length,unsigned int *NextColumn=0,unsigned int *NextRow=0);//функция нужна для считывания ряда коэффициентов Лежандра
 	void GetSequence2(vector<double> &x,vector<double> &y,unsigned int Column,unsigned int Row,unsigned int Length,unsigned int *NextColumn=0,unsigned int *NextRow=0);//функция нужна для считывания таблично заданных угловых распределений
+	void ReadPlaneTable(string inp,string template_="");//template - задает способ считывания строки: строка вида  --++- означает, что будут считаны значения в колонках 2 и 3, т.е. - означает пропустить колонку, + означает считать.
 	ClassDef(ENDFBasicTable, 1);
 };
 
