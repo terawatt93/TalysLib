@@ -2782,7 +2782,7 @@ void Nucleus::SaveToXLSX(string filename)
 			xlsx<<gs[i]->Energy<<gs[i]->TalysE_i<<gs[i]->TalysJP_i.GetLine()<<gs[i]->TalysE_f<<gs[i]->TalysJP_f.GetLine()<<gs[i]->fLevel->fNucleus->fMotherNucleus->Name<<gs[i]->fLevel->fNucleus->Reaction<<gs[i]->fLevel->fNucleus->Name<<gs[i]->TalysCrossSection<<"\n";
 		}
 		xlsx.GoToWorksheet("LevelExcitationCS");
-		xlsx<<"E_level"<<"JP"<<"Nucleus"<<"CSCompound"<<"CSDirect"<<"CSTotal"<<"\n";
+		xlsx<<"E_level,keV"<<"JP"<<"Width, keV"<<"Nucleus"<<"CSCompound"<<"CSDirect"<<"CSTotal"<<"\n";
 		for(unsigned int i=0;i<Products.size();i++)
 		{
 			for(unsigned int j=0;j<Products[i].Levels.size();j++)
@@ -2790,7 +2790,7 @@ void Nucleus::SaveToXLSX(string filename)
 				Level* l=&(Products[i].Levels[j]);
 				if((l->TalysCS>0)||(l->Energy==0))
 				{
-					xlsx<<l->Energy<<l->TalysJP.GetLine()<<l->fNucleus->Name<<l->TalysCSCompound<<l->TalysCSDirect<<l->TalysCS<<"\n";
+					xlsx<<l->Energy<<l->TalysJP.GetLine()<<l->Width*1000<<l->fNucleus->Name<<l->TalysCSCompound<<l->TalysCSDirect<<l->TalysCS<<"\n";
 				}
 				
 			}
