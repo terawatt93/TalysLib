@@ -336,7 +336,47 @@ void ENDFBasicTable::GetFromStringBase(string inp)
 	{
 		Table[i].push_back(ENDFAtof(inp.substr(i*11,11).c_str()));
 	}
-	
+}
+
+void ENDFBasicTable::ReadPlaneTable(string inp,string template_)
+{
+	stringstream ifs(inp);
+	string line;
+	int RowCount=0;
+	while(getline(ifs,line))
+	{
+		stringstream sstr(line);
+		int ColumnCount=0;
+		int ColumnCount_=0;
+		while(sstr)
+		{
+			string s;
+			sstr>>s;
+			if((s.size()>0)&&(((s[0]>='0')&&(s[0]<='9'))||(s[0]=='.')))
+			{
+				double value=atof(s.c_str());
+				bool Add=false;
+				if(template_.size()>ColumnCount)
+				{
+					if(template_[ColumnCount]=='+')
+					{
+						Add=true;
+					}
+				}
+				else if(template_.size()==0)
+				{
+					Add=true;
+				}
+				if(Add)
+				{
+					at(ColumnCount_,RowCount)=value;
+					ColumnCount_++;
+				}
+				ColumnCount++;
+			}
+		}
+		RowCount++;
+	}
 }
 
 vector<double> ENDFBasicTable::GetColumn(unsigned int Column)

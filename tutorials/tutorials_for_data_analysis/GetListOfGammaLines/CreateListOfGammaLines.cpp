@@ -3,7 +3,7 @@
 void CreateListOfGammaLines()
 {
 	TalysLibManager::Instance().SetEnableWarning(false);
-	TLMaterial Cr2O3("NaCl");
+	TLMaterial Cr2O3("TiO2");
 	Cr2O3.Calculate();
 	Cr2O3.AddBackground("background.txt");
 	cout<<"In Material:\n";
