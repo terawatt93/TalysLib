@@ -4,6 +4,18 @@
 #include "../TalysLib.hh"
 #pragma once
 
+string StringJoin(const vector<string> &strs, const string delim)
+{
+    if (strs.size() == 0) return "";
+    vector<char> res;
+    for (int i = 0; i < strs.size()-1; ++i)
+    {
+        for (auto c: strs[i]) res.push_back(c);
+        for (auto c: delim) res.push_back(c);
+    }
+    for (auto c: strs[strs.size()-1]) res.push_back(c);
+    return string{res.begin(), res.end()};
+}
 
 void strip(string &str)
 {
@@ -68,55 +80,82 @@ void EntryData::GetDetector(json &detectors)
 	}
 }
 
-void C5Manager::SearchSubents(const string& Target) // эта функция выполняет поиск нужных сабентов и заполняет поля классов C5Row, SubentData, EntryData.
+void C5Manager::SearchSubents() // эта функция выполняет поиск нужных сабентов и заполняет поля классов C5Row, SubentData, EntryData.
 {
-	string natural_isotop = Target.substr(0,Target.find("-")) + "-0";
+	string target = fMotherNucleus->Element + "-" + to_string(fMotherNucleus->A);
+	string natural_isotop = fMotherNucleus->Element + "-0";
 	sqlite3_stmt *stmt;
 	connection = sqlite3_open_v2(db_name.c_str(), &db, SQLITE_OPEN_READONLY, NULL);
 	
-	const char* search_subent_query;				
-	search_subent_query = "SELECT DISTINCT SubentID, zTarg, aTarg, zProd, aProd, Quant, SF1, SF2, SF3, SF4, SF5, SF6, SF7, SF8, SF9\n\
-						FROM REACSTR\n\
-						WHERE (Target = ? OR Target = ?)\n\
-						AND Projectile = 'N'\n\
-						GROUP BY SubentID\n\
-						HAVING COUNT(SubentID) = 1";
+	const char* search_subent_query;
+	const char* search_subent_query_v2;
+	const char* extract_x2_hdr;
+	const char* extract_c5_expansion;
+	
+	search_subent_query_v2 = "SELECT SubentID, zTarg, aTarg, zProd, aProd, Quant, SF1, SF2, SF3, SF4, SF5, SF6, SF7, SF8, SF9, MF, MT, reacode \n\
+						FROM (SELECT DatasetID, MF, MT, compNotes, reacode FROM x4pro_ds WHERE Proj = ? AND (Targ1 = ? OR Targ1 = ?) \n\
+						AND (reacode NOT LIKE '(%)/(%)' \n\
+						AND reacode NOT LIKE '(%)//(%)' \n\
+						AND reacode NOT LIKE '(%)*(%)' \n\
+						AND reacode NOT LIKE '(%)+(%)' \n\
+						AND reacode NOT LIKE '(%)-(%)')) AS table1 \n\
+						INNER JOIN (SELECT * FROM REACSTR) AS table2 ON table1.DatasetID = table2.SubentID ";				
+						
+	search_subent_query = "SELECT SubentID, zTarg, aTarg, zProd, aProd, Quant, SF1, SF2, SF3, SF4, SF5, SF6, SF7, SF8, SF9, MF, MT FROM \n\
+                        (SELECT DISTINCT SubentID, zTarg, aTarg, zProd, aProd, Quant, SF1, SF2, SF3, SF4, SF5, SF6, SF7, SF8, SF9 \n\
+                        FROM REACSTR \n\
+                        WHERE (Target = ? OR Target = ?) \n\
+                        AND Projectile = 'N' \n\
+                        GROUP BY SubentID \n\
+                        HAVING COUNT(SubentID) = 1) AS table1 \n\
+                        INNER JOIN \n\
+                        (SELECT DatasetID, MF, MT FROM x4pro_ds) AS table2 \n\
+                        ON table1.SubentID = table2.DatasetID ";              
+    
 					  
-	sqlite3_prepare_v2(db, search_subent_query, -1, &stmt, 0);
+	sqlite3_prepare_v2(db, search_subent_query_v2, -1, &stmt, 0);
 	if(connection == SQLITE_OK)
 	{
-		sqlite3_bind_text(stmt, 1, Target.c_str(), -1, SQLITE_STATIC);
-		sqlite3_bind_text(stmt, 2, natural_isotop.c_str(), -1, SQLITE_STATIC);
-		while(sqlite3_step(stmt) == SQLITE_ROW)
-		{	
-			string SubentID = (char*)sqlite3_column_text(stmt, 0);
-			int zTarg = sqlite3_column_int(stmt, 1);
-			int aTarg = sqlite3_column_int(stmt, 2);
-			int zProd = sqlite3_column_int(stmt, 3);
-			int aProd = sqlite3_column_int(stmt, 4);
-			string Quant = (char*)sqlite3_column_text(stmt, 5);
-			string SF1 = (sqlite3_column_type(stmt,6) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,6) : "";
-			string SF2 = (sqlite3_column_type(stmt,7) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,7) : "";
-			string SF3 = (sqlite3_column_type(stmt,8) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,8) : "";
-			string SF4 = (sqlite3_column_type(stmt,9) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,9) : "";
-			string SF5 = (sqlite3_column_type(stmt,10) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,10) : "";
-			string SF6 = (sqlite3_column_type(stmt,11) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,11) : "";
-			string SF7 = (sqlite3_column_type(stmt,12) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,12) : "";			
-			string SF8 = (sqlite3_column_type(stmt,13) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,13) : "";
-			string SF9 = (sqlite3_column_type(stmt,14) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,14) : "";
-			std::array<string, 9> SF = {SF1, SF2, SF3, SF4, SF5, SF6, SF7, SF8, SF9};
-			ExtractSubentData(SubentID, Quant, SF, zTarg, aTarg, zProd, aProd); 
-		}
-	}
+		sqlite3_bind_text(stmt, 1, fMotherNucleus->Projectile.c_str(), -1, SQLITE_STATIC);
+		sqlite3_bind_text(stmt, 2, target.c_str(), -1, SQLITE_STATIC);
+        sqlite3_bind_text(stmt, 3, natural_isotop.c_str(), -1, SQLITE_STATIC);
+        while(sqlite3_step(stmt) == SQLITE_ROW)
+        {
+            SubentData Subent;
+            Subent.SubentID = (char*)sqlite3_column_text(stmt, 0);
+            Subent.zTarg = sqlite3_column_int(stmt, 1);
+            Subent.aTarg = sqlite3_column_int(stmt, 2);
+            Subent.zProd = sqlite3_column_int(stmt, 3);
+            Subent.aProd = sqlite3_column_int(stmt, 4);
+            Subent.Quant = (char*)sqlite3_column_text(stmt, 5);
+            Subent.SF1 = (sqlite3_column_type(stmt,6) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,6) : "";
+            Subent.SF2 = (sqlite3_column_type(stmt,7) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,7) : "";
+            Subent.SF3 = (sqlite3_column_type(stmt,8) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,8) : "";
+            Subent.SF4 = (sqlite3_column_type(stmt,9) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,9) : "";
+            Subent.SF5 = (sqlite3_column_type(stmt,10) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,10) : "";
+            Subent.SF6 = (sqlite3_column_type(stmt,11) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,11) : "";
+            Subent.SF7 = (sqlite3_column_type(stmt,12) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,12) : "";          
+            Subent.SF8 = (sqlite3_column_type(stmt,13) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,13) : "";
+            Subent.SF9 = (sqlite3_column_type(stmt,14) != SQLITE_NULL) ? (char*)sqlite3_column_text(stmt,14) : "";
+            Subent.MF = sqlite3_column_int(stmt, 15);
+            Subent.MT = sqlite3_column_int(stmt, 16);
+            Subent.Reacode = (char*)sqlite3_column_text(stmt, 17);
+            Subents.push_back(Subent);
+            ExtractSubentData(); 
+        }
+    }
 	sqlite3_finalize(stmt);
+	
 	sqlite3_close(db);
 }
 
-void C5Manager::ExtractSubentData(const string& SubentID, const string& Quant, const array<string,9>& SF, int zTarg, int aTarg, int zProd, int aProd) // эта функция извлекает данные из x4pro
+void C5Manager::ExtractSubentData()
 {
 	sqlite3_stmt *stmt;
+	const char* extract_x2_hdr = "SELECT hdr FROM x4pro_hdr WHERE DatasetID = ? AND typ = 'x' AND varName = 'x2'";
+	const char* extract_basic_units = "SELECT BasicUnits FROM x4pro_hdr WHERE DatasetID = ? AND typ = 'x' AND varName = 'y'";
+	const char* extract_c5_expansion = "SELECT varName, expansion FROM x4pro_hdr WHERE DatasetID = ? AND typ = 'c' ";
 	const char* extract_subent_query = "SELECT * FROM x4pro_c5dat WHERE DatasetID = ?";
-	const char* extract_columns_name = "SELECT famCode, expansion FROM x4pro_hdr WHERE DatasetID = ? AND typ = 'c' "; // идентифицируем колонки в x4pro_c5dat
 	const char* extract_entry_query =  "SELECT * FROM\n\
 										(SELECT SUBSTR(Subent,0,6) AS EntryID, json_extract(jx4z, '$.BIB.AUTHOR[0].x4codes'), json_extract(jx4z, '$.BIB.TITLE[0].x4freetext'),\n\
 										json_extract(jx4z, '$.BIB.DETECTOR'), json_extract(jx4z, '$.BIB.METHOD')\n\
@@ -125,78 +164,65 @@ void C5Manager::ExtractSubentData(const string& SubentID, const string& Quant, c
 										INNER JOIN\n\
 										(SELECT YearRef1, DOI, EntryID FROM ENTRY) AS b\n\
 										ON a.EntryID = b.EntryID";
-										
-										// список авторов, название статьи и информация о детекторах извлекаются из x4pro_x4z в json формате и дальше обрабатываются в string 
-										// год, DOI извлекаются из Entry
-										// может быть нужно добавить reference, но пока не знаю в каком формате.
-										
-	string EntryID = SubentID.substr(0,5);
 	
-	SubentData Subent;
-	Subent.SubentID = SubentID;
-	Subent.Quant = Quant;
-	Subent.SF = SF;
-	Subent.zTarg = zTarg;
-	Subent.aTarg = aTarg;
-	Subent.zProd = zProd;
-	Subent.aProd = aProd;
-	///////////////////
-	sqlite3_prepare_v2(db, extract_columns_name, -1, &stmt, 0);
-	sqlite3_bind_text(stmt, 1, SubentID.c_str(), -1, SQLITE_STATIC);
-	if(sqlite3_step(stmt) == SQLITE_DONE)
-	{
-		return;
-	}
-	sqlite3_reset(stmt);
+	string SubentID = Subents.back().SubentID;
+	string EntryID = SubentID.substr(0,5);
 
+	sqlite3_prepare_v2(db, extract_c5_expansion, -1, &stmt, 0);
+	sqlite3_bind_text(stmt, 1, SubentID.c_str(), -1, SQLITE_STATIC);
 	if(connection == SQLITE_OK)
 	{
-		//sqlite3_bind_text(stmt, 1, SubentID.c_str(), -1, SQLITE_STATIC);
 		while(sqlite3_step(stmt) == SQLITE_ROW)
 		{
-			string data_col_EXFOR = (char*)sqlite3_column_text(stmt,0);
-			Subent.col_names_expansion.push_back((char*)sqlite3_column_text(stmt,1));
-			string error_col_EXFOR = "d"+data_col_EXFOR;
-			Subent.col_names_EXFOR.push_back(data_col_EXFOR);
-			Subent.col_names_EXFOR.push_back(error_col_EXFOR);
+            Subents.back().col_keys.push_back((char*)sqlite3_column_text(stmt,0));
+            Subents.back().c5_expansion.insert(pair<string, string>(Subents.back().col_keys.back(), (char*)sqlite3_column_text(stmt,1)));
+            Subents.back().col_keys.push_back("d" + Subents.back().col_keys.back());
 		}
 	}
 	sqlite3_finalize(stmt);
-	Subents.push_back(Subent);
-	///////////////////
-				
-	///////////////////				
+	
+	vector<string> x2_hdr;
+	sqlite3_prepare_v2(db, extract_x2_hdr, -1, &stmt, 0);
+	sqlite3_bind_text(stmt, 1, SubentID.c_str(), -1, SQLITE_STATIC);
+	if(connection == SQLITE_OK)
+	{
+		while(sqlite3_step(stmt) == SQLITE_ROW)
+		{
+			x2_hdr.push_back((char*)sqlite3_column_text(stmt,0));
+		}
+	}
+	Subents.back().x2_hdr = StringJoin(x2_hdr, "/");
+	sqlite3_finalize(stmt);
+	
+	sqlite3_prepare_v2(db, extract_basic_units, -1, &stmt, 0);
+	sqlite3_bind_text(stmt, 1, SubentID.c_str(), -1, SQLITE_STATIC);
+	if(connection == SQLITE_OK)
+	{
+		while(sqlite3_step(stmt) == SQLITE_ROW)
+		{
+			Subents.back().Data_basic_units = (char*)sqlite3_column_text(stmt,0); 
+		}
+	}
+	sqlite3_finalize(stmt);
+			
 	sqlite3_prepare_v2(db, extract_subent_query, -1, &stmt, 0);
 	if(connection == SQLITE_OK)
 	{
 		sqlite3_bind_text(stmt, 1, SubentID.c_str(), -1, SQLITE_STATIC);
 		while(sqlite3_step(stmt) == SQLITE_ROW)
 		{
-			C5Row row;
-			vector<double> vec;
-			vec.push_back(sqlite3_column_double(stmt, 3));
-			vec.push_back(sqlite3_column_double(stmt, 4));
-			vec.push_back(sqlite3_column_double(stmt, 5));
-			vec.push_back(sqlite3_column_double(stmt, 6));
-			vec.push_back(sqlite3_column_double(stmt, 7));
-			vec.push_back(sqlite3_column_double(stmt, 8));
-			vec.push_back(sqlite3_column_double(stmt, 9));
-			vec.push_back(sqlite3_column_double(stmt, 10));
+			SubentData::DataRow row;
+			for(size_t i = 0; i < Subents.back().col_keys.size(); i++)
+			{
+				row.Row.insert(pair<string, double>(Subents.back().col_keys[i], sqlite3_column_double(stmt,i+3)));
+			}
 			if(sqlite3_column_type(stmt, 25) != SQLITE_NULL)
 				row.cdat = json::parse((char*)sqlite3_column_text(stmt,25));
-			for(size_t i=0;i<Subent.col_names_EXFOR.size();i++)
-			{
-				row.Row.insert(pair<std::string, double>(Subent.col_names_EXFOR[i], vec[i]));
-			}
-			row.fSubent = &Subents.back();
-			Rows.push_back(row);
-			Subents.back().DataTable.push_back(&Rows.back());
+			Subents.back().DataTable.push_back(row);
 		}
 	}
 	sqlite3_finalize(stmt);
-	///////////////////
 	
-	//////////////////
 	if(Entries.empty() || Entries.back().EntryID != EntryID)
 	{
 		EntryData Entry;
@@ -259,97 +285,8 @@ void C5Manager::ExtractSubentData(const string& SubentID, const string& Quant, c
 		Subents.back().fEntry = &Entries.back();
 		Entries.back().fSubentVec.push_back(&Subents.back());
 	}
-	///////////////////
 }
 
-EnergyDistribution C5Manager::GetC5EnergyDistribution(SubentData& subent)
-{
-	EnergyDistribution ED;
-	size_t& i = subent.it;
-	ED.fSubent = &subent;
-	for(;i<subent.DataTable.size();++i)
-	{
-		ED.Y.push_back(subent.DataTable[i]->Row["Data"]*1e3);
-		ED.X.push_back(subent.DataTable[i]->Row["EN"]/1e6);
-		ED.ErrorY.push_back(subent.DataTable[i]->Row["dData"]*1e3);
-		ED.ErrorX.push_back(subent.DataTable[i]->Row["dEN"]/1e6);
-		if(i+1 == subent.DataTable.size() || subent.DataTable[i]->Row["E2"] != subent.DataTable[i+1]->Row["E2"])
-		{
-			++i;
-			break;
-		}
-	}
-	return ED;
-}
-
-AngularDistribution C5Manager::GetC5AngularDistribution(SubentData& subent)
-{	
-	AngularDistribution AD;
-	size_t& i = subent.it;
-	AD.fSubent = &subent;
-	AD.ProjectileEnergy = subent.DataTable[i]->Row["EN"]/1e6;
-	for(;i<subent.DataTable.size();++i)
-	{
-		AD.Y.push_back(subent.DataTable[i]->Row["Data"]*1e3);
-		AD.X.push_back(subent.DataTable[i]->Row["ANG"]);
-		AD.ErrorY.push_back(subent.DataTable[i]->Row["dData"]*1e3);
-		AD.ErrorX.push_back(subent.DataTable[i]->Row["dANG"]);
-		if(i+1 == subent.DataTable.size() || subent.DataTable[i]->Row["EN"] != subent.DataTable[i+1]->Row["EN"] || subent.DataTable[i]->Row["E2"] != subent.DataTable[i+1]->Row["E2"])
-		{
-			++i;
-			break;
-		}
-	}
-	return AD;
-}	
-
-AngularDistribution C5Manager::GetC5ElasticAngularDistribution(SubentData& subent)
-{
-	AngularDistribution AD;
-	size_t& i = subent.it;
-	AD.fSubent = &subent;
-	AD.ProjectileEnergy = subent.DataTable[i]->Row["EN"]/1e6;
-	for(;i<subent.DataTable.size();++i)
-	{
-		AD.Y.push_back(subent.DataTable[i]->Row["Data"]*1e3);
-		AD.X.push_back(subent.DataTable[i]->Row["ANG"]);
-		AD.ErrorY.push_back(subent.DataTable[i]->Row["dData"]*1e3);
-		AD.ErrorX.push_back(subent.DataTable[i]->Row["dANG"]);
-		if(i+1 == subent.DataTable.size() || subent.DataTable[i]->Row["EN"] != subent.DataTable[i+1]->Row["EN"])
-		{
-			++i;
-			break;
-		}
-	}
-	return AD;
-}
-
-bool EnergyDistribution::InRange(double emin, double emax)
-{
-	size_t left = 0;
-	size_t right = X.size()-1;
-	
-	if(!(emax < X[left] || X[right] < emin)){
-		if(X[right] < emax)
-			emax = X[right];
-		if(X[left] > emin)
-			emin = X[left];
-		while((X[right] - X[left] > emax - emin) || ((X[left] < emin) || (X[right] > emax))){
-			if(X[left] < emin)
-				++left;
-			if(X[right] > emax)
-				--right;
-		}
-		if(left <= right){
-			Y = vector<double>(Y.begin() + left, Y.begin() + right + 1);
-			X = vector<double>(X.begin() + left, X.begin() + right + 1);
-			ErrorY = vector<double>(ErrorY.begin() + left, ErrorY.begin() + right + 1);
-			ErrorX = vector<double>(ErrorX.begin() + left, ErrorX.begin() + right + 1);
-			return true;
-		} else return false;
-	}
-	return false;
-}
 
 
 

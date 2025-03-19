@@ -26,6 +26,7 @@
 #include "ENDFReader/EXFOR.cpp"
 #include "C4Reader/C4.cpp"
 #include "C4Reader/C5.cpp"
+#include "C4Reader/Strategy.cpp"
 #include "SMatrix/SMatrix.cpp"
 #include "SQLiteRW/SQLiteRW.cpp"
 

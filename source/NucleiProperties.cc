@@ -380,6 +380,7 @@ GammaTransition* Nucleus::GetBestTransition(float Energy,float tolerancy)
 	}
 	return best;
 }
+
 const char* NucleusData::GetName()  const
 {
 	return Name.c_str();
@@ -656,6 +657,7 @@ Level* Nucleus::FindLevelByNumber(int number)
 	}
 	return NULL;
 }
+
 Nucleus* Nucleus::FindProductByName(string _Name)
 {
 	Nucleus *MotherNucleus=this;
@@ -673,6 +675,15 @@ Nucleus* Nucleus::FindProductByName(string _Name)
 	return 0;
 }
 
+Nucleus* Nucleus::FindProductByAZ(int a, int z)
+{
+	for(Nucleus& product: Products)
+	{
+		if(product.A == a && product.Z == z)
+			return &product;
+	}
+	return NULL;
+}
 
 void Nucleus::ReadTalysOutput()
 {
@@ -1581,7 +1592,8 @@ void Nucleus::GenerateProducts(string _Projectile)
 	string target = Element + "-" + to_string(A); 
 	if(TalysLibManager::Instance().GetC5Flag())
 	{
-		c5_manager.SearchSubents(target);
+		c5_manager.fMotherNucleus = this;
+		c5_manager.SearchSubents();
 	} 
 }
 
@@ -3121,6 +3133,8 @@ Nucleus* Nucleus::SearchProductForC5(int aProd, int zProd)
 	}
 }
 */
+
+/*
 void Nucleus::AssignC5ToLevel()
 {
 	for(SubentData& subent: c5_manager.Subents)
@@ -3143,7 +3157,8 @@ void Nucleus::AssignC5ToLevel()
 		
 	}
 }
-
+*/
+/*
 void Nucleus::AssignC5EnergyDistributionToLevel(SubentData& subent)
 {
 	//cout << "ED" << "\n";
@@ -3157,12 +3172,12 @@ void Nucleus::AssignC5EnergyDistributionToLevel(SubentData& subent)
 				lvl->C5EnergyDistribution.push_back(c5_manager.GetC5EnergyDistribution(subent));
 			}
 		}
-		/*
+		
 		else if(subent.col_names_expansion[2] == "Secondary energy: excitation energy")
 		{
 		
 		}
-		*/
+		
 	}
 	else
 	{
@@ -3197,12 +3212,12 @@ void Nucleus::AssignC5EnergyDistributionToLevel(SubentData& subent)
 								auto lvl = product.GetBestTransition(subent.DataTable[subent.it]->Row["E2"]/1e3, 100);
 								lvl->C5EnergyDistribution.push_back(c5_manager.GetC5EnergyDistribution(subent));
 							}
-							/*
+							
 							else if(cdat.contains("ilvm")) // С этим флагом есть ошибки в самом EXFOR, либо я пока не до конца понимаю как он работает.
 							{
 								
 							}
-							*/
+							
 						}
 					}
 				}
@@ -3220,7 +3235,7 @@ void Nucleus::AssignC5EnergyDistributionToLevel(SubentData& subent)
 							}
 							else if(cdat.contains("ilvm"))
 							{
-								/*
+								
 								int lvl_min = cdat["ilvm"][0].template get<int>();
 								int lvl_max = cdat["ilvm"][1].template get<int>();
 								for(int n=lvl_min; n<lvl_max+1;n++)
@@ -3229,7 +3244,7 @@ void Nucleus::AssignC5EnergyDistributionToLevel(SubentData& subent)
 									c5_manager.GetC5EnergyDistribution(subent);
 									lvl->C5EnergyDistribution.push_back(&c5_manager.ED_vec.back());
 								}
-								*/
+								
 								break;
 							}
 							else
@@ -3247,7 +3262,7 @@ void Nucleus::AssignC5EnergyDistributionToLevel(SubentData& subent)
 							lvl->C5EnergyDistribution.push_back(c5_manager.GetC5EnergyDistribution(subent));
 						}
 					}
-					/*
+					
 					else if(subent.col_names[2] == "Secondary energy: Q value")
 					{
 							
@@ -3260,7 +3275,7 @@ void Nucleus::AssignC5EnergyDistributionToLevel(SubentData& subent)
 					{
 							
 					}
-					*/					
+									
 				}
 			}			
 		}
@@ -3280,12 +3295,12 @@ void Nucleus::AssignC5AngularDistributionToLevel(SubentData& subent)
 				lvl->C5AngularDistribution.push_back(c5_manager.GetC5AngularDistribution(subent));
 			}
 		}
-		/*
+		
 		else if(subent.col_names[2] == "Secondary energy: excitation energy")
 		{
 				
 		}
-		*/
+		
 	}
 	else
 	{
@@ -3315,12 +3330,12 @@ void Nucleus::AssignC5AngularDistributionToLevel(SubentData& subent)
 							}
 						}
 					}
-					/*
+					
 					else if(subent.col_names[2] == "Secondary energy: level number")
 					{
 							
 					}
-					*/
+					
 				}
 				else if(subent.SF[2] != "G" && subent.SF[2] != "SCT" && subent.SF[2] != "NON") //как то учесть N,SCT и N,NON. пока уберем.
 				{
@@ -3336,7 +3351,7 @@ void Nucleus::AssignC5AngularDistributionToLevel(SubentData& subent)
 							}
 							else if(cdat.contains("ilvm"))
 							{
-								/*
+								
 								int lvl_min = cdat["ilvm"][0].template get<int>();
 								int lvl_max = cdat["ilvm"][1].template get<int>();
 								for(int n=lvl_min; n<lvl_max+1;n++)
@@ -3346,7 +3361,7 @@ void Nucleus::AssignC5AngularDistributionToLevel(SubentData& subent)
 									c5_manager.GetC5AngularDistribution(subent);
 									lvl->C5AngularDistribution.push_back(&c5_manager.AD_vec.back());
 								}
-								*/
+								
 								break;
 							}
 							else
@@ -3364,7 +3379,7 @@ void Nucleus::AssignC5AngularDistributionToLevel(SubentData& subent)
 							lvl->C5AngularDistribution.push_back(c5_manager.GetC5AngularDistribution(subent));
 						}
 					}
-					/*
+					
 					else if(subent.col_names[2] == "Secondary energy: particle energy")
 					{
 								
@@ -3377,7 +3392,7 @@ void Nucleus::AssignC5AngularDistributionToLevel(SubentData& subent)
 					{
 								
 					}
-					*/
+					
 				}	
 			}
 		}
@@ -3413,23 +3428,5 @@ vector<pair<GammaTransition*, vector<EnergyDistribution>>> Nucleus::GetGammaEner
 	}
 	return result;
 }
-/*
-vector<GammaTransition*> Nucleus::GetGammaTransitionsEDWithExforData()
-{
-	vector<GammaTransition*> result;
-	for(auto &level: Levels)
-	{
-		if(level.Gammas.size() != 0)
-		{
-			for(auto &transition: level.Gammas)
-			{
-				if(transition.C5EnergyDistribution.size() != 0)
-				{
-					result.push_back(&transition);
-				}
-			}
-		}
-	}
-	return result;
-}
 */
+

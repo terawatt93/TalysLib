@@ -36,7 +36,6 @@
 #pragma link C++ class C4Container+;
 #pragma link C++ class C4Graph+;
 
-#pragma link C++ class C5Row+;
 #pragma link C++ class SubentData+;
 #pragma link C++ class EntryData+;
 #pragma link C++ class C5Manager+;

@@ -463,7 +463,7 @@ TGraph* GammaTransition::GetENDFAngularDistribution()
 	}
 	return &AdistENDF;
 }
-
+/*
 vector<EnergyDistribution> GammaTransition::GetEnergyDistributionInRange(double emin, double emax)
 {
 	vector<EnergyDistribution> result;
@@ -473,6 +473,7 @@ vector<EnergyDistribution> GammaTransition::GetEnergyDistributionInRange(double 
 	}
 	return result;
 }
+*/
 /*
 vector<TGraphErrors*> GammaTransition::GetEnergyDistributionGraph(double Emin, double Emax)
 {
@@ -525,3 +526,47 @@ vector<TGraphErrors*> GammaTransition::GetAngularDistributionGraph(double Emin, 
 	return result;
 } 
 */
+
+vector<EnergyDistribution*> GammaTransition::GetEnergyDistribution(double E_min, double E_max)
+{
+	vector<EnergyDistribution*> result;
+	for(size_t i=0; i<C5EnergyDistribution.size(); i++)
+	{
+		for(auto &point: C5EnergyDistribution[i].data_points)
+		{
+			if(point[0] >= E_min && point[0] <= E_max)
+			{
+				double n = C5EnergyDistribution[i].graph.GetN();
+				C5EnergyDistribution[i].graph.SetPoint(n, point[0], point[1]);
+				C5EnergyDistribution[i].graph.SetPointError(n, point[2], point[3]);
+			}
+		}
+		if(C5EnergyDistribution[i].graph.GetN() != 0)
+		{
+			result.push_back(&C5EnergyDistribution[i]);
+		} 
+	}
+	return result;
+}
+
+vector<AngularDistribution*> GammaTransition::GetAngularDistribution(double E_min, double E_max)
+{
+	vector<AngularDistribution*> result;
+	for(size_t i=0; i<C5AngularDistribution.size(); i++)
+	{
+		for(auto& point: C5AngularDistribution[i].data_points)
+		{
+			if(point[0] >= E_min && point[0] <= E_max)
+			{
+				double n = C5AngularDistribution[i].graph.GetN();
+				C5AngularDistribution[i].graph.SetPoint(n, point[1], point[2]);
+				C5AngularDistribution[i].graph.SetPointError(n, point[3], point[4]);
+			}
+		}
+		if(C5AngularDistribution[i].graph.GetN() != 0)
+		{
+			result.push_back(&C5AngularDistribution[i]);
+		}
+	}
+	return result;
+}

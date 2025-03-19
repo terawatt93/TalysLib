@@ -448,8 +448,11 @@ class GammaTransition:public GammaTransitionData
 	//EXFOR
 	vector<EnergyDistribution> C5EnergyDistribution;
 	vector<AngularDistribution> C5AngularDistribution;
+	vector<AngularDistribution*> GetAngularDistribution(double E_min, double E_max);
+	vector<EnergyDistribution*> GetEnergyDistribution(double E_min, double E_max);
 	
-	vector<EnergyDistribution> GetEnergyDistributionInRange(double E_min, double E_max);
+	
+	//vector<EnergyDistribution> GetEnergyDistributionInRange(double E_min, double E_max);
 	
 	//EXFOR
 	
@@ -613,10 +616,10 @@ class Level:public LevelData
 	vector <EXFORTable> EXFORCrossSections;
 	
 	//EXFOR
-	vector<EnergyDistribution> C5EnergyDistribution;
+	//vector<EnergyDistribution> C5EnergyDistribution;
 	vector<AngularDistribution> C5AngularDistribution;
-	
-	vector<EnergyDistribution> GetEnergyDistributionInRange(double E_min, double E_max);
+	vector<AngularDistribution*> GetAngularDistribution_v2(double E_min, double E_max);
+	//vector<EnergyDistribution> GetEnergyDistributionInRange(double E_min, double E_max);
 	
 	//EXFOR
 	
@@ -797,6 +800,8 @@ class Nucleus:public NucleusData
 	void AssignC5AngularDistributionToLevel(SubentData& subent);	
 	void AssignC5ElasticAngularDistribution(SubentData& subent);
 	vector<pair<GammaTransition*, vector<EnergyDistribution>>> GetGammaEnergyDistributionInRange(double emin, double emax);
+	
+	Nucleus* FindProductByAZ(int a, int z);
 	
 	//vector<GammaTransition*> GetGammaTransitionsEDWithExforData();
 	

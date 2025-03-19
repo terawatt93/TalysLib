@@ -1517,7 +1517,7 @@ int Level::GetMT()
 	return 0;
 }
 
-
+/*
 vector<EnergyDistribution> Level::GetEnergyDistributionInRange(double emin, double emax)
 {
 	vector<EnergyDistribution> result;
@@ -1527,6 +1527,7 @@ vector<EnergyDistribution> Level::GetEnergyDistributionInRange(double emin, doub
 	}
 	return result;
 }
+*/
 
 /*
 vector<TGraphErrors*> Level::GetEnergyDistributionGraph(double Emin, double Emax)
@@ -1581,4 +1582,25 @@ vector<TGraphErrors*> Level::GetAngularDistributionGraph(double Emin, double Ema
 } 
 */
 
+vector<AngularDistribution*> Level::GetAngularDistribution_v2(double E_min, double E_max)
+{
+	vector<AngularDistribution*> result;
+	for(size_t i=0; i<C5AngularDistribution.size(); i++)
+	{
+		for(auto& point: C5AngularDistribution[i].data_points)
+		{
+			if(point[0] >= E_min && point[0] <= E_max)
+			{
+				double n = C5AngularDistribution[i].graph.GetN();
+				C5AngularDistribution[i].graph.SetPoint(n, point[1], point[2]);
+				C5AngularDistribution[i].graph.SetPointError(n, point[3], point[4]);
+			}
+		}
+		if(C5AngularDistribution[i].graph.GetN() != 0)
+		{
+			result.push_back(&C5AngularDistribution[i]);
+		}
+	}
+	return result;
+}
 
