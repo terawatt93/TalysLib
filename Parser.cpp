@@ -861,7 +861,23 @@ double RecoilEnergyFromGammaEmission(double Egamma, string nuclide)
 	double NuclearMass=GetNuclearMass(nuclide);
 	return pow(Egamma,2)/(2*NuclearMass*1000);
 }
-
+int Nproc()
+{
+	string s;
+	FILE* fp;
+	fp = popen("nproc","r");
+	int ReadFlag=1;
+	while(ReadFlag==1)
+	{
+		char c;
+		ReadFlag=fread(&c,1,1,fp);
+		s+=c;
+	}
+	stringstream ss(s);
+	int result=0;
+	ss>>result;
+	return result;
+}
 vector<string> ListFiles(string mask)
 {
 	vector<string> FileNames;

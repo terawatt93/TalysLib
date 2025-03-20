@@ -85,6 +85,7 @@ using namespace std;
 #define kVarOptwso2 27
 #define kUseDefaultOMP 4
 #define kUseLevelJP -2
+#define CLASSVERSION 4
 //Функции, объявленные после класса, описываются в одном файле с этим классом!
 class OMPStorage;
 class Level;
@@ -158,7 +159,7 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	// необходимо также запретить копирование
 	TalysLibManager(TalysLibManager const&); // реализация не нужна
 	TalysLibManager& operator= (TalysLibManager const&);  // и тут
-	ClassDef(TalysLibManager, 2);
+	ClassDef(TalysLibManager, CLASSVERSION);
 };
 
 class TLElement//класс, соответствующий хим. элементу. Включает в себя список ядер и список оптических потенциалов
@@ -185,7 +186,7 @@ class OMPManager:public TObject//один объект для одного се�
 	string GetAdditionToInputFile();
 	void WriteOMP(string path,int UseKoningN=0,int UseKoningP=0);//UseKoning=0-использовать потенциал по умолчанию; 1-использовать Кенинга, если нет локальной ОМ; 2-использовать только Кенинга; 3-использовать файл из Talys
 	public:
-	ClassDef(OMPManager, 1);
+	ClassDef(OMPManager, CLASSVERSION);
 };
 
 class AdditionalInformationContainer:public TObject
@@ -202,7 +203,7 @@ class AdditionalInformationContainer:public TObject
 	double GetInformationD(string key);
 	string GetInformationS(string key);
 	int GetInformationI(string key);
-	ClassDef(AdditionalInformationContainer, 3);
+	ClassDef(AdditionalInformationContainer, CLASSVERSION);
 };
 
 
@@ -225,7 +226,7 @@ class OMPStorageData:public TObject
 	bool SaveEnergyDependence=false;
 	int Type=1;
 	string Projectile,HRPotentialType;
-	ClassDef(OMPStorageData, 1);
+	ClassDef(OMPStorageData, CLASSVERSION);
 };
 class OMPStorage:public OMPStorageData
 {
@@ -298,7 +299,7 @@ class OMPStorage:public OMPStorageData
 	double Getwso2();
 	double GetVc();
 	OpticalModelParameters *fOpticalModelParameters;//!
-	ClassDef(OMPStorage, 1);
+	ClassDef(OMPStorage, CLASSVERSION);
 	private:
 	using TObject::Draw;
 	using TObject::Read;
@@ -320,7 +321,7 @@ class OpticalModelParametersData:public TObject
 	string Projectile;
 	vector<string> ContentOfFile;
 	int A=0,Z=0,N=0;
-	ClassDef(OpticalModelParametersData, 1);
+	ClassDef(OpticalModelParametersData, CLASSVERSION);
 };
 
 class OpticalModelParameters:public OpticalModelParametersData//:public TObject
@@ -399,7 +400,7 @@ class OpticalModelParameters:public OpticalModelParametersData//:public TObject
 	double Getwso2();
 	double GetVc();
 	void AssignPointers(Nucleus *N=0);
-	ClassDef(OpticalModelParameters, 1);
+	ClassDef(OpticalModelParameters, CLASSVERSION);
 };
 
 class SpinParity:public TObject
@@ -416,7 +417,7 @@ class SpinParity:public TObject
 	string GetStringAsGammaMultipolarity();
 	static vector<SpinParity> QSum(SpinParity &JP1,SpinParity &JP2);
 	static vector<SpinParity> QSum(SpinParity &JPi,SpinParity &JPf,SpinParity &RadJP);
-	ClassDef(SpinParity, 1);
+	ClassDef(SpinParity, CLASSVERSION);
 };
 
 std::istream& operator >> (std::istream &istr,SpinParity &JP);
@@ -438,7 +439,7 @@ class GammaTransitionData:public TObject
 	string Multipolarity,nuclide,reaction, Origin;
 	AdditionalInformationContainer AI;
 	double& AdditionalInformation(string Key); 
-	ClassDef(GammaTransitionData, 2);
+	ClassDef(GammaTransitionData, CLASSVERSION);
 };
 
 class GammaTransition:public GammaTransitionData
@@ -500,7 +501,22 @@ class GammaTransition:public GammaTransitionData
 	int GetIntegrityFactor();//показывает уровень "целостности"-наличия указателей на уровень (1), ядро (2),родительское ядро(3), материал(4) 
 	TGraph *GetCSGraph();
 	TGraph *GetENDFAngularDistribution();
-	ClassDef(GammaTransition, 2);
+	ClassDef(GammaTransition, CLASSVERSION);
+};
+
+class GammaCascade:public TObject
+{
+	public:
+	vector<GammaTransition*> GammaInCascade;
+	vector<pair<int,int> > GammaNumbersInCascade;//вектор из пар ключей - номер начального уровня и номер гамма-перехода
+	void Append(GammaCascade *Cascade);
+	double CalculateCrossSection(string Option="Talys",vector<vector<double,double> > *LevelNumbersAndCS=0,double Tolerancy=1);//Возможные опции: 
+	//1) Talys-сечения возбуждения уровней из Talys (суммарные)
+	//2) Talys compound-сечения возбуждения уровней из Talys (составное ядро)
+	//3) Talys direct-сечения возбуждения уровней из Talys (составное ядро)
+	//4...n) -сечения возбуждения уровней из оцененных данных
+	//custom - использовать пары [номер уровня - сечение]
+	//customE - использовать пары [энергия - сечение] с заданной погрешностью по энергии
 };
 
 class LevelData:public TObject
@@ -520,7 +536,7 @@ class LevelData:public TObject
 	
 	AdditionalInformationContainer AI;
 	double& AdditionalInformation(string Key); 
-	ClassDef(LevelData, 4);
+	ClassDef(LevelData, CLASSVERSION);
 };
 
 class LevelDeformationData:public TObject
@@ -530,7 +546,7 @@ class LevelDeformationData:public TObject
 	char TypeOfLevel,TypeOfDeformation;
 	int NumberOfBand, NumberOfLevel, LOfBand=-1, NumberOfPhonons=-1, MagneticNumber=-1;
 	vector<float> Beta;
-	ClassDef(LevelDeformationData, 1);
+	ClassDef(LevelDeformationData, CLASSVERSION);
 };
 class LevelDeformation:public LevelDeformationData
 {
@@ -543,7 +559,7 @@ class LevelDeformation:public LevelDeformationData
 	Deformation *fDeformation=0;//! 
 	LevelDeformation(LevelDeformationData d);
 	LevelDeformationData ToLevelDeformationData();
-	ClassDef(LevelDeformation, 1);
+	ClassDef(LevelDeformation, CLASSVERSION);
 };
 class DeformationData:public TObject
 {
@@ -553,7 +569,7 @@ class DeformationData:public TObject
 	char TypeOfCollectivity='S',TypeOfDeformation='B';
 	vector<LevelDeformationData> LevelDeformationsData;
 	vector<string> ContentOfFile;
-	ClassDef(DeformationData, 1);
+	ClassDef(DeformationData, CLASSVERSION);
 };
 class Deformation:public DeformationData
 {
@@ -580,7 +596,7 @@ class Deformation:public DeformationData
 	DeformationData ToDeformationData();
 	AdditionalInformationContainer AI;
 	void AssignPointers();
-	ClassDef(Deformation, 1);
+	ClassDef(Deformation, CLASSVERSION);
 };
 
 class EvaluatedData:public TObject
@@ -591,7 +607,7 @@ class EvaluatedData:public TObject
 	EvaluatedDataGraph* GetAngularDistribution(string Source);
 	EvaluatedDataGraph* GetEnergyDistribution(string Source);
 	Level *fLevel=0;//!
-	ClassDef(EvaluatedData, 1);
+	ClassDef(EvaluatedData, CLASSVERSION);
 };
 
 class Level:public LevelData
@@ -631,12 +647,12 @@ class Level:public LevelData
 	//Конец
 	//float Energy, EnergyErr,TalysCS,TalysJP;
 	vector<GammaTransition> Gammas;
+	vector<GammaTransition*> GammasToThisLevel; //!
 	bool ReadLevel(string line,string ReadNuclName);
 	void ReadTransition(string line);
 	void AddLineFromTalys(double E, double CS);
 	void AddLineFromTalys(double E, double CS, double E_i, double E_f, SpinParity JP_i, SpinParity JP_f, unsigned int InitLevelNumber, unsigned int FinalLevelNumber);
 	void Reset();
-	
 	//void Print();
 	const char *GetName()  const;
 	bool CheckEnergy(float E,float Tolerancy,float intensity);
@@ -676,8 +692,8 @@ class Level:public LevelData
 	vector<C4EnergyDistribution> C4EnergyData;
 	void AddHyperlinksToTeX(string &filename,string href_addition="https://sci-hub.ru/");
 	vector<string> HyperlinksTMP;//! нужен для генерации картинки с тех и гиперссылками	
-	
-	ClassDef(Level, 3);
+	vector<GammaCascade> Cascades;
+	ClassDef(Level, CLASSVERSION);
 };
 
 class SMatrixElement
@@ -725,7 +741,7 @@ class BNECSGraphs:public TObject//Binary non-elastic cross sections graphs Ре�
 	public:
 	TGraph gamma, neutron, proton, deuteron, triton, helium3, alpha;
 	void GenerateGraphs(vector<double> X_values,TBCSData *Data);
-	ClassDef(BNECSGraphs, 1);
+	ClassDef(BNECSGraphs, CLASSVERSION);
 };
 
 //class 
@@ -772,7 +788,7 @@ class NucleusData:public TObject
 	OpticalModelParametersData OMPPData;
 	DeformationData DefData;
 	
-	ClassDef(NucleusData, 3);
+	ClassDef(NucleusData, CLASSVERSION);
 };
 
 /*class ElasticAndNonelasticData:public TObject
@@ -908,7 +924,7 @@ class Nucleus:public NucleusData
 	vector<Nucleus> Products;
 	vector<Nucleus> NucleiInEnergyGrid;
 	void GenerateProducts(string _Projectile="n");
-	void ExecuteCalculationInTalys(string _Projectile="n");
+	void ExecuteCalculationInTalys(string _Projectile="n",bool PerformCalculation=true);
 	void ReadTalysCalculationResult();
 	
 	//этот блок появился из-за необходимости переписать парсинг результатов в новой версии Talys
@@ -943,6 +959,7 @@ class Nucleus:public NucleusData
 	void ReadFromRootFile(string FileName="",string Name="");
 	void SaveToXLSX(string filename);
 	void ReadC4();
+	void GenerateGammasToThisLevelVectors();//генерирует векторы указателей в уровнях на гамма-переходы, соотвтетствующие заселению этого уровня
 	GammaTransition* GetMostIntenseGammaTransition();
 	ENDFFile ENDF;
 	list<ENDFFile> ENDFBases;
@@ -960,7 +977,7 @@ class Nucleus:public NucleusData
 	vector<Level*> GetLevelsWithAvalibleData(string DType="ADist",string SType="ENDF");//DType="ADist" или "CS" SType: ENDF или EXFOR
 	C4Container C4Data;
 	void AssignC4DataToLevels(double Tolerancy=10);
-	ClassDef(Nucleus,4);
+	ClassDef(Nucleus,CLASSVERSION);
 	void AddCommandsToInputFile(string Addition);
 	string GetRawOutput();
 	void AddEnergyPoint(double EnergyValue);
@@ -980,9 +997,11 @@ class Nucleus:public NucleusData
 	
 	sqlite3* C4Base=0;//!
 	TFile* C4ROOTBase=0;//!
+	void Reset();
 	private:
 	//using TObject::GetName;
 	using TObject::Copy;
+	
 };
 
 class Radionuclide:public Nucleus
@@ -1001,7 +1020,7 @@ class Radionuclide:public Nucleus
 	vector<GammaTransition*> GetGammaTransitions(double E_thr=0,double Int_thr=0);
 	Radionuclide* FindProductByName(string _Name);
 	//Nucleus* fMotherNucleus=0;//! 
-	ClassDef(Radionuclide, 1);
+	ClassDef(Radionuclide, CLASSVERSION);
 };
 
 double ConvertAngleToLab(double angle, double ma, double Ta, double mA, double mb, double mB, double Tb);
@@ -1125,7 +1144,7 @@ class TalysCalculation:public TObject
 	TMultiGraph* GetElasticAngularDistributions(string type="Total",string option="",TLegend *leg=0);//выдает TMultiGraph с угловыми распределениями, соответствующими значениям VarValues
 	
 	
-	ClassDef(TalysCalculation, 1);
+	ClassDef(TalysCalculation, CLASSVERSION);
 };
 
 GammaTransition* GetBestTransitionFromVector(float Energy, float Tolerancy,vector<Nucleus> &Nuclei);
@@ -1186,7 +1205,7 @@ class TLMaterial:public TObject
 			delete Nuclides[i];
 		}
 	}
-	ClassDef(TLMaterial, 1);
+	ClassDef(TLMaterial, CLASSVERSION);
 };
 
 class SampleInformation:public TObject //класс, хранящий информацию об образце и фоне
@@ -1231,7 +1250,7 @@ class SampleInformation:public TObject //класс, хранящий инфор
 	string GetSampleType();
 	void GetSizes(double &SizeX, double &SizeY, double &SizeZ);
 	void GetPosition(double &PositionX, double &PositionY, double &PositionZ);
-	ClassDef(SampleInformation, 1);
+	ClassDef(SampleInformation, CLASSVERSION);
 	private:
 	using TObject::GetName
 	

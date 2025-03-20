@@ -273,6 +273,9 @@ void Level::Reset()
 	ADCompound.resize(0);
 	Angle.resize(0);
 	AngleLab.resize(0);
+	CSValues.resize(0);
+	CSCompoundValues.resize(0);
+	CSDirectValues.resize(0);
 	PlottedADist=false;
 }
 /*void Level::Print()

@@ -249,9 +249,6 @@ void Nucleus::SetThreadNumber(int _ThreadNumber)
 void Nucleus::ReadLevelsFromTalysDatabase(string type)
 {
 	string Filename=GetPathToTalysData()+"/structure/levels/"+type+"/"+GetNucleusName(Z)+".lev";
-	
-	cout<<Filename<<"\n";
-	
 	ifstream ifs(Filename.c_str());
 	string line;
 	unsigned int NumberOfLevels=0;
@@ -316,7 +313,25 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 			break;
 		}
 	}
+	
 }
+
+void Nucleus::GenerateGammasToThisLevelVectors()
+{
+	for(unsigned int i=0;i<Levels.size();i++)
+	{
+		Levels[i].GammasToThisLevel.resize(0);
+	}
+	for(unsigned int i=0;i<Levels.size();i++)
+	{
+		for(unsigned int j=0;j<Levels[i].Gammas.size();j++)
+		{
+			int FinalLevelNumber=Levels[i].Gammas[j].FinalLevelNumber;
+			Levels[FinalLevelNumber].GammasToThisLevel.push_back(&(Levels[i].Gammas[j]));
+		}
+	}
+}
+
 vector<Level*> Nucleus::GetLevelsWithCorrespondingTransitions(float Energy, float tolerancy,float intensity)
 {
 	vector<Level*> FoundLevels;
@@ -469,21 +484,24 @@ void Nucleus::SetProjectileEnergy(double E)
 {
 	ProjectileEnergy=E;
 }
-void Nucleus::ExecuteCalculationInTalys(string _Projectile)
+void Nucleus::ExecuteCalculationInTalys(string _Projectile,bool PerformCalculation)//флаг PerformCalculation показывает, нужно ли выполнять вычисления
+//Выполнять вычисления не нужно, если считается энергетическая зависимость, т.к.в этом случае они выполняются отдельными потоками
 {
 	Projectile=_Projectile;
-	PathToCalculationDir=GetPathToTalysData()+"/CalculationResults/";
+	//PathToCalculationDir=GetPathToTalysData()+"/CalculationResults/";
+	
+	PathToCalculationDir=TString::Format("/dev/shm/CalculationResults%d/",ThreadNumber);
+	if(TalysLibManager::Instance().IsEnableWarning())
+	{
+		system(string("mkdir "+PathToCalculationDir).c_str());
+	}
+	else
+	{
+		mkdir(PathToCalculationDir.c_str(),0777);
+	}
+		
 	if(FastFlag)
 	{
-		PathToCalculationDir=TString::Format("/dev/shm/CalculationResults%d/",ThreadNumber);
-		if(TalysLibManager::Instance().IsEnableWarning())
-		{
-			system(string("mkdir "+PathToCalculationDir).c_str());
-		}
-		else
-		{
-			mkdir(PathToCalculationDir.c_str(),0777);
-		}
 		FastCalculated=true;
 	}
 	
@@ -544,6 +562,7 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile)
 		ofs<<addition;
 	}
 	ofs.close();
+	if(PerformCalculation)
 	system(string("cd "+PathToCalculationDir+"/; "+TalysLibManager::Instance().GetExecutableName()+" <input >output").c_str());
 }
 
@@ -703,6 +722,7 @@ void Nucleus::ReadTalysOutput()
 		filename=PathToCalculationDir+"/output";
 		if(!OutputWasRead)
 		{
+			RawOutput="";
 			ifstream ifs(filename);
 			CopyFileContentToBuffer(ifs,RawOutput);
 			ifs.close();
@@ -798,6 +818,7 @@ void Nucleus::ReadTalysCalculationResultsForGamma(stringstream &ifs)
 				{
 					Level* TalysLevel=&(Levels[LevelNumber]);
 					TalysLevel->AddLineFromTalys(atof(Lines[7].c_str()),atof(Lines[8].c_str()),atof(Lines[2].c_str()),atof(Lines[6].c_str()),SpinParity(Lines[1]),SpinParity(Lines[5]),LevelNumber,atoi(Lines[4].c_str()));
+					
 				}
 			}
 			else if(Lines.size()==2)
@@ -895,6 +916,7 @@ void Nucleus::ReadTalysCalculationResult()
 				Levels[Levels.size()-1].AddJPValue(TalysJP);
 				Levels[Levels.size()-1].Number=Numi;
 			}
+
 			TalysLevel->AddLineFromTalys(Egamma,CrossSection,Ei,Ef,SpinParity(JPi),SpinParity(JPf),Numi,Numf);
 			TalysLevel->fNucleus=this;
 		}
@@ -1442,6 +1464,7 @@ void Nucleus::GenerateEnergyGrid(float min, float step, float max)
 		EnergyGrid.push_back(CurrE);
 		CurrE+=step;
 	}
+	ProjectileEnergy=max;
 }
 
 void Nucleus::SetEnergyGrid(vector<float> &grid)
@@ -1450,6 +1473,7 @@ void Nucleus::SetEnergyGrid(vector<float> &grid)
 	UseEnergyGrid=true;
 	EnergyGrid=grid;
 	sort( EnergyGrid.begin(), EnergyGrid.end() );
+	ProjectileEnergy=EnergyGrid[EnergyGrid.size()-1];
 }
 
 void Nucleus::GenerateEnergyGrid(vector<TGraphErrors*> Data)
@@ -1469,6 +1493,7 @@ void Nucleus::GenerateEnergyGrid(vector<TGraphErrors*> Data)
 	//сразу же сгенерируем сетку энергий:
 	sort( EnergyGrid.begin(), EnergyGrid.end() );
 	EnergyGrid.erase( unique( EnergyGrid.begin(), EnergyGrid.end() ), EnergyGrid.end() );
+	ProjectileEnergy=EnergyGrid[EnergyGrid.size()-1];
 	UseEnergyGrid=true;
 }
 
@@ -1490,6 +1515,10 @@ void Nucleus::MergeEnergyGridData(vector<Nucleus> &NucleiInEnergyGrid)
 void EvalEdepData(Nucleus* Data, string Proj)
 {
 	Data->GenerateProducts(Proj);
+}
+void EvalEdepData_(string Path)
+{
+	system(string("cd "+Path+"/; "+TalysLibManager::Instance().GetExecutableName()+" <input >output").c_str());
 }
 
 void ExclusiveCSData::ExtractDataFromBuffer(string Buffer)
@@ -1552,6 +1581,43 @@ string GetPathToC4Base()
 	return filename;
 }
 
+void Nucleus::Reset()
+{
+	RawOutput="";
+	OutputWasRead=false;
+	for(unsigned int i=0;i<Levels.size();i++)
+	{
+		for(unsigned int j=0;j<Levels[i].Gammas.size();j++)
+		{
+			GammaTransition* g=&(Levels[i].Gammas[j]);
+			g->TalysCrossSection=0;
+			g->CSGraph=TGraph();
+		}
+		Levels[i].AdistTotalTalys=TGraph();
+		Levels[i].AdistCompoundTalys=TGraph();
+		Levels[i].AdistDirectTalys=TGraph();
+		Levels[i].AdistENDF=TGraph();
+		Levels[i].CSGraph=TGraph();
+		Levels[i].CSCompoundGraph=TGraph();
+		Levels[i].CSDirectGraph=TGraph();
+		Levels[i].CSENDFGraph=TGraph();
+		
+		Levels[i].AdistTotalTalys2D=TGraph2D();
+		Levels[i].AdistCompoundTalys2D=TGraph2D();
+		Levels[i].AdistDirectTalys2D=TGraph2D();
+		
+		Levels[i].TalysCS=0;
+		Levels[i].TalysCSCompound=0;
+		Levels[i].TalysCSDirect=0;
+		Levels[i].OutgoingParticleEnergy=0;
+		Levels[i].Reset();
+	}
+	for(unsigned int i=0;i<Products.size();i++)
+	{
+		Products[i].Reset();
+	}
+}
+
 void Nucleus::GenerateProducts(string _Projectile)
 {
 	Products.resize(0);
@@ -1579,12 +1645,8 @@ void Nucleus::GenerateProducts(string _Projectile)
 		return;
 	}
 	OutputWasRead=false;
-	if((EnergyGrid.size()>0)&&(MainNucleusFlag==0)&&(UseEnergyGrid))
-	{
-		sort(EnergyGrid.begin(),EnergyGrid.end());
-		ProjectileEnergy=EnergyGrid[EnergyGrid.size()-1];
-		MainNucleusFlag=2;//ядро, для которого строится энергетическая зависимость
-		if(EnergyGrid.size()>1)
+	
+		/*if(EnergyGrid.size()>1)
 		{
 			MinEnergy=EnergyGrid[0]; MaxEnergy=EnergyGrid[EnergyGrid.size()-1];
 			for(unsigned int i=0;i<EnergyGrid.size();i++)
@@ -1621,8 +1683,7 @@ void Nucleus::GenerateProducts(string _Projectile)
 			{
 				Threads[i].join();
 			}
-		}
-	}
+		}*/
 	for(unsigned int i=0;i<ECSD.ReactionList.size();i++)
 	{
 		string name=to_string(A+ECSD.DeltaA[i])+GetNucleusName(Z+ECSD.DeltaZ[i]);
@@ -1646,21 +1707,84 @@ void Nucleus::GenerateProducts(string _Projectile)
 	{
 		s_mat.Read(SMatrixOutput,TransmissionCoeffOutput);
 	}
-	
-	//конец
-	if((NucleiInEnergyGrid.size()>0)&&(UseEnergyGrid))
-	{
-		MergeEnergyGridData(NucleiInEnergyGrid);
-		SetTGraphNameAndTitle("Energy");
-		/*if(TalysLibManager::Instance().GenerateAllGraphs)
-		{
-			GenerateGraphs();
-		}*/
-	}
+
 	
 	AssignPointers();
 	ReadElastic();
 	AssignPointers();
+	
+	if((EnergyGrid.size()>0)&&(MainNucleusFlag==0)&&(UseEnergyGrid))
+	{
+		sort(EnergyGrid.begin(),EnergyGrid.end());
+		ProjectileEnergy=EnergyGrid[EnergyGrid.size()-1];
+		MainNucleusFlag=2;//ядро, для которого строится энергетическая зависимость
+		Nucleus SlaveNucleus=*this;//Делаем ядро, в которое будут записываться результаты расчетов для точки по энергии
+		SlaveNucleus.AssignPointers();
+		SlaveNucleus.MainNucleusFlag=1;
+		SlaveNucleus.EnergyGrid.resize(0);
+		SlaveNucleus.fMotherNucleus=0;
+		SlaveNucleus.OMPN=OMPN;
+		SlaveNucleus.OMPP=OMPP;
+		SlaveNucleus.WriteOMPOrUseKoningN=WriteOMPOrUseKoningN;
+		vector<string> PathsToGridResults;
+		for(unsigned int i=0;i<EnergyGrid.size();i++)
+		{
+			SlaveNucleus.ProjectileEnergy=EnergyGrid[i];
+			SlaveNucleus.ThreadNumber=ThreadNumber*10000+i+1;
+			SlaveNucleus.ExecuteCalculationInTalys(Projectile,false);
+			PathsToGridResults.push_back(SlaveNucleus.PathToCalculationDir);
+		}
+		if(FastFlag)
+		{
+			ROOT::EnableThreadSafety();
+			unsigned int NProc=Nproc();
+			unsigned int NCalculated=0;
+			while(NCalculated<EnergyGrid.size())
+			{
+				vector<thread> Threads;
+				for(unsigned int i=0;i<NProc;i++)
+				{
+					if(NCalculated<EnergyGrid.size())
+					{
+						Threads.emplace_back(EvalEdepData_,PathsToGridResults[NCalculated]);
+					}
+					NCalculated++;
+				}
+				for(unsigned int i=0;i<Threads.size();i++)
+				{
+					Threads[i].join();
+				}
+			}
+		}
+		else
+		{
+			for(unsigned int i=0;i<EnergyGrid.size();i++)
+			{
+				EvalEdepData_(PathsToGridResults[i]);
+			}
+		}
+		for(unsigned int i=0;i<EnergyGrid.size();i++)
+		{
+			SlaveNucleus.Reset();
+			SlaveNucleus.fMotherNucleus=0;
+			SlaveNucleus.PathToCalculationDir=PathsToGridResults[i];
+			SlaveNucleus.ReadTalysOutput();
+			for(unsigned int j=0;j<SlaveNucleus.Products.size();j++)
+			{
+				SlaveNucleus.Products[j].ReadTalysCalculationResult();
+			//	Products[i].AssignPointers();
+			}
+			
+			
+			SlaveNucleus.AssignPointers();
+			SlaveNucleus.ReadElastic();
+			SlaveNucleus.AssignPointers();
+			AddPoint(EnergyGrid[i],&SlaveNucleus);
+			system(TString::Format("rm -rf /dev/shm/CalculationResults%d/",ThreadNumber*10000+i+1).Data());
+		}
+		GenerateGraphs();
+	}
+	
 	if(TalysLibManager::Instance().GetC4Flag())
 	{
 		ReadC4();
@@ -2084,6 +2208,7 @@ void Nucleus::AssignPointers()
 		(*i).fNucleus=this;
 	}
 	AssignDeformationsToLevels();
+	GenerateGammasToThisLevelVectors();
 }
 void Nucleus::AssignSimilarLevels(float Tolerancy)
 {
@@ -2513,6 +2638,15 @@ void Nucleus::GenerateGraphs()
 	TEISGraphTot=TGraph(EnergyGrid.size(),&EnergyGrid[0],&TEISTot_Values[0]);
 	TEISGraphCont=TGraph(EnergyGrid.size(),&EnergyGrid[0],&TEISCont_Values[0]);
 	TEISGraphDiscr=TGraph(EnergyGrid.size(),&EnergyGrid[0],&TEISDiscr_Values[0]);
+	for(unsigned int i=0;i<Levels.size();i++)
+	{
+		for(unsigned int j=0;j<Levels[i].Gammas.size();j++)
+		{
+			Levels[i].Gammas[j].GenerateGraphs();
+			Levels[i].SetTGraphNameAndTitle("Energy");
+		}
+		Levels[i].SetTGraphNameAndTitle("Energy");
+	}
 }
 
 void Nucleus::AddEnergyPoint(double EnergyValue)
