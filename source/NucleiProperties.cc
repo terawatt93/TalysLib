@@ -817,7 +817,7 @@ void Nucleus::ReadTalysCalculationResultsForGamma(stringstream &ifs)
 				if(LevelNumber<Levels.size()-1)
 				{
 					Level* TalysLevel=&(Levels[LevelNumber]);
-					TalysLevel->AddLineFromTalys(atof(Lines[7].c_str()),atof(Lines[8].c_str()),atof(Lines[2].c_str()),atof(Lines[6].c_str()),SpinParity(Lines[1]),SpinParity(Lines[5]),LevelNumber,atoi(Lines[4].c_str()));
+					TalysLevel->AddLineFromTalys(atof(Lines[7].c_str())*1000,atof(Lines[8].c_str())*1000,atof(Lines[2].c_str())*1000,atof(Lines[6].c_str())*1000,SpinParity(Lines[1]),SpinParity(Lines[5]),LevelNumber,atoi(Lines[4].c_str()));
 					
 				}
 			}
