@@ -1,0 +1,37 @@
+# header:
+#   title: Ti48(n,xg_17-2)Sc47 gamma-ray production cross section
+#   source: TALYS-2.1
+#   user: Arjan Koning
+#   date: 2025-03-25
+#   format: YANDF-0.3
+# target:
+#   Z: 22
+#   A: 48
+#   nuclide: Ti48
+# reaction:
+#   type: (n,xg_17-2)
+#   Q-value [MeV]: -1.122281E+01
+#   E-threshold [MeV]:  1.145890E+01
+#   level: 
+#     number: 17
+#     energy [MeV]:  2.002300E+00
+#     spin:  1.500000E+00
+#     parity: 1
+#     level: 
+#       number: 2
+#       energy [MeV]:  8.078900E-01
+#       spin:  1.500000E+00
+#       parity: -1
+#   gamma energy [MeV]:  1.194410E+00
+# residual:
+#   Z: 21
+#   A: 47
+#   nuclide: Sc47
+# quantity:
+#   type: cross section
+#   datablock:
+#     columns: 2
+#     entries: 1
+##       E             xs
+##     [MeV]          [mb]
+   1.410000E+01   4.993219E-03

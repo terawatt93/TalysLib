@@ -159,7 +159,7 @@ vector<YAML> ExtractYAMLFromString(string &FileContent)
 	
 	return result;
 }
-void AssignDataToLevels(Nucleus *Parent,string &FileContent)
+/*void AssignDataToLevels(Nucleus *Parent,string &FileContent)
 {
 	vector<YAML> YAMLData=ExtractYAMLFromString(FileContent);
 	for(unsigned int i=0;i<YAMLData.size();i++)
@@ -170,9 +170,9 @@ void AssignDataToLevels(Nucleus *Parent,string &FileContent)
 			if(YAMLData[i].OutgoingParticle=="el")
 			{
 				Parent->Angle=YAMLData[i].Content[0];
-				Parent->ElTot=YAMLData[i].Content[1];
-				Parent->ElCompound=YAMLData[i].Content[3];
-				Parent->ElDirect=YAMLData[i].Content[2];
+				Parent->ElTot=YAMLData[i].Content[1]*1000;
+				Parent->ElCompound=YAMLData[i].Content[3]*1000;
+				Parent->ElDirect=YAMLData[i].Content[2]*1000;
 			}
 			else
 			{
@@ -193,5 +193,5 @@ void AssignDataToLevels(Nucleus *Parent,string &FileContent)
 			}
 		}
 	}
-}
+}*/
 

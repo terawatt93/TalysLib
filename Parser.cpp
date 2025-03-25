@@ -36,8 +36,28 @@ void CopyFileContentToBuffer(ifstream &t,string &buff)
 		t.read(&buff[0], SizeOfStr); 
 	}
 }
+void CopyFileContentToBuffer(string Filename,string &buff)
+{
+	ifstream t(Filename);
+	if(t.is_open())
+	{
+		t.seekg(0, std::ios::end);
+		size_t SizeOfStr = t.tellg();
+		buff=string(SizeOfStr,' ');
+		t.seekg(0);
+		t.read(&buff[0], SizeOfStr); 
+	}
+	t.close();
+}
 	
-
+bool IsNumber(const std::string& s) 
+{
+	std::istringstream iss(s);
+	double val;
+	iss >> val;
+	// Проверяем, что чтение прошло успешно и достигли конца строки
+	return !iss.fail() && iss.eof();
+}
 
 vector<string> GetListOfObjectNames(TFile *f)
 {

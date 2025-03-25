@@ -1,6 +1,12 @@
 #pragma once
 #include "../TalysLib.hh"
 
+class JSONLikeData
+{
+	public:
+	map<string,string> Content;
+}
+
 class YAML
 {
 	public:
