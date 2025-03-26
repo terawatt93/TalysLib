@@ -32,7 +32,44 @@ bool CheckPrimeKey(string line)
 	}
 	return Prime;
 }
-
+void GetDimension(string &key, string &dim)
+{
+	bool FindFirst=false;
+	string r_key;
+	for(unsigned int i=0;i<key.size();i++)
+	{
+		if(key[i]=='[')
+		{
+			FindFirst=true;
+			continue;
+		}
+		if(key[i]==']')
+		{
+			FindFirst=false;
+		}
+		if(FindFirst)
+		{
+			dim+=key[i];
+		}
+		if((dim.size()==0)&&(!FindFirst))
+		{
+			r_key+=key[i];
+		}
+	}
+	int Space_len=0;
+	for(unsigned int i=r_key.size()-1;i>=0;i--)
+	{
+		if(r_key[i]==' ')
+		{
+			r_key.pop_back();
+		}
+		else
+		{
+			break;
+		}
+	}
+	key=r_key;
+}
 class YANDFMapObject
 {
 	public:
@@ -42,6 +79,7 @@ class YANDFMapObject
 	string C_S;
 	bool ClassVariables=false;
 	string BackKey="";
+	string Dimension="";
 	YANDFMapObject& operator=(const int I)
 	{
 		C_I=I;
@@ -71,6 +109,22 @@ class YANDFMapObject
 	{
 		return Content[to_string(key)];
 	}
+	YANDFMapObject* at(string key)
+	{
+		//if (Content.find(key) != Content.end()) 
+		//{
+			return &Content[key];
+		//}
+		//return 0;
+	}
+	YANDFMapObject* at(int key)
+	{
+		//if (Content.find(to_string(key)) != Content.end()) 
+		//{
+			return &Content[to_string(key)];
+		//}
+		//return 0;
+	}
 	void get(int &I)
 	{
 		I=C_I;
@@ -82,6 +136,18 @@ class YANDFMapObject
 	void get(string &I)
 	{
 		I=C_S;
+	}
+	void set(int I)
+	{
+		C_I=I;
+	}
+	void set(double I)
+	{
+		C_F=I;
+	}
+	void set(string I)
+	{
+		C_S=I;
 	}
 	void get(string k,int &I)
 	{
@@ -118,6 +184,7 @@ class YANDFMapObject
 		string LastKey="";
 		int LastIndent=0;
 		vector<string> keys;
+		vector<int> indents;
 		while(getline(ss,line))
 		{
 			bool IsPrimeKey=false;
@@ -140,27 +207,90 @@ class YANDFMapObject
 					}
 				}
 				IsPrimeKey=CheckPrimeKey(line);
-				
 				vector<string> STRContent=SplitString(line,':');
 				string key=STRContent[0];
 				key=key.substr(Indent+1);
+				string Dim="";
+				GetDimension(key,Dim);
 				if(LastIndent>Indent)
 				{
-					for(unsigned int i=0;i<keys.size();i++)
+					vector<string> real_keys;
+					vector<int> real_indents;
+					for(unsigned int i=0;i<indents.size();i++)
 					{
-						cout<<"key "<<i<<":"<<keys[i]<<"\n";
+						if(Indent>indents[i])
+						{
+							real_keys.push_back(keys[i]);
+							real_indents.push_back(indents[i]);
+						}
 					}
-					keys.resize(0);
+					keys=real_keys;
+					indents=real_indents;
 				}
 				if(IsPrimeKey)
 				{
 					keys.push_back(key);
+					indents.push_back(Indent);
 				}
 				LastIndent=Indent;
+				if(!IsPrimeKey)
+				{
+					YANDFMapObject *obj=this;
+					for(unsigned int i=0;i<keys.size();i++)
+					{
+						obj=obj->at(keys[i]);
+					}
+					if(obj)
+					{
+						if(STRContent.size()>1)
+						{
+							string Value=STRContent[1];
+							if(IsNumber(Value))
+							{
+								if(IsFloat(Value))
+								{
+									(obj->at(key))->set(atof(Value.c_str()));
+								}
+								else
+								{
+									(obj->at(key))->set(atoi(Value.c_str()));
+									(obj->at(key))->Dimension=Dim;
+								}
+							}
+							else
+							{
+								(obj->at(key))->set(Value);
+							}
+						}
+					}
+				}
 			}
 		}
 	}
 };
+
+void GetProductsFromCalculationDir(vector<string> Filenames,int Z, int A,string Projectile, vector<pair<int,int> > &ZA, vector<string> &Reactions)
+{
+	int Zproj=0, Aproj=0;
+	GetAZ(Projectile,Zproj,Aproj);
+	for(unsigned int i=0;i<Filenames.size();i++)
+	{
+		if(Filenames[i].size()>8)
+		{
+			if((Filenames[i][0]=='r')&&(Filenames[i][1]=='p'))
+			{
+				string Zstr=Filenames[i].substr(2,3);
+				string Astr=Filenames[i].substr(5,3);
+				int ZZ=atoi(Zstr.c_str()), AA=atoi(Astr.c_str());
+				ZA.push_back({ZZ,AA});
+				int Zout=Z+Zproj-ZZ;
+				int Aout=A+Aproj-AA;
+				string OutgoingParticle=GetParticleName(Zout,Aout);
+				Reactions.push_back("("+Projectile+","+OutgoingParticle+")");
+			}
+		}
+	}
+}
 
 void Test()
 {
@@ -168,4 +298,20 @@ void Test()
 	CopyFileContentToBuffer("gam021047L17L02.tot",s);
 	YANDFMapObject m;
 	m.ParseYANDF(s);
+	double LevNumber=0;
+	m["reaction"]["gamma energy"].get(LevNumber);
+	cout<<LevNumber<<"\n";
 }
+void Test2()
+{
+	vector<string> Filenames=ListFiles("/dev/shm/CalculationResults0/48Ti0/"), Reactions;
+	int Z=22,A=48;
+	string Projectile="n";
+	vector<pair<int,int> > ZA;
+	GetProductsFromCalculationDir(Filenames,Z,A,Projectile,ZA,Reactions);
+	for(unsigned int i=0;i<ZA.size();i++)
+	{
+		cout<<"Z="<<ZA[i].first<<" A="<<ZA[i].second<<" Reaction="<<Reactions[i]<<"\n";
+	}
+}
+

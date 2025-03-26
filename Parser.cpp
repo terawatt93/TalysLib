@@ -56,7 +56,22 @@ bool IsNumber(const std::string& s)
 	double val;
 	iss >> val;
 	// Проверяем, что чтение прошло успешно и достигли конца строки
-	return !iss.fail() && iss.eof();
+	return !iss.fail();// && iss.eof();
+}
+bool IsFloat(const std::string& s) 
+{
+	std::istringstream iss(s);
+	double val;
+	iss >> val;
+	// Проверяем, что чтение прошло успешно и достигли конца строки
+	if(!iss.fail())
+	{
+		if((s.find(".")!=string::npos)||(s.find("e")!=string::npos)||(s.find("E")!=string::npos))
+		{
+			return true;
+		}
+	}
+	return false;
 }
 
 vector<string> GetListOfObjectNames(TFile *f)
@@ -506,6 +521,14 @@ string GetParticleName(int Z, int A)
 	if((Z==0)&&(A==1))
 	{
 		return "n";
+	}
+	if((Z==0)&&(A==0))
+	{
+		return "g";
+	}
+	if((Z==0)&&(A==2))
+	{
+		return "2n";
 	}
 	if((Z==1)&&(A==1))
 	{
