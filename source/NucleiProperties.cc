@@ -885,7 +885,6 @@ void Nucleus::ReadTalysCalculationResult_v2()
 			CompoundInelastic=m.DataContent[7][m.NRows-1];
 			DirectInelastic=m.DataContent[8][m.NRows-1];
 			TotTalys=m.DataContent[3][m.NRows-1];
-			
 		}
 	}
 	//цикл по всем именам файлов в директории с результатами расчетов

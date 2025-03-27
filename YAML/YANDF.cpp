@@ -296,7 +296,8 @@ void YANDFMapObject::ParseYANDF(string inp)
 					{
 						string str;
 						sstr1>>str;
-						DataContent[NRowsRead][i]=atof(str.c_str());
+						DataContent[i][NRowsRead]=atof(str.c_str());
+						//DataContent[i]
 					}
 					NRowsRead++;
 				}
