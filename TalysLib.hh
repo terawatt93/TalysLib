@@ -809,8 +809,12 @@ class Nucleus:public NucleusData
 	
 	//EXFOR
 	
-	C5Manager c5_manager;
 	
+	vector<string> CalculationResultFilenames;//в этом векторе хранятся имена файлов с результатами расчетов
+	void GenerateListOfProducts_v2();//функция, делфющая список ядер в версии 2...
+	void ReadTalysCalculationResult_v2();//функция, читающая результаты расчетов в версии 2...
+	
+	C5Manager c5_manager;
 	void AssignC5ToLevel();
 	void AssignC5EnergyDistributionToLevel(SubentData& subent);
 	void AssignC5AngularDistributionToLevel(SubentData& subent);	

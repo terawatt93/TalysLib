@@ -921,12 +921,20 @@ int Nproc()
 	ss>>result;
 	return result;
 }
-vector<string> ListFiles(string mask)
+vector<string> ListFiles(string mask, string PathTo="")
 {
 	vector<string> FileNames;
 	string s;
 	FILE* fp;
-	fp = popen(("ls "+mask).c_str(),"r");
+	if(PathTo.size()==0)
+	{
+		fp = popen(("ls "+mask).c_str(),"r");
+	}
+	else
+	{
+		fp = popen(("cd "+PathTo+"; ls "+mask).c_str(),"r");
+	}
+	
 	int ReadFlag=1;
 	while(ReadFlag==1)
 	{

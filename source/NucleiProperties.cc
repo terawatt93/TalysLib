@@ -6,7 +6,8 @@
 #include <algorithm>
 #include <cctype>
 #include "../Parser.cpp"
-#include "../YAML/YAML.cpp"
+//#include "../YAML/YAML.cpp"
+#include "../YAML/YANDF.cpp"
 #include <TLine.h>
 #include <TText.h>
 #include <TList.h>
@@ -797,7 +798,7 @@ void Nucleus::ReadTalysCalculationResultNew()
 	}
 }
 
-void Nucleus::ReadTalysCalculationResultsForGamma(stringstream &ifs)
+/*void Nucleus::ReadTalysCalculationResultsForGamma(stringstream &ifs)
 {
 	string line;
 	bool read_flag=false;
@@ -840,6 +841,54 @@ void Nucleus::ReadTalysCalculationResultsForAngularDistributions()
 		AssignDataToLevels(this,RawOutput);
 	}
 	
+}*/
+
+void Nucleus::GenerateListOfProducts_v2()
+{
+	if(CalculationResultFilenames.size()==0)
+	{
+		CalculationResultFilenames=ListFiles("",PathToCalculationDir);
+	}
+	vector<string> Reactions, OutParticles;
+	vector<pair<int,int> > ZA;
+	GetProductsFromCalculationDir(CalculationResultFilenames,Z,A,Projectile,ZA,Reactions,OutParticles);
+	for(unsigned int i=0;i<ZA.size();i++)
+	{
+		if(!FindProductByReaction(Reactions[i]))
+		{
+			Products.push_back(Nucleus(to_string(ZA[i].second)+GetNucleusName(ZA[i].first),Reactions[i]));
+			Products[Products.size()-1].OutgoingParticle=OutParticles[i];
+		}
+	}
+}
+void Nucleus::ReadTalysCalculationResult_v2()
+{
+	if(Products.size()==0)
+	{
+		GenerateListOfProducts_v2();
+	}
+	for(unsigned int i=0;i<CalculationResultFilenames.size();i++)
+	{
+		string &nm=CalculationResultFilenames[i];
+		if(nm=="all.tot")
+		{
+			YANDFMapObject m;
+			cout<<"Name: "<<PathToCalculationDir+"/"+nm<<"\n";
+			m.ReadYANDF(PathToCalculationDir+"/"+nm);
+			//TotElastic=0, CompoundElastic=0, DirectElastic=0, TotInelastic=0, CompoundInelastic=0, DirectInelastic=0, TotTalys=0;
+			 //0  1           2        3      4               5            6         7              8        9      
+			 //E Non-elastic Elastic Total Compound_elast. Shape_elastic Reaction Compound_nonel. Direct Preequilibrium Direct_capture
+			TotElastic=m.DataContent[2][m.NRows-1];
+			CompoundElastic=m.DataContent[4][m.NRows-1];
+			DirectElastic=m.DataContent[5][m.NRows-1];
+			TotInelastic=m.DataContent[6][m.NRows-1];
+			CompoundInelastic=m.DataContent[7][m.NRows-1];
+			DirectInelastic=m.DataContent[8][m.NRows-1];
+			TotTalys=m.DataContent[3][m.NRows-1];
+			
+		}
+	}
+	//цикл по всем именам файлов в директории с результатами расчетов
 }
 
 void Nucleus::ReadTalysCalculationResult()
@@ -856,7 +905,7 @@ void Nucleus::ReadTalysCalculationResult()
 		ifs<<RawOutput;
 	}
 	//конец 
-	if(atof(getenv("TALYSVERSION"))>2)
+	/*if(atof(getenv("TALYSVERSION"))>2)
 	{
 		ReadTalysCalculationResultsForGamma(ifs);
 		if(fMotherNucleus)
@@ -864,7 +913,7 @@ void Nucleus::ReadTalysCalculationResult()
 			fMotherNucleus->ReadTalysCalculationResultsForAngularDistributions();
 		}
 		return;
-	}
+	}*/
 	
 	
 	string line;
