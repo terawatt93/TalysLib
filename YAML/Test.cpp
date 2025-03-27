@@ -80,6 +80,10 @@ class YANDFMapObject
 	bool ClassVariables=false;
 	string BackKey="";
 	string Dimension="";
+	vector<vector<double> > DataContent;
+	vector<string> DataDimensions;
+	vector<string> DataHeaders;
+	int NColumns=0, NRows=0,NRowsRead=0;
 	YANDFMapObject& operator=(const int I)
 	{
 		C_I=I;
@@ -192,7 +196,7 @@ class YANDFMapObject
 			{
 				continue;
 			}
-			if(line[0]=='#')
+			if((line[0]=='#')&&(line[1]!='#'))
 			{
 				int Indent=0;
 				for(unsigned int i=1;i<line.size();i++)
@@ -265,11 +269,71 @@ class YANDFMapObject
 					}
 				}
 			}
+			else
+			{
+				if((line[0]=='#')&&(line[1]=='#'))
+				{
+					this->at("quantity")->at("datablock")->at("columns")->get(NColumns);
+					this->at("quantity")->at("datablock")->at("entries")->get(NRows);
+					DataContent.resize(NColumns);
+					stringstream sstr1(line);
+					bool FillDataHeaders=false;
+					for(int i=0;i<NColumns;i++)
+					{
+						DataContent[i].resize(NRows);
+					}
+					if(DataHeaders.size()==0)
+					{
+						for(int i=0;i<NColumns+1;i++)
+						{
+							string str;
+							sstr1>>str;
+							if(i>0)
+							{
+								DataHeaders.push_back(str);
+							}
+						}
+						FillDataHeaders=true;
+					}
+					if((DataDimensions.size()==0)&&(!FillDataHeaders))
+					{
+						for(int i=0;i<NColumns+1;i++)
+						{
+							string str;
+							sstr1>>str;
+							if(i>0)
+							{
+								DataDimensions.push_back(str);
+							}
+						}
+					}
+				}
+				else
+				{
+					if(NRowsRead<NRows)
+					{
+						stringstream sstr1(line);
+						for(int i=0;i<NColumns;i++)
+						{
+							string str;
+							sstr1>>str;
+							DataContent[NRowsRead][i]=atof(str.c_str());
+						}
+						NRowsRead++;
+					}
+				}
+			}
 		}
+	}
+	void ReadYANDF(string fname)
+	{
+		string dat;
+		CopyFileContentToBuffer("gam021047L17L02.tot",dat);
+		ParseYANDF(dat);
 	}
 };
 
-void GetProductsFromCalculationDir(vector<string> Filenames,int Z, int A,string Projectile, vector<pair<int,int> > &ZA, vector<string> &Reactions)
+void GetProductsFromCalculationDir(vector<string> Filenames,int Z, int A,string Projectile, vector<pair<int,int> > &ZA, vector<string> &Reactions, vector<string> OutParticles)
 {
 	int Zproj=0, Aproj=0;
 	GetAZ(Projectile,Zproj,Aproj);
@@ -286,6 +350,7 @@ void GetProductsFromCalculationDir(vector<string> Filenames,int Z, int A,string 
 				int Zout=Z+Zproj-ZZ;
 				int Aout=A+Aproj-AA;
 				string OutgoingParticle=GetParticleName(Zout,Aout);
+				OutParticles.push_back(OutgoingParticle);
 				Reactions.push_back("("+Projectile+","+OutgoingParticle+")");
 			}
 		}
@@ -300,6 +365,7 @@ void Test()
 	m.ParseYANDF(s);
 	double LevNumber=0;
 	m["reaction"]["gamma energy"].get(LevNumber);
+	cout<<m["quantity"]["datablock"]["columns"].C_I<<"\n";
 	cout<<LevNumber<<"\n";
 }
 void Test2()
