@@ -28,6 +28,8 @@ class YANDFMapObject
 	YANDFMapObject& operator[](int key);
 	YANDFMapObject* at(string key);
 	YANDFMapObject* at(int key);
+	vector<double> GetColumn(string key);
+	double GetCell(string key,int Index);
 	void get(int &I);
 	void get(double &I);
 	void get(string &I);

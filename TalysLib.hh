@@ -760,7 +760,7 @@ class NucleusData:public TObject
 	//сечения и дифсечения
 	vector<float> Angle, AngleLab, ElTot, ElCompound, ElDirect;//дифсечения
 	vector<vector<float> > ElTotValues, ElCompoundValues, ElDirectValues, AngleLabValues;
-	float TOTGamProd=0, TOTNProd=0, TOTPProd=0, TOTDProd=0, TOTAProd=0,TOTTauProd=0;
+	float TOTGamProd=0, TOTNProd=0, TOTPProd=0, TOTDProd=0, TOTAProd=0, TOT3HeProd=0, TOTTProd=0;
 	float TotElastic=0, CompoundElastic=0, DirectElastic=0, TotInelastic=0, CompoundInelastic=0, DirectInelastic=0, TotTalys=0;//сечения, для продуктов неупругие соответствуют сечению их образования
 	float Production=0;//сечение образования данного ядра
 	

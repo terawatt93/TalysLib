@@ -160,6 +160,31 @@ void YANDFMapObject::get(string k,YANDFMapObject &I)
 		I=Content[k];
 	}
 }
+
+vector<double> YANDFMapObject::GetColumn(string key)
+{
+	for(int i=0;i<NColumns;i++)
+	{
+		if(DataHeaders[i]==key)
+		{
+			return DataContent[i];
+		}
+	}
+	vector<double> a;
+	return a;
+}
+double  YANDFMapObject::GetCell(string key,int Index)
+{
+	for(int i=0;i<NColumns;i++)
+	{
+		if(DataHeaders[i]==key)
+		{
+			return DataContent[i][Index];
+		}
+	}
+	return nan("YANDFMapObject::GetCell returned nan");
+}
+
 void YANDFMapObject::ParseYANDF(string inp)
 {
 	string line;

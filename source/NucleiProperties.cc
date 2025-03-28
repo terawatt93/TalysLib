@@ -870,21 +870,47 @@ void Nucleus::ReadTalysCalculationResult_v2()
 	for(unsigned int i=0;i<CalculationResultFilenames.size();i++)
 	{
 		string &nm=CalculationResultFilenames[i];
-		if(nm=="all.tot")
+		if(nm=="all.tot")//полные сечения
 		{
 			YANDFMapObject m;
-			cout<<"Name: "<<PathToCalculationDir+"/"+nm<<"\n";
 			m.ReadYANDF(PathToCalculationDir+"/"+nm);
 			//TotElastic=0, CompoundElastic=0, DirectElastic=0, TotInelastic=0, CompoundInelastic=0, DirectInelastic=0, TotTalys=0;
 			 //0  1           2        3      4               5            6         7              8        9      
 			 //E Non-elastic Elastic Total Compound_elast. Shape_elastic Reaction Compound_nonel. Direct Preequilibrium Direct_capture
-			TotElastic=m.DataContent[2][m.NRows-1];
-			CompoundElastic=m.DataContent[4][m.NRows-1];
-			DirectElastic=m.DataContent[5][m.NRows-1];
-			TotInelastic=m.DataContent[6][m.NRows-1];
-			CompoundInelastic=m.DataContent[7][m.NRows-1];
-			DirectInelastic=m.DataContent[8][m.NRows-1];
-			TotTalys=m.DataContent[3][m.NRows-1];
+			TotElastic=m.GetCell("Elastic",m.NRows-1);
+			CompoundElastic=m.GetCell("Compound_elast.",m.NRows-1);
+			DirectElastic=m.GetCell("Shape_elastic",m.NRows-1);
+			TotInelastic=m.GetCell("Reaction",m.NRows-1);
+			CompoundInelastic=m.GetCell("Compound_nonel.",m.NRows-1);
+			DirectInelastic=m.GetCell("Direct",m.NRows-1);
+			TotTalys=m.GetCell("Total",m.NRows-1);
+		}
+		if(nm=="binary.tot")//полные сечения
+		{
+			YANDFMapObject m;
+			m.ReadYANDF(PathToCalculationDir+"/"+nm);
+			//TOTGamProd=0, TOTNProd=0, TOTPProd=0, TOTDProd=0, TOTAProd=0,TOTTauProd=0;
+			TOTGamProd=m.GetCell("gamma",m.NRows-1);
+			TOTNProd=m.GetCell("neutron",m.NRows-1);
+			TOTDProd=m.GetCell("deuteron",m.NRows-1);
+			TOTPProd=m.GetCell("proton",m.NRows-1);
+			TOTAProd=m.GetCell("alpha",m.NRows-1);
+			TOT3HeProd=m.GetCell("helium-3",m.NRows-1);
+			TOTTProd=m.GetCell("triton",m.NRows-1);
+		}
+		if((nm[0]=='r')&&(nm[1]=='p'))//сечения образования отдельных продуктов
+		{
+			int ZZ=atoi(nm.substr(2,3).c_str()), AA=atoi(nm.substr(2,3).c_str());
+			for(unsigned int i=0;i<Products.size();i++)
+			{
+				if(Products[i].Z==ZZ&&Products[i].A==AA)
+				{
+					YANDFMapObject m;
+					m.ReadYANDF(PathToCalculationDir+"/"+nm);
+					Products[i].Production=m.GetCell("xs",m.NRows-1);
+					break;
+				}
+			}
 		}
 	}
 	//цикл по всем именам файлов в директории с результатами расчетов
