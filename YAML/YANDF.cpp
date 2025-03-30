@@ -182,7 +182,8 @@ double  YANDFMapObject::GetCell(string key,int Index)
 			return DataContent[i][Index];
 		}
 	}
-	return nan("YANDFMapObject::GetCell returned nan");
+	//return nan("YANDFMapObject::GetCell returned nan");
+	return 0;
 }
 
 void YANDFMapObject::ParseYANDF(string inp)

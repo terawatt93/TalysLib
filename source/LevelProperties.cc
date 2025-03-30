@@ -733,7 +733,7 @@ void Level::SetTGraphNameAndTitle(string ValName)
 	}
 }
 
-void Level::SetDeformation(char LevT, int BandN, int BandL, int MagN, int NPhon, vector<float> *Def)
+void Level::SetDeformation(char LevT, int BandN, int BandL, int MagN, int NPhon, vector<double> *Def)
 {
 	if(deformation!=0)
 	{
@@ -780,9 +780,9 @@ void Level::SetDeformation(char LevT, int BandN, int BandL, int MagN, int NPhon,
 	}
 }
 
-vector<float> Level::GetDeformationBeta()
+vector<double> Level::GetDeformationBeta()
 {//Level->LevelDeformation->Beta
-	vector<float> result;
+	vector<double> result;
 	if(deformation!=0)
 	{
 		return deformation->Beta;
@@ -954,7 +954,7 @@ TGraph2D* Level::GetAngularDistribution2D(string type,string option)//если �
 			}
 		}
 		int PointIterator=0;
-		vector<float> *x=0;
+		vector<double> *x=0;
 		if(X_Values.size()!=0)
 		{
 			x=&X_Values;

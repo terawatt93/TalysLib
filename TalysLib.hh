@@ -105,6 +105,7 @@ class TalysLibManager//потом перенсти в отдельный фай�
 	static TalysLibManager& Instance();
 	static TalysLibManager* GetPointer();
 	//static TalysLibManager* Pointer;//!
+	int MaxThreads=0;//максимальное количество используемых потоков
 	bool EnableWarning=true;
 	void SetEnableWarning(bool flag);
 	void SetC4Flag(bool flag);
@@ -432,8 +433,8 @@ class GammaTransitionData:public TObject
 	//float Energy=0,EnergyErr=0,Intensity=0,CrossSection=0,E_in=0,Tolerancy=0,Rel_Cs=0,TalysCrossSection=0, TalysE_i=0,TalysE_f=0;
 	//расширение для разных энергий
 	float Energy=0,EnergyErr=0,Branching=0,Intensity=0,CrossSection=0,E_in=0,Tolerancy=0,Rel_Cs=0,TalysCrossSection=0, TalysE_i=0,TalysE_f=0;
-	vector<float> TalysCrossSections;
-	vector<float> X_Values;
+	vector<double> TalysCrossSections;
+	vector<double> X_Values;
 	SpinParity TalysJP_i,TalysJP_f;
 	vector<SpinParity> TalysMultipolarity;
 	string Multipolarity,nuclide,reaction, Origin;
@@ -528,11 +529,11 @@ class LevelData:public TObject
 	vector<GammaTransitionData> GammasData;
 	int Mark;//величина, определяющая достоверность уровня: размер вектора с JP, если JP.size=0, то Mark=99,если есть неопределенность (скобки), то размер ветора*2
 	float Energy, EnergyErr, TalysCS, TalysCSCompound, TalysCSDirect, OutgoingParticleEnergy, Width; SpinParity TalysJP;//Width - in MeV (From RIPL-3)
-	vector<float> ADTot,ADDirect, ADCompound, Angle, AngleLab, Branching;
+	vector<double> ADTot,ADDirect, ADCompound, Angle, AngleLab, Branching;
 	vector<unsigned int> NumbersOfFinalLevels;
-	vector<float> CSValues, CSCompoundValues, CSDirectValues;
-	vector<float> X_Values;
-	vector<vector<float > > ADTotValues,ADDirectValues, ADCompoundValues, AngleLabValues;
+	vector<double> CSValues, CSCompoundValues, CSDirectValues;
+	vector<double> X_Values;
+	vector<vector<double > > ADTotValues,ADDirectValues, ADCompoundValues, AngleLabValues;
 	
 	AdditionalInformationContainer AI;
 	double& AdditionalInformation(string Key); 
@@ -545,7 +546,7 @@ class LevelDeformationData:public TObject
 	LevelDeformationData(): TObject() { }
 	char TypeOfLevel,TypeOfDeformation;
 	int NumberOfBand, NumberOfLevel, LOfBand=-1, NumberOfPhonons=-1, MagneticNumber=-1;
-	vector<float> Beta;
+	vector<double> Beta;
 	ClassDef(LevelDeformationData, CLASSVERSION);
 };
 class LevelDeformation:public LevelDeformationData
@@ -583,9 +584,9 @@ class Deformation:public DeformationData
 	char GetTypeOfCollectivity();
 	void ReadDeformation();
 	void WriteDeformation(string filename);
-	void SetDeformation(Level *l,char LevT, int BandN=-1, int BandL=-1, int MagN=-1,int NPhon=-1, vector<float> *Def=0);
-	void SetDeformationValue(Level *l,vector<float> *Def=0);
-	vector<float> GetDeformationBeta(Level *l);
+	void SetDeformation(Level *l,char LevT, int BandN=-1, int BandL=-1, int MagN=-1,int NPhon=-1, vector<double> *Def=0);
+	void SetDeformationValue(Level *l,vector<double> *Def=0);
+	vector<double> GetDeformationBeta(Level *l);
 	void SetDefaultDeformationType(char _Type='D');
 	char DefaultDeformation='D';
 	int maxrot=0,maxband=0;
@@ -661,8 +662,8 @@ class Level:public LevelData
 	//методы для задания параметров уровня
 	void SetEnergy(float Energy); void SetEnergyErr(float EnergyErr); void SetTalysCS(float TalysCS); void SetTalysSpinParity(SpinParity TalysJP);
 	void SetOrigin(string Origin); void AddJPValue(SpinParity JPValue); void AddSimilarLevel(Level* SimilarLevel); 
-	void SetDeformation(char LevT, int BandN=-1, int BandL=-1,  int MagN=-1, int NPhon=-1,vector<float> *Def=0);//генерирует объект deformation и добавляет его в ядерную деформацию.
-	vector<float> GetDeformationBeta();//функция возвращает вектор значений коэф. деформации beta_2, заданных для данного уровня
+	void SetDeformation(char LevT, int BandN=-1, int BandL=-1,  int MagN=-1, int NPhon=-1,vector<double> *Def=0);//генерирует объект deformation и добавляет его в ядерную деформацию.
+	vector<double> GetDeformationBeta();//функция возвращает вектор значений коэф. деформации beta_2, заданных для данного уровня
 	//порядок и назначение аргументов соответствуют .def файлу (ECIS_report.pdf, стр.3)
 	//методы для получения параметров уровня
 	float GetEnergy(); float GetEnergyErr(); float GetTalysCS(); SpinParity GetTalysSpinParity();
@@ -755,21 +756,21 @@ class NucleusData:public TObject
 	vector<LevelData> LevelsData;
 	vector<NucleusData> ProductsData;
 	bool TalysCalculated;
-	vector<float> EnergyGrid;//сетка энергий, используемая для расчетов
+	vector<double> EnergyGrid;//сетка энергий, используемая для расчетов
 	double Abundance,ProjectileEnergy=14.1,ProjectileEnergyCM,Mass,ProjectileMass,OutgoingParticleMass;
 	//сечения и дифсечения
-	vector<float> Angle, AngleLab, ElTot, ElCompound, ElDirect;//дифсечения
-	vector<vector<float> > ElTotValues, ElCompoundValues, ElDirectValues, AngleLabValues;
+	vector<double> Angle, AngleLab, ElTot, ElCompound, ElDirect;//дифсечения
+	vector<vector<double> > ElTotValues, ElCompoundValues, ElDirectValues, AngleLabValues;
 	float TOTGamProd=0, TOTNProd=0, TOTPProd=0, TOTDProd=0, TOTAProd=0, TOT3HeProd=0, TOTTProd=0;
-	float TotElastic=0, CompoundElastic=0, DirectElastic=0, TotInelastic=0, CompoundInelastic=0, DirectInelastic=0, TotTalys=0;//сечения, для продуктов неупругие соответствуют сечению их образования
+	float TotElastic=0, CompoundElastic=0, DirectElastic=0, TotInelastic=0, CompoundInelastic=0, DirectInelastic=0, TotTalys=0,TOTTauProd=0;//сечения, для продуктов неупругие соответствуют сечению их образования
 	float Production=0;//сечение образования данного ядра
 	
-	vector<float> TOTGamProdValues, TOTNProdValues, TOTPProdValues, TOTDProdValues, TOTAProdValues,TOTTauProdValues;
-	vector<float> TotElasticValues, CompoundElasticValues, DirectElasticValues, TotInelasticValues, CompoundInelasticValues, DirectInelasticValues, TotTalysValues;
+	vector<double> TOTGamProdValues,ProductionValues, TOTNProdValues, TOTPProdValues, TOTDProdValues, TOTAProdValues,TOTTauProdValues,TOTTProdValues;
+	vector<double> TotElasticValues, CompoundElasticValues, DirectElasticValues, TotInelasticValues, CompoundInelasticValues, DirectInelasticValues, TotTalysValues;
 	
 	float BNECS_g, BNECS_n, BNECS_p, BNECS_d, BNECS_t, BNECS_tau, BNECS_a, TEISTot,TEISCont,TEISDiscr;//binary non-elastic cross-sections, total exclusive inelastic cross-sections
 	
-	vector<float> BNECS_g_Values, BNECS_n_Values, BNECS_p_Values, BNECS_d_Values, BNECS_t_Values, BNECS_tau_Values, BNECS_a_Values, TEISTot_Values,TEISCont_Values,TEISDiscr_Values;
+	vector<double> BNECS_g_Values, BNECS_n_Values, BNECS_p_Values, BNECS_d_Values, BNECS_t_Values, BNECS_tau_Values, BNECS_a_Values, TEISTot_Values,TEISCont_Values,TEISDiscr_Values;
 	
 	
 	
@@ -885,7 +886,7 @@ class Nucleus:public NucleusData
 	void SortingLevels();
 	void GenerateEnergyGrid(float min, float step, float max);
 	void GenerateEnergyGrid(vector<TGraphErrors*> Data);//в функцию передается вектор указателей на TGraphErrors, которые на самом деле C4Data
-	void SetEnergyGrid(vector<float> &grid);
+	void SetEnergyGrid(vector<double> &grid);
 	Nucleus* FindProductByReaction(string reaction);
 	Nucleus* FindProductByName(string _Name);
 	Nucleus* FindProductByMT(int MT);
@@ -942,10 +943,10 @@ class Nucleus:public NucleusData
 	void AssignPointers();
 	void ErasePointers();
 	void AssignDeformationsToLevels();
-	void SetLevelDeformation(int LevelNumber,char LevT, int BandN=-1, int BandL=-1, int MagN=-1, int NPhon=-1,  vector<float> *DefVec=0);
-	void SetLevelDeformation(double LevelEnergy,char LevT, int BandN=-1, int BandL=-1, int MagN=-1, int NPhon=-1, vector<float> *DefVec=0);
-	vector<float> GetLevelDeformationBeta(int LevelNumber);
-	vector<float> GetLevelDeformationBeta(double LevelEnergy);
+	void SetLevelDeformation(int LevelNumber,char LevT, int BandN=-1, int BandL=-1, int MagN=-1, int NPhon=-1,  vector<double> *DefVec=0);
+	void SetLevelDeformation(double LevelEnergy,char LevT, int BandN=-1, int BandL=-1, int MagN=-1, int NPhon=-1, vector<double> *DefVec=0);
+	vector<double> GetLevelDeformationBeta(int LevelNumber);
+	vector<double> GetLevelDeformationBeta(double LevelEnergy);
 	string PrintLevels();
 	string PrintReactions();
 	string ReactionToTalysNotation(char DataSelection=kExcitationCS);
@@ -1065,7 +1066,7 @@ class TalysFitterMT
 	bool Calculated=false;
 	bool GeneratedTF1=false;
 	bool UseC4=false;
-	vector<float> EnergyGrid;
+	vector<double> EnergyGrid;
 	TalysFitterMT(string NuclName, unsigned int ThreadNumber=0);
 	unsigned int InitThreadNumber=0;
 	Nucleus Nuclide;

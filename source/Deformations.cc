@@ -114,7 +114,7 @@ TString Add4IValue(int value)//ну реально, их как-то дофиг�
 	}
 	return "    ";
 }
-TString GenerateLevelDefString(int LevN, char LevT, int BandN=-1, int BandL=-1, int MagN=-1, int NPhon=-1, vector<float> *Def=0)
+TString GenerateLevelDefString(int LevN, char LevT, int BandN=-1, int BandL=-1, int MagN=-1, int NPhon=-1, vector<double> *Def=0)
 {
 	TString result=TString::Format("%4i   %c",LevN,LevT);
 	result+=(Add4IValue(BandN)+Add4IValue(BandL)+Add4IValue(MagN)+Add4IValue(NPhon));
@@ -247,7 +247,7 @@ void Deformation::Sort()
 		}
 	}
 }
-void Deformation::SetDeformation(Level *l,char LevT, int BandN, int BandL, int MagN, int NPhon, vector<float> *Def)//для совместимости с root6.14
+void Deformation::SetDeformation(Level *l,char LevT, int BandN, int BandL, int MagN, int NPhon, vector<double> *Def)//для совместимости с root6.14
 {
 	LevelDeformation *ld=0;
 	if(l==0)
@@ -292,9 +292,9 @@ void Deformation::SetDeformation(Level *l,char LevT, int BandN, int BandL, int M
 	l->deformation=ld;
 	Sort();
 }
-vector<float> Deformation::GetDeformationBeta(Level *l)
+vector<double> Deformation::GetDeformationBeta(Level *l)
 {
-	vector<float> result;
+	vector<double> result;
 	if(l==0)
 	{
 		cout<<"Deformation::GetDeformationBeta(...) error: level is not defined. Return empty beta2 vector!\n";
@@ -351,7 +351,7 @@ void Deformation::SetNLevels(int N)//установить количество �
 	}
 	NLevels=N;
 }
-void Deformation::SetDeformationValue(Level *l,vector<float> *Def)
+void Deformation::SetDeformationValue(Level *l,vector<double> *Def)
 {
 	LevelDeformation *ld=0;
 	if(l==0)

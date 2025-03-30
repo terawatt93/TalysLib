@@ -346,6 +346,22 @@ int sgn(int val)
     return 0;
 }
 
+bool CompareBeginOfString(string s1, string s2)//функция, выполняющая сравнение начала строки (s1) с маской (s2)
+{
+	if(s1.size()<s2.size())
+	{
+		return false;
+	}
+	for(unsigned int i=0;i<s2.size();i++)
+	{
+		if(s1[i]!=s2[i])
+		{
+			return false;
+		}
+	}
+	return true;
+}
+
 vector<double> QuantumSum(float A, float B)
 {
 	float Min=abs(abs(A)-abs(B));
