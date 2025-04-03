@@ -476,13 +476,13 @@ Level::Level(LevelData ld)
 }
 TGraph* Level::GetAngularDistribution(string type,string option)//если график уже построен, выдается сохраненный, если нет, или option=="new", строится заново
 {
-	if(fNucleus->fMotherNucleus)
+	/*if(fNucleus->fMotherNucleus)
 	{
 		if((Number==0)&&(fNucleus->fMotherNucleus->Name==fNucleus->Name))
 		{
 			return fNucleus->fMotherNucleus->GetElasticAngularDistribution(type,option);
 		}
-	}
+	}*/
 	
 	if((!PlottedADist)||(option=="new"))
 	{

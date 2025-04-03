@@ -356,7 +356,15 @@ void GetProductsFromCalculationDir(vector<string> Filenames,int Z, int A,string 
 				int Aout=A+Aproj-AA;
 				string OutgoingParticle=GetParticleName(Zout,Aout);
 				OutParticles.push_back(OutgoingParticle);
-				Reactions.push_back("("+Projectile+","+OutgoingParticle+")");
+				if(Zout==Zproj && Aout==Aproj)
+				{
+					Reactions.push_back("("+Projectile+","+OutgoingParticle+"')");
+				}
+				else
+				{
+					Reactions.push_back("("+Projectile+","+OutgoingParticle+")");
+				}
+				
 			}
 		}
 	}

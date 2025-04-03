@@ -303,6 +303,13 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 					if(Levels.size()>FinalLevelNumber)
 					{
 						gt.Energy=lev.Energy-Levels[FinalLevelNumber].Energy;
+						gt.TalysJP_i=lev.TalysJP;
+						gt.TalysJP_f=Levels[FinalLevelNumber].TalysJP;
+						
+						gt.TalysE_i=lev.Energy;
+						gt.TalysE_f=Levels[FinalLevelNumber].Energy;
+						
+						gt.TalysJP_f=Levels[FinalLevelNumber].TalysJP;
 						lev.Gammas.push_back(gt);
 					}
 					lev.Branching.push_back(Branch);
@@ -1406,7 +1413,20 @@ TGraph* Nucleus::GetElasticAngularDistribution(string type,string option)
 {
 	if(!fMotherNucleus)
 	{
-		if((!PlottedADist)||(option=="new")||kAlwaysNewGraphs)
+		for(unsigned int i=0;i<Products.size();i++)
+		{
+			if(Products[i].Name==Name)
+			{
+				TGraph* gr= Products[i].Levels[0].GetAngularDistribution(type,option);
+				if(gr)
+				{
+					gr->SetName("Elastic");
+					gr->SetTitle(TString::Format("%s(%s,el);Angle, deg;#frac{d#sigma}{d#Omega}, mb/str", Name.c_str(),Projectile.c_str()));
+				}
+				return gr;
+			}
+		}
+		/*if((!PlottedADist)||(option=="new")||kAlwaysNewGraphs)
 		{
 			//ElacticTotTalys, ElasticDirectTalys,ElasticCompoundTalys; Angle, ElTot, ElCompound, ElDirect;
 			if(ConvertToLab)
