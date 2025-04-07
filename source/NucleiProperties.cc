@@ -958,45 +958,51 @@ void Nucleus::ReadTalysCalculationResult_v2()
 				}
 			}
 		}
-		if((nm[0]==Projectile[0])&&(nm[3]=='L'))//сечения образования отдельных состояний
+		if(nm.size()==6)
 		{
-			string OutParticle;
-			int LevNumber=atoi(nm.substr(4,2).c_str());
-			OutParticle+=(nm[1]);
-			for(unsigned int i=0;i<Products.size();i++)
+			if((nm[0]==Projectile[0])&&(nm[3]=='L'))//сечения образования отдельных состояний
 			{
-				if(Products[i].OutgoingParticle==OutParticle)
+				string OutParticle;
+				int LevNumber=atoi(nm.substr(4,2).c_str());
+				OutParticle+=(nm[1]);
+				for(unsigned int i=0;i<Products.size();i++)
 				{
-					YANDFMapObject m;
-					m.ReadYANDF(PathToCalculationDir+"/"+nm);
-					//TalysCS, TalysCSCompound, TalysCSDirect
-					Products[i].Levels[LevNumber].TalysCS=m.GetCell("xs",m.NRows-1);
-					Products[i].Levels[LevNumber].TalysCSCompound=m.GetCell("Compound",m.NRows-1);
-					Products[i].Levels[LevNumber].TalysCSDirect=m.GetCell("Direct",m.NRows-1);
+					if(Products[i].OutgoingParticle==OutParticle)
+					{
+						YANDFMapObject m;
+						m.ReadYANDF(PathToCalculationDir+"/"+nm);
+						//TalysCS, TalysCSCompound, TalysCSDirect
+						Products[i].Levels[LevNumber].TalysCS=m.GetCell("xs",m.NRows-1);
+						Products[i].Levels[LevNumber].TalysCSCompound=m.GetCell("Compound",m.NRows-1);
+						Products[i].Levels[LevNumber].TalysCSDirect=m.GetCell("Direct",m.NRows-1);
+					}
 				}
 			}
 		}
-		if((nm[0]==Projectile[0])&&(nm[14]=='L'))//угловые распределения
+		if(nm.size()==17)
 		{
-			string OutParticle;
-			int LevNumber=atoi(nm.substr(15,2).c_str());
-			OutParticle+=(nm[1]);
-			double EnergyIn=atof(nm.substr(2,8).c_str());
-			if(abs(EnergyIn-ProjectileEnergy)>0.01)
+			if((nm[0]==Projectile[0])&&(nm[14]=='L'))//угловые распределения
 			{
-				continue;
-			}
-			for(unsigned int i=0;i<Products.size();i++)
-			{
-				if(Products[i].OutgoingParticle==OutParticle)
+				string OutParticle;
+				int LevNumber=atoi(nm.substr(15,2).c_str());
+				OutParticle+=(nm[1]);
+				double EnergyIn=atof(nm.substr(2,8).c_str());
+				if(abs(EnergyIn-ProjectileEnergy)>0.01)
 				{
-					YANDFMapObject m;
-					m.ReadYANDF(PathToCalculationDir+"/"+nm);
-					//TalysCS, TalysCSCompound, TalysCSDirect
-					Products[i].Levels[LevNumber].Angle=m.GetColumn("Angle");
-					Products[i].Levels[LevNumber].ADTot=m.GetColumn("xs");
-					Products[i].Levels[LevNumber].ADDirect=m.GetColumn("Direct");
-					Products[i].Levels[LevNumber].ADCompound=m.GetColumn("Compound");
+					continue;
+				}
+				for(unsigned int i=0;i<Products.size();i++)
+				{
+					if(Products[i].OutgoingParticle==OutParticle)
+					{
+						YANDFMapObject m;
+						m.ReadYANDF(PathToCalculationDir+"/"+nm);
+						//TalysCS, TalysCSCompound, TalysCSDirect
+						Products[i].Levels[LevNumber].Angle=m.GetColumn("Angle");
+						Products[i].Levels[LevNumber].ADTot=m.GetColumn("xs");
+						Products[i].Levels[LevNumber].ADDirect=m.GetColumn("Direct");
+						Products[i].Levels[LevNumber].ADCompound=m.GetColumn("Compound");
+					}
 				}
 			}
 		}
