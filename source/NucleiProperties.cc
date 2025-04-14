@@ -971,6 +971,7 @@ void Nucleus::ReadTalysCalculationResult_v2()
 					{
 						YANDFMapObject m;
 						m.ReadYANDF(PathToCalculationDir+"/"+nm);
+						//cout<<"LevNumber:"<<LevNumber<<" "<<nm<<" "<<OutParticle<<"\n";
 						//TalysCS, TalysCSCompound, TalysCSDirect
 						Products[i].Levels[LevNumber].TalysCS=m.GetCell("xs",m.NRows-1);
 						Products[i].Levels[LevNumber].TalysCSCompound=m.GetCell("Compound",m.NRows-1);
@@ -2005,18 +2006,10 @@ void Nucleus::GenerateProducts(string _Projectile)
 		}
 	
 	}
-	//if(RawOutput.size()>0)
-	//system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
-	
-	
 	if(TalysLibManager::Instance().GetC4Flag())
 	{
 		ReadC4();
 	}
-	/*if(TalysLibManager::Instance().DeleteDirectoryAfterReading)
-	{
-		system(string("rm -rf "+PathToCalculationDir+Name+to_string(ID)).c_str());
-	}*/
 	string target = Element + "-" + to_string(A); 
 	if(TalysLibManager::Instance().GetC5Flag())
 	{

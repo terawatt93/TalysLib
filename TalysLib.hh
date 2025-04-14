@@ -85,7 +85,7 @@ using namespace std;
 #define kVarOptwso2 27
 #define kUseDefaultOMP 4
 #define kUseLevelJP -2
-#define CLASSVERSION 4
+#define CLASSVERSION 5
 //Функции, объявленные после класса, описываются в одном файле с этим классом!
 class OMPStorage;
 class Level;
@@ -528,7 +528,7 @@ class LevelData:public TObject
 	vector<SpinParity> JP_values;
 	vector<GammaTransitionData> GammasData;
 	int Mark;//величина, определяющая достоверность уровня: размер вектора с JP, если JP.size=0, то Mark=99,если есть неопределенность (скобки), то размер ветора*2
-	float Energy, EnergyErr, TalysCS, TalysCSCompound, TalysCSDirect, OutgoingParticleEnergy, Width; SpinParity TalysJP;//Width - in MeV (From RIPL-3)
+	double Energy, EnergyErr, TalysCS, TalysCSCompound, TalysCSDirect, OutgoingParticleEnergy, Width; SpinParity TalysJP;//Width - in MeV (From RIPL-3)
 	vector<double> ADTot,ADDirect, ADCompound, Angle, AngleLab, Branching;
 	vector<unsigned int> NumbersOfFinalLevels;
 	vector<double> CSValues, CSCompoundValues, CSDirectValues;
