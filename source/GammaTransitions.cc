@@ -316,6 +316,7 @@ void GammaTransition::AddPoint(double x_value, double y_value)
 	//int N=CSGraph.GetN();
 	//CSGraph.SetPoint(N,x_value,y_value);
 	TalysCrossSections.push_back(y_value);
+	//TalysCrossSection=y_value;
 	X_Values.push_back(x_value);
 	IsCSGraphGenerated=false;
 }
@@ -326,6 +327,7 @@ void GammaTransition::AddPoint(double x_value, GammaTransition *g)
 	if((g->InitLevelNumber==InitLevelNumber)&&(g->FinalLevelNumber==FinalLevelNumber))
 	{
 		AddPoint(x_value,g->TalysCrossSection);
+		TalysCrossSection=g->TalysCrossSection;
 		IsCSGraphGenerated=false;
 	}
 }
@@ -334,6 +336,7 @@ void GammaTransition::AddPoint(GammaTransition *g)
 	if((g->InitLevelNumber==InitLevelNumber)&&(g->FinalLevelNumber==FinalLevelNumber))
 	{
 		TalysCrossSections.push_back(g->TalysCrossSection);
+		TalysCrossSection=g->TalysCrossSection;
 		IsCSGraphGenerated=false;
 	}
 }

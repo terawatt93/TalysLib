@@ -267,7 +267,8 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 		}
 		if(NumberOfLevels>0)
 		{
-			for(unsigned int i=0;i<NumberOfLevels;i++)
+			//cout<<"NumberOfLevels: "<<NumberOfLevels<<"\n";
+			for(unsigned int i=0;i<=NumberOfLevels;i++)
 			{
 				float E=0,J=0,Width=0;
 				int N=0; int Parity=1; unsigned int NGammas=0;
@@ -277,7 +278,7 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 				s>>N>>E>>J>>Parity>>NGammas>>Width;
 				if(Width!=0)
 				Width=6.582*log(2)/Width*1e-22;//конвертируем период полураспада в ширину (МэВ)
-				
+				//cout<<"line: "<<line<<" i="<<i<<"\n";
 				if(E==0)
 				{
 					TalysGroundStateExsists=true;
@@ -293,6 +294,7 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 				{
 					getline(ifs,line);
 					stringstream s1(line);
+					//cout<<"line1:"<<line<<"\n";
 					unsigned int FinalLevelNumber=0;
 					float Branch=0;
 					s1>>FinalLevelNumber>>Branch;
@@ -999,6 +1001,7 @@ void Nucleus::ReadTalysCalculationResult_v2()
 						YANDFMapObject m;
 						m.ReadYANDF(PathToCalculationDir+"/"+nm);
 						//TalysCS, TalysCSCompound, TalysCSDirect
+						//cout<<"Product: "<<Products[i].Name<<" Outgoing: "<<OutParticle<<" LevNumber: "<<LevNumber<<" NLevels: "<<Products[i].Levels.size()<<"\n";
 						Products[i].Levels[LevNumber].Angle=m.GetColumn("Angle");
 						Products[i].Levels[LevNumber].ADTot=m.GetColumn("xs");
 						Products[i].Levels[LevNumber].ADDirect=m.GetColumn("Direct");
@@ -2380,12 +2383,12 @@ void Nucleus::DrawLevelScheme(double MinTalysCS)
 }
 void Nucleus::AssignPointers()
 {
-	LevelsFromTalys.resize(0);
+	//LevelsFromTalys.resize(0);
 	for(unsigned int i=0;i<Levels.size();i++)
 	{
 		Levels[i].fNucleus=this;
 		Levels[i].AssignPointers();
-		for(unsigned int j=0;j<Levels[i].Gammas.size();j++)
+		/*for(unsigned int j=0;j<Levels[i].Gammas.size();j++)
 		{
 			Levels[i].Gammas[j].FindFinalLevel();
 		}
@@ -2396,7 +2399,7 @@ void Nucleus::AssignPointers()
 		else
 		{
 			LevelsFromENSDF.push_back(&Levels[i]);
-		}
+		}*/
 	}
 	for(unsigned int i=0;i<Products.size();i++)
 	{

@@ -371,7 +371,15 @@ void Level::AssignPointers()
 	for(unsigned int i=0;i<Gammas.size();i++)
 	{
 		Gammas[i].fLevel=this;
-		Gammas[i].fFinalLevel=0;
+		if(fNucleus)
+		{
+			if(fNucleus->Levels.size()>Gammas[i].FinalLevelNumber)
+			{
+				Gammas[i].fFinalLevel=&(fNucleus->Levels[Gammas[i].FinalLevelNumber]);
+				//fLevel->fNucleus->Levels.size()<Gammas[i].FinalLevelNumber
+			}
+		}
+		//Gammas[i].fFinalLevel=0;
 	}
 }
 //Методы для работы с данными класса Level: ввод
