@@ -80,6 +80,7 @@ void FCN(Int_t&npar, Double_t*gin, Double_t&f, Double_t*par, Int_t flag)
 void MultiFitMT()
 {
 	string NuclName="12C";
+	TH1::AddDirectory(false);
 	ROOT::EnableThreadSafety();
 	tf=new TalysFitterMT(NuclName);
 	tf->Nuclide.GenerateProducts();
@@ -87,10 +88,12 @@ void MultiFitMT()
 	NuclForExpData.GenerateProducts();
 	TCanvas c1;	
 	
+	//TalysLibManager::Instance().SetC4Flag(true);
+	NuclForExpData.ReadC4();
 	TMultiGraph *mgrElastic=NuclForExpData.GetEXFORTMultiGraphForAngularDistributions(14,14.5);
 	TMultiGraph *mgrInelastic=NuclForExpData.FindProductByReaction("(n,n')")->Levels[1].GetEXFORTMultiGraphForAngularDistributions(14,14.5);
+	//TalysLibManager::Instance().SetC4Flag(false);
 	
-	TalysLibManager::Instance().SetC4Flag(false);
 	
 	/*tf->Nuclide.OMPN->PotentialKoning.v1=48.0;//=V_V
 	tf->Nuclide.OMPN->PotentialKoning.v2=0.0;

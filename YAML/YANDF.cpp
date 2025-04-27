@@ -1,5 +1,5 @@
 #include "YANDF.hh"
-
+#include "../Parser.cpp"
 bool CheckPrimeKey(string line)
 {
 	if(line.size()<2)

@@ -1,3 +1,4 @@
+#pragma once
 #include <unordered_map>
 #include <map>
 #include <string>
@@ -5,9 +6,11 @@
 #include <any>
 #include <stdexcept>
 #include <iostream>
-#include "../Parser.cpp"
+#include <TObject.h>
 
-class YANDFMapObject
+
+
+class YANDFMapObject:public TObject
 {
 	public:
 	map<string,YANDFMapObject> Content;
@@ -42,4 +45,5 @@ class YANDFMapObject
 	void get(string k,YANDFMapObject &I);
 	void ParseYANDF(string inp);
 	void ReadYANDF(string fname);
+	ClassDef(YANDFMapObject,1);
 };

@@ -868,6 +868,14 @@ void Nucleus::GenerateListOfProducts_v2()
 			Products.push_back(Nucleus(to_string(ZA[i].second)+GetNucleusName(ZA[i].first),Reactions[i]));
 			Products[Products.size()-1].OutgoingParticle=OutParticles[i];
 		}
+		else //segfault test
+		{
+			for(unsigned int j=0;j<Products.size();j++)
+			{
+				Products[j]=Nucleus(to_string(ZA[i].second)+GetNucleusName(ZA[i].first),Reactions[i]);
+				Products[j].OutgoingParticle=OutParticles[i];
+			}
+		} 
 	}
 }
 void Nucleus::ReadTalysCalculationResult_v2()
@@ -998,6 +1006,7 @@ void Nucleus::ReadTalysCalculationResult_v2()
 				{
 					if(Products[i].OutgoingParticle==OutParticle)
 					{
+						//cout<<"Products[i].Levels.size:"<<Products[i].Levels.size()<<" "<<LevNumber<<"\n";
 						YANDFMapObject m;
 						m.ReadYANDF(PathToCalculationDir+"/"+nm);
 						//TalysCS, TalysCSCompound, TalysCSDirect
@@ -1805,7 +1814,9 @@ void Nucleus::Reset()
 
 void Nucleus::GenerateProducts(string _Projectile)
 {
-	Products.resize(0);
+	//cout<<"GenerateProducts::Name:"<<Name<<"\n";
+	//test for catching segfault:: Products.resize(0); commented
+	//Products.resize(0);
 	if(!PredefinedProjectile)
 	Projectile=_Projectile;
 	

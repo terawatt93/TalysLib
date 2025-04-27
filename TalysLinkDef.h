@@ -25,6 +25,7 @@
 #pragma link C++ class TalysLibManager+;
 #pragma link C++ class OMPManager+;
 #pragma link C++ class TLElement+;
+#pragma link C++ class YANDFMapObject+;
 
 #pragma link C++ class EXFORManager;
 
