@@ -30,8 +30,8 @@ void ParAssignmentFunction(TalysFitterMT *TF,Nucleus *Nucl, vector<double> Param
 	char Col_type='R';//тип коллективности ядра "S", "R", "V", "A", см. 
 	//int LevelNumber=1;//номер уровня, для которого задаётся деформация
 	char Level_type='R';//тип коллективности уровня: "D", "R", "V"
-	vector<float> Deformations1;
-	vector<float> null;
+	vector<double> Deformations1;
+	vector<double> null;
 	Deformations1.push_back(Parameters[11]);
 	null.push_back(0.0);
 	Nucl->Def.SetTypeOfCollectivity(Col_type);//задаём тип коллективности для ядра
