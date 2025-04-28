@@ -1596,6 +1596,7 @@ vector<TGraphErrors*> Level::GetAngularDistributionGraph(double Emin, double Ema
 vector<AngularDistribution*> Level::GetAngularDistribution_v2(double E_min, double E_max)
 {
 	vector<AngularDistribution*> result;
+	TalysLibManager* manager = TalysLibManager::GetPointer();
 	for(size_t i=0; i<C5AngularDistribution.size(); i++)
 	{
 		for(auto& point: C5AngularDistribution[i].data_points)
@@ -1607,7 +1608,16 @@ vector<AngularDistribution*> Level::GetAngularDistribution_v2(double E_min, doub
 				C5AngularDistribution[i].graph.SetPointError(n, point[3], point[4]);
 			}
 		}
+		bool Add = true;
+		if(manager->IsInExcludedSubEntries(C5AngularDistribution[i].fSubent->SubentID))
+		{
+			Add = false;
+		}
 		if(C5AngularDistribution[i].graph.GetN() != 0)
+		{
+			Add = false;
+		}
+		if(Add)
 		{
 			result.push_back(&C5AngularDistribution[i]);
 		}
