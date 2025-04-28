@@ -861,12 +861,21 @@ void Nucleus::GenerateListOfProducts_v2()
 	vector<string> Reactions, OutParticles;
 	vector<pair<int,int> > ZA;
 	GetProductsFromCalculationDir(CalculationResultFilenames,Z,A,Projectile,ZA,Reactions,OutParticles);
+	if(ZA.size()>0)
+	{
+		Success=true;
+	}
+	else
+	{
+		Success=false;
+	}
 	for(unsigned int i=0;i<ZA.size();i++)
 	{
 		if(!FindProductByReaction(Reactions[i]))
 		{
 			Products.push_back(Nucleus(to_string(ZA[i].second)+GetNucleusName(ZA[i].first),Reactions[i]));
 			Products[Products.size()-1].OutgoingParticle=OutParticles[i];
+			Products[Products.size()-1].Success=true;
 		}
 		else //segfault test
 		{
@@ -874,6 +883,7 @@ void Nucleus::GenerateListOfProducts_v2()
 			{
 				Products[j]=Nucleus(to_string(ZA[i].second)+GetNucleusName(ZA[i].first),Reactions[i]);
 				Products[j].OutgoingParticle=OutParticles[i];
+				Products[j].Success=true;
 			}
 		} 
 	}
