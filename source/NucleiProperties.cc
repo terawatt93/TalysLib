@@ -871,19 +871,27 @@ void Nucleus::GenerateListOfProducts_v2()
 	}
 	for(unsigned int i=0;i<ZA.size();i++)
 	{
+		//cout<<"Reactions[i]:"<<Reactions[i]<<"\n";
 		if(!FindProductByReaction(Reactions[i]))
 		{
 			Products.push_back(Nucleus(to_string(ZA[i].second)+GetNucleusName(ZA[i].first),Reactions[i]));
+			
 			Products[Products.size()-1].OutgoingParticle=OutParticles[i];
 			Products[Products.size()-1].Success=true;
+			//cout<<"Reaction: "<<Reactions[i]<<" "<<ZA[i].second<<GetNucleusName(ZA[i].first)<<"\n";
+			//cout<<Products.size()<<"\n";
 		}
 		else //segfault test
 		{
 			for(unsigned int j=0;j<Products.size();j++)
 			{
-				Products[j]=Nucleus(to_string(ZA[i].second)+GetNucleusName(ZA[i].first),Reactions[i]);
-				Products[j].OutgoingParticle=OutParticles[i];
-				Products[j].Success=true;
+				if(Products[j].Z==ZA[i].first&&Products[j].A==ZA[i].second)
+				{
+					Products[j]=Nucleus(to_string(ZA[i].second)+GetNucleusName(ZA[i].first),Reactions[i]);
+					Products[j].OutgoingParticle=OutParticles[i];
+					Products[j].Success=true;
+				}
+				
 			}
 		} 
 	}
@@ -3136,6 +3144,10 @@ void Nucleus::ReadENDF()
 
 void Nucleus::SaveToXLSX(string filename)
 {
+	if(filename.find(".xlsx")==string::npos)
+	{
+		filename+=".xlsx";
+	}
 	TXlsxwriter xlsx;
 	xlsx.Open(filename);
 	xlsx.GoToWorksheet("General");

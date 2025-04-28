@@ -346,7 +346,7 @@ void GetProductsFromCalculationDir(vector<string> Filenames,int Z, int A,string 
 	{
 		if(Filenames[i].size()>8)
 		{
-			if((Filenames[i][0]=='r')&&(Filenames[i][1]=='p'))
+			if((Filenames[i][0]=='r')&&(Filenames[i][1]=='p')&&(Filenames[i].find(".tot")!=string::npos))
 			{
 				string Zstr=Filenames[i].substr(2,3);
 				string Astr=Filenames[i].substr(5,3);
@@ -354,6 +354,7 @@ void GetProductsFromCalculationDir(vector<string> Filenames,int Z, int A,string 
 				ZA.push_back({ZZ,AA});
 				int Zout=Z+Zproj-ZZ;
 				int Aout=A+Aproj-AA;
+				//cout<<"YANDF:: "<<Filenames[i]<<" "<<Zout<<" "<<Aout<<" "<<GetParticleName(Zout,Aout)<<" "<<ZZ<<" "<<AA<<"\n";
 				string OutgoingParticle=GetParticleName(Zout,Aout);
 				OutParticles.push_back(OutgoingParticle);
 				if(Zout==Zproj && Aout==Aproj)

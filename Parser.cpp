@@ -550,19 +550,23 @@ string GetParticleName(int Z, int A)
 	{
 		return "p";
 	}
-	if((Z==1)&&(A=2))
+	if((Z==1)&&(A==2))
 	{
 		return "d";
 	}
-	if((Z==1)&&(A=3))
+	if((Z==1)&&(A==3))
 	{
 		return "t";
 	}
-	if((Z==2)&&(A=4))
+	if((Z==2)&&(A==4))
 	{
 		return "a";
 	}
-	return GetNucleusName(Z);
+	if((Z==2)&&(A==5))
+	{
+		return "na";
+	}
+	return to_string(A)+GetNucleusName(Z);
 }
 
 double TalysJPToNormalJP(string TalysJP)
