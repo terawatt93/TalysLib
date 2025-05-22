@@ -1316,15 +1316,41 @@ TMultiGraph* Level::GetEXFORTMultiGraphForAngularDistributions(double Emin,doubl
 	}
 	return mgr;
 }
+void GetColorAndMarker(int index,int &col, int &marker)
+{
+	int ind=0;
+	vector<int> Colors={1,2,3,4,6,7,8,9,25,28,30,32,41,52};
+	vector<int> Markers={20,21,22,23,29,33,34,39,41,43,45,47,48,49};
+	for(unsigned int i=0;i<Markers.size();i++)
+	{
+		for(unsigned int j=0;j<Colors.size();j++)
+		{
+			if(ind==index)
+			{
+				col=Colors[j];
+				marker=Markers[i];
+				return;
+			}
+			ind++;
+		}
+	}
+}
 TMultiGraph* Level::GetEXFORTMultiGraphForCrossSections(double Emin,double Emax,string Option)
 {
 	TMultiGraph* mgr=new TMultiGraph();
 	vector<TGraphErrors*> Graphs=GetEXFORCrossSections(Emin,Emax);
+	
 	for(unsigned int i=0;i<Graphs.size();i++)
 	{
 		if((Option.find("LAB")!=string::npos)||(Option.find("CM")!=string::npos))
 		{
+			int Color=1, Marker=20;
+			GetColorAndMarker(i,Color,Marker);
+			//cout<<"Color,Marker "<<Color<<" "<<Marker<<"\n";
+			Graphs[i]->SetMarkerStyle(Marker);
+			Graphs[i]->SetMarkerColor(Color);
 			C4Graph *gr=(C4Graph*)Graphs[i];
+			
 			if(Option.find("LAB")!=string::npos)
 			{
 				if(!gr->CM)
@@ -1342,6 +1368,11 @@ TMultiGraph* Level::GetEXFORTMultiGraphForCrossSections(double Emin,double Emax,
 		}
 		else
 		{
+			int Color=1, Marker=20;
+			GetColorAndMarker(i,Color,Marker);
+			//cout<<"Color,Marker "<<Color<<" "<<Marker<<"\n";
+			Graphs[i]->SetMarkerStyle(Marker);
+			Graphs[i]->SetMarkerColor(Color);
 			mgr->Add(Graphs[i],"p");
 		}
 	}

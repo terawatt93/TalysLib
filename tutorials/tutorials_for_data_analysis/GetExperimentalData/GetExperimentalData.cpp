@@ -2,12 +2,12 @@
 
 void GetExperimentalData()
 {
-	/*TalysLibManager::Instance().DeleteExpDataForAuthor("Voss");
-	TalysLibManager::Instance().DeleteExpDataForAuthor("Shcherbakov");
+	TalysLibManager::Instance().ExcludeAuthors.push_back("Kinney");
+	/*TalysLibManager::Instance().DeleteExpDataForAuthor("Shcherbakov");
 	TalysLibManager::Instance().DeleteExpDataForAuthor("Litvinski");
 	TalysLibManager::Instance().DeleteExpDataForAuthor("Pomerance");*/
-	
-	Nucleus Nucl("12C");
+	TalysLibManager::Instance().SetC4Flag(true);
+	Nucleus Nucl("48Ti");
 	//Nucl.FastFlag=false;
 	Nucl.GenerateEnergyGrid(0,1,20);//установить сетку энергий : от 0 до 20 МэВ с шагом 0.2 МэВ
 	Nucl.GenerateProducts();//выполнить расчеты в Talys
@@ -35,9 +35,10 @@ void GetExperimentalData()
 		Talys->SetLineColor(4);
 		Talys->SetTitle("Talys");
 		mgr->Add(ENDF,"l");//добавить ENDF к TMultiGraph
-		mgr->Add(Talys,"l");//добавить Talys к TMultiGraph
+		//mgr->Add(Talys,"l");//добавить Talys к TMultiGraph
 		mgr->Draw("ap");//отрисовать TMultiGraph с осями ("a и точками p")
-		mgr->GetXaxis()->SetRangeUser(0,20);
+		mgr->GetXaxis()->SetRangeUser(0,9);
+		mgr->Draw("ap");//отрисовать TMultiGraph с осями ("a и точками p")
 		gPad->BuildLegend();
 		/*ENDF->Draw("l");//отрисовать Graph линией ("l") в предыдущих осях
 		Talys->Draw("l");*/

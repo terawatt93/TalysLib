@@ -292,6 +292,8 @@ void GammaTransition::EvalMultipolarity()
 {
 	SpinParity GammaMP(1,-1);
 	TalysMultipolarity=SpinParity::QSum(TalysJP_i,TalysJP_f,GammaMP);
+	SpinParity mp=GetMostProbableMultipolarity();
+	Multipolarity=mp.GetStringAsGammaMultipolarity();
 }
 void GammaTransition::ErasePointers()
 {

@@ -31,6 +31,7 @@
 #include "C4Reader/C5.hh"
 #include "YAML/YANDF.hh"
 #include "SQLiteRW/SQLiteRW.hh"
+#include "Parser.hh"
 
 #include "nlohmann/json.hpp"//нужно для работы с json - объектами, которые хранятся в виде string
 

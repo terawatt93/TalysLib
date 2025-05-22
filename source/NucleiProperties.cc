@@ -312,6 +312,7 @@ void Nucleus::ReadLevelsFromTalysDatabase(string type)
 						gt.TalysE_f=Levels[FinalLevelNumber].Energy;
 						
 						gt.TalysJP_f=Levels[FinalLevelNumber].TalysJP;
+						gt.EvalMultipolarity();
 						lev.Gammas.push_back(gt);
 					}
 					lev.Branching.push_back(Branch);

@@ -1,4 +1,5 @@
 #pragma once
+#include "Parser.hh"
 #include <stdio.h>
 #include <vector>
 #include <cstring>
@@ -24,6 +25,8 @@ const int Z_number[]={1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,2
 const string Atomic_symbols[]={"H","He","Li","Be","B","C","N","O","F","Ne","Na","Mg","Al","Si","P","S","Cl","Ar","K","Ca","Sc","Ti","V","Cr","Mn","Fe","Co","Ni","Cu","Zn","Ga","Ge","As","Se","Br","Kr","Rb","Sr","Y","Zr","Nb","Mo","Tc","Ru","Rh","Pd","Ag","Cd","In","Sn","Sb","Te","I","Xe","Cs","Ba","La","Ce","Pr","Nd","Pm","Sm","Eu","Gd","Tb","Dy","Ho","Er","Tm","Yb","Lu","Hf","Ta","W","Re","Os","Ir","Pt","Au","Hg","Tl","Pb","Bi","Po","At","Rn","Fr","Ra","Ac","Th","Pa","U","Np","Pu","Am","Cm","Bk","Cf","Es","Fm","Md","No","Lr","Rf","Db","Sg","Bh","Hs","Mt","Ds","Rg","Cn","Nh","Fl","Mc","Lv","Ts","Og"};
 
 const char AngularMomentum[]={'s','p','d','f','g','h','i'};
+
+
 
 void CopyFileContentToBuffer(ifstream &t,string &buff)
 {
@@ -85,7 +88,7 @@ vector<string> GetListOfObjectNames(TFile *f)
     return result;
 }
 
-vector<TPad*> GeneratePadsOnCanvas(double x1, double y1, double x2, double y2,int nx, int ny,TCanvas *c=0)
+vector<TPad*> GeneratePadsOnCanvas(double x1, double y1, double x2, double y2,int nx, int ny,TCanvas *c)
 {
 	vector<TPad*> result;
 	if(!c)
@@ -219,7 +222,7 @@ bool IsDirectoryAlreadyExsisted(string Name)//функция проверяет,
 	return true;
 }
 
-std::vector<std::string> SplitString(const std::string &s, char delim, bool MergeDelimeters=true) 
+std::vector<std::string> SplitString(const std::string &s, char delim, bool MergeDelimeters) 
 {
 	std::vector<std::string> result;
 	std::stringstream ss (s);
@@ -788,7 +791,7 @@ double GetNuclearMass(int Z, int A)
 	}
 	return -1;
 }
-double GetSeparationEnergy(string nucleus, string particle="n")
+double GetSeparationEnergy(string nucleus, string particle)
 {
 	double nucleus_mass, particle_mass, product_mass;
 	
@@ -941,7 +944,7 @@ int Nproc()
 	ss>>result;
 	return result;
 }
-vector<string> ListFiles(string mask, string PathTo="")
+vector<string> ListFiles(string mask, string PathTo)
 {
 	vector<string> FileNames;
 	string s;
