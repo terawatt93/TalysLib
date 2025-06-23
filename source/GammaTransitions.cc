@@ -385,6 +385,8 @@ void GammaTransition::GenerateGraphs()
 		}
 		if(!IsCSGraphGenerated)
 		{
+			CSGraph.SetTitle(TString::Format("#sigma(E) for #gamma-transition %.1f keV in %s%s%s; E, keV; #sigma, mb",Energy,fLevel->fNucleus->fMotherNucleus->Name.c_str(),fLevel->fNucleus->Reaction.c_str(),fLevel->fNucleus->Name.c_str()));
+			CSGraph.SetName(TString::Format("CS_%d_%s",int(Energy*10),fLevel->fNucleus->Name.c_str()));
 			for(unsigned int i=0;i<TalysCrossSections.size();i++)
 			{
 				AddPointToTGraph(&CSGraph,fLevel->fNucleus->fMotherNucleus->EnergyGrid[i],TalysCrossSections[i]);
@@ -398,12 +400,30 @@ void GammaTransition::GenerateGraphs()
 			AddPointToTGraph(&CSGraph,X_Values[i],TalysCrossSections[i]);
 		}
 	}
+	
 }
 TGraph* GammaTransition::GetCSGraph()
 {
 	if(CSGraph.GetN()==0)
 	{
 		GenerateGraphs();
+		if(!fLevel)
+		{
+			cout<<"This is GammaTransition::GetCSGraph(): Graph generation error. Cannot access fLevel because pointer is invalid\n";
+			return 0;
+		}
+		if(!fLevel->fNucleus)
+		{
+			cout<<"This is GammaTransition::GenerateGraphs(): Graph generation error. Cannot access fLevel->fNucleus because pointer fNucleus is invalid\n";
+			return 0;
+		}
+		if(!fLevel->fNucleus->fMotherNucleus)
+		{
+			cout<<"This is GammaTransition::GenerateGraphs(): Graph generation error. Cannot access fLevel->fNucleus->fMotherNucleus because pointer fMotherNucleus is invalid\n";
+			return 0;
+		}
+		CSGraph.SetTitle(TString::Format("#sigma(E) for #gamma-transition %.1f keV in %s%s%s; E, MeV; #sigma, mb",Energy,fLevel->fNucleus->fMotherNucleus->Name.c_str(),fLevel->fNucleus->Reaction.c_str(),fLevel->fNucleus->Name.c_str()));
+			CSGraph.SetName(TString::Format("CS_%d_%s",int(Energy*10),fLevel->fNucleus->Name.c_str()));
 	}
 	return &CSGraph;
 }
