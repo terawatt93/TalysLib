@@ -93,6 +93,11 @@ void C5Manager::SearchSubents() // эта функция выполняет по
 	const char* extract_c5_expansion;
 	
 	search_subent_query_v2 = "SELECT SubentID, zTarg, aTarg, zProd, aProd, Quant, SF1, SF2, SF3, SF4, SF5, SF6, SF7, SF8, SF9, MF, MT, reacode \n\
+						FROM (SELECT DatasetID, MF, MT, compNotes, reacode FROM x4pro_ds WHERE Proj = ? AND (Targ1 = ? OR Targ1 = ?) \n\) AS table1 \n\
+						INNER JOIN (SELECT * FROM REACSTR) AS table2 ON table1.DatasetID = table2.SubentID ";			
+	
+	/*
+	search_subent_query_v2 = "SELECT SubentID, zTarg, aTarg, zProd, aProd, Quant, SF1, SF2, SF3, SF4, SF5, SF6, SF7, SF8, SF9, MF, MT, reacode \n\
 						FROM (SELECT DatasetID, MF, MT, compNotes, reacode FROM x4pro_ds WHERE Proj = ? AND (Targ1 = ? OR Targ1 = ?) \n\
 						AND (reacode NOT LIKE '(%)/(%)' \n\
 						AND reacode NOT LIKE '(%)//(%)' \n\
@@ -111,7 +116,7 @@ void C5Manager::SearchSubents() // эта функция выполняет по
                         INNER JOIN \n\
                         (SELECT DatasetID, MF, MT FROM x4pro_ds) AS table2 \n\
                         ON table1.SubentID = table2.DatasetID ";              
-    
+    */
 					  
 	sqlite3_prepare_v2(db, search_subent_query_v2, -1, &stmt, 0);
 	if(connection == SQLITE_OK)

@@ -117,137 +117,10 @@ string ConvertReaction(SubentData& subent)
 	return result;
 }
 
-void Strategy_7_DAP_INL(SubentData& subent, Nucleus* product, double tolerancy_gamma)
-{
-	size_t row_num = 0;
-	if(subent.x2_hdr == "E" || subent.x2_hdr == "E-LVL")
-	{
-		while(row_num < subent.DataTable.size())
-		{
-			double particle_energy = subent.DataTable[row_num].Row["x2"];
-			GammaTransition* transition = product->GetBestTransition(particle_energy / 1e3, tolerancy_gamma);
-			if(transition != NULL)
-			{
-				transition->C5AngularDistribution.push_back(GetDAP(subent, row_num));
-				transition->C5AngularDistribution.back().Transition = transition;
-			}
-			else
-			{
-				++row_num;
-			}
-		}
-	}
-	else if(subent.x2_hdr == "E-LVL-FIN/E-LVL-INI")
-	{
-		while(row_num < subent.DataTable.size())
-		{
-			json cdat = subent.DataTable[row_num].cdat;
-			if(cdat.contains("ilv"))
-			{
-				double particle_energy = subent.DataTable[row_num].Row["x2"];
-				GammaTransition* transition = product->GetBestTransition(particle_energy / 1e3, tolerancy_gamma);
-				if(transition != NULL)
-				{
-					transition->C5AngularDistribution.push_back(GetDAP(subent, row_num));
-				}
-				else
-				{
-					++row_num;
-				}
-			}
-			else if(cdat.contains("ilvm"))
-			{
-				double ini_level = product->FindLevelByNumber(cdat["ilvm"][1].template get<int>())->Energy;
-				double fin_level = product->FindLevelByNumber(cdat["ilvm"][0].template get<int>())->Energy;
-				double particle_energy = ini_level - fin_level;
-				GammaTransition* transition = product->GetBestTransition(particle_energy / 1e3, tolerancy_gamma);
-				if(transition != NULL)
-				{
-					transition->C5AngularDistribution.push_back(GetDAP(subent, row_num));
-					transition->C5AngularDistribution.back().Transition = transition;
-				}
-				else
-				{
-					++row_num;
-				}
-					
-			}
-		}
-	}
-}
-
-void Strategy_7_CSP_INL(SubentData& subent, Nucleus* product, double tolerancy_gamma)
-{
-	size_t row_num = 0;
-	if(subent.x2_hdr == "E" || subent.x2_hdr == "E-LVL")
-	{
-		while(row_num < subent.DataTable.size())
-		{
-			double particle_energy = subent.DataTable[row_num].Row["x2"];
-			GammaTransition* transition = product->GetBestTransition(particle_energy / 1e3, tolerancy_gamma);
-			if(transition != NULL)
-			{
-				transition->C5EnergyDistribution.push_back(GetCSP(subent, row_num));
-				transition->C5EnergyDistribution.back().Transition = transition;
-			}
-			else
-			{
-				++row_num;
-			}
-		}
-	}
-}
-
-
-void Strategy_4_DAP(SubentData& subent, Nucleus* nucl, double tolerancy_gamma)
-{
-	size_t row_num = 0;
-	if(subent.x2_hdr == "E")
-	{
-		while(row_num < subent.DataTable.size())
-		{
-			double particle_energy = subent.DataTable[row_num].Row["x2"];
-			GammaTransition* transition = nucl->GetBestTransition(particle_energy / 1e3, tolerancy_gamma);
-			if(transition != NULL)
-			{
-				transition->C5AngularDistribution.push_back(GetDAP(subent, row_num));
-				transition->C5AngularDistribution.back().Transition = transition;
-			}
-			else
-			{
-				++row_num;
-			}
-		}
-	}
-}
-
-/*
-void Strategy_4_CSP(SubentData& subent, Nucleus* nucl, double tolerancy_gamma)
-{
-	size_t row_num = 0;
-	if(subent.x2_hdr == "E")
-	{
-		while(row_num < subent.DataTable.size())
-		{
-			double particle_energy = subent.DataTable[row_num].Row["x2"];
-			GammaTransition* transition = nucl->GetBestTransition(particle_energy / 1e3, tolerancy_gamma);
-			if(transition != NULL)
-			{
-				transition->C5EnergyDistribution.push_back(GetCSP(subent, row_num));
-				transition->C5EnergyDistribution.back().Transition = transition;
-			}
-			else
-			{
-				++row_num;
-			}
-		}
-	}
-}
-*/
-
 void Strategy_CSP(SubentData& subent, Nucleus* nucl, double tolerancy_gamma)
 {
 	size_t row_num = 0;
+	cout << subent.SubentID << "\n";
 	if(subent.x2_hdr == "E" || subent.x2_hdr == "E-LVL")
 	{
 		while(row_num < subent.DataTable.size())
@@ -256,6 +129,7 @@ void Strategy_CSP(SubentData& subent, Nucleus* nucl, double tolerancy_gamma)
 			GammaTransition* transition = nucl->GetBestTransition(particle_energy / 1e3, tolerancy_gamma);
 			if(transition != NULL)
 			{
+				cout << transition->Energy << "\t" << transition->fLevel->fNucleus->Reaction << "\n";
 				transition->C5EnergyDistribution.push_back(GetCSP(subent, row_num));
 				transition->C5EnergyDistribution.back().Transition = transition;
 			}
