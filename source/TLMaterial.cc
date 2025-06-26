@@ -318,6 +318,32 @@ vector<GammaTransition*> TLMaterial::FindGammaTransitions(double Energy,double C
 	}
 	return result;
 }
+GammaTransition* TLMaterial::FindBestTransition(double Energy,double CrossSectionThreshold,double Tolerancy,bool UseAbundancy)
+{
+	vector<GammaTransition*> gt=FindGammaTransitions(Energy,CrossSectionThreshold,Tolerancy,UseAbundancy);
+	GammaTransition* result=0;
+	if(gt.size()==0)
+	{
+		return 0;
+	}
+	result=gt[0];
+	for(unsigned int i=0;i<gt.size();i++)
+	{
+		double CSF=gt[i]->TalysCrossSection;
+		double CSF1=result->TalysCrossSection;
+		if(UseAbundancy)
+		{
+			CSF=CSF*gt[i]->fLevel->fNucleus->fMotherNucleus->Abundance;
+			CSF1=CSF1*result->fLevel->fNucleus->fMotherNucleus->Abundance;
+		}
+		if(CSF>CSF1)
+		{
+			result=gt[i];
+		}
+	}
+	return result;
+}
+
 GammaTransition* TLMaterial::GetMostIntenseGammaTransition()
 {
 	GammaTransition* t=0;
