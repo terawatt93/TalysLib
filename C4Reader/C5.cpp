@@ -85,6 +85,12 @@ void C5Manager::SearchSubents() // эта функция выполняет по
 	string target = fMotherNucleus->Element + "-" + to_string(fMotherNucleus->A);
 	string natural_isotop = fMotherNucleus->Element + "-0";
 	sqlite3_stmt *stmt;
+	
+	if(getenv("X4SQLITE"))
+	{
+		db_name=getenv("X4SQLITE");
+	}
+	
 	connection = sqlite3_open_v2(db_name.c_str(), &db, SQLITE_OPEN_READONLY, NULL);
 	
 	const char* search_subent_query;
@@ -161,9 +167,10 @@ void C5Manager::ExtractSubentData()
 	const char* extract_basic_units = "SELECT BasicUnits FROM x4pro_hdr WHERE DatasetID = ? AND typ = 'x' AND varName = 'y'";
 	const char* extract_c5_expansion = "SELECT varName, expansion FROM x4pro_hdr WHERE DatasetID = ? AND typ = 'c' ";
 	const char* extract_subent_query = "SELECT * FROM x4pro_c5dat WHERE DatasetID = ?";
+	//                                               0                              1                                                 2                                       
 	const char* extract_entry_query =  "SELECT * FROM\n\
 										(SELECT SUBSTR(Subent,0,6) AS EntryID, json_extract(jx4z, '$.BIB.AUTHOR[0].x4codes'), json_extract(jx4z, '$.BIB.TITLE[0].x4freetext'),\n\
-										json_extract(jx4z, '$.BIB.DETECTOR'), json_extract(jx4z, '$.BIB.METHOD')\n\
+										json_extract(jx4z, '$.BIB.DETECTOR'), json_extract(jx4z, '$.BIB.METHOD'), json_extract(jx4z, '$.BIB.REFERENCE[0].x4codes[0].shortRef')\n\
 										FROM x4pro_x4z\n\
 										WHERE Subent = ?) AS a\n\
 										INNER JOIN\n\
@@ -269,11 +276,20 @@ void C5Manager::ExtractSubentData()
 				{
 					Entries.back().Detector.push_back(pair<string, string>("No info", "No info"));
 				}
-				Entries.back().Year = (char*)sqlite3_column_text(stmt,5); // год
-					
-				if(sqlite3_column_type(stmt, 6) != SQLITE_NULL)
+				Entries.back().Year = (char*)sqlite3_column_text(stmt,6); // год
+				
+				if(sqlite3_column_type(stmt,5) != SQLITE_NULL)
 				{
-					Entries.back().DOI = (char*)sqlite3_column_text(stmt,6); // DOI
+					Entries.back().Reference=((char*)sqlite3_column_text(stmt,5)); // приписываем первую ссылку из json
+				}
+				else
+				{
+					Entries.back().Authors.push_back("No info");
+				}
+				
+				if(sqlite3_column_type(stmt, 7) != SQLITE_NULL)
+				{
+					Entries.back().DOI = (char*)sqlite3_column_text(stmt,7); // DOI
 				}
 				else
 				{

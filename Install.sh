@@ -165,6 +165,7 @@ esac
 #
 # 4. Return to your TalysLib directory
 cd ${talyslibdir}
+git clone https://github.com/jmcnamara/libxlsxwriter
 #
 # 5. Downloading and installing side libraries
 ./MakeLibraries.sh
