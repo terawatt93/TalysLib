@@ -52,7 +52,104 @@ void CopyFileContentToBuffer(string Filename,string &buff)
 	}
 	t.close();
 }
+//void ChangeParNumeration(string &init, string &result, vector<pair<int,int> > &Combinations)
+string ChangeParNumeration(string &init, int MinIndex)
+{
+	string result;
+	vector<pair<int,int> > Combinations;
+	vector<int> ParNumbers_square;//из квадратных скобок
+	vector<int> ParNumbers_round;//из круглых скобок
+	vector<int> ParNumbers_square_new;//из квадратных скобок
+	vector<int> ParNumbers_round_new;//из круглых скобок
+	//выделяем данные из строки
+	bool ReadNumber=false;
+	string num;
+	for(unsigned int i=0;i<init.size();i++)
+	{
+		if(init[i]=='[')
+		{
+			ReadNumber=true;
+			num="";
+			i++;
+		}
+		if((init[i]==']')&&ReadNumber)
+		{
+			ReadNumber=false;
+			ParNumbers_square.push_back(atoi(num.c_str()));
+		}
+		if(ReadNumber)
+		{
+			num+=init[i];
+		}
+	}
+	for(unsigned int i=0;i<init.size();i++)
+	{
+		if((init[i]=='(')&&(i>0))
+		{
+			if((init[i-1]>='a' && init[i-1]<='z')||(init[i-1]>='0' && init[i-1]<='9'))
+			{
+				ReadNumber=true;
+				num="";
+				i++;
+			}
+		}
+		if((init[i]==')')&&ReadNumber)
+		{
+			ReadNumber=false;
+			ParNumbers_round.push_back(atoi(num.c_str()));
+			num="";
+		}
+		if(ReadNumber)
+		{
+			if((init[i]>='0')&&(init[i]<='9'))
+			{
+				num+=init[i];
+			}
+			else
+			{
+				num="";
+				ReadNumber=false;
+			}
+		}
+	}
+	std::sort(ParNumbers_square.begin(), ParNumbers_square.end());
+	std::sort(ParNumbers_round.begin(), ParNumbers_round.end());
 	
+	if(ParNumbers_square.size()==0&&ParNumbers_round.size()==0)
+	{
+		return init;
+	}
+	int MinParIndex=2147483647;
+	
+	if(ParNumbers_square.size()>0)
+	{
+		MinParIndex=ParNumbers_square[0];
+	}
+	if(ParNumbers_round.size()>0)
+	{
+		if(MinParIndex>ParNumbers_round[0])
+		{
+			MinParIndex=ParNumbers_round[0];
+		}
+	}
+	
+	TString tts(init.c_str());
+	
+	//vector<int> ParNumbers_square_new;//из квадратных скобок
+	//vector<int> ParNumbers_round_new;//из круглых скобок
+	for(unsigned int i=0;i<ParNumbers_square.size();i++)
+	{
+		ParNumbers_square_new.push_back(ParNumbers_square[i]-MinParIndex+MinIndex);
+		tts.ReplaceAll(TString::Format("[%d]",ParNumbers_square[i]),TString::Format("[%d]",ParNumbers_square[i]-MinParIndex+MinIndex));
+	}
+	for(unsigned int i=0;i<ParNumbers_round.size();i++)
+	{
+		ParNumbers_round_new.push_back(ParNumbers_round[i]-MinParIndex+MinIndex);
+		tts.ReplaceAll(TString::Format("(%d)",ParNumbers_round[i]),TString::Format("(%d)",ParNumbers_round[i]-MinParIndex+MinIndex));
+	}
+	result=string(tts.Data());
+	return result;
+}
 bool IsNumber(const std::string& s) 
 {
 	std::istringstream iss(s);

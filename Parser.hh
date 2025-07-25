@@ -33,7 +33,9 @@ template <typename T> bool InVector(vector<T> &vec,T element)
 }
 void CopyFileContentToBuffer(ifstream &t,string &buff);
 void CopyFileContentToBuffer(string Filename,string &buff);
-	
+
+//void ChangeParNumeration(string &init, string &result, vector<pair<int,int> > &Combinations);
+string ChangeParNumeration(string &init, int MinIndex=0);
 bool IsNumber(const std::string& s);
 bool IsFloat(const std::string& s);
 
