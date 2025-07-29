@@ -18,6 +18,7 @@
 #include <TCanvas.h>
 #include <TFile.h>
 #include <TKey.h>
+#include <sys/stat.h>
 
 #define AngularMomentumSize 7
 using namespace std;
@@ -27,6 +28,11 @@ const string Atomic_symbols[]={"H","He","Li","Be","B","C","N","O","F","Ne","Na",
 const char AngularMomentum[]={'s','p','d','f','g','h','i'};
 
 
+inline bool IsFileExsists (const std::string& name)
+{
+	struct stat buffer;   
+	return (stat (name.c_str(), &buffer) == 0); 
+}
 
 void CopyFileContentToBuffer(ifstream &t,string &buff)
 {
