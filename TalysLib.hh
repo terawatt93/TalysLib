@@ -1158,6 +1158,17 @@ GammaTransition* GetBestTransitionFromVector(float Energy, float Tolerancy,vecto
 void ReadNucleiFromRootFile(vector<Nucleus> &Nuclei,TFile *f);
 int CheckGammaTransitionIntegrality(GammaTransition* gt);
 
+class GammaPeakData:public TObject//описывается в TLMaterial.cpp
+{
+	public:
+	vector<GammaTransition*> Gammas;
+	vector<Nucleus*> InitNuclei;
+	double E=0,Sigma=0, Centroid=0, StCoeff=0, EffectiveCS=0;
+	vector<string> Reactions;
+	
+	ClassDef(GammaPeakData, CLASSVERSION);
+};
+
 class TLMaterial:public TObject
 {
 	public:
@@ -1196,6 +1207,7 @@ class TLMaterial:public TObject
 	void AddElement(string Element, int Q);
 	void AddBackground(string PathToBackground);
 	void SaveToXLSX(string filename);
+	GammaPeakData FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold=0,bool UseAbundancy=true);
 	void PrintGammas(double CrossSectionThreshold=0,bool UseAbundancy=true);
 	vector<GammaTransition*> GetGammaTransitions(double CrossSectionThreshold=0,bool UseAbundancy=true);
 	vector<GammaTransition*> GetGammaTransitionsE(double EnergyThreshold=0,double CrossSectionThreshold=0,bool UseAbundancy=true);
@@ -1259,10 +1271,7 @@ class SampleInformation:public TObject //класс, хранящий инфор
 	void GetPosition(double &PositionX, double &PositionY, double &PositionZ);
 	ClassDef(SampleInformation, CLASSVERSION);
 	private:
-	using TObject::GetName
-	
-	
-	;
+	using TObject::GetName;
 };
 
 

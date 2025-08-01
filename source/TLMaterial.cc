@@ -368,3 +368,30 @@ GammaTransition* TLMaterial::GetMostIntenseGammaTransition()
 	}
 	return t;
 }
+
+GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold,bool UseAbundancy)
+{
+	vector<GammaTransition*> GT=FindGammaTransitions(Energy,CrossSectionThreshold,Sigma,UseAbundancy);
+	GammaPeakData result;
+	result.Gammas=GT;
+	result.Sigma=Sigma;
+	result.E=Energy;
+	double StCoeff=0;
+	for(unsigned int i=0;i<GT.size();i++)
+	{
+		Nucleus* Init=GT[i]->fLevel->fNucleus->fMotherNucleus;
+		double Stechiometry=GetElementQuantity(Init);
+		double Abun=Init->Abundance;
+		
+		if(!InVector(result.InitNuclei,Init))
+		result.StCoeff+=Stechiometry*Abun;
+		
+		
+		result.InitNuclei.push_back(Init);
+		result.EffectiveCS+=GT[i]->TalysCrossSection*Stechiometry*Abun;
+		result.Centroid+=GT[i]->TalysCrossSection*Stechiometry*Abun*GT[i]->Energy;
+		result.Reactions.push_back(Init->Name+GT[i]->fLevel->fNucleus->Reaction+GT[i]->fLevel->fNucleus->Name);
+	}
+	result.Centroid=result.Centroid/result.EffectiveCS;
+	return result;
+}
