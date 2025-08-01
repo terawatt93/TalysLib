@@ -345,6 +345,163 @@ std::vector<std::string> SplitString(const std::string &s, char delim, bool Merg
 	return result;
 }
 
+bool SatisfyPrimitiveRegexp(string s, string reg)
+{
+	vector<string> splitted_s=SplitString(s,'_');
+	vector<string> splitted_r=SplitString(reg,'_');
+	if(splitted_s.size()!=splitted_r.size())
+	{
+		return false;
+	}
+	int Matches=0;
+	for(unsigned int i=0;i<splitted_r.size();i++)
+	{
+		TString sp_r(splitted_r[i].c_str());
+		if(splitted_r[i].find("[")==string::npos)
+		{
+			if(i<splitted_s.size())
+			{
+				if(splitted_s[i]==splitted_r[i])
+				{
+					Matches++;
+				}
+			}
+		}
+		else
+		{
+			sp_r.ReplaceAll("[","");
+			sp_r.ReplaceAll("]","");
+			vector<string> sp_dash=SplitString(sp_r.Data(),'-');
+			vector<string> sp_comma=SplitString(sp_r.Data(),',');
+			//if(sp_dash)
+			if(sp_dash.size()>1&&sp_comma.size()>1)
+			{
+				cout<<"This is SatisfyPrimitiveRegexp: expressions like [a,b-c] are not implemented now! False returned\n";
+				return false;
+			}
+			else if(sp_r=="*")
+			{
+				Matches++;
+			}
+			if(sp_dash.size()==2)
+			{
+				double Min=atof(sp_dash[0].c_str());
+				double Max=atof(sp_dash[1].c_str());
+				if(IsNumber(splitted_s[i]))
+				{
+					double val=atof(splitted_s[i].c_str());
+					if((Min<=val)&&(Max>=val))
+					{
+						Matches++;
+					}
+				}
+				else
+				{
+					return false;
+				}
+			}
+			else
+			{
+				for(unsigned int j=0;j<sp_comma.size();j++)
+				{
+					if(sp_comma[j]==splitted_s[i])
+					{
+						Matches++;
+					}
+				}
+			}
+		}
+	}
+	if(int(splitted_r.size())==Matches)
+	return true;
+	
+	return false;
+}
+
+vector<string> GetValuesS(vector<string> &strings,string reg,bool Unique)
+{
+	vector<string> result;
+	for(unsigned int j=0;j<strings.size();j++)
+	{
+		vector<string> splitted_s=SplitString(strings[j],'_');
+		vector<string> splitted_r=SplitString(reg,'_');
+		int Match=0;
+		if(splitted_s.size()!=splitted_r.size())
+		{
+			return result;
+		}
+		string str;
+		for(unsigned int i=0;i<splitted_r.size();i++)
+		{
+			
+			TString sp_r(splitted_r[i].c_str());
+			if(splitted_r[i].find("[")!=string::npos)
+			{
+				sp_r.ReplaceAll("[","");
+				sp_r.ReplaceAll("]","");
+				if(i<splitted_s.size())
+				{
+					if(sp_r=="?")
+					{
+						if(Unique)
+						{
+							if(!InVector(result,splitted_s[i]))
+							{
+								str=(splitted_s[i]);
+								Match++;
+							}
+						}
+						else
+						{
+							str=(splitted_s[i]);
+							Match++;
+						}
+					}
+				}
+			}
+			else
+			{
+				if(splitted_r[i]==splitted_s[i])
+				{
+					Match++;
+				}
+			}
+		}
+		if(Match==(int)splitted_s.size())
+		{
+			result.push_back(str);
+		}
+	}
+	return result;
+}
+
+vector<double> GetValuesD(vector<string> &strings, string reg,bool Unique,double Scale)
+{
+	vector<string> v_i=GetValuesS(strings,reg,Unique);
+	vector<double> result;
+	for(unsigned int i=0;i<v_i.size();i++)
+	{
+		if(IsNumber(v_i[i]))
+		{
+			result.push_back(atof(v_i[i].c_str())*Scale);
+		}
+	}
+	return result;
+}
+vector<int> GetValuesI(vector<string> &strings, string reg,bool Unique,int Scale)
+{
+	vector<string> v_i=GetValuesS(strings,reg,Unique);
+	vector<int> result;
+	for(unsigned int i=0;i<v_i.size();i++)
+	{
+		if(IsNumber(v_i[i]))
+		{
+			result.push_back(atoi(v_i[i].c_str())*Scale);
+		}
+	}
+	return result;
+}
+
 std::vector<std::string> FromFortranFormat(string str,string Format)
 {
 	//упрощенный вариант, скобки внутри формата пока не поддерживаются!

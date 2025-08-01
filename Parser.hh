@@ -33,11 +33,16 @@ template <typename T> bool InVector(vector<T> &vec,T element)
 }
 void CopyFileContentToBuffer(ifstream &t,string &buff);
 void CopyFileContentToBuffer(string Filename,string &buff);
+int FindInVector(int element,vector<int> v);
 
 //void ChangeParNumeration(string &init, string &result, vector<pair<int,int> > &Combinations);
 string ChangeParNumeration(string &init, int MinIndex=0);
 bool IsNumber(const std::string& s);
 bool IsFloat(const std::string& s);
+bool SatisfyPrimitiveRegexp(string s, string reg);//проверяет, удовлетворяет ли выражение вида a_b_c шаблону [a0-a1]_[b0-b1]_...
+vector<string> GetValuesS(vector<string> &strings, string reg,bool Unique=true);
+vector<double> GetValuesD(vector<string> &strings, string reg,bool Unique=true,double Scale=1);
+vector<int> GetValuesI(vector<string> &strings, string reg,bool Unique=true,int Scale=1);
 
 vector<string> GetListOfObjectNames(TFile *f);
 vector<TPad*> GeneratePadsOnCanvas(double x1, double y1, double x2, double y2,int nx, int ny,TCanvas *c=0);
@@ -63,7 +68,7 @@ vector<double> QuantumSum(float A, float B);
 vector<double> Multipolarities(float JPf,float JPi);
 
 string GetField(string input, int FieldNumber);
-int FindInVector(int element,vector<int> v);
+
 
 
 void ParseReaction(string reaction, string &Projectile, string &OutgoingParticle);
