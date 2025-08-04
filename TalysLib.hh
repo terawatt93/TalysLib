@@ -1163,7 +1163,7 @@ class GammaPeakData:public TObject//описывается в TLMaterial.cpp
 	public:
 	vector<GammaTransition*> Gammas;
 	vector<Nucleus*> InitNuclei;
-	double E=0,Sigma=0, Centroid=0, StCoeff=0, EffectiveCS=0;
+	double E=0,Sigma=0, Centroid=0, StCoeff=0, EffectiveCS=0, NAtoms=0, NAtoms_mb=0;//для расчета NAtoms требуется задание плотности
 	vector<string> Reactions;
 	
 	ClassDef(GammaPeakData, CLASSVERSION);
@@ -1184,7 +1184,7 @@ class TLMaterial:public TObject
 	vector<GammaTransition> Bkg;
 	string MaterialFormula;
 	void Calculate();
-	double Density;
+	double Density=0;
 	double MolarMass=0;
 	string Projectile="n";
 	double ProjectileEnergy=14.1;
@@ -1207,7 +1207,7 @@ class TLMaterial:public TObject
 	void AddElement(string Element, int Q);
 	void AddBackground(string PathToBackground);
 	void SaveToXLSX(string filename);
-	GammaPeakData FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold=0,bool UseAbundancy=true);
+	GammaPeakData FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold=0, double Length=0,bool UseAbundancy=true);//толщина - в см
 	void PrintGammas(double CrossSectionThreshold=0,bool UseAbundancy=true);
 	vector<GammaTransition*> GetGammaTransitions(double CrossSectionThreshold=0,bool UseAbundancy=true);
 	vector<GammaTransition*> GetGammaTransitionsE(double EnergyThreshold=0,double CrossSectionThreshold=0,bool UseAbundancy=true);
