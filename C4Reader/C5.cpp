@@ -174,7 +174,7 @@ void C5Manager::ExtractSubentData()
 										FROM x4pro_x4z\n\
 										WHERE Subent = ?) AS a\n\
 										INNER JOIN\n\
-										(SELECT YearRef1, DOI, Reference1 EntryID FROM ENTRY) AS b\n\
+										(SELECT YearRef1, DOI, Reference1, EntryID FROM ENTRY) AS b\n\
 										ON a.EntryID = b.EntryID";
 	
 	string SubentID = Subents.back().SubentID;
@@ -276,11 +276,12 @@ void C5Manager::ExtractSubentData()
 				{
 					Entries.back().Detector.push_back(pair<string, string>("No info", "No info"));
 				}
+				
 				Entries.back().Year = (char*)sqlite3_column_text(stmt,5); // год
 				
 				if(sqlite3_column_type(stmt, 6) != SQLITE_NULL)
 				{
-					Entries.back().DOI = (char*)sqlite3_column_text(stmt,7); // DOI
+					Entries.back().DOI = (char*)sqlite3_column_text(stmt,6); // DOI
 				}
 				else
 				{
