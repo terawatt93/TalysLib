@@ -170,7 +170,7 @@ void C5Manager::ExtractSubentData()
 	//                                               0                              1                                                 2                                       
 	const char* extract_entry_query =  "SELECT * FROM\n\
 										(SELECT SUBSTR(Subent,0,6) AS EntryID, json_extract(jx4z, '$.BIB.AUTHOR[0].x4codes'), json_extract(jx4z, '$.BIB.TITLE[0].x4freetext'),\n\
-										json_extract(jx4z, '$.BIB.DETECTOR'), json_extract(jx4z, '$.BIB.METHOD'), json_extract(jx4z, '$.BIB.REFERENCE[0].x4codes[0].shortRef')\n\
+										json_extract(jx4z, '$.BIB.DETECTOR'), json_extract(jx4z, '$.BIB.METHOD')\n\
 										FROM x4pro_x4z\n\
 										WHERE Subent = ?) AS a\n\
 										INNER JOIN\n\
@@ -276,18 +276,9 @@ void C5Manager::ExtractSubentData()
 				{
 					Entries.back().Detector.push_back(pair<string, string>("No info", "No info"));
 				}
-				Entries.back().Year = (char*)sqlite3_column_text(stmt,6); // год
+				Entries.back().Year = (char*)sqlite3_column_text(stmt,5); // год
 				
-				if(sqlite3_column_type(stmt,5) != SQLITE_NULL)
-				{
-					Entries.back().Reference=((char*)sqlite3_column_text(stmt,5)); // приписываем первую ссылку из json
-				}
-				else
-				{
-					Entries.back().Authors.push_back("No info");
-				}
-				
-				if(sqlite3_column_type(stmt, 7) != SQLITE_NULL)
+				if(sqlite3_column_type(stmt, 6) != SQLITE_NULL)
 				{
 					Entries.back().DOI = (char*)sqlite3_column_text(stmt,7); // DOI
 				}
