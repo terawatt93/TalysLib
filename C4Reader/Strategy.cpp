@@ -90,6 +90,10 @@ double Gamma_min_diff(SubentData& subent, double tolerancy_gamma)
 				result = fabs(x2[i] - x2[j]);
 		}
 	}
+	if(result < 1)
+	{
+		return tolerancy_gamma;
+	}
 	return result;
 }
 
@@ -120,7 +124,6 @@ string ConvertReaction(SubentData& subent)
 void Strategy_CSP(SubentData& subent, Nucleus* nucl, double tolerancy_gamma)
 {
 	size_t row_num = 0;
-	cout << subent.SubentID << "\n";
 	if(subent.x2_hdr == "E" || subent.x2_hdr == "E-LVL")
 	{
 		while(row_num < subent.DataTable.size())
@@ -129,7 +132,6 @@ void Strategy_CSP(SubentData& subent, Nucleus* nucl, double tolerancy_gamma)
 			GammaTransition* transition = nucl->GetBestTransition(particle_energy / 1e3, tolerancy_gamma);
 			if(transition != NULL)
 			{
-				cout << transition->Energy << "\t" << transition->fLevel->fNucleus->Reaction << "\n";
 				transition->C5EnergyDistribution.push_back(GetCSP(subent, row_num));
 				transition->C5EnergyDistribution.back().Transition = transition;
 			}
