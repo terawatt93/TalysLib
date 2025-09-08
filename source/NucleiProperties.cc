@@ -729,11 +729,14 @@ void Nucleus::ReadSMatrixFromOutput()
 	}
 	else
 	{
+		//cout<<"SMatrixWasRead: "<<SMatrixWasRead<<"\n";
 		if(ReadSMatrix && SMatrixWasRead == false)
 		{
 			//Полина! Чтение файлов fort.60 и fort.70 в 
 			ifstream ifs60(PathToCalculationDir+"/fort.60");
+			//cout<<"PathToCalculationDir:"<<PathToCalculationDir<<"\n";
 			CopyFileContentToBuffer(ifs60,SMatrixOutput);
+			//cout<<"SMatrixOutput:"<<SMatrixOutput<<"\n";
 			ifs60.close();
 			ifstream ifs70(PathToCalculationDir+"/fort.70");
 			CopyFileContentToBuffer(ifs70,TransmissionCoeffOutput);
@@ -1963,6 +1966,10 @@ void Nucleus::GenerateProducts(string _Projectile)
 		else
 		{
 			ReadTalysCalculationResult_v2();
+		}
+		 if(SMatrixOutput.size()>0)
+		{
+			s_mat.Read(SMatrixOutput,TransmissionCoeffOutput);
 		}
 		AssignPointers();
 	}
