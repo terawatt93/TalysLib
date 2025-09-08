@@ -17,7 +17,10 @@ EnergyDistribution GetCSP(SubentData& subent, size_t& row_num)
 		double dx1 = subent.DataTable[row_num].Row["dx1"] / 1e6;
 		double y = subent.DataTable[row_num].Row["y"] * 1e3;
 		double dy = subent.DataTable[row_num].Row["dy"] * 1e3;
-		ED.data_points.push_back({x1, y, dx1, dy});
+		if(y != 0 and dy != 0)
+		{
+			ED.data_points.push_back({x1, y, dx1, dy});
+		}
 		if(row_num+1 != subent.DataTable.size() && subent.DataTable[row_num].Row["x2"] != subent.DataTable[row_num+1].Row["x2"])
 		{
 			++row_num;
@@ -38,7 +41,10 @@ AngularDistribution GetDAP(SubentData& subent, size_t& row_num)
 		double dx3 = subent.DataTable[row_num].Row["dx3"];
 		double y = subent.DataTable[row_num].Row["y"] * 1e3;
 		double dy = subent.DataTable[row_num].Row["dy"] * 1e3;
-		AD.data_points.push_back({x1, x3, y, dx3, dy});
+		if(y != 0 and dy != 0)
+		{
+			AD.data_points.push_back({x1, x3, y, dx3, dy});
+		}
 		if(row_num+1 != subent.DataTable.size() && subent.DataTable[row_num].Row["x2"] != subent.DataTable[row_num+1].Row["x2"])
 		{
 			++row_num;
@@ -90,6 +96,10 @@ double Gamma_min_diff(SubentData& subent, double tolerancy_gamma)
 				result = fabs(x2[i] - x2[j]);
 		}
 	}
+	if(result < 1)
+	{
+		return tolerancy_gamma;
+	}
 	return result;
 }
 
@@ -120,16 +130,15 @@ string ConvertReaction(SubentData& subent)
 void Strategy_CSP(SubentData& subent, Nucleus* nucl, double tolerancy_gamma)
 {
 	size_t row_num = 0;
-	cout << subent.SubentID << "\n";
 	if(subent.x2_hdr == "E" || subent.x2_hdr == "E-LVL")
 	{
 		while(row_num < subent.DataTable.size())
 		{
 			double particle_energy = subent.DataTable[row_num].Row["x2"];
 			GammaTransition* transition = nucl->GetBestTransition(particle_energy / 1e3, tolerancy_gamma);
+			//GammaTransition* best_transition = nucl->GetBestTransition(particle_energy / 1e3, tolerancy_gamma);
 			if(transition != NULL)
 			{
-				cout << transition->Energy << "\t" << transition->fLevel->fNucleus->Reaction << "\n";
 				transition->C5EnergyDistribution.push_back(GetCSP(subent, row_num));
 				transition->C5EnergyDistribution.back().Transition = transition;
 			}
@@ -291,7 +300,8 @@ void C5Manager::AssignC5ToLevel(double tolerancy_gamma)
 						{
 							Strategy_CSP(subent, product, tol);
 						}
-					}			
+					}	
+						
 				}
 			}
 			else if(subent.Quant == "DAP")

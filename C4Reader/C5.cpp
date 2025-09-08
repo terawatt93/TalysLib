@@ -80,6 +80,42 @@ void EntryData::GetDetector(json &detectors)
 	}
 }
 
+void EntryData::GetReference(json &reference)
+{
+	for(auto ref: reference)
+	{
+		if(ref.contains("x4codes"))
+		{
+			if(ref["x4codes"][0].contains("year"))
+			{
+				Year.push_back(to_string(ref["x4codes"][0]["year"]));
+			}
+			else
+			{
+				Year.push_back("No info");
+			}
+			
+			if(ref["x4codes"][0].contains("DOI"))
+			{
+				DOI.push_back(string(ref["x4codes"][0]["DOI"]));
+			}
+			else
+			{
+				DOI.push_back("No info");
+			}
+			
+			if(ref["x4codes"][0].contains("shortRef"))
+			{
+				Reference.push_back(string(ref["x4codes"][0]["shortRef"]));
+			}
+			else
+			{
+				Reference.push_back("No info");
+			}
+		}
+	}
+}
+
 void C5Manager::SearchSubents() // эта функция выполняет поиск нужных сабентов и заполняет поля классов C5Row, SubentData, EntryData.
 {
 	string target = fMotherNucleus->Element + "-" + to_string(fMotherNucleus->A);
@@ -167,15 +203,21 @@ void C5Manager::ExtractSubentData()
 	const char* extract_basic_units = "SELECT BasicUnits FROM x4pro_hdr WHERE DatasetID = ? AND typ = 'x' AND varName = 'y'";
 	const char* extract_c5_expansion = "SELECT varName, expansion FROM x4pro_hdr WHERE DatasetID = ? AND typ = 'c' ";
 	const char* extract_subent_query = "SELECT * FROM x4pro_c5dat WHERE DatasetID = ?";
-	//                                               0                              1                                                 2                                       
+	//   
+	/*                                            0                              1                                                 2                                       
 	const char* extract_entry_query =  "SELECT * FROM\n\
 										(SELECT SUBSTR(Subent,0,6) AS EntryID, json_extract(jx4z, '$.BIB.AUTHOR[0].x4codes'), json_extract(jx4z, '$.BIB.TITLE[0].x4freetext'),\n\
-										json_extract(jx4z, '$.BIB.DETECTOR'), json_extract(jx4z, '$.BIB.METHOD'), json_extract(jx4z, '$.BIB.REFERENCE[0].x4codes[0].shortRef')\n\
+										json_extract(jx4z, '$.BIB.DETECTOR'), json_extract(jx4z, '$.BIB.METHOD'), json_extract(jx4z, '$.BIB.REFERENCE')\n\
 										FROM x4pro_x4z\n\
 										WHERE Subent = ?) AS a\n\
 										INNER JOIN\n\
-										(SELECT YearRef1, DOI, Reference1 EntryID FROM ENTRY) AS b\n\
+										(SELECT YearRef1, DOI, Reference1, EntryID FROM ENTRY) AS b\n\
 										ON a.EntryID = b.EntryID";
+	*/
+	const char* extract_entry_query = "SELECT SUBSTR(Subent,0,6), json_extract(jx4z, '$.BIB.AUTHOR[0].x4codes'), json_extract(jx4z, '$.BIB.TITLE[0].x4freetext'),\n\
+										json_extract(jx4z, '$.BIB.DETECTOR'), json_extract(jx4z, '$.BIB.METHOD'), json_extract(jx4z, '$.BIB.REFERENCE')\n\
+										FROM x4pro_x4z\n\
+										WHERE Subent = ?";
 	
 	string SubentID = Subents.back().SubentID;
 	string EntryID = SubentID.substr(0,5);
@@ -276,20 +318,24 @@ void C5Manager::ExtractSubentData()
 				{
 					Entries.back().Detector.push_back(pair<string, string>("No info", "No info"));
 				}
-				Entries.back().Year = (char*)sqlite3_column_text(stmt,6); // год
 				
-				if(sqlite3_column_type(stmt,5) != SQLITE_NULL)
+				if(sqlite3_column_type(stmt, 5) != SQLITE_NULL)
 				{
-					Entries.back().Reference=((char*)sqlite3_column_text(stmt,5)); // приписываем первую ссылку из json
+					json reference = json::parse((char*)sqlite3_column_text(stmt,5));
+					Entries.back().GetReference(reference);
 				}
 				else
 				{
-					Entries.back().Authors.push_back("No info");
+					Entries.back().Reference.push_back("No info");
+					Entries.back().DOI.push_back("No info");
+					Entries.back().Year.push_back("No info");
 				}
+				/*
+				Entries.back().Year = (char*)sqlite3_column_text(stmt,5); // год
 				
-				if(sqlite3_column_type(stmt, 7) != SQLITE_NULL)
+				if(sqlite3_column_type(stmt, 6) != SQLITE_NULL)
 				{
-					Entries.back().DOI = (char*)sqlite3_column_text(stmt,7); // DOI
+					Entries.back().DOI = (char*)sqlite3_column_text(stmt,6); // DOI
 				}
 				else
 				{
@@ -304,6 +350,7 @@ void C5Manager::ExtractSubentData()
 				{
 					Entries.back().Reference = "No info";
 				}
+				*/
 			}
 		}	
 		sqlite3_finalize(stmt);
