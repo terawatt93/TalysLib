@@ -721,6 +721,47 @@ Nucleus* Nucleus::FindProductByAZ(int a, int z)
 	return NULL;
 }
 
+void Nucleus::ReadSMatrixFromOutput()
+{
+	if(fMotherNucleus)
+	{
+		fMotherNucleus->ReadSMatrixFromOutput();
+	}
+	else
+	{
+		if(ReadSMatrix && SMatrixWasRead == false)
+		{
+			//Полина! Чтение файлов fort.60 и fort.70 в 
+			ifstream ifs60(PathToCalculationDir+"/fort.60");
+			CopyFileContentToBuffer(ifs60,SMatrixOutput);
+			ifs60.close();
+			ifstream ifs70(PathToCalculationDir+"/fort.70");
+			CopyFileContentToBuffer(ifs70,TransmissionCoeffOutput);
+			ifs70.close();
+			
+			string ECISDiscINP,ECISIncINP;
+			ifstream ifsEcisDisc(PathToCalculationDir+"/ecisdisc.inp");
+			CopyFileContentToBuffer(ifsEcisDisc,ECISDiscINP);
+			ifsEcisDisc.close();
+
+			ifstream ifsEcisInc(PathToCalculationDir+"/ecisinc.inp");
+			CopyFileContentToBuffer(ifsEcisInc,ECISIncINP);
+			ifsEcisInc.close();
+
+			if(ECISDiscINP.find("2.00 0 1+   4.43982")!=string::npos)
+			{
+				s_mat.BlockNumber=1;
+			}
+			if(ECISIncINP.find("2.00 0 1+   4.43982")!=string::npos)
+			{
+				s_mat.BlockNumber=0;
+			}
+			SMatrixWasRead=true;
+			//конец
+		}
+	}
+}
+
 void Nucleus::ReadTalysOutput()
 {
 	string filename;
@@ -1039,6 +1080,7 @@ void Nucleus::ReadTalysCalculationResult_v2()
 			}
 		}
 	}
+	ReadSMatrixFromOutput();
 	//цикл по всем именам файлов в директории с результатами расчетов
 }
 

@@ -2,7 +2,7 @@
 
 void GetExforAngularDistribution()
 {
-	TalysLibManager::Instance().ExcludeSubEntries = {"22188046"};
+	//TalysLibManager::Instance().ExcludeSubEntries = {"22188046"};
 	
 	Nucleus Nucl("12C");
     Nucl.GenerateProducts();
@@ -12,7 +12,7 @@ void GetExforAngularDistribution()
     for(unsigned int i=0;i<4;i++)
     {
 		Level *l=&(Nucl.FindProductByReaction("(n,n')")->Levels[i]);
-		vector<TGraphErrors*> vec = l->GetAngularDistributionGraph(14,14.2);
+		vector<TGraphErrors*> vec = l->GetEXFORAngularDistributions(14,14.2);
 		TMultiGraph* mg = new TMultiGraph();
 					
 		TString Title=TString::Format("%s with excitation of level %.1f in %s; #theta; #sigma,mb",l->fNucleus->Reaction.c_str(),l->Energy,l->fNucleus->Name.c_str());

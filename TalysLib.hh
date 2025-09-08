@@ -837,6 +837,7 @@ class Nucleus:public NucleusData
 	bool ConvertToLab=false;
 	bool Success=false;//флаг, подтверждающий успешность вычислений
 	bool ReadSMatrix=false;//флаг, управляющий чтением s-матриц
+	bool SMatrixWasRead=false;//флаг, управляющий чтением s-матриц
 	bool PredefinedProjectile=false;//флаг, определяющий, приписывать ли Projectile аргумент из GenerateProducts;
 	bool C4WasRead=false;
 	int MainNucleusFlag=0;
@@ -987,6 +988,8 @@ class Nucleus:public NucleusData
 	void AddCommandsToInputFile(string Addition);
 	string GetRawOutput();
 	void AddEnergyPoint(double EnergyValue);
+	
+	
 	//Nucleus& operator =(const Nucleus& Nucl);
 	
 	int GetIntegrityFactor();
@@ -997,6 +1000,7 @@ class Nucleus:public NucleusData
 	string TransmissionCoeffOutput;//строка, содержащая текст из файла fort.70, куда записываются коэффициенты проницаемости
 	ST_Matrix s_mat;//!
 	double NormInelastic1=0;
+	void ReadSMatrixFromOutput();//функция, читающая S-матрицу для Полины
 	//блок закончен
 	bool OutputWasRead=false;
 	void ReadTalysOutput();//считывает информацию из файла output в RawOutputContent
