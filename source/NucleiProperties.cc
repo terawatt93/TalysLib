@@ -499,6 +499,7 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile,bool PerformCalculati
 //Выполнять вычисления не нужно, если считается энергетическая зависимость, т.к.в этом случае они выполняются отдельными потоками
 {
 	Projectile=_Projectile;
+	ProjectileMass=GetNuclearMass(Projectile);
 	//PathToCalculationDir=GetPathToTalysData()+"/CalculationResults/";
 	
 	PathToCalculationDir=TString::Format("/dev/shm/CalculationResults%d/",ThreadNumber);

@@ -948,6 +948,10 @@ double GetNuclearMass(string nucleus)
 	{
 		return 938.272;
 	}
+	if(nucleus=="g")
+	{
+		return 0;
+	}
 	TString MassFileName;
 	if(GetTalysVersion()>=2)
 	{
