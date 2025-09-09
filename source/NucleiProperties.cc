@@ -731,7 +731,8 @@ void Nucleus::ReadSMatrixFromOutput()
 	else
 	{
 		//cout<<"SMatrixWasRead: "<<SMatrixWasRead<<"\n";
-		if(ReadSMatrix && SMatrixWasRead == false)
+		//if(ReadSMatrix && SMatrixWasRead == false)
+		if(ReadSMatrix)
 		{
 			//Полина! Чтение файлов fort.60 и fort.70 в 
 			ifstream ifs60(PathToCalculationDir+"/fort.60");

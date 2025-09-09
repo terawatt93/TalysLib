@@ -72,6 +72,11 @@ void TLMaterial::Calculate()
 			EvalInThreadForTLMaterial(Nuclides[p],0);
 		}
 	}
+	for(unsigned int p=0;p<Nuclides.size();p++)
+	{
+		Nuclides[p]->AssignPointers();
+		Nuclides[p]->fMaterial=this;
+	}
 }
 
 int TLMaterial::GetElementQuantity(string Element)
@@ -263,6 +268,13 @@ vector<GammaTransition*> TLMaterial::GetGammaTransitions(double CrossSectionThre
 		}
 	}
 	Gammas=result;
+	for(unsigned int i=0;i<result.size();i++)
+	{
+		if(!InVector(Nuclides,result[i]->fLevel->fNucleus->fMotherNucleus))
+		{
+			cout<<"Pointer Error\n";
+		}
+	}
 	return result;
 }
 
@@ -388,14 +400,17 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 		{
 			result.StCoeff+=Stechiometry*Abun;
 			result.NAtoms+=NAtoms*Stechiometry*Abun;
+			result.InitNuclei.push_back(Init);
 		}
 		
-		result.InitNuclei.push_back(Init);
+		
 		result.EffectiveCS+=GT[i]->TalysCrossSection*Stechiometry*Abun;
 		result.Centroid+=GT[i]->TalysCrossSection*Stechiometry*Abun*GT[i]->Energy;
 		result.Reactions.push_back(Init->Name+GT[i]->fLevel->fNucleus->Reaction+GT[i]->fLevel->fNucleus->Name);
 	}
+	
 	result.Centroid=result.Centroid/result.EffectiveCS;
+	result.EffectiveCS=result.EffectiveCS/StCoeff;
 	result.NAtoms_mb=result.NAtoms*1e-27;
 	return result;
 }
