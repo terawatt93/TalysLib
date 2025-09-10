@@ -51,6 +51,8 @@ void AddPointToTGraph(TGraph* gr, double x_value, double y_value);
 
 void AddPointToTGraph(TGraph2D* gr, double x_value, double y_value, double z_value);
 
+TGraph SumTGraphs(vector<TGraph*> Graphs, vector<double> Multipliers);
+
 bool IsDirectoryAlreadyExsisted(string Name);//функция проверяет, существует ли директория с данным именем. Нужна для решения конфликтов, возникающих при одновременном расчете двух ядер с однинаковым именем
 
 std::vector<std::string> SplitString(const std::string &s, char delim, bool MergeDelimeters=true);

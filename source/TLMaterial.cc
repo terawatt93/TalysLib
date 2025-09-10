@@ -40,6 +40,15 @@ double TLMaterial::GetDensity()
 	return Density;
 }
 
+void TLMaterial::GenerateEnergyGrid(double min, double step,double max)
+{
+	WithEnergyGrid=true;
+	for(unsigned int i=0;i<Nuclides.size();i++)
+	{
+		Nuclides[i]->GenerateEnergyGrid(min,step,max);
+	}
+}
+
 void EvalInThreadForTLMaterial(Nucleus *Nucl,int NThread)
 {
 	Nucl->SetThreadNumber(NThread);
@@ -48,7 +57,7 @@ void EvalInThreadForTLMaterial(Nucleus *Nucl,int NThread)
 }
 void TLMaterial::Calculate()
 {
-	if(EnableMultiThreading)
+	if(EnableMultiThreading && !WithEnergyGrid)
 	{
 		vector<thread> threads;
 		unsigned int CurrIndex=0;
@@ -390,6 +399,8 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 	result.E=Energy;
 	double NAtoms=Density*6.02e23/GetMolarMass();
 	double StCoeff=0;
+	vector<TGraph*> Graphs;
+	vector<double> Multipliers;
 	for(unsigned int i=0;i<GT.size();i++)
 	{
 		Nucleus* Init=GT[i]->fLevel->fNucleus->fMotherNucleus;
@@ -402,13 +413,17 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 			result.NAtoms+=NAtoms*Stechiometry*Abun;
 			result.InitNuclei.push_back(Init);
 		}
-		
-		
 		result.EffectiveCS+=GT[i]->TalysCrossSection*Stechiometry*Abun;
+		Multipliers.push_back(GT[i]->TalysCrossSection*Stechiometry*Abun);
 		result.Centroid+=GT[i]->TalysCrossSection*Stechiometry*Abun*GT[i]->Energy;
 		result.Reactions.push_back(Init->Name+GT[i]->fLevel->fNucleus->Reaction+GT[i]->fLevel->fNucleus->Name);
+		Graphs.push_back(GT[i]->GetCSGraph());
 	}
-	
+	for(unsigned int i=0;i<Multipliers.size();i++)
+	{
+		Multipliers[i]=Multipliers[i]/StCoeff;
+	}
+	result.CSGraph=SumTGraphs(Graphs,Multipliers);
 	result.Centroid=result.Centroid/result.EffectiveCS;
 	result.EffectiveCS=result.EffectiveCS/StCoeff;
 	result.NAtoms_mb=result.NAtoms*1e-27;

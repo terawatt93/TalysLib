@@ -27,6 +27,59 @@ const string Atomic_symbols[]={"H","He","Li","Be","B","C","N","O","F","Ne","Na",
 
 const char AngularMomentum[]={'s','p','d','f','g','h','i'};
 
+class kGrPoint_s//вспомогательный класс, позволяющий хранить точки графика совместно с указателем на график
+{
+	public:
+	double x=0,y=0;
+	TGraph *fGraph=0;
+	double MinX=0, MaxX=0;
+};
+
+vector<kGrPoint_s> Get_kGrPoint_s(vector<TGraph*> &gr)
+{
+	vector<kGrPoint_s> result;
+	for(unsigned int i=0;i<gr.size();i++)
+	{
+		double Min=TMath::MinElement(gr[i]->GetN(),gr[i]->GetX()),Max=TMath::MaxElement(gr[i]->GetN(),gr[i]->GetX());
+		for(int j=0;j<gr[i]->GetN();j++)
+		{
+			double x,y;
+			gr[i]->GetPoint(j,x,y);
+			kGrPoint_s p;
+			p.x=x; p.y=y; p.fGraph=gr[i];
+			p.MinX=Min; p.MaxX=Max;
+			result.push_back(p);
+		}
+	}
+	std::sort(result.begin(), result.end(), [](kGrPoint_s a, kGrPoint_s b)
+	{
+		return a.x < b.x;
+	});
+	return result;
+}
+
+
+
+TGraph SumTGraphs(vector<TGraph*> Graphs, vector<double> Multipliers)
+{
+	vector<kGrPoint_s> Points=Get_kGrPoint_s(Graphs);
+	TGraph result;
+	for(unsigned int i=0;i<Points.size();i++)
+	{
+		double y=0;
+		for(unsigned int j=0;j<Graphs.size();j++)
+		{
+			double Min=TMath::MinElement(Graphs[j]->GetN(),Graphs[j]->GetX()),Max=TMath::MaxElement(Graphs[j]->GetN(),Graphs[j]->GetX());
+			if(Points[i].x>=Min && Points[i].x<=Max)
+			{
+				y+=Graphs[j]->Eval(Points[i].x,0,"S")*Multipliers[j];
+			}
+		}
+		result.SetPoint(result.GetN(),Points[i].x,y);
+	}
+	return result;
+}
+
 
 inline bool IsFileExsists (const std::string& name)
 {

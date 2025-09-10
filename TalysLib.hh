@@ -1167,6 +1167,7 @@ class GammaPeakData:public TObject//описывается в TLMaterial.cpp
 	public:
 	vector<GammaTransition*> Gammas;
 	vector<Nucleus*> InitNuclei;
+	TGraph CSGraph;
 	double E=0,Sigma=0, Centroid=0, StCoeff=0, EffectiveCS=0, NAtoms=0, NAtoms_mb=0;//для расчета NAtoms требуется задание плотности
 	vector<string> Reactions;
 	
@@ -1177,6 +1178,7 @@ class TLMaterial:public TObject
 {
 	public:
 	bool EnableMultiThreading=true;
+	bool WithEnergyGrid=false;
 	int NThreads=7;
 	vector<string> ElementsVector;
 	vector<int> QVector;
@@ -1220,6 +1222,7 @@ class TLMaterial:public TObject
 	vector<TH1F> GammaSpectraPerNuclei;
 	TH1F GammaSpectrum;
 	TH1F* GenerateGammaSpectrum(string DetectorType="HPGe",TF1 *ResolutionFunction=0);
+	void GenerateEnergyGrid(double min, double step, double max);
 	GammaTransition* GetMostIntenseGammaTransition();
 	~TLMaterial()
 	{
