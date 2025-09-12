@@ -31,6 +31,13 @@ template <typename T> bool InVector(vector<T> &vec,T element)
 	}
 	return false;
 }
+template <typename T> void AddUniqueElementToVector(vector<T> &vec,T element)
+{
+	if(!InVector(vec,element))
+	{
+		vec.push_back(element);
+	}
+}
 void CopyFileContentToBuffer(ifstream &t,string &buff);
 void CopyFileContentToBuffer(string Filename,string &buff);
 int FindInVector(int element,vector<int> v);

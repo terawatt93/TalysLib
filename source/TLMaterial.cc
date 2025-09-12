@@ -390,13 +390,51 @@ GammaTransition* TLMaterial::GetMostIntenseGammaTransition()
 	return t;
 }
 
-GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold, double Length,bool UseAbundancy)
+GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold, double Length,bool UseAbundancy, bool AtLeastOne)
 {
-	vector<GammaTransition*> GT=FindGammaTransitions(Energy,CrossSectionThreshold,Sigma,UseAbundancy);
+	vector<GammaTransition*> GT;
+	GammaTransition* MaxCS=0;
+	double CSMax=0;
+	if(AtLeastOne)
+	{
+		vector<GammaTransition*> GT0=FindGammaTransitions(Energy,0,Sigma,UseAbundancy);
+		for(unsigned int i=0;i<GT0.size();i++)
+		{
+			double Val=GT0[i]->TalysCrossSection;
+			if(UseAbundancy)
+			{
+				Val=Val*GT0[i]->fLevel->fNucleus->fMotherNucleus->Abundance;
+			}
+			if(i==0)
+			{
+				CSMax=Val;
+				MaxCS=GT0[i];
+			}
+			else if (CSMax<Val)
+			{
+				CSMax=Val;
+				MaxCS=GT0[i];
+			}
+			if(Val>CrossSectionThreshold)
+			{
+				GT.push_back(GT0[i]);
+			}
+		}
+		if(GT.size()==0)
+		{
+			GT.push_back(MaxCS);
+		}
+	}
+	else
+	{
+		GT=FindGammaTransitions(Energy,CrossSectionThreshold,Sigma,UseAbundancy);
+	}
+	
 	GammaPeakData result;
 	result.Gammas=GT;
 	result.Sigma=Sigma;
 	result.E=Energy;
+	result.fMaterial=this;
 	double NAtoms=Density*6.02e23/GetMolarMass();
 	double StCoeff=0;
 	vector<TGraph*> Graphs;
@@ -423,7 +461,10 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 	{
 		Multipliers[i]=Multipliers[i]/StCoeff;
 	}
-	result.CSGraph=SumTGraphs(Graphs,Multipliers);
+	if(WithEnergyGrid)
+	{
+		result.CSGraph=SumTGraphs(Graphs,Multipliers);
+	}
 	result.Centroid=result.Centroid/result.EffectiveCS;
 	result.EffectiveCS=result.EffectiveCS/StCoeff;
 	result.NAtoms_mb=result.NAtoms*1e-27;

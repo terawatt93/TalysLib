@@ -1170,7 +1170,7 @@ class GammaPeakData:public TObject//описывается в TLMaterial.cpp
 	TGraph CSGraph;
 	double E=0,Sigma=0, Centroid=0, StCoeff=0, EffectiveCS=0, NAtoms=0, NAtoms_mb=0;//для расчета NAtoms требуется задание плотности
 	vector<string> Reactions;
-	
+	TLMaterial *fMaterial=0;
 	ClassDef(GammaPeakData, CLASSVERSION);
 };
 
@@ -1213,7 +1213,7 @@ class TLMaterial:public TObject
 	void AddElement(string Element, int Q);
 	void AddBackground(string PathToBackground);
 	void SaveToXLSX(string filename);
-	GammaPeakData FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold=0, double Length=0,bool UseAbundancy=true);//толщина - в см
+	GammaPeakData FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold=0, double Length=0,bool UseAbundancy=true, bool AtLeastOne=false);//толщина - в см
 	void PrintGammas(double CrossSectionThreshold=0,bool UseAbundancy=true);
 	vector<GammaTransition*> GetGammaTransitions(double CrossSectionThreshold=0,bool UseAbundancy=true);
 	vector<GammaTransition*> GetGammaTransitionsE(double EnergyThreshold=0,double CrossSectionThreshold=0,bool UseAbundancy=true);
