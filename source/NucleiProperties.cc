@@ -413,6 +413,7 @@ const char* NucleusData::GetName()  const
 	return Name.c_str();
 }
 
+
 void Nucleus::Create(string Name,string Reaction)
 {
 	if(TalysLibManager::Instance().RemoteCalculation)
@@ -486,8 +487,73 @@ void Nucleus::Create(string Name,string Reaction)
 	
 }
 
+
+
 Nucleus::Nucleus(string Name,string Reaction)
 {
+	bool _Created=false;
+	if(Reaction=="")
+	{
+		if(IsExsistedPath(Name))
+		{
+			PathToCalculationDir=Name;
+			if(Name.find("input")==string::npos)
+			{
+				bool InpFound=false;
+				if(IsExsistedPath(Name+"input"))
+				{
+					Name+="input";
+					InpFound=true;
+				}
+				else if(IsExsistedPath(Name+"/input"))
+				{
+					Name+="/input";
+					InpFound=true;
+				}
+				if(!InpFound)
+				{
+					cout<<"This is Nucleus::Nucleus("<<Name<<"): input like path to directory but input file cannot be found!\n";
+				}
+				else
+				{
+					ifstream ifs(Name);
+					cout<<"ll: "<<Name<<"\n";
+					string line;
+					string NM, NMass;
+					while(getline(ifs,line))
+					{
+						cout<<"ll: "<<line<<"\n";
+						stringstream sstr(line);
+						string key;
+						sstr>>key;
+						if(key=="projectile")
+						{
+							sstr>>Projectile;
+						}
+						if(key=="element")
+						{
+							sstr>>NM;
+						}
+						if(key=="mass")
+						{
+							sstr>>NMass;
+						}
+						if(key=="energy")
+						{
+							sstr>>ProjectileEnergy;
+						}
+					}
+					Name=NMass+NM;
+					Create(Name,"");
+					_Created=true;
+					ReadTalysCalculationResult_v2();
+					AssignPointers();
+					TalysLibManager::Instance().DeleteCalculationFolder=false;
+				}
+			}
+		}
+	}
+	if(!_Created)
 	Create(Name,Reaction);
 }
 
@@ -1969,7 +2035,7 @@ void Nucleus::GenerateProducts(string _Projectile)
 		{
 			ReadTalysCalculationResult_v2();
 		}
-		 if(SMatrixOutput.size()>0)
+		if(SMatrixOutput.size()>0)
 		{
 			s_mat.Read(SMatrixOutput,TransmissionCoeffOutput);
 		}

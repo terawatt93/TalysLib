@@ -19,6 +19,7 @@
 #include <TFile.h>
 #include <TKey.h>
 #include <sys/stat.h>
+#include <iomanip>
 
 #define AngularMomentumSize 7
 using namespace std;
@@ -58,7 +59,23 @@ vector<kGrPoint_s> Get_kGrPoint_s(vector<TGraph*> &gr)
 	return result;
 }
 
-
+bool IsExsistedPath(const std::string& input)
+{
+	try 
+	{
+		fs::path pathObj(input);
+		if (fs::exists(pathObj)) 
+		{
+			return true;
+		}
+		return false;
+	}
+	catch (const std::exception&) 
+	{
+		return false; // If path construction fails, it's likely not a valid path
+	}
+	return false;
+}
 
 TGraph SumTGraphs(vector<TGraph*> Graphs, vector<double> Multipliers)
 {
@@ -80,6 +97,43 @@ TGraph SumTGraphs(vector<TGraph*> Graphs, vector<double> Multipliers)
 	return result;
 }
 
+double EvalPoverForScientificNotation(double inp)//функция, возвращающая показатель для эксп. записи
+{
+	if(inp==0)
+	{
+		return 0;
+	}
+	return pow(10,-floor(log10(abs(inp))));
+}
+
+vector<double> RoundError(vector<double> inp)//http://genphys.phys.msu.ru/rus/ofp/CanYouRound.pdf стр 5
+{
+	double Val=inp[0];
+	double Err=abs(inp[1]);
+	double Multiplier=EvalPoverForScientificNotation(Err);
+	
+	Val=Val*Multiplier;
+	Err=Err*Multiplier;
+	
+	
+	string Err_str=to_string(Err);
+	int PointerToLast=0;
+	stringstream sstr;
+	if(Err_str[0]>'2')
+	{
+		sstr<<round(Err)<<std::setprecision(0);
+		PointerToLast=0;
+	}
+	else
+	{
+		sstr<<(round(Err*10)/10)<<std::setprecision(1);
+		PointerToLast=1;
+	}
+	Val=round(Val*pow(10,PointerToLast))/pow(10,PointerToLast)/Multiplier;
+	Err_str=sstr.str();
+	double Err_rounded=atof(Err_str.c_str())/Multiplier;
+	return {Val,Err_rounded};
+}
 
 inline bool IsFileExsists (const std::string& name)
 {

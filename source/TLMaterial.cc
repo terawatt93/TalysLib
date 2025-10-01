@@ -395,6 +395,7 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 	vector<GammaTransition*> GT;
 	GammaTransition* MaxCS=0;
 	double CSMax=0;
+	
 	if(AtLeastOne)
 	{
 		vector<GammaTransition*> GT0=FindGammaTransitions(Energy,0,Sigma,UseAbundancy);
@@ -431,14 +432,15 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 	}
 	
 	GammaPeakData result;
+	result.Multipolarity=0;
 	result.Gammas=GT;
 	result.Sigma=Sigma;
 	result.E=Energy;
 	result.fMaterial=this;
-	double NAtoms=Density*6.02e23/GetMolarMass();
-	double StCoeff=0;
+	double NAtoms=Density*6.02e23/GetMolarMass()*Length;
 	vector<TGraph*> Graphs;
 	vector<double> Multipliers;
+	CSMax=0;
 	for(unsigned int i=0;i<GT.size();i++)
 	{
 		Nucleus* Init=GT[i]->fLevel->fNucleus->fMotherNucleus;
@@ -452,21 +454,44 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 			result.InitNuclei.push_back(Init);
 		}
 		result.EffectiveCS+=GT[i]->TalysCrossSection*Stechiometry*Abun;
+		if(result.Multipolarity<GT[i]->GetMostProbableMultipolarity().J)
+		{
+			result.Multipolarity=GT[i]->GetMostProbableMultipolarity().J;
+		}
+		/*if(CSMax<GT[i]->TalysCrossSection*Stechiometry*Abun)
+		{
+			CSMax=GT[i]->TalysCrossSection*Stechiometry*Abun;
+			Multipolarity=GT[i]->GetMostProbableMultipolarity().J;
+		}*/
 		Multipliers.push_back(GT[i]->TalysCrossSection*Stechiometry*Abun);
-		result.Centroid+=GT[i]->TalysCrossSection*Stechiometry*Abun*GT[i]->Energy;
 		result.Reactions.push_back(Init->Name+GT[i]->fLevel->fNucleus->Reaction+GT[i]->fLevel->fNucleus->Name);
+		result.Centroid+=GT[i]->TalysCrossSection*Stechiometry*Abun*GT[i]->Energy;
 		Graphs.push_back(GT[i]->GetCSGraph());
+		
 	}
 	for(unsigned int i=0;i<Multipliers.size();i++)
 	{
-		Multipliers[i]=Multipliers[i]/StCoeff;
+		Multipliers[i]=Multipliers[i]/result.StCoeff;
 	}
 	if(WithEnergyGrid)
 	{
 		result.CSGraph=SumTGraphs(Graphs,Multipliers);
 	}
 	result.Centroid=result.Centroid/result.EffectiveCS;
-	result.EffectiveCS=result.EffectiveCS/StCoeff;
+	result.EffectiveCS=result.EffectiveCS/result.StCoeff;
 	result.NAtoms_mb=result.NAtoms*1e-27;
+	
+	for(unsigned int i=0;i<result.Reactions.size();i++)
+	{
+		if(i==0)
+		{
+			result.Reacstr+=result.Reactions[i];
+		}
+		else
+		{
+			result.Reacstr+=("; "+result.Reactions[i]);
+		}
+	}
+	
 	return result;
 }

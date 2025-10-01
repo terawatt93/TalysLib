@@ -1166,10 +1166,12 @@ class GammaPeakData:public TObject//описывается в TLMaterial.cpp
 {
 	public:
 	vector<GammaTransition*> Gammas;
+	double Multipolarity=0;
 	vector<Nucleus*> InitNuclei;
 	TGraph CSGraph;
 	double E=0,Sigma=0, Centroid=0, StCoeff=0, EffectiveCS=0, NAtoms=0, NAtoms_mb=0;//для расчета NAtoms требуется задание плотности
 	vector<string> Reactions;
+	string Reacstr;
 	TLMaterial *fMaterial=0;
 	ClassDef(GammaPeakData, CLASSVERSION);
 };

@@ -1,4 +1,7 @@
 #pragma once
+#include <filesystem>
+#include <regex>
+
 #include <stdio.h>
 #include <vector>
 #include <cstring>
@@ -20,6 +23,11 @@
 
 #define AngularMomentumSize 7
 using namespace std;
+
+namespace fs = std::filesystem;
+
+bool IsExsistedPath(const std::string& input); 
+
 template <typename T> bool InVector(vector<T> &vec,T element)
 {
 	for(unsigned int i=0;i<vec.size();i++)
@@ -41,6 +49,8 @@ template <typename T> void AddUniqueElementToVector(vector<T> &vec,T element)
 void CopyFileContentToBuffer(ifstream &t,string &buff);
 void CopyFileContentToBuffer(string Filename,string &buff);
 int FindInVector(int element,vector<int> v);
+
+vector<double> RoundError(vector<double> inp);
 
 //void ChangeParNumeration(string &init, string &result, vector<pair<int,int> > &Combinations);
 string ChangeParNumeration(string &init, int MinIndex=0);
