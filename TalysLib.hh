@@ -817,10 +817,10 @@ class Nucleus:public NucleusData
 	void ReadTalysCalculationResult_v2();//функция, читающая результаты расчетов в версии 2...
 	
 	C5Manager c5_manager;
-	void AssignC5ToLevel();
+	/*void AssignC5ToLevel();
 	void AssignC5EnergyDistributionToLevel(SubentData& subent);
 	void AssignC5AngularDistributionToLevel(SubentData& subent);	
-	void AssignC5ElasticAngularDistribution(SubentData& subent);
+	void AssignC5ElasticAngularDistribution(SubentData& subent);*/
 	vector<pair<GammaTransition*, vector<EnergyDistribution>>> GetGammaEnergyDistributionInRange(double emin, double emax);
 	
 	Nucleus* FindProductByAZ(int a, int z);
