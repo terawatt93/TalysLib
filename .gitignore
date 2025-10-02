@@ -38,3 +38,5 @@ tutorials/tutorials_for_data_analysis/GetExperimentalData/2.tex
 tutorials/tutorials_for_data_analysis/GetExperimentalData/2.pdf
 tutorials/tutorials_for_data_analysis/GetExperimentalData/1.tex
 tutorials/tutorials_for_data_analysis/GetExperimentalData/1.pdf
+*.xlsx
+*.xlsx#

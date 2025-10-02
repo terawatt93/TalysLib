@@ -594,10 +594,10 @@ void Nucleus::ExecuteCalculationInTalys(string _Projectile,bool PerformCalculati
 	ofstream ofs(filename.c_str());
 	//ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\noutexcitation y\n channels y\n";
 	ofs<<"projectile "<<Projectile<<"\nelement "<<GetNucleusName(Z)<<"\nmass "<<A<<"\nenergy "<<ProjectileEnergy<<"\noutdiscrete y\noutgamdis y\noutangle y\n channels y\noutexcitation y\n";
-	if(atof(getenv("TALYSVERSION"))>2)
+	/*if(atof(getenv("TALYSVERSION"))>2)
 	{
 		ofs<<"outall y\n";
-	}
+	}*/
 	
 	//Полина!
 	if(ReadSMatrix)
