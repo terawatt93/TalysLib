@@ -463,7 +463,7 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 			CSMax=GT[i]->TalysCrossSection*Stechiometry*Abun;
 			Multipolarity=GT[i]->GetMostProbableMultipolarity().J;
 		}*/
-		Multipliers.push_back(GT[i]->TalysCrossSection*Stechiometry*Abun);
+		Multipliers.push_back(Stechiometry*Abun);
 		result.Reactions.push_back(Init->Name+GT[i]->fLevel->fNucleus->Reaction+GT[i]->fLevel->fNucleus->Name);
 		result.Centroid+=GT[i]->TalysCrossSection*Stechiometry*Abun*GT[i]->Energy;
 		Graphs.push_back(GT[i]->GetCSGraph());
@@ -492,6 +492,7 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 			result.Reacstr+=("; "+result.Reactions[i]);
 		}
 	}
-	
+	result.CSGraph.SetName(TString::Format("CSPeak_%d_pm_%d",(int(Energy*10)),int(Sigma*10)));
+	result.CSGraph.SetTitle(TString::Format("Talys-calculated #sigma for #gamma-peak %.1f#pm%.1f; E, MeV; #sigma, mb",Energy,Sigma));
 	return result;
 }
