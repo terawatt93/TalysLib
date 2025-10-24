@@ -5,7 +5,7 @@ void GammaPeak()
 	TLMaterial mat("Fe");//создаем материал
 	mat.GenerateEnergyGrid(0,1,20);
 	mat.Calculate();//запускаем вычисления
-	GammaPeakData p=mat.FindGammaTransitionsForPeak(847,10,5);//возвращает объект GammaPeakData, содержащий следующие элементы:
+	GammaPeakData p=mat.FindGammaTransitionsForPeak(3202,30,5);//возвращает объект GammaPeakData, содержащий следующие элементы:
 	p.CSGraph.Draw("alp");
 	gPad->GetCanvas()->Print("PeakCSGraph.pdf","pdf");
 	/*class GammaPeakData:public TObject//описывается в TLMaterial.cpp

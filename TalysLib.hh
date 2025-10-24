@@ -1215,7 +1215,7 @@ class TLMaterial:public TObject
 	void AddElement(string Element, int Q);
 	void AddBackground(string PathToBackground);
 	void SaveToXLSX(string filename);
-	GammaPeakData FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold=0, double Length=0,bool UseAbundancy=true, bool AtLeastOne=false);//толщина - в см
+	GammaPeakData FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold=0, double Length=0,bool UseAbundancy=true, bool AtLeastOne=false,double EThr=14.1);//толщина - в см
 	void PrintGammas(double CrossSectionThreshold=0,bool UseAbundancy=true);
 	vector<GammaTransition*> GetGammaTransitions(double CrossSectionThreshold=0,bool UseAbundancy=true);
 	vector<GammaTransition*> GetGammaTransitionsE(double EnergyThreshold=0,double CrossSectionThreshold=0,bool UseAbundancy=true);
