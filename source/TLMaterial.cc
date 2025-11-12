@@ -390,7 +390,72 @@ GammaTransition* TLMaterial::GetMostIntenseGammaTransition()
 	return t;
 }
 
-GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold, double Length,bool UseAbundancy, bool AtLeastOne)
+void Find_nn_n2n_gammas(vector<GammaTransition*> &GT,vector<GammaTransition*> &Gamma_n,vector<GammaTransition*> &Gamma_2n,string reaction)//строка "reaction" соответствует реакциям в векторе Gamma_2n
+{
+	//теперь проверим наличие n,2n 
+	for(unsigned int i=0;i<Gamma_n.size();i++)
+	{
+		bool Found_n2n=false;
+		string Nucl_n=Gamma_n[i]->fLevel->fNucleus->Name;
+		double Energy_n=Gamma_n[i]->Energy;
+		for(unsigned int j=0;j<Gamma_2n.size();j++)
+		{
+			string Nucl_2n=Gamma_2n[j]->fLevel->fNucleus->Name;
+			double Energy_2n=Gamma_n[i]->Energy;
+			if(abs(Energy_n-Energy_2n)<0.01 && (Nucl_n==Nucl_2n))
+			{
+				Found_n2n=true;
+				//cout<<"Found_n2n!\n";
+				break;
+			}
+		}
+		if(!Found_n2n)
+		{
+			//cout<<"Not Found_n2n!\n";
+			TLMaterial *mat=Gamma_n[i]->fLevel->fNucleus->fMotherNucleus->fMaterial;
+			Nucleus *Nucl_2n=0;
+			if(reaction=="(n,n')")
+			{
+				for(unsigned int j=0;j<mat->Nuclides.size();j++)
+				{
+					if(mat->Nuclides[j]->Name==Nucl_n)
+					{
+						Nucl_2n=mat->Nuclides[j];
+					}
+				}
+			}
+			else if(reaction=="(n,2n)")
+			{
+				for(unsigned int j=0;j<mat->Nuclides.size();j++)
+				{
+					if(mat->Nuclides[j]->Z==Gamma_n[i]->fLevel->fNucleus->Z && mat->Nuclides[j]->A==Gamma_n[i]->fLevel->fNucleus->A+1)
+					{
+						Nucl_2n=mat->Nuclides[j];
+					}
+				}
+			}
+			if(!Nucl_2n)
+			{
+				continue;
+			}
+			//cout<<"Find Nucl_2n:"<<reaction<<Nucl_2n->Name<<"\n";
+			GammaTransition *gt_2n=Nucl_2n->GetBestTransition(Energy_n,0.1);
+			if(!gt_2n)
+			{
+				continue;
+			}
+			//cout<<"Find gt_2n:"<<gt_2n->Energy<<"\n";
+			if(gt_2n->TalysCrossSection>0)
+			{
+				Gamma_2n.push_back(gt_2n);
+				GT.push_back(gt_2n);
+			}
+		}
+	}
+}
+
+GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold, double Length,bool UseAbundancy, bool AtLeastOne, bool Always_n2n)
+//GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold, double Length,bool UseAbundancy, bool AtLeastOne)
 {
 	vector<GammaTransition*> GT;
 	GammaTransition* MaxCS=0;
@@ -429,6 +494,29 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 	else
 	{
 		GT=FindGammaTransitions(Energy,CrossSectionThreshold,Sigma,UseAbundancy);
+	}
+	
+	if(Always_n2n && Projectile=="n")
+	{
+		//cout<<"Always_n2n!\n";
+		//сначала заполним векторы с (n,n') и (n,2n)
+		vector<GammaTransition*> Gamma_n;
+		vector<GammaTransition*> Gamma_2n;
+		for(unsigned int i=0;i<GT.size();i++)
+		{
+			if(GT[i]->fLevel->fNucleus->Reaction=="(n,n')")
+			{
+				Gamma_n.push_back(GT[i]);
+			}
+			if(GT[i]->fLevel->fNucleus->Reaction=="(n,2n)")
+			{
+				Gamma_2n.push_back(GT[i]);
+			}
+		}
+		//cout<<"Gamma_n.size: "<<Gamma_n.size()<<"\n";
+		//cout<<"Gamma_2n.size: "<<Gamma_2n.size()<<"\n";
+		Find_nn_n2n_gammas(GT,Gamma_n,Gamma_2n,"(n,2n)");
+		Find_nn_n2n_gammas(GT,Gamma_2n,Gamma_n,"(n,n')");
 	}
 	
 	GammaPeakData result;
