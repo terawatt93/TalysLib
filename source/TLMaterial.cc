@@ -454,19 +454,21 @@ void Find_nn_n2n_gammas(vector<GammaTransition*> &GT,vector<GammaTransition*> &G
 	}
 }
 
-GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold, double Length,bool UseAbundancy, bool AtLeastOne, bool Always_n2n)
-//GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold, double Length,bool UseAbundancy, bool AtLeastOne)
+GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold, double Length,bool UseAbundancy, bool AtLeastOne,double EThr, bool Always_n2n)
 {
 	vector<GammaTransition*> GT;
 	GammaTransition* MaxCS=0;
 	double CSMax=0;
-	
-	if(AtLeastOne)
-	{
-		vector<GammaTransition*> GT0=FindGammaTransitions(Energy,0,Sigma,UseAbundancy);
+	vector<GammaTransition*> GT0=FindGammaTransitions(Energy,0,Sigma,UseAbundancy);
+	//if(AtLeastOne)
+	//{
 		for(unsigned int i=0;i<GT0.size();i++)
 		{
 			double Val=GT0[i]->TalysCrossSection;
+			if(WithEnergyGrid)
+			{
+				Val=GT0[i]->GetCSGraph()->Eval(EThr);
+			}
 			if(UseAbundancy)
 			{
 				Val=Val*GT0[i]->fLevel->fNucleus->fMotherNucleus->Abundance;
@@ -486,15 +488,16 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 				GT.push_back(GT0[i]);
 			}
 		}
-		if(GT.size()==0)
+		//if(GT.size()==0)
+		if((GT.size()==0)&&(AtLeastOne))
 		{
 			GT.push_back(MaxCS);
 		}
-	}
-	else
+	//}
+/*	else
 	{
 		GT=FindGammaTransitions(Energy,CrossSectionThreshold,Sigma,UseAbundancy);
-	}
+	}*/
 	
 	if(Always_n2n && Projectile=="n")
 	{
