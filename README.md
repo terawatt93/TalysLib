@@ -28,7 +28,8 @@ New lines in ~/.bashrc file added for TalysLib should look like this:
 
 If you want to use testing feature working with EXFOR and ENDF, download http://159.93.100.133:85/C4/C4Base.db and http://159.93.100.133:85/C4/Base.root put them into same directory and add path to them in .bashrc:
 export C4Base=/Path/to/C4Base.db
-
+## IMPORTANT!
+Since 17.12.2025 TalysLib has migrated from libxlsxwriter to OpenXLSX (with ROOTOpenXLSX wrapper)! Install.sh was updated. libxlsxwriter is not avalible anymore in TalysLib
 ## Требования: 
 1. Дистрибутив Linux на основе Debian (мы рекомендуем [Linux Mint](https://linuxmint.com/))
 2. [TALYS](https://tendl.web.psi.ch/tendl_2019/talys.html) 1.8 or 1.9 
@@ -52,4 +53,5 @@ export C4Base=/Path/to/C4Base.db
 > export LD_LIBRARY_PATH=$LD_LIBRARY_PATH:/home/user_name/some_directory/TalysLib <br>
 > export CPATH=$CPATH:/home/user_name/some_directory/TalysLib <br>
 > export TALYSLIBDIR=/home/user_name/some_directory/TalysLib <br>
-
+## Важно!
+С 17.12.2025 библиотека TalysLib перешла с libxlsxwriter на OpenXLSX (с использованием оболочки ROOTOpenXLSX)! Файл Install.sh был обновлен. libxlsxwriter больше недоступен.
