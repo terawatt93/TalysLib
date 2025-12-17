@@ -153,8 +153,8 @@ void TLMaterial::AddBackground(string PathToBackground)
 }
 void TLMaterial::SaveToXLSX(string filename)
 {
-	TXlsxwriter xlsx;
-	xlsx.Open(filename);
+	ROOTOpenXLSX xlsx;
+	xlsx.Open(filename,"w","General");
 	xlsx.GoToWorksheet("General");
 	xlsx<<"Composition:"<<MaterialFormula<<"\n";
 	xlsx<<"Molar mass:"<<MolarMass<<"\n";
@@ -170,6 +170,7 @@ void TLMaterial::SaveToXLSX(string filename)
 	{
 		xlsx<<Gammas[i]->Energy<<Gammas[i]->TalysE_i<<Gammas[i]->TalysJP_i.GetLine()<<Gammas[i]->TalysE_f<<Gammas[i]->TalysJP_f.GetLine()<<Gammas[i]->fLevel->fNucleus->fMotherNucleus->Name<<Gammas[i]->fLevel->fNucleus->Reaction<<Gammas[i]->fLevel->fNucleus->Name<<Gammas[i]->TalysCrossSection<<Gammas[i]->TalysCrossSection*(Gammas[i]->fLevel->fNucleus->fMotherNucleus->Abundance)<<"\n";
 	}
+	xlsx.Close();
 }
 void TLMaterial::PrintGammas(double CrossSectionThreshold,bool UseAbundancy)
 {

@@ -23,7 +23,8 @@
 #include <TROOT.h>  
 #include <TVirtualFitter.h>
 #include <complex>
-#include "libxlsxwriter/include/xlsxwriter.h"
+//#include "libxlsxwriter/include/xlsxwriter.h"
+#include "ROOTOpenXLSXLib.hh"
 #include "ENDFReader/ENDFLib.hh"
 #include "ENDFReader/EXFOR.hh"
 #include "SMatrix/SMatrix.hh"

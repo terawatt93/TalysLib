@@ -24,7 +24,7 @@
 #include <TROOT.h>  
 #include <TVirtualFitter.h>
 #include <sqlite3.h>
-#include "../TXlsxwriter.hh"
+#include "ROOTOpenXLSXLib.hh"
 
 using namespace std;
 
@@ -115,7 +115,7 @@ class C4Container:public TObject//хранит c4 в упорядоченном 
 	vector<C4AngularDistribution> GetAngularDistributions();
 	vector<C4EnergyDistribution>  GetEnergyDistributions();
 	void GenerateBaseSummaryAndSaveToXLSX(string Filename,string Template="MF MT PrjE LevE Author Year Reference");
-	void GenerateBaseSummaryAndSaveToXLSX(TXlsxwriter &xl,string Template="MF MT PrjE LevE Author Year Reference");
+	void GenerateBaseSummaryAndSaveToXLSX(ROOTOpenXLSX &xl,string Template="MF MT PrjE LevE Author Year Reference");
 	ClassDef(C4Container,2);
 };//
 

@@ -165,10 +165,18 @@ esac
 #
 # 4. Return to your TalysLib directory
 cd ${talyslibdir}
-git clone https://github.com/jmcnamara/libxlsxwriter
+cd ../
+if ! grep -q "ROOTOpenXLSX" ~/.bashrc 2>/dev/null; then \
+	echo "Installing ROOTOpenXLSX";\
+	git clone https://github.com/terawatt93/ROOTOpenXLSX;\
+	cd ROOTOpenXLSX; make clean; make; make install;
+else \
+	echo "ROOTOpenXLSX already installed!"; \
+fi
+cd ${talyslibdir}
 #
 # 5. Downloading and installing side libraries
-./MakeLibraries.sh
+make
 make install
 
 

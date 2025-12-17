@@ -18,7 +18,7 @@
 #include "GammaTransitions.cc"
 #include "LevelProperties.cc"
 #include <TVector3.h>
-#include "TXlswriter.cpp"
+//#include "TXlswriter.cpp"
 #include <algorithm>
 #include <TSocket.h>
 #include <TMessage.h>
@@ -3204,7 +3204,7 @@ void Nucleus::ReadFromRootFile(string FileName,string _Name)
 	TFile f(FileName.c_str());
 	ReadFromRootFile(&f,_Name);
 }
-void PrintDeformationToXLSX(TXlsxwriter &xlsx,LevelDeformation *df)
+void PrintDeformationToXLSX(ROOTOpenXLSX &xlsx,LevelDeformation *df)
 {
 	xlsx<<df->fLevel->Energy<<df->fLevel->TalysJP.GetLine()<<df->fLevel->fNucleus->Name<<df->TypeOfLevel<<df->fLevel->fNucleus->Def.TypeOfCollectivity<<df->NumberOfBand<<df->LOfBand<<df->NumberOfPhonons<<df->MagneticNumber;
 	for(unsigned int j=0;j<df->Beta.size();j++)
@@ -3213,7 +3213,7 @@ void PrintDeformationToXLSX(TXlsxwriter &xlsx,LevelDeformation *df)
 	}
 	xlsx<<"\n";
 }
-void PrintOMPToXLSX(TXlsxwriter &xlsx,OpticalModelParameters *OMP)
+void PrintOMPToXLSX(ROOTOpenXLSX &xlsx,OpticalModelParameters *OMP)
 {
 	if(!OMP->DefaultOMP)
 	{
@@ -3266,8 +3266,8 @@ void Nucleus::SaveToXLSX(string filename)
 	{
 		filename+=".xlsx";
 	}
-	TXlsxwriter xlsx;
-	xlsx.Open(filename);
+	ROOTOpenXLSX xlsx;
+	xlsx.Open(filename,"w","General");
 	xlsx.GoToWorksheet("General");
 	xlsx<<"Nucleus"<<Name<<"\n";
 	xlsx<<"A"<<A<<"\n";
@@ -3285,7 +3285,7 @@ void Nucleus::SaveToXLSX(string filename)
 		xlsx<<"Z"<<Products[i].Z<<"\n";
 		xlsx<<"N"<<Products[i].A-Products[i].Z<<"\n";
 		xlsx<<"Mass,MeV"<<Products[i].Mass<<"\n";
-		xlsx<<"NLevels"<<Products[i].Levels.size()<<"\n";
+		xlsx<<"NLevels"<<(int)(Products[i].Levels.size())<<"\n";
 		xlsx<<"\n";
 	}
 	xlsx.GoToWorksheet("Gammas");
@@ -3408,6 +3408,7 @@ void Nucleus::SaveToXLSX(string filename)
 	{
 		Products[i].C4Data.GenerateBaseSummaryAndSaveToXLSX(xlsx,"MF MT PrjE LevE Author Year Reference WSAddition="+Products[i].Reaction);
 	}
+	xlsx.Close();
 }
 
 vector<TGraphErrors*> Nucleus::GetEXFORAngularDistributions(double Emin,double Emax, bool GenerateHLink)

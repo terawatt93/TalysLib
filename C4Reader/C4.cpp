@@ -782,12 +782,14 @@ vector<C4EnergyDistribution>  C4Container::GetEnergyDistributions()
 
 void C4Container::GenerateBaseSummaryAndSaveToXLSX(string Filename,string Template)
 {
-	TXlsxwriter xl;
-	xl.Open(Filename);
+	ROOTOpenXLSX xl;
+	xl.Open(Filename,"w");
 	GenerateBaseSummaryAndSaveToXLSX(xl,Template);
+	xl.Close();
+	
 }
 
-void C4Container::GenerateBaseSummaryAndSaveToXLSX(TXlsxwriter &xl,string Template)
+void C4Container::GenerateBaseSummaryAndSaveToXLSX(ROOTOpenXLSX &xl,string Template)
 {
 	if(Data.size()==0)
 	{
