@@ -588,3 +588,9 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 	result.CSGraph.SetTitle(TString::Format("Talys-calculated #sigma for #gamma-peak %.1f#pm%.1f; E, MeV; #sigma, mb",Energy,Sigma));
 	return result;
 }
+GammaPeakData TLMaterial::FindGammaTransitionsForInterval(double EMin,double EMax,double CrossSectionThreshold, double Length,bool UseAbundancy, bool AtLeastOne,double EThr, bool Always_n2n)//толщина - в см
+{
+	double E_av=(EMin+EMax)/2;
+	double E_sig=(EMax-EMin)/2;
+	return FindGammaTransitionsForPeak(E_av,E_sig,CrossSectionThreshold,Length,UseAbundancy,AtLeastOne,EThr,Always_n2n);
+}
