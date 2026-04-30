@@ -120,6 +120,10 @@ TLMaterial::TLMaterial(string _MaterialFormula)
 	
 	ElementsVector=Elements;
 	QVector=Q;
+	for(unsigned int i=0;i<Nuclides.size();i++)
+	{
+		Nuclides[i]->fMaterial=this;
+	}
 	//Calculate();
 
 }
@@ -453,6 +457,90 @@ void Find_nn_n2n_gammas(vector<GammaTransition*> &GT,vector<GammaTransition*> &G
 			}
 		}
 	}
+}
+
+GammaPeakData TLMaterial::FindGammaTransitionsForInterval(vector<GammaTransition*> GT_,double EMin,double EMax,double Length)//толщина - в см
+{	
+	GammaPeakData result;
+	result.Multipolarity=0;
+	vector<GammaTransition*> GT;
+	for(unsigned int i=0;i<GT_.size();i++)
+	{
+		double E=GT_[i]->Energy;
+		if(E>=EMin && E<=EMax)
+		{
+			//cout<<"FindGammaTransitionsForInterval: "<<E<<"\n";
+			GT.push_back(GT_[i]);
+		}
+	}
+	if(GT.size()==0)
+	{
+		return result;
+	}
+	
+	result.Gammas=GT;
+	result.Sigma=(EMax-EMin)/2;
+	result.E=(EMin+EMax)/2;
+	result.fMaterial=GT[0]->fLevel->fNucleus->fMotherNucleus->fMaterial;
+	cout<<"Material:"<<result.fMaterial->MaterialFormula<<"\n";
+	double NAtoms=result.fMaterial->Density*6.02e23/result.fMaterial->GetMolarMass()*Length;
+	vector<TGraph*> Graphs;
+	vector<double> Multipliers;
+	double CSMax=0;
+	for(unsigned int i=0;i<GT.size();i++)
+	{
+		Nucleus* Init=GT[i]->fLevel->fNucleus->fMotherNucleus;
+		double Stechiometry=result.fMaterial->GetElementQuantity(Init);
+		double Abun=Init->Abundance;
+		
+		if(!InVector(result.InitNuclei,Init))
+		{
+			result.StCoeff+=Stechiometry*Abun;
+			result.NAtoms+=NAtoms*Stechiometry*Abun;
+			result.InitNuclei.push_back(Init);
+		}
+		result.EffectiveCS+=GT[i]->TalysCrossSection*Stechiometry*Abun;
+		if(result.Multipolarity<GT[i]->GetMostProbableMultipolarity().J)
+		{
+			result.Multipolarity=GT[i]->GetMostProbableMultipolarity().J;
+		}
+		/*if(CSMax<GT[i]->TalysCrossSection*Stechiometry*Abun)
+		{
+			CSMax=GT[i]->TalysCrossSection*Stechiometry*Abun;
+			Multipolarity=GT[i]->GetMostProbableMultipolarity().J;
+		}*/
+		Multipliers.push_back(Stechiometry*Abun);
+		result.Reactions.push_back(Init->Name+GT[i]->fLevel->fNucleus->Reaction+GT[i]->fLevel->fNucleus->Name);
+		result.Centroid+=GT[i]->TalysCrossSection*Stechiometry*Abun*GT[i]->Energy;
+		Graphs.push_back(GT[i]->GetCSGraph());
+		
+	}
+	for(unsigned int i=0;i<Multipliers.size();i++)
+	{
+		Multipliers[i]=Multipliers[i]/result.StCoeff;
+	}
+	if(result.fMaterial->WithEnergyGrid)
+	{
+		result.CSGraph=SumTGraphs(Graphs,Multipliers);
+	}
+	result.Centroid=result.Centroid/result.EffectiveCS;
+	result.EffectiveCS=result.EffectiveCS/result.StCoeff;
+	result.NAtoms_mb=result.NAtoms*1e-27;
+	
+	for(unsigned int i=0;i<result.Reactions.size();i++)
+	{
+		if(i==0)
+		{
+			result.Reacstr+=result.Reactions[i];
+		}
+		else
+		{
+			result.Reacstr+=("; "+result.Reactions[i]);
+		}
+	}
+	result.CSGraph.SetName(TString::Format("CSPeak_%d_pm_%d",(int(result.E*10)),int(result.Sigma*10)));
+	result.CSGraph.SetTitle(TString::Format("Talys-calculated #sigma for #gamma-peak %.1f#pm%.1f; E, MeV; #sigma, mb",result.E,result.Sigma));
+	return result;
 }
 
 GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold, double Length,bool UseAbundancy, bool AtLeastOne,double EThr, bool Always_n2n)

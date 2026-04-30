@@ -1141,7 +1141,8 @@ void Nucleus::ReadTalysCalculationResult_v2()
 						YANDFMapObject m;
 						m.ReadYANDF(PathToCalculationDir+"/"+nm);
 						//TalysCS, TalysCSCompound, TalysCSDirect
-						//cout<<"Product: "<<Products[i].Name<<" Outgoing: "<<OutParticle<<" LevNumber: "<<LevNumber<<" NLevels: "<<Products[i].Levels.size()<<"\n";
+						//cout<<"Product: "<<Products[i].Name<<" Outgoing: "<<OutParticle<<" LevNumber: "<<LevNumber<<" NLevels: "<<Products[i].Levels.size()<<" "<<nm<<"\n";
+						
 						Products[i].Levels[LevNumber].Angle=m.GetColumn("Angle");
 						Products[i].Levels[LevNumber].ADTot=m.GetColumn("xs");
 						Products[i].Levels[LevNumber].ADDirect=m.GetColumn("Direct");

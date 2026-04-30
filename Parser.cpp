@@ -1017,12 +1017,20 @@ void GetAZ(string nucleus, int &Z, int &A)
 			Z=Z_number[i];
 			return ;
 		}
+	}
+	for(unsigned int i=0;i<119;i++)
+	{
+		string symbol=Atomic_symbols[i];
 		transform(symbol.begin(), symbol.end(), symbol.begin(), ::toupper);
 		if(symbol==name)
 		{
 			Z=Z_number[i];
 			return ;
 		}
+	}
+	for(unsigned int i=0;i<119;i++)
+	{
+		string symbol=Atomic_symbols[i];
 		transform(symbol.begin(), symbol.end(), symbol.begin(), ::tolower);
 		if(symbol==name)
 		{
