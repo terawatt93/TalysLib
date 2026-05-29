@@ -814,7 +814,8 @@ class Nucleus:public NucleusData
 	
 	vector<string> CalculationResultFilenames;//в этом векторе хранятся имена файлов с результатами расчетов
 	void GenerateListOfProducts_v2();//функция, делфющая список ядер в версии 2...
-	void ReadTalysCalculationResult_v2();//функция, читающая результаты расчетов в версии 2...
+	void ReadTalysCalculationResult_v2(int behaviour_flag=0);//функция, читающая результаты расчетов в версии 2... behaviour_flag определяет поведение функции при чтении файлов, содержащих много 
+	//энергий. Если behaviour_flag==0, то выполняется чтение "как обычно, последнего элемента векторов", если ==1, то выполняется дополнение векторов, если ==2, то перезапись
 	
 	C5Manager c5_manager;
 	/*void AssignC5ToLevel();
