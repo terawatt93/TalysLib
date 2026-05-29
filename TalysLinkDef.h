@@ -55,8 +55,8 @@
 #pragma link C++ class SQLLib+;
 #pragma link C++ class GammaPeakData+;
 
-#pragma link C++ class SQLiteRW+;
-#pragma link C++ class SQLRow+;
+//#pragma link C++ class SQLiteRW+;
+//#pragma link C++ class SQLRow+;
 #pragma link C++ class TalysLibSPF;
 
 #endif

@@ -29,7 +29,7 @@
 #include "C4Reader/C5.cpp"
 #include "C4Reader/Strategy.cpp"
 #include "SMatrix/SMatrix.cpp"
-#include "SQLiteRW/SQLiteRW.cpp"
+//#include "SQLiteRW/SQLiteRW.cpp"
 
 GammaTransition* GetBestTransitionFromVector(float Energy, float Tolerancy,vector<Nucleus> &Nuclei)
 {
