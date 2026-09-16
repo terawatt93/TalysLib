@@ -1024,7 +1024,7 @@ void Nucleus::GenerateListOfProducts_v2()
 		} 
 	}
 }
-void Nucleus::ReadTalysCalculationResult_v2()
+void Nucleus::ReadTalysCalculationResult_v2(int behaviour_flag)
 {
 	if(Products.size()==0)
 	{
@@ -1047,6 +1047,33 @@ void Nucleus::ReadTalysCalculationResult_v2()
 			CompoundInelastic=m.GetCell("Compound_nonel.",m.NRows-1);
 			DirectInelastic=m.GetCell("Direct",m.NRows-1);
 			TotTalys=m.GetCell("Total",m.NRows-1);
+			if(behaviour_flag==1)
+			{
+				//TotElasticValues, CompoundElasticValues, DirectElasticValues, TotInelasticValues, CompoundInelasticValues, DirectInelasticValues, TotTalysValues;
+				vector<double> tmp;
+				tmp=m.GetColumn("Elastic");
+				TotElasticValues.insert(TotElasticValues.end(),tmp.begin(),tmp.end());
+				tmp=m.GetColumn("Compound_elast.");
+				CompoundElasticValues.insert(CompoundElasticValues.end(),tmp.begin(),tmp.end());
+				tmp=m.GetColumn("Shape_elastic");
+				DirectElasticValues.insert(DirectElasticValues.end(),tmp.begin(),tmp.end());
+				tmp=m.GetColumn("Reaction");
+				TotInelasticValues.insert(TotInelasticValues.end(),tmp.begin(),tmp.end());
+				tmp=m.GetColumn("Compound_nonel");
+				CompoundInelasticValues.insert(CompoundInelasticValues.end(),tmp.begin(),tmp.end());
+				tmp=m.GetColumn("Direct");
+				DirectInelasticValues.insert(DirectInelasticValues.end(),tmp.begin(),tmp.end());
+			}
+			if(behaviour_flag==2)
+			{
+				//TotElasticValues, CompoundElasticValues, DirectElasticValues, TotInelasticValues, CompoundInelasticValues, DirectInelasticValues, TotTalysValues;
+				TotElasticValues=m.GetColumn("Elastic");
+				CompoundElasticValues=m.GetColumn("Compound_elast.");
+				DirectElasticValues=m.GetColumn("Shape_elastic");
+				TotInelasticValues=m.GetColumn("Reaction");
+				CompoundInelasticValues=m.GetColumn("Compound_nonel");
+				DirectInelasticValues=m.GetColumn("Direct");
+			}
 			
 			//vector<double> TotElasticValues, CompoundElasticValues, DirectElasticValues, TotInelasticValues, CompoundInelasticValues, DirectInelasticValues, TotTalysValues;
 		}
@@ -1063,7 +1090,27 @@ void Nucleus::ReadTalysCalculationResult_v2()
 			TOTTauProd=m.GetCell("helium-3",m.NRows-1);
 			TOTTProd=m.GetCell("triton",m.NRows-1);
 			//vector<double> TOTGamProdValues, TOTNProdValues, TOTPProdValues, TOTDProdValues, TOTAProdValues,TOTTauProdValues;
-			if(m.NRows>1)
+			
+			if(behaviour_flag==1)
+			{
+				//TotElasticValues, CompoundElasticValues, DirectElasticValues, TotInelasticValues, CompoundInelasticValues, DirectInelasticValues, TotTalysValues;
+				vector<double> tmp;
+				tmp=m.GetColumn("gamma");
+				TOTGamProdValues.insert(TOTGamProdValues.end(),tmp.begin(),tmp.end());
+				tmp=m.GetColumn("neutron");
+				TOTNProdValues.insert(TOTNProdValues.end(),tmp.begin(),tmp.end());
+				tmp=m.GetColumn("deuteron");
+				TOTDProdValues.insert(TOTDProdValues.end(),tmp.begin(),tmp.end());
+				tmp=m.GetColumn("proton");
+				TOTPProdValues.insert(TOTPProdValues.end(),tmp.begin(),tmp.end());
+				tmp=m.GetColumn("alpha");
+				TOTAProdValues.insert(TOTAProdValues.end(),tmp.begin(),tmp.end());
+				tmp=m.GetColumn("helium-3");
+				TOTTauProdValues.insert(TOTTauProdValues.end(),tmp.begin(),tmp.end());
+				tmp=m.GetColumn("triton");
+				TOTTProdValues.insert(TOTTProdValues.end(),tmp.begin(),tmp.end());
+			}
+			if(behaviour_flag==2)
 			{
 				TOTGamProdValues=m.GetColumn("gamma");
 				TOTNProdValues=m.GetColumn("neutron");
@@ -1073,6 +1120,7 @@ void Nucleus::ReadTalysCalculationResult_v2()
 				TOTTauProdValues=m.GetColumn("helium-3");
 				TOTTProdValues=m.GetColumn("triton");
 			}
+			
 		}
 		if(CompareBeginOfString(nm,"rp"))//сечения образования отдельных продуктов
 		{
@@ -1084,7 +1132,13 @@ void Nucleus::ReadTalysCalculationResult_v2()
 					YANDFMapObject m;
 					m.ReadYANDF(PathToCalculationDir+"/"+nm);
 					Products[i].Production=m.GetCell("xs",m.NRows-1);
-					if(m.NRows>1)
+					if(behaviour_flag==1)
+					{
+						vector<double> tmp;
+						tmp=m.GetColumn("xs");
+						Products[i].ProductionValues.insert(Products[i].ProductionValues.end(),tmp.begin(),tmp.end());
+					}
+					if(behaviour_flag==2)
 					{
 						Products[i].ProductionValues=m.GetColumn("xs");
 					}
@@ -1102,6 +1156,14 @@ void Nucleus::ReadTalysCalculationResult_v2()
 					YANDFMapObject m;
 					m.ReadYANDF(PathToCalculationDir+"/"+nm);
 					Level* l=&(Products[i].Levels[LevI]);
+					vector<double> tmp,x;
+					tmp=m.GetColumn("xs");
+					x=m.GetColumn("E");
+					if(behaviour_flag==2)
+					{
+						l->Gammas[i].TalysCrossSections.resize(0);
+						l->Gammas[i].X_Values.resize(0);
+					}
 					for(unsigned int i=0;i<l->Gammas.size();i++)
 					{
 						if(l->Gammas[i].FinalLevelNumber==LevF)
@@ -1130,6 +1192,19 @@ void Nucleus::ReadTalysCalculationResult_v2()
 								if(binding<l->Energy)
 								{
 									l->Gammas[i].TalysCrossSection=0;
+								}
+								if(behaviour_flag==1 &&((binding<l->Energy)||(TalysLibManager::Instance().AllowNotPhysicalGamma)))
+								{
+									for(unsigned int pp=0;pp<tmp.size();pp++)
+									{
+										l->Gammas[i].TalysCrossSections.push_back(tmp[pp]);
+										l->Gammas[i].X_Values.push_back(x[pp]);
+									}
+								}
+								if(behaviour_flag==2&&((binding<l->Energy)||(TalysLibManager::Instance().AllowNotPhysicalGamma)))
+								{
+									l->Gammas[i].TalysCrossSections=tmp;
+									l->Gammas[i].X_Values=x;
 								}
 							}
 						}
