@@ -10,6 +10,32 @@ double TalysLibSPF::_GetAbundance(string nucleus)
 	return GetAbundance(nucleus);
 }
 
+double TalysLibSPF::_GetAbundance(string nucleus,string EnrichedIsotope,double abun)
+{
+	double Abun1=0;
+	int SelectedA=_GetA(EnrichedIsotope);
+	int UsedA=_GetA(nucleus);
+	double UsedAbun=0;
+	vector<int> A_values;
+	vector<double> Abundances;
+	string Element=GetNucleusName(nucleus);
+	GetAbundance(Element,A_values,Abundances);
+	for(unsigned int i=0;i<A_values.size();i++)
+	{
+		if(A_values[i]==SelectedA)
+		{
+			continue;
+		}
+		if(A_values[i]==UsedA)
+		{
+			UsedAbun=Abundances[i];
+		}
+		Abun1+=Abundances[i];
+	}
+	double k_norm=(1-abun)/Abun1;
+	return k_norm*UsedAbun;
+}
+
 double TalysLibSPF::_GetNuclearMass(int Z, int A)
 {
 	return GetNuclearMass( Z,  A);
@@ -58,4 +84,16 @@ int TalysLibSPF::_GetA(string nucleus)
 	int z,a;
 	GetAZ(nucleus,z,a);
 	return a;
+}
+string TalysLibSPF::_GetElementName(int Z)
+{
+	return GetNucleusName(Z);
+}
+vector<string> TalysLibSPF::_GetElementNames(int Z)
+{
+	return GetElementNames(Z);
+}
+vector<string> TalysLibSPF::_GetElementNames(string NuclName)
+{
+	return GetElementNames(NuclName);
 }

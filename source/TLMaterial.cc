@@ -16,6 +16,7 @@
 #include "GammaTransitions.cc"
 #include "LevelProperties.cc"
 #include <TVector3.h>
+#include <TMath.h>
 //#include "TXlswriter.cpp"
 #include <algorithm>
 #pragma once
@@ -487,6 +488,63 @@ Nucleus* TLMaterial::FindNuclide(string NuclName)
 	return FindNuclide(Z,A);
 }
 
+void TLMaterial::SetAbundances(vector<string> Nuclides_,vector<double> Abundances)
+{
+	for(unsigned int pp=0;pp<ElementsVector.size();pp++)
+	{
+		int ZElement; int AA=0;
+		GetAZ(ElementsVector[pp],ZElement,AA);
+		
+		vector<Nucleus*> NuclWithoutAbundances;
+		double ResAbundance=0;
+		double SumAbundances=0;
+		for(unsigned int j=0;j<Nuclides.size();j++)
+		{
+			bool Found=false;
+			for(unsigned int i=0;i<Nuclides_.size();i++)
+			{
+				int Z,A;
+				GetAZ(Nuclides_[i],Z,A);
+				if((Z == Nuclides[j]->Z) && (A == Nuclides[j]->A) && (ZElement == Z))
+				{
+					Nucleus *Nucl=Nuclides[j];
+					Nucl->Abundance=Abundances[i];
+					Found=true;
+					SumAbundances+=Nucl->Abundance;
+				}
+			}
+			if(!Found)
+			{
+				int ZNucl=Nuclides[j]->Z;
+				if(ZNucl == ZElement)
+				{
+					NuclWithoutAbundances.push_back(Nuclides[j]);
+					ResAbundance+=Nuclides[j]->Abundance;
+				}
+			}
+		}
+		double k=(1-SumAbundances)/ResAbundance;
+		for(unsigned int i=0;i<NuclWithoutAbundances.size();i++)
+		{
+			NuclWithoutAbundances[i]->Abundance=k*NuclWithoutAbundances[i]->Abundance;
+		}
+	}
+	
+}
+
+string GammaPeakData::ToString(string Option)
+{
+	string result;
+	if(Option=="short")
+	{
+		result=TString::Format("E=%.2f#pm%.2f, #sigma=%.2f mb",E,Sigma,EffectiveCS).Data();
+	}
+	else
+	{
+		result=TString::Format("E=%.2f#pm%.2f, #sigma=%.2f mb, NAtoms=%.2e, StCoeff=%.2f, Multipolarity=%d",E,Sigma,EffectiveCS,NAtoms,StCoeff,(int)Multipolarity).Data();
+	}
+	return result;
+}
 GammaPeakData TLMaterial::FindGammaTransitionsForInterval(vector<GammaTransition*> GT_,double EMin,double EMax,double Length,bool Add_n2n)//толщина - в см
 {	
 	GammaPeakData result;
@@ -529,6 +587,7 @@ GammaPeakData TLMaterial::FindGammaTransitionsForInterval(vector<GammaTransition
 	double CSMax=0;
 	for(unsigned int i=0;i<GT.size();i++)
 	{
+		
 		Nucleus* Init=GT[i]->fLevel->fNucleus->fMotherNucleus;
 		double Stechiometry=result.fMaterial->GetElementQuantity(Init);
 		double Abun=Init->Abundance;
@@ -584,7 +643,93 @@ GammaPeakData TLMaterial::FindGammaTransitionsForInterval(vector<GammaTransition
 	return result;
 }
 
-GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold, double Length,bool UseAbundancy, bool AtLeastOne,double EThr, bool Always_n2n)
+void TLMaterial::AssignPointers()
+{
+	for(unsigned int i=0;i<Nuclides.size();i++)
+	{
+		Nuclides[i]->AssignPointers();
+		Nuclides[i]->fMaterial=this;
+	}
+}
+
+void TLMaterial::LoadPreCalculatedMaterial(string fname)
+{
+	TFile ff(fname.c_str());
+	TString json_str=*(TString*)ff.Get("Info");
+	nlohmann::json jsn = nlohmann::json::parse(json_str.Data());
+	
+	std::vector<std::string> keys;
+	keys.reserve(jsn.size());          // size() для объекта = число ключей
+
+	for (auto it = jsn.begin(); it != jsn.end(); ++it)
+	{
+		keys.push_back(it.key());
+	}
+	for(unsigned int i=0;i<keys.size();i++)
+	{
+		string InitNuclName=(jsn[keys[i]]["Init"]);
+		string ProdName=(jsn[keys[i]]["Final"]);
+		Nucleus *Init=FindNuclide(InitNuclName);
+		if(!Init)
+		{
+			continue;
+		}
+		Nucleus *Prod=Init->FindProductByName(ProdName);
+		if(!Prod)
+		{
+			Init->Products.push_back(Nucleus(ProdName,jsn[keys[i]]["Reaction"]));
+		}
+	}
+	for(unsigned int i=0;i<keys.size();i++)
+	{
+		string InitNuclName=(jsn[keys[i]]["Init"]);
+		string ProdName=(jsn[keys[i]]["Final"]);
+		Nucleus *Init=FindNuclide(InitNuclName);
+		if(!Init)
+		{
+			continue;
+		}
+		Nucleus *Prod=Init->FindProductByName(ProdName);
+		double LevE=jsn[keys[i]]["InitLevel"];
+		Level* lvl=Prod->FindLevelByEnergy(LevE,1);
+		double GamE=jsn[keys[i]]["E"];
+		bool UsedGrid=false;
+		if(Init->EnergyGrid.size()>0)
+		UsedGrid=true;
+		for(unsigned int j=0;j<lvl->Gammas.size();j++)
+		{
+			if(abs(lvl->Gammas[j].Energy-GamE)<1)
+			{
+				lvl->Gammas[j].CSGraph=*(TGraph*)ff.Get(keys[i].c_str());
+				double x,y;
+				int N=lvl->Gammas[j].CSGraph.GetN();
+				lvl->Gammas[j].CSGraph.GetPoint(N-1,x,y);
+				lvl->Gammas[j].TalysCrossSection=y;
+				if(!UsedGrid)
+				{
+					for(int p=0;p<N;p++)
+					{
+						lvl->Gammas[j].CSGraph.GetPoint(p,x,y);
+						Init->EnergyGrid.push_back(x);
+					}
+				}
+			}
+		}
+	}
+	AssignPointers();
+	WithEnergyGrid=true;
+	ff.Close();
+}
+
+void TLMaterial::LoadPreCalculatedMaterial(vector<string> fnames)
+{
+	for(unsigned int i=0;i<fnames.size();i++)
+	{
+		LoadPreCalculatedMaterial(fnames[i]);
+	}
+}
+
+GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma,double CrossSectionThreshold, double Length,bool UseAbundancy, bool AtLeastOne,double EThr, bool Always_n2n,string SelectedElement)
 {
 	vector<GammaTransition*> GT;
 	GammaTransition* MaxCS=0;
@@ -597,7 +742,24 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 			double Val=GT0[i]->TalysCrossSection;
 			if(WithEnergyGrid)
 			{
-				Val=GT0[i]->GetCSGraph()->Eval(EThr);
+				if(EThr>0) 
+				{
+					Val=GT0[i]->GetCSGraph()->Eval(EThr);
+				}
+				else
+				{
+					TGraph *CSG=GT0[i]->GetCSGraph();
+					for(int pp=0;pp<CSG->GetN();pp++)
+					{
+						double x,y;
+						CSG->GetPoint(pp,x,y);
+						if(x< -EThr && y>Val)
+						{
+							Val=y;
+						}
+					}
+					Val=TMath::MaxElement(GT0[i]->GetCSGraph()->GetN(),GT0[i]->GetCSGraph()->GetY()); 
+				}
 			}
 			if(UseAbundancy)
 			{
@@ -668,6 +830,23 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 		double Stechiometry=GetElementQuantity(Init);
 		double Abun=Init->Abundance;
 		
+		if(SelectedElement.size()>0)
+		{
+			int ZZ,AA;
+			GetAZ(SelectedElement,ZZ,AA);
+			if(ZZ<=0)
+			{
+				cout<<"This is FindGammaTransitionsForInterval: cannot use SelectedElement="<<SelectedElement<<"\n";
+			}
+			else
+			{
+				if(ZZ!=Init->Z)
+				{
+					Abun=0;//зануляем распространенность для неподходящих элементов
+				}
+			}
+		}
+		
 		if(!InVector(result.InitNuclei,Init))
 		{
 			result.StCoeff+=Stechiometry*Abun;
@@ -717,9 +896,9 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 	result.CSGraph.SetTitle(TString::Format("Talys-calculated #sigma for #gamma-peak %.1f#pm%.1f; E, MeV; #sigma, mb",Energy,Sigma));
 	return result;
 }
-GammaPeakData TLMaterial::FindGammaTransitionsForInterval(double EMin,double EMax,double CrossSectionThreshold, double Length,bool UseAbundancy, bool AtLeastOne,double EThr, bool Always_n2n)//толщина - в см
+GammaPeakData TLMaterial::FindGammaTransitionsForInterval(double EMin,double EMax,double CrossSectionThreshold, double Length,bool UseAbundancy, bool AtLeastOne,double EThr, bool Always_n2n,string SelectedElement)//толщина - в см
 {
 	double E_av=(EMin+EMax)/2;
 	double E_sig=(EMax-EMin)/2;
-	return FindGammaTransitionsForPeak(E_av,E_sig,CrossSectionThreshold,Length,UseAbundancy,AtLeastOne,EThr,Always_n2n);
+	return FindGammaTransitionsForPeak(E_av,E_sig,CrossSectionThreshold,Length,UseAbundancy,AtLeastOne,EThr,Always_n2n,SelectedElement);
 }

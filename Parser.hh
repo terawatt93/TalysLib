@@ -88,7 +88,8 @@ vector<double> Multipolarities(float JPf,float JPi);
 
 string GetField(string input, int FieldNumber);
 
-
+vector<string> GetElementNames(int Z);
+vector<string> GetElementNames(string NuclName);
 
 void ParseReaction(string reaction, string &Projectile, string &OutgoingParticle);
 string NLJToString(int n, int L, float J);
