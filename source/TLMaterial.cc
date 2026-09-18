@@ -734,11 +734,12 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 	vector<GammaTransition*> GT;
 	GammaTransition* MaxCS=0;
 	double CSMax=0;
-	vector<GammaTransition*> GT0=FindGammaTransitions(Energy,0,Sigma,UseAbundancy);
+	vector<GammaTransition*> GT0=FindGammaTransitions(Energy,0,Sigma,false);
 	//if(AtLeastOne)
 	//{
 		for(unsigned int i=0;i<GT0.size();i++)
 		{
+			//cout<<"!FGT: "<<GT0[i]->fLevel->fNucleus->fMotherNucleus->Name<<GT0[i]->fLevel->fNucleus->Reaction<<GT0[i]->fLevel->fNucleus->Name<<"\n";
 			double Val=GT0[i]->TalysCrossSection;
 			if(WithEnergyGrid)
 			{
@@ -751,14 +752,15 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 					TGraph *CSG=GT0[i]->GetCSGraph();
 					for(int pp=0;pp<CSG->GetN();pp++)
 					{
-						double x,y;
+						double x=0,y=0;
 						CSG->GetPoint(pp,x,y);
-						if(x< -EThr && y>Val)
+						if(x< - EThr && y>Val)
 						{
 							Val=y;
+							//cout<<"xcs:"<<x<<" "<<y<<" "<<GT0[i]->fLevel->fNucleus->fMotherNucleus->Name<<GT0[i]->fLevel->fNucleus->Reaction<<GT0[i]->fLevel->fNucleus->Name<<"\n";
 						}
 					}
-					Val=TMath::MaxElement(GT0[i]->GetCSGraph()->GetN(),GT0[i]->GetCSGraph()->GetY()); 
+					//Val=TMath::MaxElement(GT0[i]->GetCSGraph()->GetN(),GT0[i]->GetCSGraph()->GetY()); 
 				}
 			}
 			if(UseAbundancy)
@@ -775,8 +777,10 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 				CSMax=Val;
 				MaxCS=GT0[i];
 			}
+			
 			if(Val>CrossSectionThreshold)
 			{
+				//cout<<"Val:"<<Val<<" "<<CrossSectionThreshold<<" "<<GT0[i]->fLevel->fNucleus->fMotherNucleus->Name<<GT0[i]->fLevel->fNucleus->Reaction<<GT0[i]->fLevel->fNucleus->Name<<"\n";
 				GT.push_back(GT0[i]);
 			}
 		}
@@ -793,7 +797,7 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 	
 	if(Always_n2n && Projectile=="n")
 	{
-		//cout<<"Always_n2n!\n";
+		/*//cout<<"Always_n2n!\n";
 		//сначала заполним векторы с (n,n') и (n,2n)
 		vector<GammaTransition*> Gamma_n;
 		vector<GammaTransition*> Gamma_2n;
@@ -811,7 +815,25 @@ GammaPeakData TLMaterial::FindGammaTransitionsForPeak(double Energy,double Sigma
 		//cout<<"Gamma_n.size: "<<Gamma_n.size()<<"\n";
 		//cout<<"Gamma_2n.size: "<<Gamma_2n.size()<<"\n";
 		Find_nn_n2n_gammas(GT,Gamma_n,Gamma_2n,"(n,2n)");
-		Find_nn_n2n_gammas(GT,Gamma_2n,Gamma_n,"(n,n')");
+		Find_nn_n2n_gammas(GT,Gamma_2n,Gamma_n,"(n,n')");*/
+		for(unsigned int i=0;i<GT0.size();i++)
+		{
+			if(GT0[i]->fLevel->fNucleus->Reaction=="(n,2n)")
+			{
+				if(!InVector(GT,GT0[i]))
+				{
+					//cout<<"!InVector: "<<GT0[i]->fLevel->fNucleus->Name<<GT0[i]->fLevel->fNucleus->Reaction<<"\n";
+					for(unsigned int p=0;p<GT.size();p++)
+					{
+						//cout<<"!!!InVector: "<<GT[p]->fLevel->fNucleus->Name<<GT[p]->fLevel->fNucleus->Reaction<<"\n";
+						if(GT[p]->fLevel->fNucleus->Reaction=="(n,n')" && abs(GT0[i]->Energy-GT[p]->Energy)<0.1 && (GT0[i]->fLevel->fNucleus->A == GT[p]->fLevel->fNucleus->A))
+						{
+							GT.push_back(GT0[i]);
+						}
+					}
+				}
+			}
+		}
 	}
 	
 	GammaPeakData result;
