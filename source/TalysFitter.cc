@@ -16,6 +16,8 @@
 #include "GammaTransitions.cc"
 #include "LevelProperties.cc"
 #include "NucleiProperties.cc"
+#include "RVersion.h"
+
 TalysFitter::TalysFitter(string NuclName)
 {
 	Nuclide=Nucleus(NuclName);
@@ -76,7 +78,12 @@ double TalysFitter::Eval(double *x, double *p)
 }
 TF1 *TalysFitter::GenerateTF1(string name, double x_min,double x_max)
 {
-	FitFunction=TF1(name.c_str(),this,&TalysFitter::Eval,x_min,x_max,Parameters.size(),"TalysFitter","Eval");
+	#if ROOT_VERSION_CODE >= ROOT_VERSION(6,40,0)
+    FitFunction = TF1(name.c_str(), this, &TalysFitter::Eval, x_min, x_max, static_cast<Int_t>(Parameters.size()));
+	#else
+		FitFunction = TF1(name.c_str(), this, &TalysFitter::Eval, x_min, x_max, Parameters.size(), "TalysFitter", "Eval");
+	#endif
+
 	for(unsigned int i=0;i<Parameters.size();i++)
 	{
 		FitFunction.SetParameter(i,Parameters[i]);

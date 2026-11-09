@@ -36,8 +36,12 @@ case $choice in
         git clone https://github.com/arjankoning1/talys
         cd talys
         echo 'Downloading TALYS database and examples.'
-        wget  -U 'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0' https://nds.iaea.org/talys/misc/structure.tar
-        wget  -U 'Mozilla/5.0 (X11; Linux x86_64; rv:30.0) Gecko/20100101 Firefox/30.0' https://nds.iaea.org/talys/samples/talys_samples.tar
+        
+		curl -L -A "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36" \
+			 -O https://nds.iaea.org/talys/misc/structure.tar
+		curl -L -A "Mozilla/5.0 (X11; Linux x86_64) AppleWebKit/537.36" \
+			 -O https://nds.iaea.org/talys/samples/talys_samples.tar
+			 
         echo 'Decompressing of the TALYS database.'
         tar zxf structure.tar
         tar zxf talys_samples.tar
@@ -110,9 +114,16 @@ case $choice in
           echo ' '
           echo 'The '${code}' build has been completed.'
           echo 'Adding paths to .bashrc'
-          echo 'export TALYSDIR='`pwd`>>~/.bashrc 
-          echo 'export PATH=$PATH:'`pwd`>>~/.bashrc
-          echo 'export TALYSVERSION=2' >>~/.bashrc
+          
+			sed -i '/#TALYS_CONFIG_BEGIN/,/#TALYS_CONFIG_END/d' ~/.bashrc
+			{
+			  echo '#TALYS_CONFIG_BEGIN'
+			  echo "export TALYSDIR=`pwd`"
+			  echo "export PATH=\$PATH:`pwd`"
+			  echo 'export TALYSVERSION=2'
+			  echo '#TALYS_CONFIG_END'
+			} >> ~/.bashrc
+			
           echo ' '
         else
           echo ${code} 'build failed'
@@ -166,17 +177,54 @@ esac
 # 4. Return to your TalysLib directory
 cd ${talyslibdir}
 cd ../
-if ! grep -q "ROOTOpenXLSX" ~/.bashrc 2>/dev/null; then \
-	echo "Installing ROOTOpenXLSX";\
-	git clone https://github.com/terawatt93/ROOTOpenXLSX;\
-	cd ROOTOpenXLSX; make clean; make; make install;
-else \
-	echo "ROOTOpenXLSX already installed!"; \
+
+# 4a. Build and install ROOTOpenXLSX if its marker is not in .bashrc yet
+if ! grep -q "ROOTOpenXLSX" ~/.bashrc 2>/dev/null; then
+	echo "Installing ROOTOpenXLSX"
+	if [ ! -d "ROOTOpenXLSX" ]; then
+		git clone https://github.com/terawatt93/ROOTOpenXLSX
+	fi
+	cd ROOTOpenXLSX
+	make clean; make; make install
+else
+	echo "ROOTOpenXLSX already installed!"
 fi
+
+# 4b. Install OpenXLSX headers if missing
+if [ ! -f /usr/local/include/OpenXLSX.hpp ]; then
+	echo "Installing OpenXLSX headers..."
+	OPENXLSX_SRC=""
+	for d in \
+	    "${talyslibdir}/../ROOTOpenXLSX/external/OpenXLSX" \
+	    "${talyslibdir}/../ROOTOpenXLSX/external/OpenXLSX/OpenXLSX"; do
+		if [ -f "${d}/CMakeLists.txt" ]; then
+			OPENXLSX_SRC="${d}"
+			break
+		fi
+	done
+	if [ -n "${OPENXLSX_SRC}" ]; then
+		echo "Building OpenXLSX from ${OPENXLSX_SRC}"
+		cd "${OPENXLSX_SRC}"
+		rm -rf build
+		mkdir -p build && cd build
+		if cmake .. && make && sudo make install; then
+			echo "OpenXLSX installed successfully"
+		else
+			echo "ERROR: OpenXLSX build failed"
+		fi
+		# TalysLib's rootcling needs <OpenXLSX.hpp> in its include path
+        export CPATH=/usr/local/include/OpenXLSX:$CPATH
+		cd "${talyslibdir}/.."
+	else
+		echo "WARNING: CMakeLists.txt not found under ROOTOpenXLSX/external/OpenXLSX"
+		echo "Checked: ${talyslibdir}/../ROOTOpenXLSX/external/OpenXLSX{,/OpenXLSX}"
+	fi
+else
+	echo "OpenXLSX headers already installed!"
+fi
+
 cd ${talyslibdir}
 #
 # 5. Downloading and installing side libraries
 make
 make install
-
-
